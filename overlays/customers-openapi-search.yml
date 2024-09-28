@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  title: Stripe Customers API
+paths:
+  /v1/customers:
+    get:
+      description: >-
+        <p>Returns a list of your customers. The customers are returned sorted
+        by creation date, with the most recent customers appearing first.</p>
+      tags:
+        - Customers
+      summary: Retrieve Customers
+    post:
+      description: <p>Creates a new customer object.</p>
+      tags:
+        - Customers
+      summary: Create Customers
+  /v1/customers/search:
+    get:
+      description: >-
+        <p>Search for customers you’ve previously created using Stripe’s <a
+        href="/docs/search#search-query-language">Search Query Language</a>.
+
+        Don’t use search in read-after-write flows where strict consistency is
+        necessary. Under normal operating
+
+        conditions, data is searchable in less than a minute. Occasionally,
+        propagation of new or updated data can be up
+
+        to an hour behind during outages. Search functionality is not available
+        to merchants in India.</p>
+      tags:
+        - Customers
+        - Search
+      summary: Retrieve Customers Search
+  /v1/customers/{customer}:
+    delete:
+      description: >-
+        <p>Permanently deletes a customer. It cannot be undone. Also immediately
+        cancels any active subscriptions on the customer.</p>
+      tags:
+        - Customers
+      summary: Delete Customers Customer
+    get:
+      description: <p>Retrieves a Customer object.</p>
+      tags:
+        - Customers
+      summary: Retrieve Customers Customer
+    post:
+      description: >-
+        <p>Updates the specified customer by setting the values of the
+        parameters passed. Any parameters not provided will be left unchanged.
+        For example, if you pass the <strong>source</strong> parameter, that
+        becomes the customer’s active source (e.g., a card) to be used for all
+        charges in the future. When you update a customer to a new valid card
+        source by passing the <strong>source</strong> parameter: for each of the
+        customer’s current subscriptions, if the subscription bills
+        automatically and is in the <code>past_due</code> state, then the latest
+        open invoice for the subscription with automatic collection enabled will
+        be retried. This retry will not count as an automatic retry, and will
+        not affect the next regularly scheduled payment for the invoice.
+        Changing the <strong>default_source</strong> for a customer will not
+        trigger this behavior.</p>
+
+
+        <p>This request accepts mostly the same arguments as the customer
+        creation call.</p>
+      tags:
+        - Customers
+      summary: Create Customers Customer
+  /v1/customers/{customer}/balance_transactions:
+    get:
+      description: >-
+        <p>Returns a list of transactions that updated the customer’s <a
+        href="/docs/billing/customer/balance">balances</a>.</p>
+      tags:
+        - Balance
+        - Customers
+        - Transactions
+      summary: Retrieve Customers Customer Balance Transactions
+    post:
+      description: >-
+        <p>Creates an immutable transaction that updates the customer’s credit
+        <a href="/docs/billing/customer/balance">balance</a>.</p>
+      tags:
+        - Balance
+        - Customers
+        - Transactions
+      summary: Create Customers Customer Balance Transactions
+  /v1/customers/{customer}/balance_transactions/{transaction}:
+    get:
+      description: >-
+        <p>Retrieves a specific customer balance transaction that updated the
+        customer’s <a href="/docs/billing/customer/balance">balances</a>.</p>
+      tags:
+        - Balance
+        - Customers
+        - Transactions
+      summary: Retrieve Customers Customer Balance Transactions Transaction
+    post:
+      description: >-
+        <p>Most credit balance transaction fields are immutable, but you may
+        update its <code>description</code> and <code>metadata</code>.</p>
+      tags:
+        - Balance
+        - Customers
+        - Transactions
+      summary: Create Customers Customer Balance Transactions Transaction
+  /v1/customers/{customer}/bank_accounts:
+    get:
+      description: >-
+        <p>You can see a list of the bank accounts belonging to a Customer. Note
+        that the 10 most recent sources are always available by default on the
+        Customer. If you need more than those 10, you can use this API method
+        and the <code>limit</code> and <code>starting_after</code> parameters to
+        page through additional bank accounts.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+      summary: Retrieve Customers Customer Bank Accounts
+    post:
+      description: >-
+        <p>When you create a new credit card, you must specify a customer or
+        recipient on which to create it.</p>
+
+
+        <p>If the card’s owner has no default card, then the new card will
+        become the default.
+
+        However, if the owner already has a default, then it will not change.
+
+        To change the default, you should <a
+        href="/docs/api#update_customer">update the customer</a> to have a new
+        <code>default_source</code>.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+      summary: Create Customers Customer Bank Accounts
+  /v1/customers/{customer}/bank_accounts/{id}:
+    delete:
+      description: <p>Delete a specified source for a given customer.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+      summary: Delete Customers Customer Bank Accounts Id
+    get:
+      description: >-
+        <p>By default, you can see the 10 most recent sources stored on a
+        Customer directly on the object, but you can also retrieve details about
+        a specific bank account stored on the Stripe account.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+      summary: Retrieve Customers Customer Bank Accounts Id
+    post:
+      description: <p>Update a specified source for a given customer.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+      summary: Create Customers Customer Bank Accounts Id
+  /v1/customers/{customer}/bank_accounts/{id}/verify:
+    post:
+      description: <p>Verify a specified bank account for a given customer.</p>
+      tags:
+        - Accounts
+        - Bank
+        - Customers
+        - Verify
+      summary: Create Customers Customer Bank Accounts Id Verify
+  /v1/customers/{customer}/cards:
+    get:
+      description: >-
+        <p>You can see a list of the cards belonging to a customer.
+
+        Note that the 10 most recent sources are always available on the
+        <code>Customer</code> object.
+
+        If you need more than those 10, you can use this API method and the
+        <code>limit</code> and <code>starting_after</code> parameters to page
+        through additional cards.</p>
+      tags:
+        - Cards
+        - Customers
+      summary: Retrieve Customers Customer Cards
+    post:
+      description: >-
+        <p>When you create a new credit card, you must specify a customer or
+        recipient on which to create it.</p>
+
+
+        <p>If the card’s owner has no default card, then the new card will
+        become the default.
+
+        However, if the owner already has a default, then it will not change.
+
+        To change the default, you should <a
+        href="/docs/api#update_customer">update the customer</a> to have a new
+        <code>default_source</code>.</p>
+      tags:
+        - Cards
+        - Customers
+      summary: Create Customers Customer Cards
+  /v1/customers/{customer}/cards/{id}:
+    delete:
+      description: <p>Delete a specified source for a given customer.</p>
+      tags:
+        - Cards
+        - Customers
+      summary: Delete Customers Customer Cards Id
+    get:
+      description: >-
+        <p>You can always see the 10 most recent cards directly on a customer;
+        this method lets you retrieve details about a specific card stored on
+        the customer.</p>
+      tags:
+        - Cards
+        - Customers
+      summary: Retrieve Customers Customer Cards Id
+    post:
+      description: <p>Update a specified source for a given customer.</p>
+      tags:
+        - Cards
+        - Customers
+      summary: Create Customers Customer Cards Id
+  /v1/customers/{customer}/cash_balance:
+    get:
+      description: <p>Retrieves a customer’s cash balance.</p>
+      tags:
+        - Balance
+        - Cash
+        - Customers
+      summary: Retrieve Customers Customer Cash Balance
+    post:
+      description: <p>Changes the settings on a customer’s cash balance.</p>
+      tags:
+        - Balance
+        - Cash
+        - Customers
+      summary: Create Customers Customer Cash Balance
+  /v1/customers/{customer}/cash_balance_transactions:
+    get:
+      description: >-
+        <p>Returns a list of transactions that modified the customer’s <a
+        href="/docs/payments/customer-balance">cash balance</a>.</p>
+      tags:
+        - Balance
+        - Cash
+        - Customers
+        - Transactions
+      summary: Retrieve Customers Customer Cash Balance Transactions
+  /v1/customers/{customer}/cash_balance_transactions/{transaction}:
+    get:
+      description: >-
+        <p>Retrieves a specific cash balance transaction, which updated the
+        customer’s <a href="/docs/payments/customer-balance">cash
+        balance</a>.</p>
+      tags:
+        - Balance
+        - Cash
+        - Customers
+        - Transactions
+      summary: Retrieve Customers Customer Cash Balance Transactions Transaction
+  /v1/customers/{customer}/discount:
+    delete:
+      description: <p>Removes the currently applied discount on a customer.</p>
+      tags:
+        - Customers
+        - Discount
+      summary: Delete Customers Customer Discount
+    get:
+      description: ''
+      tags:
+        - Customers
+        - Discount
+      summary: Retrieve Customers Customer Discount
+  /v1/customers/{customer}/funding_instructions:
+    post:
+      description: >-
+        <p>Retrieve funding instructions for a customer cash balance. If funding
+        instructions do not yet exist for the customer, new
+
+        funding instructions will be created. If funding instructions have
+        already been created for a given customer, the same
+
+        funding instructions will be retrieved. In other words, we will return
+        the same funding instructions each time.</p>
+      tags:
+        - Customers
+        - Funding
+        - Instructions
+      summary: Create Customers Customer Funding Instructions
+  /v1/customers/{customer}/payment_methods:
+    get:
+      description: <p>Returns a list of PaymentMethods for a given Customer</p>
+      tags:
+        - Customers
+        - Methods
+        - Payments
+      summary: Retrieve Customers Customer Payment Methods
+  /v1/customers/{customer}/payment_methods/{payment_method}:
+    get:
+      description: <p>Retrieves a PaymentMethod object for a given Customer.</p>
+      tags:
+        - Customers
+        - Methods
+        - Payments
+      summary: Retrieve Customers Customer Payment Methods Payment Method
+  /v1/customers/{customer}/sources:
+    get:
+      description: <p>List sources for a specified customer.</p>
+      tags:
+        - Customers
+        - Sources
+      summary: Retrieve Customers Customer Sources
+    post:
+      description: >-
+        <p>When you create a new credit card, you must specify a customer or
+        recipient on which to create it.</p>
+
+
+        <p>If the card’s owner has no default card, then the new card will
+        become the default.
+
+        However, if the owner already has a default, then it will not change.
+
+        To change the default, you should <a
+        href="/docs/api#update_customer">update the customer</a> to have a new
+        <code>default_source</code>.</p>
+      tags:
+        - Customers
+        - Sources
+      summary: Create Customers Customer Sources
+  /v1/customers/{customer}/sources/{id}:
+    delete:
+      description: <p>Delete a specified source for a given customer.</p>
+      tags:
+        - Customers
+        - Sources
+      summary: Delete Customers Customer Sources Id
+    get:
+      description: <p>Retrieve a specified source for a given customer.</p>
+      tags:
+        - Customers
+        - Sources
+      summary: Retrieve Customers Customer Sources Id
+    post:
+      description: <p>Update a specified source for a given customer.</p>
+      tags:
+        - Customers
+        - Sources
+      summary: Create Customers Customer Sources Id
+  /v1/customers/{customer}/sources/{id}/verify:
+    post:
+      description: <p>Verify a specified bank account for a given customer.</p>
+      tags:
+        - Customers
+        - Sources
+        - Verify
+      summary: Create Customers Customer Sources Id Verify
+  /v1/customers/{customer}/subscriptions:
+    get:
+      description: >-
+        <p>You can see a list of the customer’s active subscriptions. Note that
+        the 10 most recent active subscriptions are always available by default
+        on the customer object. If you need more than those 10, you can use the
+        limit and starting_after parameters to page through additional
+        subscriptions.</p>
+      tags:
+        - Customers
+        - Subscriptions
+      summary: Retrieve Customers Customer Subscriptions
+    post:
+      description: <p>Creates a new subscription on an existing customer.</p>
+      tags:
+        - Customers
+        - Subscriptions
+      summary: Create Customers Customer Subscriptions
+  /v1/customers/{customer}/subscriptions/{subscription_exposed_id}:
+    delete:
+      description: >-
+        <p>Cancels a customer’s subscription. If you set the
+        <code>at_period_end</code> parameter to <code>true</code>, the
+        subscription will remain active until the end of the period, at which
+        point it will be canceled and not renewed. Otherwise, with the default
+        <code>false</code> value, the subscription is terminated immediately. In
+        either case, the customer will not be charged again for the
+        subscription.</p>
+
+
+        <p>Note, however, that any pending invoice items that you’ve created
+        will still be charged for at the end of the period, unless manually <a
+        href="#delete_invoiceitem">deleted</a>. If you’ve set the subscription
+        to cancel at the end of the period, any pending prorations will also be
+        left in place and collected at the end of the period. But if the
+        subscription is set to cancel immediately, pending prorations will be
+        removed.</p>
+
+
+        <p>By default, upon subscription cancellation, Stripe will stop
+        automatic collection of all finalized invoices for the customer. This is
+        intended to prevent unexpected payment attempts after the customer has
+        canceled a subscription. However, you can resume automatic collection of
+        the invoices manually after subscription cancellation to have us
+        proceed. Or, you could check for unpaid invoices before allowing the
+        customer to cancel the subscription at all.</p>
+      tags:
+        - Customers
+        - Exposed
+        - Subscriptions
+      summary: Delete Customers Customer Subscriptions Subscription Exposed Id
+    get:
+      description: <p>Retrieves the subscription with the given ID.</p>
+      tags:
+        - Customers
+        - Exposed
+        - Subscriptions
+      summary: Retrieve Customers Customer Subscriptions Subscription Exposed Id
+    post:
+      description: >-
+        <p>Updates an existing subscription on a customer to match the specified
+        parameters. When changing plans or quantities, we will optionally
+        prorate the price we charge next month to make up for any price changes.
+        To preview how the proration will be calculated, use the <a
+        href="#upcoming_invoice">upcoming invoice</a> endpoint.</p>
+      tags:
+        - Customers
+        - Exposed
+        - Subscriptions
+      summary: Create Customers Customer Subscriptions Subscription Exposed Id
+  /v1/customers/{customer}/subscriptions/{subscription_exposed_id}/discount:
+    delete:
+      description: <p>Removes the currently applied discount on a customer.</p>
+      tags:
+        - Customers
+        - Discount
+        - Exposed
+        - Subscriptions
+      summary: Delete Customers Customer Subscriptions Subscription Exposed Id Discount
+    get:
+      description: ''
+      tags:
+        - Customers
+        - Discount
+        - Exposed
+        - Subscriptions
+      summary: >-
+        Retrieve Customers Customer Subscriptions Subscription Exposed Id
+        Discount
+  /v1/customers/{customer}/tax_ids:
+    get:
+      description: <p>Returns a list of tax IDs for a customer.</p>
+      tags:
+        - Customers
+        - Ids
+        - Taxes
+      summary: Retrieve Customers Customer Tax Ids
+    post:
+      description: <p>Creates a new <code>tax_id</code> object for a customer.</p>
+      tags:
+        - Customers
+        - Ids
+        - Taxes
+      summary: Create Customers Customer Tax Ids
+  /v1/customers/{customer}/tax_ids/{id}:
+    delete:
+      description: <p>Deletes an existing <code>tax_id</code> object.</p>
+      tags:
+        - Customers
+        - Ids
+        - Taxes
+      summary: Delete Customers Customer Tax Ids Id
+    get:
+      description: <p>Retrieves the <code>tax_id</code> object with the given ident
+      tags:
+        - Customers
+        - Ids
+        - Taxes
+      summary: Retrieve Customers Customer Tax Ids Id

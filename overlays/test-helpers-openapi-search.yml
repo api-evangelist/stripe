@@ -1,0 +1,374 @@
+openapi: 3.0.0
+info:
+  title: Stripe Test Helpers API
+paths:
+  /v1/test_helpers/customers/{customer}/fund_cash_balance:
+    post:
+      description: <p>Create an incoming testmode bank transfer</p>
+      tags:
+        - Balance
+        - Cash
+        - Customers
+        - Funds
+        - Helpers
+        - Tests
+      summary: Create Test Helpers Customers Customer Fund Cash Balance
+  /v1/test_helpers/issuing/authorizations:
+    post:
+      description: <p>Create a test-mode authorization.</p>
+      tags:
+        - Authorization
+        - Helpers
+        - Issuing
+        - Tests
+      summary: Create Test Helpers Issuing Authorizations
+  /v1/test_helpers/issuing/authorizations/{authorization}/capture:
+    post:
+      description: <p>Capture a test-mode authorization.</p>
+      tags:
+        - Authorization
+        - Capture
+        - Helpers
+        - Issuing
+        - Tests
+      summary: Create Test Helpers Issuing Authorizations Authorization Capture
+  /v1/test_helpers/issuing/authorizations/{authorization}/expire:
+    post:
+      description: <p>Expire a test-mode Authorization.</p>
+      tags:
+        - Authorization
+        - Expire
+        - Helpers
+        - Issuing
+        - Tests
+      summary: Create Test Helpers Issuing Authorizations Authorization Expire
+  /v1/test_helpers/issuing/authorizations/{authorization}/increment:
+    post:
+      description: <p>Increment a test-mode Authorization.</p>
+      tags:
+        - Authorization
+        - Helpers
+        - Increment
+        - Issuing
+        - Tests
+      summary: Create Test Helpers Issuing Authorizations Authorization Increment
+  /v1/test_helpers/issuing/authorizations/{authorization}/reverse:
+    post:
+      description: <p>Reverse a test-mode Authorization.</p>
+      tags:
+        - Authorization
+        - Helpers
+        - Issuing
+        - Reverse
+        - Tests
+      summary: Create Test Helpers Issuing Authorizations Authorization Reverse
+  /v1/test_helpers/issuing/cards/{card}/shipping/deliver:
+    post:
+      description: >-
+        <p>Updates the shipping status of the specified Issuing
+        <code>Card</code> object to <code>delivered</code>.</p>
+      tags:
+        - Cards
+        - Deliveries
+        - Helpers
+        - Issuing
+        - Shipping
+        - Tests
+      summary: Create Test Helpers Issuing Cards Card Shipping Deliver
+  /v1/test_helpers/issuing/cards/{card}/shipping/fail:
+    post:
+      description: >-
+        <p>Updates the shipping status of the specified Issuing
+        <code>Card</code> object to <code>failure</code>.</p>
+      tags:
+        - Cards
+        - Fail
+        - Helpers
+        - Issuing
+        - Shipping
+        - Tests
+      summary: Create Test Helpers Issuing Cards Card Shipping Fail
+  /v1/test_helpers/issuing/cards/{card}/shipping/return:
+    post:
+      description: >-
+        <p>Updates the shipping status of the specified Issuing
+        <code>Card</code> object to <code>returned</code>.</p>
+      tags:
+        - Cards
+        - Helpers
+        - Issuing
+        - Returns
+        - Shipping
+        - Tests
+      summary: Create Test Helpers Issuing Cards Card Shipping Return
+  /v1/test_helpers/issuing/cards/{card}/shipping/ship:
+    post:
+      description: >-
+        <p>Updates the shipping status of the specified Issuing
+        <code>Card</code> object to <code>shipped</code>.</p>
+      tags:
+        - Cards
+        - Helpers
+        - Issuing
+        - Ship
+        - Shipping
+        - Tests
+      summary: Create Test Helpers Issuing Cards Card Shipping Ship
+  /v1/test_helpers/issuing/transactions/create_force_capture:
+    post:
+      description: >-
+        <p>Allows the user to capture an arbitrary amount, also known as a
+        forced capture.</p>
+      tags:
+        - Capture
+        - Force
+        - Helpers
+        - Issuing
+        - Tests
+        - Transactions
+      summary: Create Test Helpers Issuing Transactions Create Force Capture
+  /v1/test_helpers/issuing/transactions/create_unlinked_refund:
+    post:
+      description: >-
+        <p>Allows the user to refund an arbitrary amount, also known as a
+        unlinked refund.</p>
+      tags:
+        - Helpers
+        - Issuing
+        - Refunds
+        - Tests
+        - Transactions
+        - Unlinked
+      summary: Create Test Helpers Issuing Transactions Create Unlinked Refund
+  /v1/test_helpers/issuing/transactions/{transaction}/refund:
+    post:
+      description: <p>Refund a test-mode Transaction.</p>
+      tags:
+        - Helpers
+        - Issuing
+        - Refunds
+        - Tests
+        - Transactions
+      summary: Create Test Helpers Issuing Transactions Transaction Refund
+  /v1/test_helpers/refunds/{refund}/expire:
+    post:
+      description: <p>Expire a refund with a status of <code>requires_action</code>.</p>
+      tags:
+        - Expire
+        - Helpers
+        - Refunds
+        - Tests
+      summary: Create Test Helpers Refunds Refund Expire
+  /v1/test_helpers/terminal/readers/{reader}/present_payment_method:
+    post:
+      description: >-
+        <p>Presents a payment method on a simulated reader. Can be used to
+        simulate accepting a payment, saving a card or refunding a
+        transaction.</p>
+      tags:
+        - Helpers
+        - Methods
+        - Payments
+        - Present
+        - Readers
+        - Terminal
+        - Tests
+      summary: Create Test Helpers Terminal Readers Reader Present Payment Method
+  /v1/test_helpers/test_clocks:
+    get:
+      description: <p>Returns a list of your test clocks.</p>
+      tags:
+        - Clocks
+        - Helpers
+        - Tests
+      summary: Retrieve Test Helpers Test Clocks
+    post:
+      description: >-
+        <p>Creates a new test clock that can be attached to new customers and
+        quotes.</p>
+      tags:
+        - Clocks
+        - Helpers
+        - Tests
+      summary: Create Test Helpers Test Clocks
+  /v1/test_helpers/test_clocks/{test_clock}:
+    delete:
+      description: <p>Deletes a test clock.</p>
+      tags:
+        - Clock
+        - Clocks
+        - Helpers
+        - Tests
+      summary: Delete Test Helpers Test Clocks Test Clock
+    get:
+      description: <p>Retrieves a test clock.</p>
+      tags:
+        - Clock
+        - Clocks
+        - Helpers
+        - Tests
+      summary: Retrieve Test Helpers Test Clocks Test Clock
+  /v1/test_helpers/test_clocks/{test_clock}/advance:
+    post:
+      description: >-
+        <p>Starts advancing a test clock to a specified time in the future.
+        Advancement is done when status changes to <code>Ready</code>.</p>
+      tags:
+        - Advance
+        - Clock
+        - Clocks
+        - Helpers
+        - Tests
+      summary: Create Test Helpers Test Clocks Test Clock Advance
+  /v1/test_helpers/treasury/inbound_transfers/{id}/fail:
+    post:
+      description: >-
+        <p>Transitions a test mode created InboundTransfer to the
+        <code>failed</code> status. The InboundTransfer must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Fail
+        - Helpers
+        - Inbound
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Inbound Transfers Id Fail
+  /v1/test_helpers/treasury/inbound_transfers/{id}/return:
+    post:
+      description: >-
+        <p>Marks the test mode InboundTransfer object as returned and links the
+        InboundTransfer to a ReceivedDebit. The InboundTransfer must already be
+        in the <code>succeeded</code> state.</p>
+      tags:
+        - Helpers
+        - Inbound
+        - Returns
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Inbound Transfers Id Return
+  /v1/test_helpers/treasury/inbound_transfers/{id}/succeed:
+    post:
+      description: >-
+        <p>Transitions a test mode created InboundTransfer to the
+        <code>succeeded</code> status. The InboundTransfer must already be in
+        the <code>processing</code> state.</p>
+      tags:
+        - Helpers
+        - Inbound
+        - Succeed
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Inbound Transfers Id Succeed
+  /v1/test_helpers/treasury/outbound_payments/{id}/fail:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundPayment to the
+        <code>failed</code> status. The OutboundPayment must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Fail
+        - Helpers
+        - Outbound
+        - Payments
+        - Tests
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Payments Id Fail
+  /v1/test_helpers/treasury/outbound_payments/{id}/post:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundPayment to the
+        <code>posted</code> status. The OutboundPayment must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Helpers
+        - Outbound
+        - Payments
+        - Posts
+        - Tests
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Payments Id Post
+  /v1/test_helpers/treasury/outbound_payments/{id}/return:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundPayment to the
+        <code>returned</code> status. The OutboundPayment must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Helpers
+        - Outbound
+        - Payments
+        - Returns
+        - Tests
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Payments Id Return
+  /v1/test_helpers/treasury/outbound_transfers/{outbound_transfer}/fail:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundTransfer to the
+        <code>failed</code> status. The OutboundTransfer must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Fail
+        - Helpers
+        - Outbound
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Transfers Outbound Transfer Fail
+  /v1/test_helpers/treasury/outbound_transfers/{outbound_transfer}/post:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundTransfer to the
+        <code>posted</code> status. The OutboundTransfer must already be in the
+        <code>processing</code> state.</p>
+      tags:
+        - Helpers
+        - Outbound
+        - Posts
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Transfers Outbound Transfer Post
+  /v1/test_helpers/treasury/outbound_transfers/{outbound_transfer}/return:
+    post:
+      description: >-
+        <p>Transitions a test mode created OutboundTransfer to the
+        <code>returned</code> status. The OutboundTransfer must already be in
+        the <code>processing</code> state.</p>
+      tags:
+        - Helpers
+        - Outbound
+        - Returns
+        - Tests
+        - Transfers
+        - Treasury
+      summary: Create Test Helpers Treasury Outbound Transfers Outbound Transfer Return
+  /v1/test_helpers/treasury/received_credits:
+    post:
+      description: >-
+        <p>Use this endpoint to simulate a test mode ReceivedCredit initiated by
+        a third party. In live mode, you can’t directly create ReceivedCredits
+        initiated by third parties.</p>
+      tags:
+        - Credits
+        - Helpers
+        - Received
+        - Tests
+        - Treasury
+      summary: Create Test Helpers Treasury Received Credits
+  /v1/test_helpers/treasury/received_debits:
+    post:
+      description: >-
+        <p>Use this endpoint to simulate a test mode ReceivedDebit initiated by
+        a third party. In live mode, you can’t directly create ReceivedDebits
+        initiated by third pa
+      tags:
+        - Debits
+        - Helpers
+        - Received
+        - Tests
+        - Treasury
+      summary: Create Test Helpers Treasury Received Debits

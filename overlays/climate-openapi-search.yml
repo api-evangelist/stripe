@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: Stripe Climate API
+paths:
+  /v1/climate/orders:
+    get:
+      description: >-
+        <p>Lists all Climate order objects. The orders are returned sorted by
+        creation date, with the
+
+        most recently created orders appearing first.</p>
+      tags:
+        - Climate
+        - Orders
+      summary: Retrieve Climate Orders
+    post:
+      description: >-
+        <p>Creates a Climate order object for a given Climate product. The order
+        will be processed immediately
+
+        after creation and payment will be deducted your Stripe balance.</p>
+      tags:
+        - Climate
+        - Orders
+      summary: Create Climate Orders
+  /v1/climate/orders/{order}:
+    get:
+      description: >-
+        <p>Retrieves the details of a Climate order object with the given
+        ID.</p>
+      tags:
+        - Climate
+        - Orders
+      summary: Retrieve Climate Orders Order
+    post:
+      description: >-
+        <p>Updates the specified order by setting the values of the parameters
+        passed.</p>
+      tags:
+        - Climate
+        - Orders
+      summary: Create Climate Orders Order
+  /v1/climate/orders/{order}/cancel:
+    post:
+      description: >-
+        <p>Cancels a Climate order. You can cancel an order within 30 days of
+        creation. Stripe refunds the
+
+        reservation <code>amount_subtotal</code>, but not the
+        <code>amount_fees</code> for user-triggered cancellations. Frontier
+
+        might cancel reservations if suppliers fail to deliver. If Frontier
+        cancels the reservation, Stripe
+
+        provides 90 days advance notice and refunds the
+        <code>amount_total</code>.</p>
+      tags:
+        - Cancel
+        - Climate
+        - Orders
+      summary: Create Climate Orders Order Cancel
+  /v1/climate/products:
+    get:
+      description: <p>Lists all available Climate product objects.</p>
+      tags:
+        - Climate
+        - Products
+      summary: Retrieve Climate Products
+  /v1/climate/products/{product}:
+    get:
+      description: <p>Retrieves the details of a Climate product with the given ID.</p>
+      tags:
+        - Climate
+        - Products
+      summary: Retrieve Climate Products Product
+  /v1/climate/reservations:
+    get:
+      description: >-
+        <p>Lists all Climate order objects. The orders are returned sorted by
+        creation date, with the
+
+        most recently created orders appearing first.</p>
+      tags:
+        - Climate
+        - Reservations
+      summary: Retrieve Climate Reservations
+    post:
+      description: >-
+        <p>Creates a Climate order object for a given Climate product. The order
+        will be processed immediately
+
+        after creation and payment will be deducted your Stripe balance.</p>
+      tags:
+        - Climate
+        - Reservations
+      summary: Create Climate Reservations
+  /v1/climate/reservations/{order}:
+    get:
+      description: >-
+        <p>Retrieves the details of a Climate order object with the given
+        ID.</p>
+      tags:
+        - Climate
+        - Orders
+        - Reservations
+      summary: Retrieve Climate Reservations Order
+    post:
+      description: >-
+        <p>Updates the specified order by setting the values of the parameters
+        passed.</p>
+      tags:
+        - Climate
+        - Orders
+        - Reservations
+      summary: Create Climate Reservations Order
+  /v1/climate/reservations/{order}/cancel:
+    post:
+      description: >-
+        <p>Cancels a Climate order. You can cancel an order within 30 days of
+        creation. Stripe refunds the
+
+        reservation <code>amount_subtotal</code>, but not the
+        <code>amount_fees</code> for user-triggered cancellations. Frontier
+
+        might cancel reservations if suppliers fail to deliver. If Frontier
+        cancels the reservation, Stripe
+
+        provides 90 days advance notice and refunds the
+        <code>amount_total</code>.</p>
+      tags:
+        - Cancel
+        - Climate
+        - Orders
+        - Reservations
+      summary: Create Climate Reservations Order Cancel
+  /v1/climate/reservations/{order}/confirm:
+    post:
+      description: >-
+        <p>Confirms a Climate order. When you confirm your order, we immediately
+        deduct the funds from your
+
+        Stripe balance.</p>
+      tags:
+        - Climate
+        - Confirm
+        - Orders
+        - Reservations
+      summary: Create Climate Reservations Order Confirm
+  /v1/climate/suppliers:
+    get:
+      description: <p>Lists all available Climate supplier objects.</p>
+      tags:
+        - Climate
+        - Suppliers
+      summary: Retrieve Climate Suppliers
+  /v1/climate/suppliers/{supplier}:
+    get:
+      description: <p>Retrieves a Climate supplier o
+      tags:
+        - Climate
+        - Supplier
+        - Suppliers
+      summary: Retrieve Climate Suppliers Supplier
