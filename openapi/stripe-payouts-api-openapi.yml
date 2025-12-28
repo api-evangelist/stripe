@@ -1,7 +1,12 @@
 openapi: 3.0.0
 info:
   title: Stripe Payouts API
-  description: Needs description.
+  description: >-
+    A Payout object is created when you receive funds from Stripe, or when you
+    initiate a payout to either a bank account or debit card of a connected
+    Stripe account. You can retrieve individual payouts, and list all payouts.
+    Payouts are made on varying schedules, depending on your country and
+    industry.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -155,6 +160,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Payouts
     post:
       description: >-
         <p>To send funds to your own bank account, create a new payout object.
@@ -203,6 +212,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Payouts
   /v1/payouts/{payout}:
     get:
       description: >-
@@ -255,6 +268,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Payouts
     post:
       description: >-
         <p>Updates the specified payout by setting the values of the parameters
@@ -301,6 +318,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Payouts
   /v1/payouts/{payout}/cancel:
     post:
       description: >-
@@ -345,6 +366,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Payouts
+        - Cancel
   /v1/payouts/{payout}/reverse:
     post:
       description: >-
@@ -399,6 +425,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Payouts
+        - Reverse
 components:
   schemas:
     error:
