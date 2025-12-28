@@ -1,7 +1,9 @@
 openapi: 3.0.0
 info:
   title: Stripe Invoice API
-  description: Needs description.
+  description: >-
+    Invoices are statements of amounts owed by a customer, and are either
+    generated one-off, or generated periodically from a subscription.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -15,13 +17,13 @@ security:
 servers:
   - url: https://api.stripe.com/
 paths:
-  /v1/invoiceitems:
+  /v1/Invoice Items:
     get:
       description: >-
         <p>Returns a list of your invoice items. Invoice items are returned
         sorted by creation date, with the most recently created invoice items
         appearing first.</p>
-      operationId: getInvoiceitems
+      operationId: getInvoice Items
       parameters:
         - explode: true
           in: query
@@ -125,7 +127,7 @@ paths:
             encoding: {}
             schema:
               additionalProperties: false
-              $ref: '#/components/schemas/GetInvoiceitemsRequest'
+              $ref: '#/components/schemas/GetInvoice ItemsRequest'
         required: false
       responses:
         '200':
@@ -143,17 +145,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Invoiceitems
+      summary: Get   Invoice Items
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
     post:
       description: >-
         <p>Creates an item to be added to a draft invoice (up to 250 items per
         invoice). If no invoice is specified, the item will be on the next
         invoice created for the customer specified.</p>
-      operationId: postInvoiceitems
+      operationId: postInvoice Items
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -181,7 +186,7 @@ paths:
                 style: deepObject
             schema:
               additionalProperties: false
-              $ref: '#/components/schemas/PostInvoiceitemsRequest'
+              $ref: '#/components/schemas/PostInvoice ItemsRequest'
         required: true
       responses:
         '200':
@@ -196,18 +201,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Invoiceitems
+      summary: Post   Invoice Items
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
-  /v1/invoiceitems/{invoiceitem}:
+        ChooseTags: true
+      tags:
+        - Post
+  /v1/Invoice Items/{invoiceitem}:
     delete:
       description: >-
         <p>Deletes an invoice item, removing it from an invoice. Deleting
         invoice items is only possible when they’re not attached to invoices, or
         if it’s attached to a draft invoice.</p>
-      operationId: deleteInvoiceitemsInvoiceitem
+      operationId: deleteInvoice ItemsInvoiceitem
       parameters:
         - in: path
           name: invoiceitem
@@ -222,7 +230,7 @@ paths:
             encoding: {}
             schema:
               additionalProperties: false
-              $ref: '#/components/schemas/DeleteInvoiceitemsInvoiceitemRequest'
+              $ref: '#/components/schemas/DeleteInvoice ItemsInvoiceitemRequest'
         required: false
       responses:
         '200':
@@ -237,14 +245,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Delete   Invoiceitems Invoiceitem
+      summary: Delete   Invoice Items Invoiceitem
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Delete
     get:
       description: <p>Retrieves the invoice item with the given ID.</p>
-      operationId: getInvoiceitemsInvoiceitem
+      operationId: getInvoice ItemsInvoiceitem
       parameters:
         - description: Specifies which fields in the response should be expanded.
           explode: true
@@ -270,7 +281,7 @@ paths:
             encoding: {}
             schema:
               additionalProperties: false
-              $ref: '#/components/schemas/GetInvoiceitemsInvoiceitemRequest'
+              $ref: '#/components/schemas/GetInvoice ItemsInvoiceitemRequest'
         required: false
       responses:
         '200':
@@ -285,17 +296,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Invoiceitems Invoiceitem
+      summary: Get   Invoice Items Invoiceitem
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
     post:
       description: >-
         <p>Updates the amount or description of an invoice item on an upcoming
         invoice. Updating an invoice item is only possible before the invoice
         it’s attached to is closed.</p>
-      operationId: postInvoiceitemsInvoiceitem
+      operationId: postInvoice ItemsInvoiceitem
       parameters:
         - in: path
           name: invoiceitem
@@ -331,7 +345,7 @@ paths:
                 style: deepObject
             schema:
               additionalProperties: false
-              $ref: '#/components/schemas/PostInvoiceitemsInvoiceitemRequest'
+              $ref: '#/components/schemas/PostInvoice ItemsInvoiceitemRequest'
         required: false
       responses:
         '200':
@@ -346,11 +360,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Invoiceitems Invoiceitem
+      summary: Post   Invoice Items Invoiceitem
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
   /v1/invoices:
     get:
       description: >-
@@ -519,6 +536,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
     post:
       description: >-
         <p>This endpoint creates a draft invoice for a given customer. The
@@ -592,6 +613,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
   /v1/invoices/search:
     get:
       description: >-
@@ -680,6 +705,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
+        - Search
   /v1/invoices/upcoming:
     get:
       description: >-
@@ -1396,6 +1426,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
+        - Upcoming
   /v1/invoices/upcoming/lines:
     get:
       description: >-
@@ -2129,6 +2164,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
+        - Upcoming
+        - Lines
   /v1/invoices/{invoice}:
     delete:
       description: >-
@@ -2171,6 +2212,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Delete
+        - Invoices
+        - Invoice
     get:
       description: <p>Retrieves the invoice with the given ID.</p>
       operationId: getInvoicesInvoice
@@ -2219,6 +2265,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
+        - Invoice
     post:
       description: >-
         <p>Draft invoices are fully editable. Once an invoice is <a
@@ -2316,6 +2367,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
   /v1/invoices/{invoice}/finalize:
     post:
       description: >-
@@ -2360,6 +2416,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Finalize
   /v1/invoices/{invoice}/lines:
     get:
       description: >-
@@ -2451,6 +2513,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Invoices
+        - Invoice
+        - Lines
   /v1/invoices/{invoice}/lines/{line_item_id}:
     post:
       description: >-
@@ -2530,6 +2598,15 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Lines
+        - Line
+        - Item
+        - Identifiers
   /v1/invoices/{invoice}/mark_uncollectible:
     post:
       description: >-
@@ -2573,6 +2650,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Mark
   /v1/invoices/{invoice}/pay:
     post:
       description: >-
@@ -2623,6 +2706,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Pay
   /v1/invoices/{invoice}/send:
     post:
       description: >-
@@ -2675,6 +2764,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Send
   /v1/invoices/{invoice}/void:
     post:
       description: >-
@@ -2720,6 +2815,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Invoices
+        - Invoice
+        - Void
 components:
   schemas:
     error:
@@ -2981,7 +3082,7 @@ components:
         generated one-off, or generated periodically from a subscription.
 
 
-        They contain [invoice items](https://stripe.com/docs/api#invoiceitems),
+        They contain [invoice items](https://stripe.com/docs/api#Invoice Items),
         and proration adjustments
 
         that may be caused by subscription upgrades/downgrades (if necessary).
@@ -3883,9 +3984,8 @@ components:
               type: string
             - $ref: '#/components/schemas/invoiceitem'
           description: >-
-            The ID of the [invoice
-            item](https://stripe.com/docs/api/invoiceitems) associated with this
-            line item if any.
+            The ID of the [invoice item](https://stripe.com/docs/api/Invoice
+            Items) associated with this line item if any.
           x-expansionResources:
             oneOf:
               - $ref: '#/components/schemas/invoiceitem'
@@ -4006,7 +4106,7 @@ components:
         - tax_amounts
         - tax_rates
       x-resourceId: line_item
-    GetInvoiceitemsRequest:
+    GetInvoice ItemsRequest:
       type: object
       properties: {}
     InvoicesItemsList:
@@ -4036,9 +4136,9 @@ components:
         url:
           description: The URL where this list can be accessed.
           maxLength: 5000
-          pattern: ^/v1/invoiceitems
+          pattern: ^/v1/Invoice Items
           type: string
-    PostInvoiceitemsRequest:
+    PostInvoice ItemsRequest:
       type: object
       required:
         - customer
@@ -4230,13 +4330,13 @@ components:
             `unit_amount` and `unit_amount_decimal` can be set.
           format: decimal
           type: string
-    DeleteInvoiceitemsInvoiceitemRequest:
+    DeleteInvoice ItemsInvoiceitemRequest:
       type: object
       properties: {}
-    GetInvoiceitemsInvoiceitemRequest:
+    GetInvoice ItemsInvoiceitemRequest:
       type: object
       properties: {}
-    PostInvoiceitemsInvoiceitemRequest:
+    PostInvoice ItemsInvoiceitemRequest:
       type: object
       properties:
         amount:
