@@ -1,7 +1,12 @@
 openapi: 3.0.0
 info:
   title: Stripe Payment Links API
-  description: Needs description.
+  description: >-
+    A payment link is a shareable URL that will take your customers to a hosted
+    payment page. A payment link can be shared and used multiple times. When a
+    customer opens a payment link it will open a new checkout session to render
+    the payment page. You can use checkout session events to track payments
+    through payment links.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -104,6 +109,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Links
     post:
       description: <p>Creates a payment link.</p>
       operationId: postPaymentLinks
@@ -187,6 +196,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Links
   /v1/payment_links/{payment_link}:
     get:
       description: <p>Retrieve a payment link.</p>
@@ -231,11 +244,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Payment Links Payment Link
+      summary: Get   Payment Links
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Links
+        - Link
     post:
       description: <p>Updates a payment link.</p>
       operationId: postPaymentLinksPaymentLink
@@ -310,11 +328,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Links Payment Link
+      summary: Post   Payment Links
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Links
+        - Link
   /v1/payment_links/{payment_link}/line_items:
     get:
       description: >-
@@ -401,11 +424,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Payment Links Payment Link Line Items
+      summary: Get   Payment Links Line Items
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Links
+        - Link
+        - Line
+        - Items
 components:
   schemas:
     error:
