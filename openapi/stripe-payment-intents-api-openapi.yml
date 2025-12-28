@@ -1,7 +1,12 @@
 openapi: 3.0.0
 info:
   title: Stripe Payment Intents API
-  description: Needs description.
+  description: >-
+    A PaymentIntent guides you through the process of collecting a payment from
+    your customer. We recommend that you create exactly one PaymentIntent for
+    each order or customer session in your system. You can reference the
+    PaymentIntent later to see the history of payment attempts for a particular
+    session.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -128,6 +133,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Intents
     post:
       description: >-
         <p>Creates a PaymentIntent object.</p>
@@ -212,6 +221,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
   /v1/payment_intents/search:
     get:
       description: >-
@@ -300,6 +313,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Intents
+        - Search
   /v1/payment_intents/{intent}:
     get:
       description: >-
@@ -366,11 +384,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Payment Intents Intent
+      summary: Get   Payment Intents
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Payments
+        - Intents
+        - Intent
     post:
       description: >-
         <p>Updates properties on a PaymentIntent object without confirming.</p>
@@ -446,11 +469,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent
+      summary: Post   Payment Intents
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
   /v1/payment_intents/{intent}/apply_customer_balance:
     post:
       description: >-
@@ -490,11 +518,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Apply Customer Balance
+      summary: Post   Payment Intents Apply Customer Balance
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Apply
+        - Customer
+        - Balance
   /v1/payment_intents/{intent}/cancel:
     post:
       description: >-
@@ -548,11 +584,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Cancel
+      summary: Post   Payment Intents Cancel
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Cancel
   /v1/payment_intents/{intent}/capture:
     post:
       description: >-
@@ -605,11 +647,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Capture
+      summary: Post   Payment Intents Capture
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Capture
   /v1/payment_intents/{intent}/confirm:
     post:
       description: >-
@@ -729,11 +777,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Confirm
+      summary: Post   Payment Intents Confirm
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Confirm
   /v1/payment_intents/{intent}/increment_authorization:
     post:
       description: >-
@@ -829,11 +883,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Increment Authorization
+      summary: Post   Payment Intents Increment Authorization
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Increment
+        - Authorization
   /v1/payment_intents/{intent}/verify_microdeposits:
     post:
       description: <p>Verifies microdeposits on a PaymentIntent object.</p>
@@ -874,11 +935,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Payment Intents Intent Verify Microdeposits
+      summary: Post   Payment Intents Verify Microdeposits
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Payments
+        - Intents
+        - Intent
+        - Verify
+        - Microdeposits
 components:
   schemas:
     error:
