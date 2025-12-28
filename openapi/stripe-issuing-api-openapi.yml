@@ -1,7 +1,9 @@
 openapi: 3.0.0
 info:
   title: Stripe Issuing API
-  description: Needs description.
+  description: >-
+    An API for businesses to instantly create, manage, and distribute payment
+    cards.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -149,6 +151,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Authorization
   /v1/issuing/authorizations/{authorization}:
     get:
       description: <p>Retrieves an Issuing <code>Authorization</code> object.</p>
@@ -194,11 +200,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Issuing Authorizations Authorization
+      summary: Get   Issuing Authorizations
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Authorization
     post:
       description: >-
         <p>Updates the specified Issuing <code>Authorization</code> object by
@@ -241,11 +251,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Authorizations Authorization
+      summary: Post   Issuing Authorizations
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Authorization
   /v1/issuing/authorizations/{authorization}/approve:
     post:
       description: >-
@@ -294,11 +308,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Authorizations Authorization Approve
+      summary: Post   Issuing Authorizations Approve
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Authorization
+        - Approve
   /v1/issuing/authorizations/{authorization}/decline:
     post:
       description: >-
@@ -347,11 +366,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Authorizations Authorization Decline
+      summary: Post   Issuing Authorizations Decline
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Authorization
+        - Decline
   /v1/issuing/cardholders:
     get:
       description: >-
@@ -497,6 +521,9 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
     post:
       description: >-
         <p>Creates a new Issuing <code>Cardholder</code> object that can be
@@ -549,6 +576,9 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
   /v1/issuing/cardholders/{cardholder}:
     get:
       description: <p>Retrieves an Issuing <code>Cardholder</code> object.</p>
@@ -593,11 +623,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Issuing Cardholders Cardholder
+      summary: Get   Issuing Cardholders
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
     post:
       description: >-
         <p>Updates the specified Issuing <code>Cardholder</code> object by
@@ -654,11 +687,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Cardholders Cardholder
+      summary: Post   Issuing Cardholders
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
   /v1/issuing/cards:
     get:
       description: >-
@@ -818,6 +854,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Cards
     post:
       description: <p>Creates an Issuing <code>Card</code> object.</p>
       operationId: postIssuingCards
@@ -859,6 +899,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Cards
   /v1/issuing/cards/{card}:
     get:
       description: <p>Retrieves an Issuing <code>Card</code> object.</p>
@@ -908,6 +952,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Cards
+        - Card
     post:
       description: >-
         <p>Updates the specified Issuing <code>Card</code> object by setting the
@@ -960,6 +1009,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Cards
+        - Card
   /v1/issuing/disputes:
     get:
       description: >-
@@ -1086,6 +1140,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Disputes
     post:
       description: >-
         <p>Creates an Issuing <code>Dispute</code> object. Individual pieces of
@@ -1134,6 +1192,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Disputes
   /v1/issuing/disputes/{dispute}:
     get:
       description: <p>Retrieves an Issuing <code>Dispute</code> object.</p>
@@ -1183,6 +1245,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Disputes
+        - Dispute
     post:
       description: >-
         <p>Updates the specified Issuing <code>Dispute</code> object by setting
@@ -1233,6 +1300,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Disputes
+        - Dispute
   /v1/issuing/disputes/{dispute}/submit:
     post:
       description: >-
@@ -1277,11 +1349,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Disputes Dispute Submit
+      summary: Post   Issuing DisputesSubmit
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Disputes
+        - Dispute
+        - Submit
   /v1/issuing/settlements:
     get:
       description: >-
@@ -1387,6 +1465,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Settlements
   /v1/issuing/settlements/{settlement}:
     get:
       description: <p>Retrieves an Issuing <code>Settlement</code> object.</p>
@@ -1436,6 +1518,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Settlements
+        - Settlement
     post:
       description: >-
         <p>Updates the specified Issuing <code>Settlement</code> object by
@@ -1482,6 +1569,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Settlements
+        - Settlement
   /v1/issuing/tokens:
     get:
       description: <p>Lists all Issuing <code>Token</code> objects for a given card.</p>
@@ -1604,6 +1696,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Tokens
   /v1/issuing/tokens/{token}:
     get:
       description: <p>Retrieves an Issuing <code>Token</code> object.</p>
@@ -1648,11 +1744,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Issuing Tokens Token
+      summary: Get   Issuing Tokens
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Tokens
     post:
       description: >-
         <p>Attempts to update the specified Issuing <code>Token</code> object to
@@ -1690,11 +1790,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Tokens Token
+      summary: Post   Issuing Tokens
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Tokens
   /v1/issuing/transactions:
     get:
       description: >-
@@ -1828,6 +1932,10 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Transactions
   /v1/issuing/transactions/{transaction}:
     get:
       description: <p>Retrieves an Issuing <code>Transaction</code> object.</p>
@@ -1872,11 +1980,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Issuing Transactions Transaction
+      summary: Get   Issuing Transactions
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Get
+        - Issuing
+        - Transactions
+        - Transaction
     post:
       description: >-
         <p>Updates the specified Issuing <code>Transaction</code> object by
@@ -1918,11 +2031,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Issuing Transactions Transaction
+      summary: Post   Issuing Transactions
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+      tags:
+        - Post
+        - Issuing
+        - Transactions
+        - Transaction
 components:
   schemas:
     error:
