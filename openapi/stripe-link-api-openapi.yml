@@ -1,7 +1,10 @@
 openapi: 3.0.0
 info:
   title: Stripe Link API
-  description: Needs description.
+  description: >-
+    You can use the Payment Links API to create a payment link that you can
+    share with your customers. Stripe redirects customers who open this link to
+    a Stripe-hosted payment page.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -63,6 +66,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Link
+        - Account
+        - Sessions
   /v1/link_account_sessions/{session}:
     get:
       description: >-
@@ -114,6 +123,12 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Link
+        - Account
+        - Sessions
   /v1/linked_accounts:
     get:
       description: >-
@@ -225,6 +240,11 @@ paths:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Linked
+        - Accounts
   /v1/linked_accounts/{account}:
     get:
       description: >-
@@ -271,11 +291,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Linked Accounts Account
+      summary: Get   Linked Accounts
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Linked
+        - Accounts
+        - Account
   /v1/linked_accounts/{account}/disconnect:
     post:
       description: >-
@@ -315,11 +341,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Linked Accounts Account Disconnect
+      summary: Post   Linked Accounts Disconnect
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Linked
+        - Accounts
+        - Account
+        - Disconnect
   /v1/linked_accounts/{account}/owners:
     get:
       description: <p>Lists all owners for a given <code>Account</code></p>
@@ -410,11 +443,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Get   Linked Accounts Account Owners
+      summary: Get   Linked Accounts Owners
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Get
+        - Linked
+        - Accounts
+        - Account
+        - Owners
   /v1/linked_accounts/{account}/refresh:
     post:
       description: >-
@@ -456,11 +496,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Post   Linked Accounts Account Refresh
+      summary: Post   Linked Accounts Refresh
       x-api-evangelist-processing:
         GenerateOperationSummariesFromPath: true
         PascalCaseOperationSummaries: true
         CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+        - Post
+        - Linked
+        - Accounts
+        - Account
+        - Refresh
 components:
   schemas:
     financial_connections.session:
