@@ -1,0 +1,443 @@
+openapi: 3.1.0
+info:
+  title: Stripe Sources API
+  description: >-
+    Source objects allow you to accept a variety of payment methods. They
+    represent a customer's payment instrument, and can be used with the Stripe
+    API just like a Card object once chargeable, they can be charged, or can
+    be attached to customers.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/sources:
+    post:
+      summary: Create Source
+      description: <p>Creates a new source object.</p>
+      operationId: PostSources
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The type of the source to create.
+                  maxLength: 5000
+                amount:
+                  type: integer
+                  description: Amount associated with the source.
+                currency:
+                  type: string
+                  description: Three-letter ISO code for the currency associated with the source.
+                flow:
+                  type: string
+                  description: The authentication flow of the source to create.
+                  enum:
+                    - code_verification
+                    - none
+                    - receiver
+                    - redirect
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                owner:
+                  type: object
+                  properties:
+                    address:
+                      type: object
+                    email:
+                      type: string
+                    name:
+                      type: string
+                    phone:
+                      type: string
+                redirect:
+                  type: object
+                  properties:
+                    return_url:
+                      type: string
+                statement_descriptor:
+                  type: string
+                  maxLength: 5000
+                token:
+                  type: string
+                  maxLength: 5000
+                usage:
+                  type: string
+                  enum:
+                    - reusable
+                    - single_use
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/source'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+  /v1/sources/{source}:
+    get:
+      summary: Retrieve Source
+      description: <p>Retrieves an existing source object.</p>
+      operationId: GetSourcesSource
+      parameters:
+        - name: source
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: client_secret
+          in: query
+          description: The client secret of the source.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/source'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+    post:
+      summary: Update Source
+      description: <p>Updates the specified source by setting the values of the parameters passed.</p>
+      operationId: PostSourcesSource
+      parameters:
+        - name: source
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                owner:
+                  type: object
+                  properties:
+                    address:
+                      type: object
+                    email:
+                      type: string
+                    name:
+                      type: string
+                    phone:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/source'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+  /v1/sources/{source}/source_transactions:
+    get:
+      summary: List Source Transactions
+      description: <p>List source transactions for a given source.</p>
+      operationId: GetSourcesSourceSourceTransactions
+      parameters:
+        - name: source
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/source_transaction'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+  /v1/customers/{customer}/sources:
+    post:
+      summary: Attach Source to Customer
+      description: <p>Attaches a source to a customer.</p>
+      operationId: PostCustomersCustomerSources
+      parameters:
+        - name: customer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - source
+              properties:
+                source:
+                  type: string
+                  description: The identifier of the source to be attached.
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/source'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+  /v1/customers/{customer}/sources/{id}:
+    delete:
+      summary: Detach Source from Customer
+      description: <p>Detaches a source from a customer.</p>
+      operationId: DeleteCustomersCustomerSourcesId
+      parameters:
+        - name: customer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/source'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Sources
+components:
+  schemas:
+    source:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - source
+        amount:
+          type:
+            - integer
+            - 'null'
+        client_secret:
+          type: string
+          maxLength: 5000
+        created:
+          type: integer
+        currency:
+          type:
+            - string
+            - 'null'
+        customer:
+          type:
+            - string
+            - 'null'
+        flow:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: string
+        owner:
+          type:
+            - object
+            - 'null'
+        redirect:
+          type:
+            - object
+            - 'null'
+        statement_descriptor:
+          type:
+            - string
+            - 'null'
+        status:
+          type: string
+        type:
+          type: string
+          maxLength: 5000
+        usage:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - client_secret
+        - created
+        - flow
+        - livemode
+        - status
+        - type
+    source_transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - source_transaction
+        amount:
+          type: integer
+        created:
+          type: integer
+        currency:
+          type: string
+        livemode:
+          type: boolean
+        source:
+          type: string
+          maxLength: 5000
+        status:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - object
+        - amount
+        - created
+        - currency
+        - livemode
+        - source
+        - status
+        - type
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

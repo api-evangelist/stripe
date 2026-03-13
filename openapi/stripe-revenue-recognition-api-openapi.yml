@@ -1,0 +1,305 @@
+openapi: 3.1.0
+info:
+  title: Stripe Revenue Recognition API
+  description: >-
+    Automate your accrual accounting process with Stripe Revenue Recognition.
+    Import transaction data, set up rules, and download revenue reports for
+    compliance with accounting standards like ASC 606.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/reporting/report_runs:
+    post:
+      summary: Create Revenue Recognition Report
+      description: <p>Creates a report run for revenue recognition data export.</p>
+      operationId: PostRevenueRecognitionReportRuns
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - report_type
+              properties:
+                report_type:
+                  type: string
+                  description: >-
+                    The report type for revenue recognition reports. Use types like
+                    balance_change_from_activity.itemized.5 for detailed data.
+                  maxLength: 5000
+                parameters:
+                  type: object
+                  properties:
+                    interval_start:
+                      type: integer
+                    interval_end:
+                      type: integer
+                    columns:
+                      type: array
+                      items:
+                        type: string
+                    currency:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reporting.report_run'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Revenue Recognition
+  /v1/credit_notes:
+    get:
+      summary: List Credit Notes
+      description: <p>Returns a list of credit notes for revenue recognition purposes.</p>
+      operationId: GetCreditNotesForRevRec
+      parameters:
+        - name: invoice
+          in: query
+          description: Only return credit notes for the invoice specified by this invoice ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: customer
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/credit_note'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Revenue Recognition
+components:
+  schemas:
+    reporting.report_run:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - reporting.report_run
+        created:
+          type: integer
+        error:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        parameters:
+          type: object
+        report_type:
+          type: string
+          maxLength: 5000
+        result:
+          type:
+            - object
+            - 'null'
+        status:
+          type: string
+        succeeded_at:
+          type:
+            - integer
+            - 'null'
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - parameters
+        - report_type
+        - status
+    credit_note:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - credit_note
+        amount:
+          type: integer
+        created:
+          type: integer
+        currency:
+          type: string
+        customer:
+          type: string
+        discount_amount:
+          type: integer
+        discount_amounts:
+          type: array
+          items:
+            type: object
+        effective_at:
+          type:
+            - integer
+            - 'null'
+        invoice:
+          type: string
+        lines:
+          type: object
+        livemode:
+          type: boolean
+        memo:
+          type:
+            - string
+            - 'null'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        number:
+          type: string
+        out_of_band_amount:
+          type:
+            - integer
+            - 'null'
+        reason:
+          type:
+            - string
+            - 'null'
+          enum:
+            - duplicate
+            - fraudulent
+            - order_change
+            - product_unsatisfactory
+            - null
+        refund:
+          type:
+            - string
+            - 'null'
+        status:
+          type: string
+          enum:
+            - issued
+            - void
+        subtotal:
+          type: integer
+        subtotal_excluding_tax:
+          type:
+            - integer
+            - 'null'
+        tax_amounts:
+          type: array
+          items:
+            type: object
+        total:
+          type: integer
+        total_excluding_tax:
+          type:
+            - integer
+            - 'null'
+        type:
+          type: string
+          enum:
+            - post_payment
+            - pre_payment
+        voided_at:
+          type:
+            - integer
+            - 'null'
+      required:
+        - id
+        - object
+        - amount
+        - created
+        - currency
+        - customer
+        - discount_amount
+        - invoice
+        - lines
+        - livemode
+        - metadata
+        - number
+        - status
+        - subtotal
+        - total
+        - type
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

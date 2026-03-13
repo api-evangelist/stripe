@@ -1,0 +1,351 @@
+openapi: 3.1.0
+info:
+  title: Stripe Reporting API
+  description: >-
+    The financial reports in the Dashboard provide downloadable reports in CSV
+    format for a variety of accounting and reconciliation tasks. These reports
+    are also available through the API.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/reporting/report_runs:
+    get:
+      summary: List Report Runs
+      description: <p>Returns a list of Report Runs.</p>
+      operationId: GetReportingReportRuns
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/reporting.report_run'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reporting
+    post:
+      summary: Create Report Run
+      description: <p>Creates a new object and begin running the report.</p>
+      operationId: PostReportingReportRuns
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - report_type
+              properties:
+                report_type:
+                  type: string
+                  description: The ID of the report type to run.
+                  maxLength: 5000
+                parameters:
+                  type: object
+                  properties:
+                    interval_start:
+                      type: integer
+                    interval_end:
+                      type: integer
+                    columns:
+                      type: array
+                      items:
+                        type: string
+                    connected_account:
+                      type: string
+                    currency:
+                      type: string
+                    reporting_category:
+                      type: string
+                    timezone:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reporting.report_run'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reporting
+  /v1/reporting/report_runs/{report_run}:
+    get:
+      summary: Retrieve Report Run
+      description: <p>Retrieves the details of an existing Report Run.</p>
+      operationId: GetReportingReportRunsReportRun
+      parameters:
+        - name: report_run
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reporting.report_run'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reporting
+  /v1/reporting/report_types:
+    get:
+      summary: List Report Types
+      description: <p>Returns a full list of Report Types.</p>
+      operationId: GetReportingReportTypes
+      parameters:
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/reporting.report_type'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reporting
+  /v1/reporting/report_types/{report_type}:
+    get:
+      summary: Retrieve Report Type
+      description: <p>Retrieves the details of a Report Type.</p>
+      operationId: GetReportingReportTypesReportType
+      parameters:
+        - name: report_type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reporting.report_type'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reporting
+components:
+  schemas:
+    reporting.report_run:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - reporting.report_run
+        created:
+          type: integer
+        error:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        parameters:
+          type: object
+        report_type:
+          type: string
+          maxLength: 5000
+        result:
+          type:
+            - object
+            - 'null'
+          description: The file object representing the result of the report run.
+        status:
+          type: string
+        succeeded_at:
+          type:
+            - integer
+            - 'null'
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - parameters
+        - report_type
+        - status
+    reporting.report_type:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - reporting.report_type
+        data_available_end:
+          type: integer
+        data_available_start:
+          type: integer
+        default_columns:
+          type:
+            - array
+            - 'null'
+          items:
+            type: string
+        livemode:
+          type: boolean
+        name:
+          type: string
+        updated:
+          type: integer
+        version:
+          type: integer
+      required:
+        - id
+        - object
+        - data_available_end
+        - data_available_start
+        - livemode
+        - name
+        - updated
+        - version
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

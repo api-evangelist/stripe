@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/customer",
+  "title": "Stripe Customer",
+  "description": "This object represents a customer of your business. Use it to create recurring charges and track payments that belong to the same customer.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^cus_"
+    },
+    "object": {
+      "type": "string",
+      "const": "customer",
+      "description": "String representing the object's type."
+    },
+    "address": {
+      "description": "The customer's address.",
+      "oneOf": [
+        { "$ref": "#/$defs/address" },
+        { "type": "null" }
+      ]
+    },
+    "balance": {
+      "type": "integer",
+      "description": "The current balance, if any, that's stored on the customer. Positive amounts represent the amount the customer owes; negative amounts represent credit."
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch."
+    },
+    "currency": {
+      "type": ["string", "null"],
+      "description": "Three-letter ISO code for the currency the customer can be charged in for recurring billing purposes."
+    },
+    "default_source": {
+      "type": ["string", "null"],
+      "description": "ID of the default payment source for the customer."
+    },
+    "delinquent": {
+      "type": ["boolean", "null"],
+      "description": "Whether or not the latest charge for the customer's latest invoice has failed."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "An arbitrary string attached to the object."
+    },
+    "discount": {
+      "description": "Describes the current discount active on the customer, if there is one.",
+      "oneOf": [
+        { "$ref": "#/$defs/discount" },
+        { "type": "null" }
+      ]
+    },
+    "email": {
+      "type": ["string", "null"],
+      "description": "The customer's email address.",
+      "format": "email"
+    },
+    "invoice_prefix": {
+      "type": ["string", "null"],
+      "description": "The prefix for the customer used to generate unique invoice numbers."
+    },
+    "invoice_settings": {
+      "type": ["object", "null"],
+      "description": "The customer's default invoice settings.",
+      "properties": {
+        "custom_fields": {
+          "type": ["array", "null"],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        },
+        "default_payment_method": {
+          "type": ["string", "null"]
+        },
+        "footer": {
+          "type": ["string", "null"]
+        },
+        "rendering_options": {
+          "type": ["object", "null"]
+        }
+      }
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode or the value false if the object exists in test mode."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "name": {
+      "type": ["string", "null"],
+      "description": "The customer's full name or business name."
+    },
+    "next_invoice_sequence": {
+      "type": "integer",
+      "description": "The suffix of the customer's next invoice number."
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "description": "The customer's phone number."
+    },
+    "preferred_locales": {
+      "type": "array",
+      "description": "The customer's preferred locales (languages), ordered by preference.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "shipping": {
+      "description": "Mailing and shipping address for the customer.",
+      "oneOf": [
+        { "$ref": "#/$defs/shipping" },
+        { "type": "null" }
+      ]
+    },
+    "sources": {
+      "type": "object",
+      "description": "The customer's payment sources, if any."
+    },
+    "subscriptions": {
+      "type": "object",
+      "description": "The customer's current subscriptions, if any."
+    },
+    "tax_exempt": {
+      "type": ["string", "null"],
+      "description": "Describes the customer's tax exemption status.",
+      "enum": ["exempt", "none", "reverse", null]
+    },
+    "tax_ids": {
+      "type": "object",
+      "description": "The customer's tax IDs."
+    },
+    "test_clock": {
+      "type": ["string", "null"],
+      "description": "ID of the test clock that this customer belongs to."
+    }
+  },
+  "required": ["id", "object", "created", "livemode", "metadata"],
+  "$defs": {
+    "address": {
+      "type": "object",
+      "properties": {
+        "city": { "type": ["string", "null"] },
+        "country": { "type": ["string", "null"] },
+        "line1": { "type": ["string", "null"] },
+        "line2": { "type": ["string", "null"] },
+        "postal_code": { "type": ["string", "null"] },
+        "state": { "type": ["string", "null"] }
+      }
+    },
+    "discount": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "object": { "type": "string", "const": "discount" },
+        "coupon": { "type": "object" },
+        "customer": { "type": ["string", "null"] },
+        "end": { "type": ["integer", "null"] },
+        "start": { "type": "integer" },
+        "subscription": { "type": ["string", "null"] }
+      }
+    },
+    "shipping": {
+      "type": "object",
+      "properties": {
+        "address": { "$ref": "#/$defs/address" },
+        "name": { "type": "string" },
+        "phone": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

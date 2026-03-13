@@ -1,0 +1,660 @@
+openapi: 3.1.0
+info:
+  title: Stripe Tax API
+  description: >-
+    Automate sales tax, VAT, and GST compliance on all your transactions -
+    low or no code integrations available.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/tax/calculations:
+    post:
+      summary: Create Tax Calculation
+      description: <p>Calculates tax based on input and returns a Tax Calculation object.</p>
+      operationId: PostTaxCalculations
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - currency
+                - line_items
+              properties:
+                currency:
+                  type: string
+                  description: Three-letter ISO currency code.
+                customer:
+                  type: string
+                  maxLength: 5000
+                customer_details:
+                  type: object
+                  properties:
+                    address:
+                      type: object
+                    address_source:
+                      type: string
+                      enum:
+                        - billing
+                        - shipping
+                    ip_address:
+                      type: string
+                    tax_ids:
+                      type: array
+                      items:
+                        type: object
+                    taxability_override:
+                      type: string
+                      enum:
+                        - customer_exempt
+                        - none
+                        - reverse_charge
+                line_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      amount:
+                        type: integer
+                      product:
+                        type: string
+                      quantity:
+                        type: integer
+                      reference:
+                        type: string
+                      tax_behavior:
+                        type: string
+                        enum:
+                          - exclusive
+                          - inclusive
+                      tax_code:
+                        type: string
+                shipping_cost:
+                  type: object
+                  properties:
+                    amount:
+                      type: integer
+                    shipping_rate:
+                      type: string
+                    tax_behavior:
+                      type: string
+                    tax_code:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.calculation'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/calculations/{calculation}/line_items:
+    get:
+      summary: List Tax Calculation Line Items
+      description: <p>Retrieves the line items of a tax calculation.</p>
+      operationId: GetTaxCalculationsCalculationLineItems
+      parameters:
+        - name: calculation
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/transactions/create_from_calculation:
+    post:
+      summary: Create Tax Transaction from Calculation
+      description: <p>Creates a Tax Transaction from a calculation.</p>
+      operationId: PostTaxTransactionsCreateFromCalculation
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - calculation
+                - reference
+              properties:
+                calculation:
+                  type: string
+                  maxLength: 5000
+                reference:
+                  type: string
+                  maxLength: 500
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.transaction'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/transactions/create_reversal:
+    post:
+      summary: Create Tax Transaction Reversal
+      description: <p>Partially or fully reverses a previously created Transaction.</p>
+      operationId: PostTaxTransactionsCreateReversal
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - mode
+                - original_transaction
+                - reference
+              properties:
+                mode:
+                  type: string
+                  enum:
+                    - full
+                    - partial
+                original_transaction:
+                  type: string
+                  maxLength: 5000
+                reference:
+                  type: string
+                  maxLength: 500
+                line_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      amount:
+                        type: integer
+                      amount_tax:
+                        type: integer
+                      original_line_item:
+                        type: string
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.transaction'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/transactions/{transaction}:
+    get:
+      summary: Retrieve Tax Transaction
+      description: <p>Retrieves a Tax Transaction object.</p>
+      operationId: GetTaxTransactionsTransaction
+      parameters:
+        - name: transaction
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.transaction'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/registrations:
+    get:
+      summary: List Tax Registrations
+      description: <p>Returns a list of Tax Registration objects.</p>
+      operationId: GetTaxRegistrations
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - active
+              - all
+              - expired
+              - scheduled
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/tax.registration'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+    post:
+      summary: Create Tax Registration
+      description: <p>Creates a new Tax Registration object.</p>
+      operationId: PostTaxRegistrations
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - active_from
+                - country
+                - country_options
+              properties:
+                active_from:
+                  type: string
+                country:
+                  type: string
+                country_options:
+                  type: object
+                expires_at:
+                  type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.registration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+  /v1/tax/settings:
+    get:
+      summary: Retrieve Tax Settings
+      description: <p>Retrieves Tax Settings for a merchant.</p>
+      operationId: GetTaxSettings
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.settings'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+    post:
+      summary: Update Tax Settings
+      description: <p>Updates Tax Settings parameters used in tax calculations.</p>
+      operationId: PostTaxSettings
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                defaults:
+                  type: object
+                  properties:
+                    tax_behavior:
+                      type: string
+                      enum:
+                        - exclusive
+                        - inclusive
+                        - inferred_by_currency
+                    tax_code:
+                      type: string
+                head_office:
+                  type: object
+                  properties:
+                    address:
+                      type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tax.settings'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tax
+components:
+  schemas:
+    tax.calculation:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - tax.calculation
+        amount_total:
+          type: integer
+        currency:
+          type: string
+        customer:
+          type:
+            - string
+            - 'null'
+        customer_details:
+          type: object
+        expires_at:
+          type:
+            - integer
+            - 'null'
+        line_items:
+          type:
+            - object
+            - 'null'
+        livemode:
+          type: boolean
+        shipping_cost:
+          type:
+            - object
+            - 'null'
+        tax_amount_exclusive:
+          type: integer
+        tax_amount_inclusive:
+          type: integer
+        tax_breakdown:
+          type: array
+          items:
+            type: object
+        tax_date:
+          type: integer
+      required:
+        - object
+        - amount_total
+        - currency
+        - customer_details
+        - livemode
+        - tax_amount_exclusive
+        - tax_amount_inclusive
+        - tax_date
+    tax.transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - tax.transaction
+        created:
+          type: integer
+        currency:
+          type: string
+        customer:
+          type:
+            - string
+            - 'null'
+        customer_details:
+          type: object
+        line_items:
+          type:
+            - object
+            - 'null'
+        livemode:
+          type: boolean
+        metadata:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: string
+        reference:
+          type: string
+          maxLength: 500
+        reversal:
+          type:
+            - object
+            - 'null'
+        shipping_cost:
+          type:
+            - object
+            - 'null'
+        tax_date:
+          type: integer
+        type:
+          type: string
+          enum:
+            - reversal
+            - transaction
+      required:
+        - id
+        - object
+        - created
+        - currency
+        - customer_details
+        - livemode
+        - reference
+        - tax_date
+        - type
+    tax.registration:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - tax.registration
+        active_from:
+          type: integer
+        country:
+          type: string
+        country_options:
+          type: object
+        created:
+          type: integer
+        expires_at:
+          type:
+            - integer
+            - 'null'
+        livemode:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - active
+            - expired
+            - scheduled
+      required:
+        - id
+        - object
+        - active_from
+        - country
+        - country_options
+        - created
+        - livemode
+        - status
+    tax.settings:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+            - tax.settings
+        defaults:
+          type: object
+        head_office:
+          type:
+            - object
+            - 'null'
+        livemode:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - active
+            - pending
+        status_details:
+          type: object
+      required:
+        - object
+        - defaults
+        - livemode
+        - status
+        - status_details
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

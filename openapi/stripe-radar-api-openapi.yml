@@ -1,0 +1,656 @@
+openapi: 3.1.0
+info:
+  title: Stripe Radar API
+  description: >-
+    Stripe Radar provides real-time fraud protection and requires no additional
+    development time. Fraud professionals can add Radar for Fraud Teams to
+    customize protection and get deeper insights.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/radar/early_fraud_warnings:
+    get:
+      summary: List Early Fraud Warnings
+      description: <p>Returns a list of early fraud warnings.</p>
+      operationId: GetRadarEarlyFraudWarnings
+      parameters:
+        - name: charge
+          in: query
+          description: Only return early fraud warnings for the charge specified by this charge ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: payment_intent
+          in: query
+          description: Only return early fraud warnings for charges that were created by the PaymentIntent specified by this PaymentIntent ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/radar.early_fraud_warning'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+  /v1/radar/early_fraud_warnings/{early_fraud_warning}:
+    get:
+      summary: Retrieve Early Fraud Warning
+      description: <p>Retrieves the details of an early fraud warning that has previously been created.</p>
+      operationId: GetRadarEarlyFraudWarningsEarlyFraudWarning
+      parameters:
+        - name: early_fraud_warning
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.early_fraud_warning'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+  /v1/radar/value_lists:
+    get:
+      summary: List Value Lists
+      description: <p>Returns a list of ValueList objects.</p>
+      operationId: GetRadarValueLists
+      parameters:
+        - name: alias
+          in: query
+          description: The alias used to reference the value list.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: contains
+          in: query
+          description: A value contained within a value list.
+          required: false
+          schema:
+            type: string
+            maxLength: 800
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/radar.value_list'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+    post:
+      summary: Create Value List
+      description: <p>Creates a new ValueList object.</p>
+      operationId: PostRadarValueLists
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - alias
+                - name
+              properties:
+                alias:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                item_type:
+                  type: string
+                  enum:
+                    - card_bin
+                    - card_fingerprint
+                    - case_sensitive_string
+                    - country
+                    - customer_id
+                    - email
+                    - ip_address
+                    - sepa_debit_fingerprint
+                    - string
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.value_list'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+  /v1/radar/value_lists/{value_list}:
+    get:
+      summary: Retrieve Value List
+      description: <p>Retrieves a ValueList object.</p>
+      operationId: GetRadarValueListsValueList
+      parameters:
+        - name: value_list
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.value_list'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+    post:
+      summary: Update Value List
+      description: <p>Updates a ValueList object by setting the values of the parameters passed.</p>
+      operationId: PostRadarValueListsValueList
+      parameters:
+        - name: value_list
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                alias:
+                  type: string
+                  maxLength: 100
+                name:
+                  type: string
+                  maxLength: 100
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.value_list'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+    delete:
+      summary: Delete Value List
+      description: <p>Deletes a ValueList object.</p>
+      operationId: DeleteRadarValueListsValueList
+      parameters:
+        - name: value_list
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  object:
+                    type: string
+                    enum:
+                      - radar.value_list
+                  deleted:
+                    type: boolean
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+  /v1/radar/value_list_items:
+    get:
+      summary: List Value List Items
+      description: <p>Returns a list of ValueListItem objects.</p>
+      operationId: GetRadarValueListItems
+      parameters:
+        - name: value_list
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: value
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 800
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/radar.value_list_item'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+    post:
+      summary: Create Value List Item
+      description: <p>Creates a new ValueListItem object.</p>
+      operationId: PostRadarValueListItems
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - value
+                - value_list
+              properties:
+                value:
+                  type: string
+                  maxLength: 800
+                value_list:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.value_list_item'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+  /v1/radar/value_list_items/{item}:
+    get:
+      summary: Retrieve Value List Item
+      description: <p>Retrieves a ValueListItem object.</p>
+      operationId: GetRadarValueListItemsItem
+      parameters:
+        - name: item
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/radar.value_list_item'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+    delete:
+      summary: Delete Value List Item
+      description: <p>Deletes a ValueListItem object.</p>
+      operationId: DeleteRadarValueListItemsItem
+      parameters:
+        - name: item
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  object:
+                    type: string
+                    enum:
+                      - radar.value_list_item
+                  deleted:
+                    type: boolean
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Radar
+components:
+  schemas:
+    radar.early_fraud_warning:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - radar.early_fraud_warning
+        actionable:
+          type: boolean
+        charge:
+          type: string
+        created:
+          type: integer
+        fraud_type:
+          type: string
+        livemode:
+          type: boolean
+        payment_intent:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - actionable
+        - charge
+        - created
+        - fraud_type
+        - livemode
+    radar.value_list:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - radar.value_list
+        alias:
+          type: string
+          maxLength: 100
+        created:
+          type: integer
+        created_by:
+          type: string
+        item_type:
+          type: string
+          enum:
+            - card_bin
+            - card_fingerprint
+            - case_sensitive_string
+            - country
+            - customer_id
+            - email
+            - ip_address
+            - sepa_debit_fingerprint
+            - string
+        list_items:
+          type: object
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+          maxLength: 100
+      required:
+        - id
+        - object
+        - alias
+        - created
+        - created_by
+        - item_type
+        - list_items
+        - livemode
+        - metadata
+        - name
+    radar.value_list_item:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - radar.value_list_item
+        created:
+          type: integer
+        created_by:
+          type: string
+        livemode:
+          type: boolean
+        value:
+          type: string
+          maxLength: 800
+        value_list:
+          type: string
+          maxLength: 5000
+      required:
+        - id
+        - object
+        - created
+        - created_by
+        - livemode
+        - value
+        - value_list
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

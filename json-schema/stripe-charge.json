@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/charge",
+  "title": "Stripe Charge",
+  "description": "The Charge object represents a single attempt to move money into your Stripe account. PaymentIntent confirmation is the most common way to create Charges.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^ch_"
+    },
+    "object": {
+      "type": "string",
+      "const": "charge",
+      "description": "String representing the object's type."
+    },
+    "amount": {
+      "type": "integer",
+      "description": "Amount intended to be collected by this payment. A positive integer representing how much to charge in the smallest currency unit."
+    },
+    "amount_captured": {
+      "type": "integer",
+      "description": "Amount in cents captured."
+    },
+    "amount_refunded": {
+      "type": "integer",
+      "description": "Amount in cents refunded."
+    },
+    "application": {
+      "type": ["string", "null"],
+      "description": "ID of the Connect application that created the charge."
+    },
+    "application_fee": {
+      "type": ["string", "null"],
+      "description": "The application fee (if any) for the charge."
+    },
+    "application_fee_amount": {
+      "type": ["integer", "null"],
+      "description": "The amount of the application fee (if any) requested for the charge."
+    },
+    "balance_transaction": {
+      "type": ["string", "null"],
+      "description": "ID of the balance transaction that describes the impact of this charge on your account balance."
+    },
+    "billing_details": {
+      "type": "object",
+      "description": "Billing information associated with the payment method at the time of the transaction.",
+      "properties": {
+        "address": {
+          "type": ["object", "null"],
+          "properties": {
+            "city": { "type": ["string", "null"] },
+            "country": { "type": ["string", "null"] },
+            "line1": { "type": ["string", "null"] },
+            "line2": { "type": ["string", "null"] },
+            "postal_code": { "type": ["string", "null"] },
+            "state": { "type": ["string", "null"] }
+          }
+        },
+        "email": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "phone": { "type": ["string", "null"] }
+      }
+    },
+    "calculated_statement_descriptor": {
+      "type": ["string", "null"],
+      "description": "The full statement descriptor that is passed to card networks."
+    },
+    "captured": {
+      "type": "boolean",
+      "description": "If the charge was created without capturing, this Boolean represents whether it is still uncaptured or has since been captured."
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created."
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO currency code, in lowercase."
+    },
+    "customer": {
+      "type": ["string", "null"],
+      "description": "ID of the customer this charge is for if one exists."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "An arbitrary string attached to the object."
+    },
+    "disputed": {
+      "type": "boolean",
+      "description": "Whether the charge has been disputed."
+    },
+    "failure_balance_transaction": {
+      "type": ["string", "null"],
+      "description": "ID of the balance transaction that describes the reversal of the balance on your account due to payment failure."
+    },
+    "failure_code": {
+      "type": ["string", "null"],
+      "description": "Error code explaining reason for charge failure."
+    },
+    "failure_message": {
+      "type": ["string", "null"],
+      "description": "Message to user further explaining reason for charge failure."
+    },
+    "fraud_details": {
+      "type": ["object", "null"],
+      "description": "Information on fraud assessments for the charge."
+    },
+    "invoice": {
+      "type": ["string", "null"],
+      "description": "ID of the invoice this charge is for if one exists."
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": { "type": "string" }
+    },
+    "on_behalf_of": {
+      "type": ["string", "null"],
+      "description": "The account (if any) the charge was made on behalf of."
+    },
+    "outcome": {
+      "type": ["object", "null"],
+      "description": "Details about whether the payment was accepted and why.",
+      "properties": {
+        "network_status": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] },
+        "risk_level": { "type": ["string", "null"] },
+        "risk_score": { "type": ["integer", "null"] },
+        "rule": { "type": ["string", "object", "null"] },
+        "seller_message": { "type": ["string", "null"] },
+        "type": { "type": "string" }
+      }
+    },
+    "paid": {
+      "type": "boolean",
+      "description": "true if the charge succeeded, or was successfully authorized for later capture."
+    },
+    "payment_intent": {
+      "type": ["string", "null"],
+      "description": "ID of the PaymentIntent associated with this charge, if one exists."
+    },
+    "payment_method": {
+      "type": ["string", "null"],
+      "description": "ID of the payment method used in this charge."
+    },
+    "payment_method_details": {
+      "type": ["object", "null"],
+      "description": "Details about the payment method at the time of the transaction."
+    },
+    "receipt_email": {
+      "type": ["string", "null"],
+      "description": "This is the email address that the receipt for this charge was sent to."
+    },
+    "receipt_number": {
+      "type": ["string", "null"],
+      "description": "This is the transaction number that appears on email receipts sent for this charge."
+    },
+    "receipt_url": {
+      "type": ["string", "null"],
+      "description": "This is the URL to view the receipt for this charge."
+    },
+    "refunded": {
+      "type": "boolean",
+      "description": "Whether the charge has been fully refunded."
+    },
+    "refunds": {
+      "type": "object",
+      "description": "A list of refunds that have been applied to the charge."
+    },
+    "review": {
+      "type": ["string", "null"],
+      "description": "ID of the review associated with this charge if one exists."
+    },
+    "shipping": {
+      "type": ["object", "null"],
+      "description": "Shipping information for the charge."
+    },
+    "source": {
+      "type": ["object", "null"],
+      "description": "This is a legacy field that will be removed in the future."
+    },
+    "source_transfer": {
+      "type": ["string", "null"],
+      "description": "The transfer ID which created this charge."
+    },
+    "statement_descriptor": {
+      "type": ["string", "null"],
+      "description": "For card charges, use statement_descriptor_suffix."
+    },
+    "statement_descriptor_suffix": {
+      "type": ["string", "null"],
+      "description": "Provides information about the charge that customers see on their statements."
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the payment.",
+      "enum": ["failed", "pending", "succeeded"]
+    },
+    "transfer_data": {
+      "type": ["object", "null"],
+      "description": "An optional dictionary including the account to automatically transfer to as part of a destination charge."
+    },
+    "transfer_group": {
+      "type": ["string", "null"],
+      "description": "A string that identifies this transaction as part of a group."
+    }
+  },
+  "required": [
+    "id",
+    "object",
+    "amount",
+    "amount_captured",
+    "amount_refunded",
+    "billing_details",
+    "captured",
+    "created",
+    "currency",
+    "disputed",
+    "livemode",
+    "metadata",
+    "paid",
+    "refunded",
+    "status"
+  ]
+}

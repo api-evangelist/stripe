@@ -1,0 +1,692 @@
+openapi: 3.1.0
+info:
+  title: Stripe Terminal API
+  description: >-
+    Use Stripe Terminal to accept in-person payments and extend Stripe payments
+    to your point of sale.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/terminal/locations:
+    get:
+      summary: List Terminal Locations
+      description: <p>Returns a list of Location objects.</p>
+      operationId: GetTerminalLocations
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/terminal.location'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    post:
+      summary: Create Terminal Location
+      description: <p>Creates a new Location object.</p>
+      operationId: PostTerminalLocations
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - address
+                - display_name
+              properties:
+                address:
+                  type: object
+                  required:
+                    - country
+                  properties:
+                    city:
+                      type: string
+                    country:
+                      type: string
+                    line1:
+                      type: string
+                    line2:
+                      type: string
+                    postal_code:
+                      type: string
+                    state:
+                      type: string
+                display_name:
+                  type: string
+                  maxLength: 1000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                configuration_overrides:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.location'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+  /v1/terminal/locations/{location}:
+    get:
+      summary: Retrieve Terminal Location
+      description: <p>Retrieves a Location object.</p>
+      operationId: GetTerminalLocationsLocation
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.location'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    post:
+      summary: Update Terminal Location
+      description: <p>Updates a Location object by setting the values of the parameters passed.</p>
+      operationId: PostTerminalLocationsLocation
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object
+                display_name:
+                  type: string
+                  maxLength: 1000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.location'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    delete:
+      summary: Delete Terminal Location
+      description: <p>Deletes a Location object.</p>
+      operationId: DeleteTerminalLocationsLocation
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  object:
+                    type: string
+                  deleted:
+                    type: boolean
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+  /v1/terminal/readers:
+    get:
+      summary: List Terminal Readers
+      description: <p>Returns a list of Reader objects.</p>
+      operationId: GetTerminalReaders
+      parameters:
+        - name: device_type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - offline
+              - online
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/terminal.reader'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    post:
+      summary: Create Terminal Reader
+      description: <p>Creates a new Reader object.</p>
+      operationId: PostTerminalReaders
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - registration_code
+              properties:
+                registration_code:
+                  type: string
+                  maxLength: 5000
+                label:
+                  type: string
+                  maxLength: 5000
+                location:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+  /v1/terminal/readers/{reader}:
+    get:
+      summary: Retrieve Terminal Reader
+      description: <p>Retrieves a Reader object.</p>
+      operationId: GetTerminalReadersReader
+      parameters:
+        - name: reader
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    post:
+      summary: Update Terminal Reader
+      description: <p>Updates a Reader object by setting the values of the parameters passed.</p>
+      operationId: PostTerminalReadersReader
+      parameters:
+        - name: reader
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    delete:
+      summary: Delete Terminal Reader
+      description: <p>Deletes a Reader object.</p>
+      operationId: DeleteTerminalReadersReader
+      parameters:
+        - name: reader
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  object:
+                    type: string
+                  deleted:
+                    type: boolean
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+  /v1/terminal/configurations:
+    get:
+      summary: List Terminal Configurations
+      description: <p>Returns a list of Configuration objects.</p>
+      operationId: GetTerminalConfigurations
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/terminal.configuration'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+    post:
+      summary: Create Terminal Configuration
+      description: <p>Creates a new Configuration object.</p>
+      operationId: PostTerminalConfigurations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tipping:
+                  type: object
+                offline:
+                  type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+  /v1/terminal/connection_tokens:
+    post:
+      summary: Create Connection Token
+      description: <p>Creates a short-lived connection token for use with Stripe Terminal.</p>
+      operationId: PostTerminalConnectionTokens
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                location:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.connection_token'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Terminal
+components:
+  schemas:
+    terminal.location:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - terminal.location
+        address:
+          type: object
+        configuration_overrides:
+          type:
+            - string
+            - 'null'
+        display_name:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - id
+        - object
+        - address
+        - display_name
+        - livemode
+        - metadata
+    terminal.reader:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - terminal.reader
+        action:
+          type:
+            - object
+            - 'null'
+        device_sw_version:
+          type:
+            - string
+            - 'null'
+        device_type:
+          type: string
+        ip_address:
+          type:
+            - string
+            - 'null'
+        label:
+          type: string
+        livemode:
+          type: boolean
+        location:
+          type:
+            - string
+            - 'null'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        serial_number:
+          type: string
+        status:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - device_type
+        - label
+        - livemode
+        - metadata
+        - serial_number
+    terminal.configuration:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - terminal.configuration
+        is_account_default:
+          type:
+            - boolean
+            - 'null'
+        livemode:
+          type: boolean
+        tipping:
+          type:
+            - object
+            - 'null'
+        offline:
+          type:
+            - object
+            - 'null'
+      required:
+        - id
+        - object
+        - livemode
+    terminal.connection_token:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+            - terminal.connection_token
+        location:
+          type:
+            - string
+            - 'null'
+        secret:
+          type: string
+      required:
+        - object
+        - secret
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

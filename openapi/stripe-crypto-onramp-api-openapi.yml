@@ -1,0 +1,216 @@
+openapi: 3.1.0
+info:
+  title: Stripe Crypto Onramp API
+  description: >-
+    The Stripe fiat-to-crypto onramp lets your customers securely purchase and
+    exchange cryptocurrencies directly from your platform or decentralized
+    application at checkout.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/crypto/onramp_sessions:
+    post:
+      summary: Create Onramp Session
+      description: <p>Creates a crypto onramp session.</p>
+      operationId: PostCryptoOnrampSessions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                wallet_addresses:
+                  type: object
+                  description: The wallet addresses that the customer wants to send crypto to.
+                  additionalProperties:
+                    type: string
+                source_currency:
+                  type: string
+                  description: The fiat currency the customer wants to pay with.
+                source_amount:
+                  type: integer
+                  description: The amount of fiat currency in the smallest unit.
+                destination_currency:
+                  type: string
+                  description: The cryptocurrency the customer wants to purchase.
+                destination_amount:
+                  type: string
+                  description: The amount of cryptocurrency the customer wants to purchase.
+                destination_network:
+                  type: string
+                  description: The blockchain network for the destination cryptocurrency.
+                lock_wallet_address:
+                  type: boolean
+                  description: Whether the wallet address should be locked and not editable.
+                customer_ip_address:
+                  type: string
+                  description: The customer's IP address.
+                customer_information:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/crypto.onramp_session'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Crypto Onramp
+  /v1/crypto/onramp_sessions/{onramp_session}:
+    get:
+      summary: Retrieve Onramp Session
+      description: <p>Retrieves a crypto onramp session.</p>
+      operationId: GetCryptoOnrampSessionsOnrampSession
+      parameters:
+        - name: onramp_session
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/crypto.onramp_session'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Crypto Onramp
+  /v1/crypto/onramp_sessions:
+    get:
+      summary: List Onramp Sessions
+      description: <p>Returns a list of crypto onramp sessions.</p>
+      operationId: GetCryptoOnrampSessions
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/crypto.onramp_session'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Crypto Onramp
+components:
+  schemas:
+    crypto.onramp_session:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - crypto.onramp_session
+        client_secret:
+          type: string
+        created:
+          type: integer
+        livemode:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - initialized
+            - requires_input
+            - fulfillment_processing
+            - fulfillment_complete
+        wallet_addresses:
+          type:
+            - object
+            - 'null'
+      required:
+        - id
+        - object
+        - client_secret
+        - created
+        - livemode
+        - status
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

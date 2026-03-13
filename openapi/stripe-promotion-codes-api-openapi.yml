@@ -1,0 +1,349 @@
+openapi: 3.1.0
+info:
+  title: Stripe Promotion Codes API
+  description: >-
+    A Promotion Code represents a customer-redeemable code for a coupon. It can
+    be used to create multiple codes for a single coupon.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/promotion_codes:
+    get:
+      summary: List Promotion Codes
+      description: <p>Returns a list of your promotion codes.</p>
+      operationId: GetPromotionCodes
+      parameters:
+        - name: active
+          in: query
+          description: Filter promotion codes by whether they are active.
+          required: false
+          schema:
+            type: boolean
+        - name: code
+          in: query
+          description: Only return promotion codes that have this case-insensitive code.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: coupon
+          in: query
+          description: Only return promotion codes for this coupon.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: customer
+          in: query
+          description: Only return promotion codes that are restricted to this customer.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          description: A cursor for use in pagination. ending_before is an object ID that defines your place in the list.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          description: Specifies which fields in the response should be expanded.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+        - name: limit
+          in: query
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100.
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          description: A cursor for use in pagination. starting_after is an object ID that defines your place in the list.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/promotion_code'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Promotion Codes
+    post:
+      summary: Create Promotion Code
+      description: <p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer, redemption limit, and expiration date.</p>
+      operationId: PostPromotionCodes
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - coupon
+              properties:
+                coupon:
+                  type: string
+                  description: The coupon for this promotion code.
+                  maxLength: 5000
+                code:
+                  type: string
+                  description: The customer-facing code. If not provided, Stripe will generate one.
+                  maxLength: 500
+                active:
+                  type: boolean
+                  description: Whether the promotion code is currently active.
+                customer:
+                  type: string
+                  description: The customer that this promotion code can be used by.
+                  maxLength: 5000
+                expires_at:
+                  type: integer
+                  description: The timestamp at which this promotion code will expire.
+                max_redemptions:
+                  type: integer
+                  description: A positive integer specifying the number of times the promotion code can be redeemed.
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                restrictions:
+                  type: object
+                  properties:
+                    first_time_transaction:
+                      type: boolean
+                    minimum_amount:
+                      type: integer
+                    minimum_amount_currency:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promotion_code'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Promotion Codes
+  /v1/promotion_codes/{promotion_code}:
+    get:
+      summary: Retrieve Promotion Code
+      description: <p>Retrieves the promotion code with the given ID.</p>
+      operationId: GetPromotionCodesPromotionCode
+      parameters:
+        - name: promotion_code
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          description: Specifies which fields in the response should be expanded.
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promotion_code'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Promotion Codes
+    post:
+      summary: Update Promotion Code
+      description: <p>Updates the specified promotion code by setting the values of the parameters passed.</p>
+      operationId: PostPromotionCodesPromotionCode
+      parameters:
+        - name: promotion_code
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                restrictions:
+                  type: object
+                  properties:
+                    currency_options:
+                      type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promotion_code'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Promotion Codes
+components:
+  schemas:
+    promotion_code:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the object.
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - promotion_code
+        active:
+          type: boolean
+          description: Whether the promotion code is currently active.
+        code:
+          type: string
+          description: The customer-facing code.
+          maxLength: 5000
+        coupon:
+          type: object
+          description: The coupon for this promotion code.
+        created:
+          type: integer
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+        customer:
+          type:
+            - string
+            - 'null'
+          description: The customer that this promotion code can be used by.
+        expires_at:
+          type:
+            - integer
+            - 'null'
+          description: The timestamp at which this promotion code will expire.
+        livemode:
+          type: boolean
+          description: Has the value true if the object exists in live mode.
+        max_redemptions:
+          type:
+            - integer
+            - 'null'
+          description: Maximum number of times this promotion code can be redeemed.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Set of key-value pairs for additional information.
+        restrictions:
+          type: object
+          properties:
+            first_time_transaction:
+              type: boolean
+            minimum_amount:
+              type:
+                - integer
+                - 'null'
+            minimum_amount_currency:
+              type:
+                - string
+                - 'null'
+        times_redeemed:
+          type: integer
+          description: Number of times this promotion code has been used.
+      required:
+        - id
+        - object
+        - active
+        - code
+        - coupon
+        - created
+        - livemode
+        - times_redeemed
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

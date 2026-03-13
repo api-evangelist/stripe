@@ -1,0 +1,380 @@
+openapi: 3.1.0
+info:
+  title: Stripe Payment Method Configurations API
+  description: >-
+    Payment method configurations allow you to configure which payment methods
+    are available to your customers during checkout. Manage payment method
+    availability across multiple Connect accounts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/payment_method_configurations:
+    get:
+      summary: List Payment Method Configurations
+      description: <p>List payment method configurations.</p>
+      operationId: GetPaymentMethodConfigurations
+      parameters:
+        - name: application
+          in: query
+          description: The Connect application to filter by.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/payment_method_configuration'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Payment Method Configurations
+    post:
+      summary: Create Payment Method Configuration
+      description: <p>Creates a payment method configuration.</p>
+      operationId: PostPaymentMethodConfigurations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 100
+                parent:
+                  type: string
+                  maxLength: 5000
+                acss_debit:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                affirm:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                afterpay_clearpay:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                apple_pay:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                bancontact:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                card:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                eps:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                google_pay:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                ideal:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                klarna:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                link:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                paypal:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                sepa_debit:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+                us_bank_account:
+                  type: object
+                  properties:
+                    display_preference:
+                      type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Payment Method Configurations
+  /v1/payment_method_configurations/{configuration}:
+    get:
+      summary: Retrieve Payment Method Configuration
+      description: <p>Retrieve payment method configuration.</p>
+      operationId: GetPaymentMethodConfigurationsConfiguration
+      parameters:
+        - name: configuration
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Payment Method Configurations
+    post:
+      summary: Update Payment Method Configuration
+      description: <p>Update payment method configuration.</p>
+      operationId: PostPaymentMethodConfigurationsConfiguration
+      parameters:
+        - name: configuration
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                name:
+                  type: string
+                  maxLength: 100
+                acss_debit:
+                  type: object
+                affirm:
+                  type: object
+                afterpay_clearpay:
+                  type: object
+                apple_pay:
+                  type: object
+                card:
+                  type: object
+                google_pay:
+                  type: object
+                ideal:
+                  type: object
+                klarna:
+                  type: object
+                link:
+                  type: object
+                paypal:
+                  type: object
+                sepa_debit:
+                  type: object
+                us_bank_account:
+                  type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Payment Method Configurations
+components:
+  schemas:
+    payment_method_configuration:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - payment_method_configuration
+        active:
+          type: boolean
+        application:
+          type:
+            - string
+            - 'null'
+        is_default:
+          type: boolean
+        livemode:
+          type: boolean
+        name:
+          type:
+            - string
+            - 'null'
+        parent:
+          type:
+            - string
+            - 'null'
+        acss_debit:
+          type:
+            - object
+            - 'null'
+        affirm:
+          type:
+            - object
+            - 'null'
+        afterpay_clearpay:
+          type:
+            - object
+            - 'null'
+        apple_pay:
+          type:
+            - object
+            - 'null'
+        bancontact:
+          type:
+            - object
+            - 'null'
+        card:
+          type:
+            - object
+            - 'null'
+        eps:
+          type:
+            - object
+            - 'null'
+        google_pay:
+          type:
+            - object
+            - 'null'
+        ideal:
+          type:
+            - object
+            - 'null'
+        klarna:
+          type:
+            - object
+            - 'null'
+        link:
+          type:
+            - object
+            - 'null'
+        paypal:
+          type:
+            - object
+            - 'null'
+        sepa_debit:
+          type:
+            - object
+            - 'null'
+        us_bank_account:
+          type:
+            - object
+            - 'null'
+      required:
+        - id
+        - object
+        - active
+        - is_default
+        - livemode
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

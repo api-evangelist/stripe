@@ -1,0 +1,559 @@
+openapi: 3.1.0
+info:
+  title: Stripe Quotes API
+  description: >-
+    A Quote is a way to model prices that you'd like to provide to a customer.
+    Once accepted, it will automatically create an invoice, subscription or
+    subscription schedule.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/quotes:
+    get:
+      summary: List Quotes
+      description: <p>Returns a list of your quotes.</p>
+      operationId: GetQuotes
+      parameters:
+        - name: customer
+          in: query
+          description: The ID of the customer whose quotes will be retrieved.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          description: The status of the quotes to retrieve.
+          required: false
+          schema:
+            type: string
+            enum:
+              - accepted
+              - canceled
+              - draft
+              - open
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/quote'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+    post:
+      summary: Create Quote
+      description: <p>A quote models prices and services for a customer.</p>
+      operationId: PostQuotes
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer:
+                  type: string
+                  description: The customer to create this quote for.
+                  maxLength: 5000
+                description:
+                  type: string
+                  description: A description that will be displayed on the quote.
+                  maxLength: 500
+                line_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      price:
+                        type: string
+                      quantity:
+                        type: integer
+                header:
+                  type: string
+                  description: A header that will be displayed on the quote PDF.
+                  maxLength: 5000
+                footer:
+                  type: string
+                  description: A footer that will be displayed on the quote PDF.
+                  maxLength: 5000
+                expires_at:
+                  type: integer
+                  description: The date on which this quote will expire.
+                collection_method:
+                  type: string
+                  enum:
+                    - charge_automatically
+                    - send_invoice
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}:
+    get:
+      summary: Retrieve Quote
+      description: <p>Retrieves the quote with the given ID.</p>
+      operationId: GetQuotesQuote
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+    post:
+      summary: Update Quote
+      description: <p>A quote models prices and services for a customer.</p>
+      operationId: PostQuotesQuote
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  maxLength: 500
+                expires_at:
+                  type: integer
+                line_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      price:
+                        type: string
+                      quantity:
+                        type: integer
+                      id:
+                        type: string
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}/accept:
+    post:
+      summary: Accept Quote
+      description: <p>Accepts the specified quote.</p>
+      operationId: PostQuotesQuoteAccept
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}/cancel:
+    post:
+      summary: Cancel Quote
+      description: <p>Cancels the quote.</p>
+      operationId: PostQuotesQuoteCancel
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}/finalize:
+    post:
+      summary: Finalize Quote
+      description: <p>Finalizes the quote.</p>
+      operationId: PostQuotesQuoteFinalize
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                expires_at:
+                  type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}/line_items:
+    get:
+      summary: List Quote Line Items
+      description: <p>When retrieving a quote, there is an includable line_items property containing the first handful of those items.</p>
+      operationId: GetQuotesQuoteLineItems
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+  /v1/quotes/{quote}/pdf:
+    get:
+      summary: Download Quote PDF
+      description: <p>Download the PDF for a finalized quote.</p>
+      operationId: GetQuotesQuotePdf
+      parameters:
+        - name: quote
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Quotes
+components:
+  schemas:
+    quote:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - quote
+        amount_subtotal:
+          type: integer
+        amount_total:
+          type: integer
+        application:
+          type:
+            - string
+            - 'null'
+        application_fee_amount:
+          type:
+            - integer
+            - 'null'
+        application_fee_percent:
+          type:
+            - number
+            - 'null'
+        automatic_tax:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+            status:
+              type:
+                - string
+                - 'null'
+        collection_method:
+          type: string
+          enum:
+            - charge_automatically
+            - send_invoice
+        computed:
+          type: object
+        created:
+          type: integer
+        currency:
+          type:
+            - string
+            - 'null'
+        customer:
+          type:
+            - string
+            - 'null'
+        description:
+          type:
+            - string
+            - 'null'
+          maxLength: 500
+        discounts:
+          type: array
+          items:
+            type: object
+        expires_at:
+          type: integer
+        footer:
+          type:
+            - string
+            - 'null'
+        header:
+          type:
+            - string
+            - 'null'
+        invoice:
+          type:
+            - string
+            - 'null'
+        line_items:
+          type: object
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        number:
+          type:
+            - string
+            - 'null'
+        status:
+          type: string
+          enum:
+            - accepted
+            - canceled
+            - draft
+            - open
+        subscription:
+          type:
+            - string
+            - 'null'
+        subscription_schedule:
+          type:
+            - string
+            - 'null'
+        total_details:
+          type: object
+      required:
+        - id
+        - object
+        - amount_subtotal
+        - amount_total
+        - collection_method
+        - created
+        - expires_at
+        - livemode
+        - status
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

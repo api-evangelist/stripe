@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/product",
+  "title": "Stripe Product",
+  "description": "Products describe the specific goods or services you offer to your customers. They can be used in conjunction with Prices to configure pricing in Payment Links, Checkout, and Subscriptions.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^prod_"
+    },
+    "object": {
+      "type": "string",
+      "const": "product",
+      "description": "String representing the object's type."
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Whether the product is currently available for purchase."
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created."
+    },
+    "default_price": {
+      "type": ["string", "null"],
+      "description": "The ID of the Price object that is the default price for this product."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "The product's description, meant to be displayable to the customer."
+    },
+    "features": {
+      "type": "array",
+      "description": "A list of up to 15 features for this product.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" }
+        },
+        "required": ["name"]
+      }
+    },
+    "images": {
+      "type": "array",
+      "description": "A list of up to 8 URLs of images for this product.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": { "type": "string" }
+    },
+    "name": {
+      "type": "string",
+      "description": "The product's name, meant to be displayable to the customer."
+    },
+    "package_dimensions": {
+      "type": ["object", "null"],
+      "description": "The dimensions of this product for shipping purposes.",
+      "properties": {
+        "height": { "type": "number" },
+        "length": { "type": "number" },
+        "weight": { "type": "number" },
+        "width": { "type": "number" }
+      }
+    },
+    "shippable": {
+      "type": ["boolean", "null"],
+      "description": "Whether this product is shipped (i.e., physical goods)."
+    },
+    "statement_descriptor": {
+      "type": ["string", "null"],
+      "description": "Extra information about a product which will appear on your customer's credit card statement."
+    },
+    "tax_code": {
+      "type": ["string", "null"],
+      "description": "A tax code ID."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the product.",
+      "enum": ["good", "service"]
+    },
+    "unit_label": {
+      "type": ["string", "null"],
+      "description": "A label that represents units of this product."
+    },
+    "updated": {
+      "type": "integer",
+      "description": "Time at which the object was last updated."
+    },
+    "url": {
+      "type": ["string", "null"],
+      "description": "A URL of a publicly-accessible webpage for this product.",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "id",
+    "object",
+    "active",
+    "created",
+    "features",
+    "images",
+    "livemode",
+    "metadata",
+    "name",
+    "type",
+    "updated"
+  ]
+}

@@ -1,0 +1,228 @@
+openapi: 3.1.0
+info:
+  title: Stripe Tokens API
+  description: >-
+    Tokenization is the process Stripe uses to collect sensitive card or bank
+    account details, or personally identifiable information (PII), directly
+    from your customers in a secure manner.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/tokens:
+    post:
+      summary: Create Token
+      description: >-
+        <p>Creates a single-use token that represents a credit card's details.
+        You can use this token in place of a credit card dictionary with any
+        API method.</p>
+      operationId: PostTokens
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                card:
+                  type: object
+                  properties:
+                    number:
+                      type: string
+                    exp_month:
+                      type: string
+                    exp_year:
+                      type: string
+                    cvc:
+                      type: string
+                    name:
+                      type: string
+                    address_line1:
+                      type: string
+                    address_line2:
+                      type: string
+                    address_city:
+                      type: string
+                    address_state:
+                      type: string
+                    address_zip:
+                      type: string
+                    address_country:
+                      type: string
+                    currency:
+                      type: string
+                bank_account:
+                  type: object
+                  properties:
+                    country:
+                      type: string
+                    currency:
+                      type: string
+                    account_holder_name:
+                      type: string
+                    account_holder_type:
+                      type: string
+                      enum:
+                        - company
+                        - individual
+                    routing_number:
+                      type: string
+                    account_number:
+                      type: string
+                pii:
+                  type: object
+                  properties:
+                    id_number:
+                      type: string
+                account:
+                  type: object
+                  properties:
+                    business_type:
+                      type: string
+                    tos_shown_and_accepted:
+                      type: boolean
+                    individual:
+                      type: object
+                    company:
+                      type: object
+                person:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    dob:
+                      type: object
+                    address:
+                      type: object
+                    ssn_last_4:
+                      type: string
+                customer:
+                  type: string
+                  maxLength: 5000
+                cvc_update:
+                  type: object
+                  properties:
+                    cvc:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tokens
+  /v1/tokens/{token}:
+    get:
+      summary: Retrieve Token
+      description: <p>Retrieves the token with the given ID.</p>
+      operationId: GetTokensToken
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Tokens
+components:
+  schemas:
+    token:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - token
+        bank_account:
+          type:
+            - object
+            - 'null'
+        card:
+          type:
+            - object
+            - 'null'
+        client_ip:
+          type:
+            - string
+            - 'null'
+        created:
+          type: integer
+        livemode:
+          type: boolean
+        type:
+          type: string
+        used:
+          type: boolean
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - type
+        - used
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

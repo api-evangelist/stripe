@@ -1,0 +1,334 @@
+openapi: 3.1.0
+info:
+  title: Stripe Test Helpers API
+  description: >-
+    Stripe provides a number of resources for testing your integration. Use test
+    helpers to simulate events and test your integration without using real
+    payment methods.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/test_helpers/test_clocks:
+    get:
+      summary: List Test Clocks
+      description: <p>Returns a list of your test clocks.</p>
+      operationId: GetTestHelpersTestClocks
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/test_helpers.test_clock'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+    post:
+      summary: Create Test Clock
+      description: <p>Creates a new test clock that can be attached to new customers and quotes.</p>
+      operationId: PostTestHelpersTestClocks
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - frozen_time
+              properties:
+                frozen_time:
+                  type: integer
+                  description: The initial frozen time for this test clock.
+                name:
+                  type: string
+                  description: The name for this test clock.
+                  maxLength: 300
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/test_helpers.test_clock'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+  /v1/test_helpers/test_clocks/{test_clock}:
+    get:
+      summary: Retrieve Test Clock
+      description: <p>Retrieves a test clock.</p>
+      operationId: GetTestHelpersTestClocksTestClock
+      parameters:
+        - name: test_clock
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/test_helpers.test_clock'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+    delete:
+      summary: Delete Test Clock
+      description: <p>Deletes a test clock.</p>
+      operationId: DeleteTestHelpersTestClocksTestClock
+      parameters:
+        - name: test_clock
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  object:
+                    type: string
+                  deleted:
+                    type: boolean
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+  /v1/test_helpers/test_clocks/{test_clock}/advance:
+    post:
+      summary: Advance Test Clock
+      description: <p>Starts advancing a test clock to a specified time in the future.</p>
+      operationId: PostTestHelpersTestClocksTestClockAdvance
+      parameters:
+        - name: test_clock
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - frozen_time
+              properties:
+                frozen_time:
+                  type: integer
+                  description: The time to advance the test clock to.
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/test_helpers.test_clock'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+  /v1/test_helpers/refunds/{refund}/expire:
+    post:
+      summary: Expire Refund
+      description: <p>Expire a refund with a status of requires_action.</p>
+      operationId: PostTestHelpersRefundsRefundExpire
+      parameters:
+        - name: refund
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+  /v1/test_helpers/customers/{customer}/fund_cash_balance:
+    post:
+      summary: Fund Customer Cash Balance
+      description: <p>Create an incoming testmode bank transfer.</p>
+      operationId: PostTestHelpersCustomersCustomerFundCashBalance
+      parameters:
+        - name: customer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+              properties:
+                amount:
+                  type: integer
+                currency:
+                  type: string
+                reference:
+                  type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Test Helpers
+components:
+  schemas:
+    test_helpers.test_clock:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - test_helpers.test_clock
+        created:
+          type: integer
+        deletes_after:
+          type: integer
+        frozen_time:
+          type: integer
+        livemode:
+          type: boolean
+        name:
+          type:
+            - string
+            - 'null'
+          maxLength: 300
+        status:
+          type: string
+          enum:
+            - advancing
+            - internal_failure
+            - ready
+      required:
+        - id
+        - object
+        - created
+        - deletes_after
+        - frozen_time
+        - livemode
+        - status
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,981 @@
+openapi: 3.1.0
+info:
+  title: Stripe Treasury API
+  description: >-
+    Stripe Treasury is a banking-as-a-service API that lets you embed financial
+    services in your product. With Stripe's API, you can enable businesses to
+    hold funds, pay bills, earn yield, and manage their cash flow.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/treasury/financial_accounts:
+    get:
+      summary: List Financial Accounts
+      description: <p>Returns a list of FinancialAccounts.</p>
+      operationId: GetTreasuryFinancialAccounts
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/treasury.financial_account'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+    post:
+      summary: Create Financial Account
+      description: <p>Creates a new FinancialAccount.</p>
+      operationId: PostTreasuryFinancialAccounts
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - supported_currencies
+              properties:
+                supported_currencies:
+                  type: array
+                  items:
+                    type: string
+                features:
+                  type: object
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                platform_restrictions:
+                  type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.financial_account'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/financial_accounts/{financial_account}:
+    get:
+      summary: Retrieve Financial Account
+      description: <p>Retrieves the details of a FinancialAccount.</p>
+      operationId: GetTreasuryFinancialAccountsFinancialAccount
+      parameters:
+        - name: financial_account
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.financial_account'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+    post:
+      summary: Update Financial Account
+      description: <p>Updates the details of a FinancialAccount.</p>
+      operationId: PostTreasuryFinancialAccountsFinancialAccount
+      parameters:
+        - name: financial_account
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                features:
+                  type: object
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                platform_restrictions:
+                  type: object
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.financial_account'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/transactions:
+    get:
+      summary: List Transactions
+      description: <p>Retrieves a list of Transaction objects.</p>
+      operationId: GetTreasuryTransactions
+      parameters:
+        - name: financial_account
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - posted
+              - void
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/treasury.transaction'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/transactions/{id}:
+    get:
+      summary: Retrieve Transaction
+      description: <p>Retrieves the details of an existing Transaction.</p>
+      operationId: GetTreasuryTransactionsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.transaction'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/outbound_payments:
+    get:
+      summary: List Outbound Payments
+      description: <p>Returns a list of OutboundPayments sent from the specified FinancialAccount.</p>
+      operationId: GetTreasuryOutboundPayments
+      parameters:
+        - name: financial_account
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - canceled
+              - failed
+              - posted
+              - processing
+              - returned
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/treasury.outbound_payment'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+    post:
+      summary: Create Outbound Payment
+      description: <p>Creates an OutboundPayment.</p>
+      operationId: PostTreasuryOutboundPayments
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+                - financial_account
+              properties:
+                amount:
+                  type: integer
+                currency:
+                  type: string
+                financial_account:
+                  type: string
+                  maxLength: 5000
+                customer:
+                  type: string
+                  maxLength: 5000
+                description:
+                  type: string
+                  maxLength: 5000
+                destination_payment_method:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                statement_descriptor:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.outbound_payment'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/outbound_transfers:
+    get:
+      summary: List Outbound Transfers
+      description: <p>Returns a list of OutboundTransfers sent from the specified FinancialAccount.</p>
+      operationId: GetTreasuryOutboundTransfers
+      parameters:
+        - name: financial_account
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - canceled
+              - failed
+              - posted
+              - processing
+              - returned
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/treasury.outbound_transfer'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+    post:
+      summary: Create Outbound Transfer
+      description: <p>Creates an OutboundTransfer.</p>
+      operationId: PostTreasuryOutboundTransfers
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+                - destination_payment_method
+                - financial_account
+              properties:
+                amount:
+                  type: integer
+                currency:
+                  type: string
+                destination_payment_method:
+                  type: string
+                  maxLength: 5000
+                financial_account:
+                  type: string
+                  maxLength: 5000
+                description:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                statement_descriptor:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.outbound_transfer'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+  /v1/treasury/inbound_transfers:
+    get:
+      summary: List Inbound Transfers
+      description: <p>Returns a list of InboundTransfers sent from the specified FinancialAccount.</p>
+      operationId: GetTreasuryInboundTransfers
+      parameters:
+        - name: financial_account
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - canceled
+              - failed
+              - processing
+              - succeeded
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/treasury.inbound_transfer'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+    post:
+      summary: Create Inbound Transfer
+      description: <p>Creates an InboundTransfer.</p>
+      operationId: PostTreasuryInboundTransfers
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+                - financial_account
+                - origin_payment_method
+              properties:
+                amount:
+                  type: integer
+                currency:
+                  type: string
+                financial_account:
+                  type: string
+                  maxLength: 5000
+                origin_payment_method:
+                  type: string
+                  maxLength: 5000
+                description:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                statement_descriptor:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/treasury.inbound_transfer'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Treasury
+components:
+  schemas:
+    treasury.financial_account:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - treasury.financial_account
+        active_features:
+          type: array
+          items:
+            type: string
+        balance:
+          type: object
+        country:
+          type: string
+        created:
+          type: integer
+        features:
+          type:
+            - object
+            - 'null'
+        financial_addresses:
+          type: array
+          items:
+            type: object
+        livemode:
+          type: boolean
+        metadata:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: string
+        pending_features:
+          type: array
+          items:
+            type: string
+        platform_restrictions:
+          type:
+            - object
+            - 'null'
+        restricted_features:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum:
+            - closed
+            - open
+        status_details:
+          type: object
+        supported_currencies:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - object
+        - balance
+        - country
+        - created
+        - financial_addresses
+        - livemode
+        - status
+        - status_details
+        - supported_currencies
+    treasury.transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - treasury.transaction
+        amount:
+          type: integer
+        balance_impact:
+          type: object
+        created:
+          type: integer
+        currency:
+          type: string
+        description:
+          type: string
+        financial_account:
+          type: string
+        flow:
+          type:
+            - string
+            - 'null'
+        flow_type:
+          type: string
+          enum:
+            - credit_reversal
+            - debit_reversal
+            - inbound_transfer
+            - issuing_authorization
+            - other
+            - outbound_payment
+            - outbound_transfer
+            - received_credit
+            - received_debit
+        livemode:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - open
+            - posted
+            - void
+      required:
+        - id
+        - object
+        - amount
+        - balance_impact
+        - created
+        - currency
+        - description
+        - financial_account
+        - flow_type
+        - livemode
+        - status
+    treasury.outbound_payment:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - treasury.outbound_payment
+        amount:
+          type: integer
+        cancelable:
+          type: boolean
+        created:
+          type: integer
+        currency:
+          type: string
+        customer:
+          type:
+            - string
+            - 'null'
+        description:
+          type:
+            - string
+            - 'null'
+        destination_payment_method:
+          type:
+            - string
+            - 'null'
+        expected_arrival_date:
+          type:
+            - integer
+            - 'null'
+        financial_account:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          type: string
+          enum:
+            - canceled
+            - failed
+            - posted
+            - processing
+            - returned
+        transaction:
+          type: string
+      required:
+        - id
+        - object
+        - amount
+        - cancelable
+        - created
+        - currency
+        - financial_account
+        - livemode
+        - metadata
+        - status
+        - transaction
+    treasury.outbound_transfer:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - treasury.outbound_transfer
+        amount:
+          type: integer
+        cancelable:
+          type: boolean
+        created:
+          type: integer
+        currency:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        destination_payment_method:
+          type: string
+        expected_arrival_date:
+          type: integer
+        financial_account:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          type: string
+          enum:
+            - canceled
+            - failed
+            - posted
+            - processing
+            - returned
+        transaction:
+          type: string
+      required:
+        - id
+        - object
+        - amount
+        - cancelable
+        - created
+        - currency
+        - destination_payment_method
+        - expected_arrival_date
+        - financial_account
+        - livemode
+        - metadata
+        - status
+        - transaction
+    treasury.inbound_transfer:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - treasury.inbound_transfer
+        amount:
+          type: integer
+        cancelable:
+          type: boolean
+        created:
+          type: integer
+        currency:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        financial_account:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        origin_payment_method:
+          type: string
+        status:
+          type: string
+          enum:
+            - canceled
+            - failed
+            - processing
+            - succeeded
+        transaction:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - amount
+        - cancelable
+        - created
+        - currency
+        - financial_account
+        - livemode
+        - metadata
+        - origin_payment_method
+        - status
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/price",
+  "title": "Stripe Price",
+  "description": "Prices define the unit cost, currency, and (optional) billing cycle for both recurring and one-time purchases of products.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^price_"
+    },
+    "object": {
+      "type": "string",
+      "const": "price",
+      "description": "String representing the object's type."
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Whether the price can be used for new purchases."
+    },
+    "billing_scheme": {
+      "type": "string",
+      "description": "Describes how to compute the price per period.",
+      "enum": ["per_unit", "tiered"]
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created."
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO currency code, in lowercase."
+    },
+    "currency_options": {
+      "type": ["object", "null"],
+      "description": "Prices defined in each available currency option."
+    },
+    "custom_unit_amount": {
+      "type": ["object", "null"],
+      "description": "When set, provides configuration for the amount to be adjusted by the customer during Checkout Sessions and Payment Links.",
+      "properties": {
+        "maximum": { "type": ["integer", "null"] },
+        "minimum": { "type": ["integer", "null"] },
+        "preset": { "type": ["integer", "null"] }
+      }
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode."
+    },
+    "lookup_key": {
+      "type": ["string", "null"],
+      "description": "A lookup key used to retrieve prices dynamically from a static string."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": { "type": "string" }
+    },
+    "nickname": {
+      "type": ["string", "null"],
+      "description": "A brief description of the price, hidden from customers."
+    },
+    "product": {
+      "type": "string",
+      "description": "The ID of the product this price is associated with."
+    },
+    "recurring": {
+      "type": ["object", "null"],
+      "description": "The recurring components of a price such as interval and usage_type.",
+      "properties": {
+        "aggregate_usage": {
+          "type": ["string", "null"],
+          "enum": ["last_during_period", "last_ever", "max", "sum", null]
+        },
+        "interval": {
+          "type": "string",
+          "enum": ["day", "month", "week", "year"]
+        },
+        "interval_count": {
+          "type": "integer"
+        },
+        "trial_period_days": {
+          "type": ["integer", "null"]
+        },
+        "usage_type": {
+          "type": "string",
+          "enum": ["licensed", "metered"]
+        }
+      },
+      "required": ["interval", "interval_count", "usage_type"]
+    },
+    "tax_behavior": {
+      "type": ["string", "null"],
+      "description": "Only required for products with multiple prices.",
+      "enum": ["exclusive", "inclusive", "unspecified", null]
+    },
+    "tiers": {
+      "type": ["array", "null"],
+      "description": "Each element represents a pricing tier.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "flat_amount": { "type": ["integer", "null"] },
+          "flat_amount_decimal": { "type": ["string", "null"] },
+          "unit_amount": { "type": ["integer", "null"] },
+          "unit_amount_decimal": { "type": ["string", "null"] },
+          "up_to": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "tiers_mode": {
+      "type": ["string", "null"],
+      "description": "Defines if the tiering price should be graduated or volume based.",
+      "enum": ["graduated", "volume", null]
+    },
+    "transform_quantity": {
+      "type": ["object", "null"],
+      "description": "Apply a transformation to the reported usage or set quantity before computing the amount billed.",
+      "properties": {
+        "divide_by": { "type": "integer" },
+        "round": { "type": "string", "enum": ["down", "up"] }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "One of one_time or recurring depending on whether the price is for a one-time purchase or a recurring (subscription) purchase.",
+      "enum": ["one_time", "recurring"]
+    },
+    "unit_amount": {
+      "type": ["integer", "null"],
+      "description": "The unit amount in cents to be charged."
+    },
+    "unit_amount_decimal": {
+      "type": ["string", "null"],
+      "description": "The unit amount in cents to be charged, represented as a decimal string with at most 12 decimal places."
+    }
+  },
+  "required": [
+    "id",
+    "object",
+    "active",
+    "billing_scheme",
+    "created",
+    "currency",
+    "livemode",
+    "metadata",
+    "product",
+    "type"
+  ]
+}

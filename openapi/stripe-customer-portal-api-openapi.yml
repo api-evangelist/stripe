@@ -1,0 +1,387 @@
+openapi: 3.1.0
+info:
+  title: Stripe Customer Portal API
+  description: >-
+    The Billing customer portal is a Stripe-hosted UI for subscription and
+    billing management. A portal session describes the instantiation of the
+    customer portal for a particular customer.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/billing_portal/sessions:
+    post:
+      summary: Create Portal Session
+      description: <p>Creates a session of the customer portal.</p>
+      operationId: PostBillingPortalSessions
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - customer
+              properties:
+                customer:
+                  type: string
+                  description: The ID of an existing customer.
+                  maxLength: 5000
+                configuration:
+                  type: string
+                  description: The ID of an existing portal configuration to use.
+                  maxLength: 5000
+                return_url:
+                  type: string
+                  description: The URL to redirect the customer to after they are done in the portal.
+                flow_data:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                        - payment_method_update
+                        - subscription_cancel
+                        - subscription_update
+                        - subscription_update_confirm
+                    subscription_cancel:
+                      type: object
+                    subscription_update:
+                      type: object
+                    subscription_update_confirm:
+                      type: object
+                locale:
+                  type: string
+                on_behalf_of:
+                  type: string
+                  maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.session'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Customer Portal
+  /v1/billing_portal/configurations:
+    get:
+      summary: List Portal Configurations
+      description: <p>Returns a list of portal configurations.</p>
+      operationId: GetBillingPortalConfigurations
+      parameters:
+        - name: active
+          in: query
+          description: Only return configurations that are active or inactive.
+          required: false
+          schema:
+            type: boolean
+        - name: is_default
+          in: query
+          description: Only return the default or non-default configurations.
+          required: false
+          schema:
+            type: boolean
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/billing_portal.configuration'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Customer Portal
+    post:
+      summary: Create Portal Configuration
+      description: <p>Creates a portal configuration.</p>
+      operationId: PostBillingPortalConfigurations
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - business_profile
+                - features
+              properties:
+                business_profile:
+                  type: object
+                  properties:
+                    headline:
+                      type: string
+                    privacy_policy_url:
+                      type: string
+                    terms_of_service_url:
+                      type: string
+                features:
+                  type: object
+                  properties:
+                    customer_update:
+                      type: object
+                    invoice_history:
+                      type: object
+                    payment_method_update:
+                      type: object
+                    subscription_cancel:
+                      type: object
+                    subscription_update:
+                      type: object
+                default_return_url:
+                  type: string
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Customer Portal
+  /v1/billing_portal/configurations/{configuration}:
+    get:
+      summary: Retrieve Portal Configuration
+      description: <p>Retrieves a portal configuration.</p>
+      operationId: GetBillingPortalConfigurationsConfiguration
+      parameters:
+        - name: configuration
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Customer Portal
+    post:
+      summary: Update Portal Configuration
+      description: <p>Updates a portal configuration.</p>
+      operationId: PostBillingPortalConfigurationsConfiguration
+      parameters:
+        - name: configuration
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                business_profile:
+                  type: object
+                default_return_url:
+                  type: string
+                features:
+                  type: object
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Customer Portal
+components:
+  schemas:
+    billing_portal.session:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - billing_portal.session
+        configuration:
+          type: string
+        created:
+          type: integer
+        customer:
+          type: string
+        flow:
+          type:
+            - object
+            - 'null'
+        livemode:
+          type: boolean
+        locale:
+          type:
+            - string
+            - 'null'
+        on_behalf_of:
+          type:
+            - string
+            - 'null'
+        return_url:
+          type:
+            - string
+            - 'null'
+        url:
+          type: string
+      required:
+        - id
+        - object
+        - configuration
+        - created
+        - customer
+        - livemode
+        - url
+    billing_portal.configuration:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - billing_portal.configuration
+        active:
+          type: boolean
+        application:
+          type:
+            - string
+            - 'null'
+        business_profile:
+          type: object
+        created:
+          type: integer
+        default_return_url:
+          type:
+            - string
+            - 'null'
+        features:
+          type: object
+        is_default:
+          type: boolean
+        livemode:
+          type: boolean
+        metadata:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: string
+        updated:
+          type: integer
+      required:
+        - id
+        - object
+        - active
+        - business_profile
+        - created
+        - features
+        - is_default
+        - livemode
+        - updated
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

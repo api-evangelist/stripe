@@ -1,0 +1,540 @@
+openapi: 3.1.0
+info:
+  title: Stripe Setup API
+  description: >-
+    Use the Setup Intents API to set up a payment method for future payments.
+    It's similar to a payment, but no charge is created. Set up a payment
+    method for future payments now.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/setup_intents:
+    get:
+      summary: List Setup Intents
+      description: <p>Returns a list of SetupIntents.</p>
+      operationId: GetSetupIntents
+      parameters:
+        - name: customer
+          in: query
+          description: Only return SetupIntents for the customer specified by this customer ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: payment_method
+          in: query
+          description: Only return SetupIntents that associate with the specified payment method.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/setup_intent'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+    post:
+      summary: Create Setup Intent
+      description: >-
+        <p>Creates a SetupIntent object. After you create the SetupIntent, attach
+        a payment method and confirm it to collect any required permissions to
+        charge the payment method later.</p>
+      operationId: PostSetupIntents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                confirm:
+                  type: boolean
+                customer:
+                  type: string
+                  maxLength: 5000
+                description:
+                  type: string
+                  maxLength: 1000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                payment_method:
+                  type: string
+                  maxLength: 5000
+                payment_method_types:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 5000
+                return_url:
+                  type: string
+                usage:
+                  type: string
+                  enum:
+                    - off_session
+                    - on_session
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setup_intent'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+  /v1/setup_intents/{intent}:
+    get:
+      summary: Retrieve Setup Intent
+      description: <p>Retrieves the details of a SetupIntent that has previously been created.</p>
+      operationId: GetSetupIntentsIntent
+      parameters:
+        - name: intent
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: client_secret
+          in: query
+          description: The client secret of the SetupIntent.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setup_intent'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+    post:
+      summary: Update Setup Intent
+      description: <p>Updates a SetupIntent object.</p>
+      operationId: PostSetupIntentsIntent
+      parameters:
+        - name: intent
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer:
+                  type: string
+                  maxLength: 5000
+                description:
+                  type: string
+                  maxLength: 1000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                payment_method:
+                  type: string
+                  maxLength: 5000
+                payment_method_types:
+                  type: array
+                  items:
+                    type: string
+                    maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setup_intent'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+  /v1/setup_intents/{intent}/confirm:
+    post:
+      summary: Confirm Setup Intent
+      description: >-
+        <p>Confirm that your customer intends to set up the current or provided
+        payment method.</p>
+      operationId: PostSetupIntentsIntentConfirm
+      parameters:
+        - name: intent
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                payment_method:
+                  type: string
+                  maxLength: 5000
+                return_url:
+                  type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setup_intent'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+  /v1/setup_intents/{intent}/cancel:
+    post:
+      summary: Cancel Setup Intent
+      description: <p>You can cancel a SetupIntent object when it's in one of these statuses: requires_payment_method, requires_confirmation, or requires_action.</p>
+      operationId: PostSetupIntentsIntentCancel
+      parameters:
+        - name: intent
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                cancellation_reason:
+                  type: string
+                  enum:
+                    - abandoned
+                    - duplicate
+                    - requested_by_customer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setup_intent'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+  /v1/setup_attempts:
+    get:
+      summary: List Setup Attempts
+      description: <p>Returns a list of SetupAttempts that associate with a provided SetupIntent.</p>
+      operationId: GetSetupAttempts
+      parameters:
+        - name: setup_intent
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/setup_attempt'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Setup Intents
+components:
+  schemas:
+    setup_intent:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - setup_intent
+        application:
+          type:
+            - string
+            - 'null'
+        cancellation_reason:
+          type:
+            - string
+            - 'null'
+          enum:
+            - abandoned
+            - duplicate
+            - requested_by_customer
+            - null
+        client_secret:
+          type:
+            - string
+            - 'null'
+        created:
+          type: integer
+        customer:
+          type:
+            - string
+            - 'null'
+        description:
+          type:
+            - string
+            - 'null'
+        last_setup_error:
+          type:
+            - object
+            - 'null'
+        latest_attempt:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        next_action:
+          type:
+            - object
+            - 'null'
+        payment_method:
+          type:
+            - string
+            - 'null'
+        payment_method_options:
+          type:
+            - object
+            - 'null'
+        payment_method_types:
+          type: array
+          items:
+            type: string
+            maxLength: 5000
+        status:
+          type: string
+          enum:
+            - canceled
+            - processing
+            - requires_action
+            - requires_confirmation
+            - requires_payment_method
+            - succeeded
+        usage:
+          type: string
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - metadata
+        - payment_method_types
+        - status
+        - usage
+    setup_attempt:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - setup_attempt
+        application:
+          type:
+            - string
+            - 'null'
+        attach_to_self:
+          type: boolean
+        created:
+          type: integer
+        customer:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        on_behalf_of:
+          type:
+            - string
+            - 'null'
+        payment_method:
+          type: string
+        setup_error:
+          type:
+            - object
+            - 'null'
+        setup_intent:
+          type: string
+        status:
+          type: string
+        usage:
+          type: string
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - payment_method
+        - setup_intent
+        - status
+        - usage
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

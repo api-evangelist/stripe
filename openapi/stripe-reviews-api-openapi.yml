@@ -1,0 +1,234 @@
+openapi: 3.1.0
+info:
+  title: Stripe Reviews API
+  description: >-
+    Reviews can be used to supplement automated fraud detection with human
+    expertise. Reviews are created when a payment is flagged by Radar rules
+    or manually by your team.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/reviews:
+    get:
+      summary: List Reviews
+      description: <p>Returns a list of Review objects that have open set to true.</p>
+      operationId: GetReviews
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/review'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reviews
+  /v1/reviews/{review}:
+    get:
+      summary: Retrieve Review
+      description: <p>Retrieves a Review object.</p>
+      operationId: GetReviewsReview
+      parameters:
+        - name: review
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reviews
+  /v1/reviews/{review}/approve:
+    post:
+      summary: Approve Review
+      description: <p>Approves a Review object, closing it and removing it from the list of reviews.</p>
+      operationId: PostReviewsReviewApprove
+      parameters:
+        - name: review
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/review'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Reviews
+components:
+  schemas:
+    review:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - review
+        billing_zip:
+          type:
+            - string
+            - 'null'
+        charge:
+          type:
+            - string
+            - 'null'
+        closed_reason:
+          type:
+            - string
+            - 'null'
+          enum:
+            - approved
+            - disputed
+            - redacted
+            - refunded
+            - refunded_as_fraud
+            - null
+        created:
+          type: integer
+        ip_address:
+          type:
+            - string
+            - 'null'
+        ip_address_location:
+          type:
+            - object
+            - 'null'
+        livemode:
+          type: boolean
+        open:
+          type: boolean
+        opened_reason:
+          type: string
+          enum:
+            - manual
+            - rule
+        payment_intent:
+          type:
+            - string
+            - 'null'
+        reason:
+          type: string
+        session:
+          type:
+            - object
+            - 'null'
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - open
+        - opened_reason
+        - reason
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

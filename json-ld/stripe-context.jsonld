@@ -1,0 +1,404 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "stripe": "https://stripe.com/schemas/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "Customer": {
+      "@id": "stripe:Customer",
+      "@context": {
+        "id": {
+          "@id": "stripe:customerId",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "email": {
+          "@id": "schema:email",
+          "@type": "xsd:string"
+        },
+        "phone": {
+          "@id": "schema:telephone",
+          "@type": "xsd:string"
+        },
+        "description": {
+          "@id": "schema:description",
+          "@type": "xsd:string"
+        },
+        "address": {
+          "@id": "schema:address",
+          "@type": "schema:PostalAddress"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "currency": {
+          "@id": "schema:currency",
+          "@type": "xsd:string"
+        },
+        "balance": {
+          "@id": "stripe:balance",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Product": {
+      "@id": "stripe:Product",
+      "@context": {
+        "id": {
+          "@id": "stripe:productId",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "description": {
+          "@id": "schema:description",
+          "@type": "xsd:string"
+        },
+        "active": {
+          "@id": "stripe:active",
+          "@type": "xsd:boolean"
+        },
+        "images": {
+          "@id": "schema:image",
+          "@container": "@list"
+        },
+        "url": {
+          "@id": "schema:url",
+          "@type": "@id"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "updated": {
+          "@id": "schema:dateModified",
+          "@type": "xsd:integer"
+        },
+        "type": {
+          "@id": "stripe:productType",
+          "@type": "xsd:string"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Price": {
+      "@id": "stripe:Price",
+      "@context": {
+        "id": {
+          "@id": "stripe:priceId",
+          "@type": "xsd:string"
+        },
+        "product": {
+          "@id": "stripe:product",
+          "@type": "xsd:string"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "unit_amount": {
+          "@id": "schema:price",
+          "@type": "xsd:integer"
+        },
+        "active": {
+          "@id": "stripe:active",
+          "@type": "xsd:boolean"
+        },
+        "type": {
+          "@id": "stripe:priceType",
+          "@type": "xsd:string"
+        },
+        "billing_scheme": {
+          "@id": "stripe:billingScheme",
+          "@type": "xsd:string"
+        },
+        "recurring": {
+          "@id": "stripe:recurring",
+          "@type": "@json"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Charge": {
+      "@id": "stripe:Charge",
+      "@context": {
+        "id": {
+          "@id": "stripe:chargeId",
+          "@type": "xsd:string"
+        },
+        "amount": {
+          "@id": "schema:price",
+          "@type": "xsd:integer"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "customer": {
+          "@id": "stripe:customer",
+          "@type": "xsd:string"
+        },
+        "description": {
+          "@id": "schema:description",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "stripe:status",
+          "@type": "xsd:string"
+        },
+        "paid": {
+          "@id": "stripe:paid",
+          "@type": "xsd:boolean"
+        },
+        "captured": {
+          "@id": "stripe:captured",
+          "@type": "xsd:boolean"
+        },
+        "refunded": {
+          "@id": "stripe:refunded",
+          "@type": "xsd:boolean"
+        },
+        "payment_intent": {
+          "@id": "stripe:paymentIntent",
+          "@type": "xsd:string"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "PaymentIntent": {
+      "@id": "stripe:PaymentIntent",
+      "@context": {
+        "id": {
+          "@id": "stripe:paymentIntentId",
+          "@type": "xsd:string"
+        },
+        "amount": {
+          "@id": "schema:price",
+          "@type": "xsd:integer"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "customer": {
+          "@id": "stripe:customer",
+          "@type": "xsd:string"
+        },
+        "description": {
+          "@id": "schema:description",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "stripe:status",
+          "@type": "xsd:string"
+        },
+        "payment_method": {
+          "@id": "stripe:paymentMethod",
+          "@type": "xsd:string"
+        },
+        "capture_method": {
+          "@id": "stripe:captureMethod",
+          "@type": "xsd:string"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Subscription": {
+      "@id": "stripe:Subscription",
+      "@context": {
+        "id": {
+          "@id": "stripe:subscriptionId",
+          "@type": "xsd:string"
+        },
+        "customer": {
+          "@id": "stripe:customer",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "stripe:status",
+          "@type": "xsd:string"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "current_period_start": {
+          "@id": "stripe:currentPeriodStart",
+          "@type": "xsd:integer"
+        },
+        "current_period_end": {
+          "@id": "stripe:currentPeriodEnd",
+          "@type": "xsd:integer"
+        },
+        "cancel_at_period_end": {
+          "@id": "stripe:cancelAtPeriodEnd",
+          "@type": "xsd:boolean"
+        },
+        "collection_method": {
+          "@id": "stripe:collectionMethod",
+          "@type": "xsd:string"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Invoice": {
+      "@id": "stripe:Invoice",
+      "@context": {
+        "id": {
+          "@id": "stripe:invoiceId",
+          "@type": "xsd:string"
+        },
+        "customer": {
+          "@id": "stripe:customer",
+          "@type": "xsd:string"
+        },
+        "subscription": {
+          "@id": "stripe:subscription",
+          "@type": "xsd:string"
+        },
+        "status": {
+          "@id": "stripe:status",
+          "@type": "xsd:string"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency",
+          "@type": "xsd:string"
+        },
+        "amount_due": {
+          "@id": "stripe:amountDue",
+          "@type": "xsd:integer"
+        },
+        "amount_paid": {
+          "@id": "stripe:amountPaid",
+          "@type": "xsd:integer"
+        },
+        "total": {
+          "@id": "schema:totalPrice",
+          "@type": "xsd:integer"
+        },
+        "paid": {
+          "@id": "stripe:paid",
+          "@type": "xsd:boolean"
+        },
+        "number": {
+          "@id": "schema:identifier",
+          "@type": "xsd:string"
+        },
+        "hosted_invoice_url": {
+          "@id": "schema:url",
+          "@type": "@id"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "metadata": {
+          "@id": "stripe:metadata",
+          "@type": "@json"
+        }
+      }
+    },
+    "Event": {
+      "@id": "stripe:Event",
+      "@context": {
+        "id": {
+          "@id": "stripe:eventId",
+          "@type": "xsd:string"
+        },
+        "type": {
+          "@id": "stripe:eventType",
+          "@type": "xsd:string"
+        },
+        "api_version": {
+          "@id": "stripe:apiVersion",
+          "@type": "xsd:string"
+        },
+        "data": {
+          "@id": "stripe:eventData",
+          "@type": "@json"
+        },
+        "created": {
+          "@id": "schema:dateCreated",
+          "@type": "xsd:integer"
+        },
+        "livemode": {
+          "@id": "stripe:livemode",
+          "@type": "xsd:boolean"
+        },
+        "pending_webhooks": {
+          "@id": "stripe:pendingWebhooks",
+          "@type": "xsd:integer"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,345 @@
+openapi: 3.1.0
+info:
+  title: Stripe Refunds API
+  description: >-
+    Refund objects allow you to refund a previously created charge that isn't
+    refunded yet. Funds are refunded to the credit or debit card that's
+    initially charged.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/refunds:
+    get:
+      summary: List Refunds
+      description: <p>Returns a list of all refunds you created.</p>
+      operationId: GetRefunds
+      parameters:
+        - name: charge
+          in: query
+          description: Only return refunds for the charge specified by this charge ID.
+          required: false
+          schema:
+            type: string
+        - name: payment_intent
+          in: query
+          description: Only return refunds for the PaymentIntent specified by this ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/refund'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Refunds
+    post:
+      summary: Create Refund
+      description: >-
+        <p>When you create a new refund, you must specify a Charge or
+        PaymentIntent object on which to create it.</p>
+      operationId: PostRefunds
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                charge:
+                  type: string
+                  description: The identifier of the charge to refund.
+                  maxLength: 5000
+                payment_intent:
+                  type: string
+                  description: ID of the PaymentIntent to refund.
+                  maxLength: 5000
+                amount:
+                  type: integer
+                  description: A positive integer in cents representing how much to refund.
+                reason:
+                  type: string
+                  description: The reason for the refund.
+                  enum:
+                    - duplicate
+                    - fraudulent
+                    - requested_by_customer
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                reverse_transfer:
+                  type: boolean
+                refund_application_fee:
+                  type: boolean
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refund'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Refunds
+  /v1/refunds/{refund}:
+    get:
+      summary: Retrieve Refund
+      description: <p>Retrieves the details of an existing refund.</p>
+      operationId: GetRefundsRefund
+      parameters:
+        - name: refund
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refund'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Refunds
+    post:
+      summary: Update Refund
+      description: <p>Updates the refund that you specify by setting the values of the parameters that you pass.</p>
+      operationId: PostRefundsRefund
+      parameters:
+        - name: refund
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refund'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Refunds
+  /v1/refunds/{refund}/cancel:
+    post:
+      summary: Cancel Refund
+      description: <p>Cancels a refund with a status of requires_action.</p>
+      operationId: PostRefundsRefundCancel
+      parameters:
+        - name: refund
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refund'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Refunds
+components:
+  schemas:
+    refund:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - refund
+        amount:
+          type: integer
+        balance_transaction:
+          type:
+            - string
+            - 'null'
+        charge:
+          type:
+            - string
+            - 'null'
+        created:
+          type: integer
+        currency:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+          maxLength: 5000
+        failure_balance_transaction:
+          type:
+            - string
+            - 'null'
+        failure_reason:
+          type:
+            - string
+            - 'null'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        payment_intent:
+          type:
+            - string
+            - 'null'
+        reason:
+          type:
+            - string
+            - 'null'
+          enum:
+            - duplicate
+            - expired_uncaptured_charge
+            - fraudulent
+            - requested_by_customer
+            - null
+        receipt_number:
+          type:
+            - string
+            - 'null'
+        source_transfer_reversal:
+          type:
+            - string
+            - 'null'
+        status:
+          type:
+            - string
+            - 'null'
+        transfer_reversal:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - amount
+        - created
+        - currency
+        - metadata
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

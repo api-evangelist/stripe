@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/payment-intent",
+  "title": "Stripe Payment Intent",
+  "description": "A PaymentIntent guides you through the process of collecting a payment from your customer. It tracks charge attempts and payment state changes throughout the process.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^pi_"
+    },
+    "object": {
+      "type": "string",
+      "const": "payment_intent",
+      "description": "String representing the object's type."
+    },
+    "amount": {
+      "type": "integer",
+      "description": "Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the smallest currency unit."
+    },
+    "amount_capturable": {
+      "type": "integer",
+      "description": "Amount that can be captured from this PaymentIntent."
+    },
+    "amount_received": {
+      "type": "integer",
+      "description": "Amount that this PaymentIntent collected."
+    },
+    "application": {
+      "type": ["string", "null"],
+      "description": "ID of the Connect application that created the PaymentIntent."
+    },
+    "application_fee_amount": {
+      "type": ["integer", "null"],
+      "description": "The amount of the application fee for the resulting payment."
+    },
+    "automatic_payment_methods": {
+      "type": ["object", "null"],
+      "description": "Settings to configure compatible payment methods from the Stripe Dashboard.",
+      "properties": {
+        "allow_redirects": {
+          "type": "string",
+          "enum": ["always", "never"]
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "canceled_at": {
+      "type": ["integer", "null"],
+      "description": "Populated when status is canceled, this is the time at which the PaymentIntent was canceled."
+    },
+    "cancellation_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for cancellation of this PaymentIntent.",
+      "enum": ["abandoned", "automatic", "duplicate", "failed_invoice", "fraudulent", "requested_by_customer", "void_invoice", null]
+    },
+    "capture_method": {
+      "type": "string",
+      "description": "Controls when the funds are captured from the customer's account.",
+      "enum": ["automatic", "automatic_async", "manual"]
+    },
+    "client_secret": {
+      "type": ["string", "null"],
+      "description": "The client secret of this PaymentIntent."
+    },
+    "confirmation_method": {
+      "type": "string",
+      "description": "Describes whether we can confirm this PaymentIntent automatically or if it requires customer action.",
+      "enum": ["automatic", "manual"]
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch."
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO currency code, in lowercase."
+    },
+    "customer": {
+      "type": ["string", "null"],
+      "description": "ID of the Customer this PaymentIntent belongs to."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "An arbitrary string attached to the object."
+    },
+    "invoice": {
+      "type": ["string", "null"],
+      "description": "ID of the invoice that created this PaymentIntent, if it exists."
+    },
+    "last_payment_error": {
+      "type": ["object", "null"],
+      "description": "The payment error encountered in the previous PaymentIntent confirmation.",
+      "properties": {
+        "charge": { "type": ["string", "null"] },
+        "code": { "type": ["string", "null"] },
+        "decline_code": { "type": ["string", "null"] },
+        "doc_url": { "type": ["string", "null"] },
+        "message": { "type": ["string", "null"] },
+        "param": { "type": ["string", "null"] },
+        "payment_method": { "type": ["object", "null"] },
+        "type": {
+          "type": "string",
+          "enum": ["api_error", "card_error", "idempotency_error", "invalid_request_error"]
+        }
+      }
+    },
+    "latest_charge": {
+      "type": ["string", "null"],
+      "description": "The latest charge created by this PaymentIntent."
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "next_action": {
+      "type": ["object", "null"],
+      "description": "If present, this property tells you what actions you need to take in order for your customer to fulfill a payment."
+    },
+    "on_behalf_of": {
+      "type": ["string", "null"],
+      "description": "The account (if any) for which the funds of the PaymentIntent are intended."
+    },
+    "payment_method": {
+      "type": ["string", "null"],
+      "description": "ID of the payment method used in this PaymentIntent."
+    },
+    "payment_method_options": {
+      "type": ["object", "null"],
+      "description": "Payment-method-specific configuration for this PaymentIntent."
+    },
+    "payment_method_types": {
+      "type": "array",
+      "description": "The list of payment method types that this PaymentIntent is allowed to use.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "processing": {
+      "type": ["object", "null"],
+      "description": "If present, this property tells you about the processing state of the payment."
+    },
+    "receipt_email": {
+      "type": ["string", "null"],
+      "description": "Email address that the receipt for the resulting payment will be sent to."
+    },
+    "review": {
+      "type": ["string", "null"],
+      "description": "ID of the review associated with this PaymentIntent, if any."
+    },
+    "setup_future_usage": {
+      "type": ["string", "null"],
+      "description": "Indicates that you intend to make future payments with this PaymentIntent's payment method.",
+      "enum": ["off_session", "on_session", null]
+    },
+    "shipping": {
+      "type": ["object", "null"],
+      "description": "Shipping information for this PaymentIntent."
+    },
+    "statement_descriptor": {
+      "type": ["string", "null"],
+      "description": "For card charges, use statement_descriptor_suffix. Otherwise, you can use this value as the complete description of a charge on your customers' statements."
+    },
+    "statement_descriptor_suffix": {
+      "type": ["string", "null"],
+      "description": "Provides information about a card payment that customers see on their statements."
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of this PaymentIntent.",
+      "enum": [
+        "canceled",
+        "processing",
+        "requires_action",
+        "requires_capture",
+        "requires_confirmation",
+        "requires_payment_method",
+        "succeeded"
+      ]
+    },
+    "transfer_data": {
+      "type": ["object", "null"],
+      "description": "The data that automatically creates a Transfer after the payment finalizes."
+    },
+    "transfer_group": {
+      "type": ["string", "null"],
+      "description": "A string that identifies the resulting payment as part of a group."
+    }
+  },
+  "required": [
+    "id",
+    "object",
+    "amount",
+    "capture_method",
+    "confirmation_method",
+    "created",
+    "currency",
+    "livemode",
+    "metadata",
+    "payment_method_types",
+    "status"
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/event",
+  "title": "Stripe Event",
+  "description": "Events are Stripe's way of letting you know when something interesting happens in your account. When an interesting event occurs, a new Event object is created and POSTed to the configured webhook URL.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object.",
+      "pattern": "^evt_"
+    },
+    "object": {
+      "type": "string",
+      "const": "event",
+      "description": "String representing the object's type."
+    },
+    "account": {
+      "type": "string",
+      "description": "The connected account that originated the event."
+    },
+    "api_version": {
+      "type": ["string", "null"],
+      "description": "The Stripe API version used to render data."
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch."
+    },
+    "data": {
+      "type": "object",
+      "description": "Object containing data associated with the event.",
+      "properties": {
+        "object": {
+          "type": "object",
+          "description": "Object containing the API resource relevant to the event."
+        },
+        "previous_attributes": {
+          "type": "object",
+          "description": "Object containing the names of the updated attributes and their values prior to the event (only included in *.updated events)."
+        }
+      },
+      "required": ["object"]
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode or the value false if the object exists in test mode."
+    },
+    "pending_webhooks": {
+      "type": "integer",
+      "description": "Number of webhooks that haven't been successfully delivered (i.e., to return a 20x response) to the URLs you specify."
+    },
+    "request": {
+      "type": ["object", "null"],
+      "description": "Information on the API request that triggers the event.",
+      "properties": {
+        "id": {
+          "type": ["string", "null"],
+          "description": "ID of the API request that caused the event."
+        },
+        "idempotency_key": {
+          "type": ["string", "null"],
+          "description": "The idempotency key transmitted during the request, if any."
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Description of the event (e.g., invoice.created or charge.refunded)."
+    }
+  },
+  "required": [
+    "id",
+    "object",
+    "api_version",
+    "created",
+    "data",
+    "livemode",
+    "pending_webhooks",
+    "type"
+  ]
+}

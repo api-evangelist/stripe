@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stripe.com/schemas/invoice",
+  "title": "Stripe Invoice",
+  "description": "Invoices are statements of amounts owed by a customer, and are either generated one-off, or generated periodically from a subscription.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": ["string", "null"],
+      "description": "Unique identifier for the object.",
+      "pattern": "^in_"
+    },
+    "object": {
+      "type": "string",
+      "const": "invoice",
+      "description": "String representing the object's type."
+    },
+    "account_country": {
+      "type": ["string", "null"],
+      "description": "The country of the business associated with this invoice."
+    },
+    "account_name": {
+      "type": ["string", "null"],
+      "description": "The public name of the business associated with this invoice."
+    },
+    "amount_due": {
+      "type": "integer",
+      "description": "Final amount due at this time for this invoice."
+    },
+    "amount_paid": {
+      "type": "integer",
+      "description": "The amount, in cents, that was paid."
+    },
+    "amount_remaining": {
+      "type": "integer",
+      "description": "The difference between amount_due and amount_paid, in cents."
+    },
+    "amount_shipping": {
+      "type": "integer",
+      "description": "This is the sum of all the shipping amounts."
+    },
+    "application": {
+      "type": ["string", "null"],
+      "description": "ID of the Connect Application that created the invoice."
+    },
+    "attempt_count": {
+      "type": "integer",
+      "description": "Number of payment attempts made for this invoice."
+    },
+    "attempted": {
+      "type": "boolean",
+      "description": "Whether an attempt has been made to pay the invoice."
+    },
+    "auto_advance": {
+      "type": "boolean",
+      "description": "Controls whether Stripe performs automatic collection of the invoice."
+    },
+    "billing_reason": {
+      "type": ["string", "null"],
+      "description": "Indicates the reason why the invoice was created.",
+      "enum": [
+        "automatic_pending_invoice_item_invoice",
+        "manual",
+        "quote_accept",
+        "subscription",
+        "subscription_create",
+        "subscription_cycle",
+        "subscription_threshold",
+        "subscription_update",
+        "upcoming",
+        null
+      ]
+    },
+    "charge": {
+      "type": ["string", "null"],
+      "description": "ID of the latest charge generated for this invoice."
+    },
+    "collection_method": {
+      "type": "string",
+      "description": "How the invoice's collection is handled.",
+      "enum": ["charge_automatically", "send_invoice"]
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created."
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO currency code, in lowercase."
+    },
+    "customer": {
+      "type": ["string", "null"],
+      "description": "The ID of the customer who will be billed."
+    },
+    "customer_email": {
+      "type": ["string", "null"],
+      "description": "The customer's email."
+    },
+    "customer_name": {
+      "type": ["string", "null"],
+      "description": "The customer's name."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "An arbitrary string attached to the object."
+    },
+    "due_date": {
+      "type": ["integer", "null"],
+      "description": "The date on which payment for this invoice is due."
+    },
+    "effective_at": {
+      "type": ["integer", "null"],
+      "description": "The date when this invoice is in effect."
+    },
+    "hosted_invoice_url": {
+      "type": ["string", "null"],
+      "description": "The URL for the hosted invoice page."
+    },
+    "invoice_pdf": {
+      "type": ["string", "null"],
+      "description": "The link to download the PDF for the invoice."
+    },
+    "lines": {
+      "type": "object",
+      "description": "The individual line items that make up the invoice."
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode."
+    },
+    "metadata": {
+      "type": ["object", "null"],
+      "description": "Set of key-value pairs that you can attach to an object.",
+      "additionalProperties": { "type": "string" }
+    },
+    "number": {
+      "type": ["string", "null"],
+      "description": "A unique, identifying string that appears on emails sent for this invoice."
+    },
+    "paid": {
+      "type": "boolean",
+      "description": "Whether payment was successfully collected for this invoice."
+    },
+    "paid_out_of_band": {
+      "type": "boolean",
+      "description": "Returns true if the invoice was manually marked paid."
+    },
+    "payment_intent": {
+      "type": ["string", "null"],
+      "description": "The PaymentIntent associated with this invoice."
+    },
+    "period_end": {
+      "type": "integer",
+      "description": "End of the usage period during which invoice items were added to this invoice."
+    },
+    "period_start": {
+      "type": "integer",
+      "description": "Start of the usage period during which invoice items were added to this invoice."
+    },
+    "status": {
+      "type": ["string", "null"],
+      "description": "The status of the invoice.",
+      "enum": ["draft", "open", "paid", "uncollectible", "void", null]
+    },
+    "subscription": {
+      "type": ["string", "null"],
+      "description": "The subscription that this invoice was prepared for, if any."
+    },
+    "subtotal": {
+      "type": "integer",
+      "description": "Total of all subscriptions, invoice items, and prorations on the invoice before any invoice level discount or exclusive tax is applied."
+    },
+    "tax": {
+      "type": ["integer", "null"],
+      "description": "The amount of tax on this invoice."
+    },
+    "total": {
+      "type": "integer",
+      "description": "Total after discounts and taxes."
+    },
+    "total_discount_amounts": {
+      "type": ["array", "null"],
+      "description": "The aggregate amounts calculated per discount across all line items.",
+      "items": { "type": "object" }
+    },
+    "total_excluding_tax": {
+      "type": ["integer", "null"],
+      "description": "The integer amount in cents representing the total amount of the invoice including all discounts but excluding all tax."
+    },
+    "total_tax_amounts": {
+      "type": "array",
+      "description": "The aggregate amounts calculated per tax rate for all line items.",
+      "items": { "type": "object" }
+    },
+    "webhooks_delivered_at": {
+      "type": ["integer", "null"],
+      "description": "Invoices are automatically paid or sent 1 hour after webhooks are delivered."
+    }
+  },
+  "required": [
+    "object",
+    "amount_due",
+    "amount_paid",
+    "amount_remaining",
+    "attempt_count",
+    "attempted",
+    "collection_method",
+    "created",
+    "currency",
+    "livemode",
+    "paid",
+    "paid_out_of_band",
+    "period_end",
+    "period_start",
+    "subtotal",
+    "total"
+  ]
+}

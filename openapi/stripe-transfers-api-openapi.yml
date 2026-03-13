@@ -1,0 +1,534 @@
+openapi: 3.1.0
+info:
+  title: Stripe Transfers API
+  description: >-
+    A Transfer object is created when you move funds between Stripe accounts
+    as part of Connect.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/transfers:
+    get:
+      summary: List Transfers
+      description: <p>Returns a list of existing transfers sent to connected accounts.</p>
+      operationId: GetTransfers
+      parameters:
+        - name: destination
+          in: query
+          description: Only return transfers for the destination specified by this account ID.
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: transfer_group
+          in: query
+          description: Only return transfers with the specified transfer group.
+          required: false
+          schema:
+            type: string
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transfer'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+    post:
+      summary: Create Transfer
+      description: <p>To send funds from your Stripe account to a connected account, create a new transfer.</p>
+      operationId: PostTransfers
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - currency
+                - destination
+              properties:
+                amount:
+                  type: integer
+                  description: A positive integer in cents representing how much to transfer.
+                currency:
+                  type: string
+                  description: Three-letter ISO currency code.
+                destination:
+                  type: string
+                  description: The ID of a connected Stripe account.
+                  maxLength: 5000
+                description:
+                  type: string
+                  description: An arbitrary string attached to the object.
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                source_transaction:
+                  type: string
+                  maxLength: 5000
+                source_type:
+                  type: string
+                  enum:
+                    - bank_account
+                    - card
+                    - fpx
+                transfer_group:
+                  type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+  /v1/transfers/{transfer}:
+    get:
+      summary: Retrieve Transfer
+      description: <p>Retrieves the details of an existing transfer.</p>
+      operationId: GetTransfersTransfer
+      parameters:
+        - name: transfer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+    post:
+      summary: Update Transfer
+      description: <p>Updates the specified transfer by setting the values of the parameters passed.</p>
+      operationId: PostTransfersTransfer
+      parameters:
+        - name: transfer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+  /v1/transfers/{id}/reversals:
+    get:
+      summary: List Transfer Reversals
+      description: <p>You can see a list of the reversals belonging to a specific transfer.</p>
+      operationId: GetTransfersIdReversals
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transfer_reversal'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+    post:
+      summary: Create Transfer Reversal
+      description: <p>When you create a new reversal, you must specify a transfer to create it on.</p>
+      operationId: PostTransfersIdReversals
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                description:
+                  type: string
+                  maxLength: 5000
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                refund_application_fee:
+                  type: boolean
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer_reversal'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+  /v1/transfers/{transfer}/reversals/{id}:
+    get:
+      summary: Retrieve Transfer Reversal
+      description: <p>Retrieves the details of an existing transfer reversal.</p>
+      operationId: GetTransfersTransferReversalsId
+      parameters:
+        - name: transfer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer_reversal'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+    post:
+      summary: Update Transfer Reversal
+      description: <p>Updates the specified reversal by setting the values of the parameters passed.</p>
+      operationId: PostTransfersTransferReversalsId
+      parameters:
+        - name: transfer
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transfer_reversal'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Transfers
+components:
+  schemas:
+    transfer:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - transfer
+        amount:
+          type: integer
+        amount_reversed:
+          type: integer
+        balance_transaction:
+          type:
+            - string
+            - 'null'
+        created:
+          type: integer
+        currency:
+          type: string
+        description:
+          type:
+            - string
+            - 'null'
+        destination:
+          type:
+            - string
+            - 'null'
+        destination_payment:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        reversals:
+          type: object
+        reversed:
+          type: boolean
+        source_transaction:
+          type:
+            - string
+            - 'null'
+        source_type:
+          type:
+            - string
+            - 'null'
+        transfer_group:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - amount
+        - amount_reversed
+        - created
+        - currency
+        - livemode
+        - metadata
+        - reversals
+        - reversed
+    transfer_reversal:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - transfer_reversal
+        amount:
+          type: integer
+        balance_transaction:
+          type:
+            - string
+            - 'null'
+        created:
+          type: integer
+        currency:
+          type: string
+        destination_payment_refund:
+          type:
+            - string
+            - 'null'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        source_refund:
+          type:
+            - string
+            - 'null'
+        transfer:
+          type: string
+      required:
+        - id
+        - object
+        - amount
+        - created
+        - currency
+        - metadata
+        - transfer
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

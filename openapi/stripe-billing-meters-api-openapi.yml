@@ -1,0 +1,532 @@
+openapi: 3.1.0
+info:
+  title: Stripe Billing Meters API
+  description: >-
+    Meters specify how to aggregate meter events over a billing period for
+    usage-based pricing. Meter events represent customer actions and support
+    up to 10,000 events per second via the V2 meter event streams API.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/billing/meters:
+    get:
+      summary: List Billing Meters
+      description: <p>Retrieve a list of billing meters.</p>
+      operationId: GetBillingMeters
+      parameters:
+        - name: status
+          in: query
+          description: Filter meters by status.
+          required: false
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/billing.meter'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+    post:
+      summary: Create Billing Meter
+      description: <p>Creates a billing meter.</p>
+      operationId: PostBillingMeters
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - default_aggregation
+                - display_name
+                - event_name
+              properties:
+                default_aggregation:
+                  type: object
+                  required:
+                    - formula
+                  properties:
+                    formula:
+                      type: string
+                      enum:
+                        - count
+                        - sum
+                display_name:
+                  type: string
+                  description: The meter's name.
+                  maxLength: 100
+                event_name:
+                  type: string
+                  description: The name of the meter event to record usage for.
+                  maxLength: 100
+                customer_mapping:
+                  type: object
+                  properties:
+                    event_payload_key:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                        - by_id
+                value_settings:
+                  type: object
+                  properties:
+                    event_payload_key:
+                      type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+  /v1/billing/meters/{id}:
+    get:
+      summary: Retrieve Billing Meter
+      description: <p>Retrieves a billing meter given an ID.</p>
+      operationId: GetBillingMetersId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+    post:
+      summary: Update Billing Meter
+      description: <p>Updates a billing meter.</p>
+      operationId: PostBillingMetersId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                display_name:
+                  type: string
+                  maxLength: 100
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+  /v1/billing/meters/{id}/deactivate:
+    post:
+      summary: Deactivate Billing Meter
+      description: <p>Deactivates a billing meter.</p>
+      operationId: PostBillingMetersIdDeactivate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+  /v1/billing/meters/{id}/reactivate:
+    post:
+      summary: Reactivate Billing Meter
+      description: <p>Reactivates a billing meter.</p>
+      operationId: PostBillingMetersIdReactivate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+  /v1/billing/meters/{id}/event_summaries:
+    get:
+      summary: List Meter Event Summaries
+      description: <p>Retrieve a list of billing meter event summaries.</p>
+      operationId: GetBillingMetersIdEventSummaries
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: customer
+          in: query
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: start_time
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: end_time
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: value_grouping_window
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - day
+              - hour
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/billing.meter_event_summary'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+  /v1/billing/meter_events:
+    post:
+      summary: Create Meter Event
+      description: <p>Creates a billing meter event.</p>
+      operationId: PostBillingMeterEvents
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - event_name
+                - payload
+              properties:
+                event_name:
+                  type: string
+                  description: The name of the meter event.
+                  maxLength: 100
+                payload:
+                  type: object
+                  description: The payload of the event.
+                  additionalProperties:
+                    type: string
+                timestamp:
+                  type: integer
+                  description: The time of the event. Defaults to current timestamp.
+                identifier:
+                  type: string
+                  description: A unique identifier for the event.
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing.meter_event'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Billing Meters
+components:
+  schemas:
+    billing.meter:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - billing.meter
+        created:
+          type: integer
+        customer_mapping:
+          type: object
+          properties:
+            event_payload_key:
+              type: string
+            type:
+              type: string
+        default_aggregation:
+          type: object
+          properties:
+            formula:
+              type: string
+              enum:
+                - count
+                - sum
+        display_name:
+          type: string
+          maxLength: 100
+        event_name:
+          type: string
+          maxLength: 100
+        event_time_window:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+        status_transitions:
+          type: object
+          properties:
+            deactivated_at:
+              type:
+                - integer
+                - 'null'
+        updated:
+          type: integer
+        value_settings:
+          type:
+            - object
+            - 'null'
+      required:
+        - id
+        - object
+        - created
+        - customer_mapping
+        - default_aggregation
+        - display_name
+        - event_name
+        - livemode
+        - status
+        - status_transitions
+        - updated
+    billing.meter_event:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+            - billing.meter_event
+        created:
+          type: integer
+        event_name:
+          type: string
+        identifier:
+          type:
+            - string
+            - 'null'
+        livemode:
+          type: boolean
+        payload:
+          type: object
+          additionalProperties:
+            type: string
+        timestamp:
+          type: integer
+      required:
+        - object
+        - created
+        - event_name
+        - livemode
+        - payload
+        - timestamp
+    billing.meter_event_summary:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - billing.meter_event_summary
+        aggregated_value:
+          type: number
+        end_time:
+          type: integer
+        livemode:
+          type: boolean
+        meter:
+          type: string
+        start_time:
+          type: integer
+      required:
+        - id
+        - object
+        - aggregated_value
+        - end_time
+        - livemode
+        - meter
+        - start_time
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

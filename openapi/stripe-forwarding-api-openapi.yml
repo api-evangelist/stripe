@@ -1,0 +1,254 @@
+openapi: 3.1.0
+info:
+  title: Stripe Forwarding API
+  description: >-
+    The Vault and Forward API allows you to tokenize and store card details in
+    Stripe's PCI-compliant vault and forward that data to supported third-party
+    processors or endpoints.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/forwarding/requests:
+    get:
+      summary: List Forwarding Requests
+      description: <p>Lists all ForwardingRequest objects.</p>
+      operationId: GetForwardingRequests
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/forwarding.request'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Forwarding
+    post:
+      summary: Create Forwarding Request
+      description: <p>Creates a ForwardingRequest object.</p>
+      operationId: PostForwardingRequests
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - payment_method
+                - url
+                - replacements
+              properties:
+                payment_method:
+                  type: string
+                  description: The PaymentMethod to insert into the forwarded request.
+                  maxLength: 5000
+                url:
+                  type: string
+                  description: The destination URL for the forwarded request.
+                replacements:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - card_cvc
+                      - card_expiry
+                      - card_number
+                      - cardholder_name
+                request:
+                  type: object
+                  properties:
+                    body:
+                      type: string
+                    headers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          value:
+                            type: string
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/forwarding.request'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Forwarding
+  /v1/forwarding/requests/{id}:
+    get:
+      summary: Retrieve Forwarding Request
+      description: <p>Retrieves a ForwardingRequest object.</p>
+      operationId: GetForwardingRequestsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+        - name: expand
+          in: query
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              maxLength: 5000
+          style: deepObject
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/forwarding.request'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Forwarding
+components:
+  schemas:
+    forwarding.request:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - forwarding.request
+        created:
+          type: integer
+        livemode:
+          type: boolean
+        metadata:
+          type:
+            - object
+            - 'null'
+          additionalProperties:
+            type: string
+        payment_method:
+          type: string
+        replacements:
+          type: array
+          items:
+            type: string
+        request_context:
+          type:
+            - object
+            - 'null'
+        request_details:
+          type:
+            - object
+            - 'null'
+        response_details:
+          type:
+            - object
+            - 'null'
+        url:
+          type:
+            - string
+            - 'null'
+      required:
+        - id
+        - object
+        - created
+        - livemode
+        - payment_method
+        - replacements
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer

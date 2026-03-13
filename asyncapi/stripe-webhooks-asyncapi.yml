@@ -1,0 +1,836 @@
+asyncapi: 2.6.0
+info:
+  title: Stripe Webhooks
+  version: '2024-06-20'
+  description: >-
+    Stripe uses webhooks to notify your application when an event happens in your
+    account. Webhooks are particularly useful for asynchronous events like when a
+    customer's bank confirms a payment, a customer disputes a charge, a recurring
+    payment succeeds, or when collecting subscription payments. Stripe signs the
+    webhook events it sends to your endpoints by including a signature in each
+    event's Stripe-Signature header.
+  contact:
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+    email: dev-platform@stripe.com
+  license:
+    name: Stripe Terms of Service
+    url: https://stripe.com/us/terms/
+  x-logo:
+    url: https://stripe.com/img/about/logos/logos/blue.png
+externalDocs:
+  description: Stripe Webhooks Documentation
+  url: https://docs.stripe.com/webhooks
+servers:
+  production:
+    url: https://api.stripe.com
+    protocol: https
+    description: >-
+      Stripe delivers webhook events to your configured endpoints via HTTPS POST
+      requests. You configure webhook endpoints in the Stripe Dashboard or via
+      the Webhook Endpoints API.
+defaultContentType: application/json
+channels:
+  account.updated:
+    description: Occurs whenever an account status or property has changed.
+    subscribe:
+      operationId: onAccountUpdated
+      message:
+        $ref: '#/components/messages/AccountUpdatedEvent'
+  account.external_account.created:
+    description: Occurs whenever an external account is created.
+    subscribe:
+      operationId: onExternalAccountCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  account.external_account.deleted:
+    description: Occurs whenever an external account is deleted.
+    subscribe:
+      operationId: onExternalAccountDeleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  account.external_account.updated:
+    description: Occurs whenever an external account is updated.
+    subscribe:
+      operationId: onExternalAccountUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  balance.available:
+    description: Occurs whenever your Stripe balance has been updated.
+    subscribe:
+      operationId: onBalanceAvailable
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  billing_portal.configuration.created:
+    description: Occurs whenever a portal configuration is created.
+    subscribe:
+      operationId: onBillingPortalConfigurationCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  billing_portal.configuration.updated:
+    description: Occurs whenever a portal configuration is updated.
+    subscribe:
+      operationId: onBillingPortalConfigurationUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  billing_portal.session.created:
+    description: Occurs whenever a portal session is created.
+    subscribe:
+      operationId: onBillingPortalSessionCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  charge.captured:
+    description: Occurs whenever a previously uncaptured charge is captured.
+    subscribe:
+      operationId: onChargeCaptured
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.expired:
+    description: Occurs whenever an uncaptured charge expires.
+    subscribe:
+      operationId: onChargeExpired
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.failed:
+    description: Occurs whenever a failed charge attempt occurs.
+    subscribe:
+      operationId: onChargeFailed
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.pending:
+    description: Occurs whenever a pending charge is created.
+    subscribe:
+      operationId: onChargePending
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.refunded:
+    description: Occurs whenever a charge is refunded.
+    subscribe:
+      operationId: onChargeRefunded
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.succeeded:
+    description: Occurs whenever a charge is successful.
+    subscribe:
+      operationId: onChargeSucceeded
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.updated:
+    description: Occurs whenever a charge description or metadata is updated.
+    subscribe:
+      operationId: onChargeUpdated
+      message:
+        $ref: '#/components/messages/ChargeEvent'
+  charge.dispute.closed:
+    description: Occurs when a dispute is closed and the dispute status changes to lost, warning_closed, or won.
+    subscribe:
+      operationId: onChargeDisputeClosed
+      message:
+        $ref: '#/components/messages/DisputeEvent'
+  charge.dispute.created:
+    description: Occurs whenever a customer disputes a charge with their bank.
+    subscribe:
+      operationId: onChargeDisputeCreated
+      message:
+        $ref: '#/components/messages/DisputeEvent'
+  charge.dispute.funds_reinstated:
+    description: Occurs when funds are reinstated to your account after a dispute is closed.
+    subscribe:
+      operationId: onChargeDisputeFundsReinstated
+      message:
+        $ref: '#/components/messages/DisputeEvent'
+  charge.dispute.funds_withdrawn:
+    description: Occurs when funds are removed from your account due to a dispute.
+    subscribe:
+      operationId: onChargeDisputeFundsWithdrawn
+      message:
+        $ref: '#/components/messages/DisputeEvent'
+  charge.dispute.updated:
+    description: Occurs when the dispute is updated (usually with evidence).
+    subscribe:
+      operationId: onChargeDisputeUpdated
+      message:
+        $ref: '#/components/messages/DisputeEvent'
+  charge.refund.updated:
+    description: Occurs whenever a refund is updated on a charge.
+    subscribe:
+      operationId: onChargeRefundUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  checkout.session.async_payment_failed:
+    description: Occurs when a payment intent using a delayed payment method fails.
+    subscribe:
+      operationId: onCheckoutSessionAsyncPaymentFailed
+      message:
+        $ref: '#/components/messages/CheckoutSessionEvent'
+  checkout.session.async_payment_succeeded:
+    description: Occurs when a payment intent using a delayed payment method succeeds.
+    subscribe:
+      operationId: onCheckoutSessionAsyncPaymentSucceeded
+      message:
+        $ref: '#/components/messages/CheckoutSessionEvent'
+  checkout.session.completed:
+    description: Occurs when a Checkout Session has been successfully completed.
+    subscribe:
+      operationId: onCheckoutSessionCompleted
+      message:
+        $ref: '#/components/messages/CheckoutSessionEvent'
+  checkout.session.expired:
+    description: Occurs when a Checkout Session is expired.
+    subscribe:
+      operationId: onCheckoutSessionExpired
+      message:
+        $ref: '#/components/messages/CheckoutSessionEvent'
+  customer.created:
+    description: Occurs whenever a new customer is created.
+    subscribe:
+      operationId: onCustomerCreated
+      message:
+        $ref: '#/components/messages/CustomerEvent'
+  customer.deleted:
+    description: Occurs whenever a customer is deleted.
+    subscribe:
+      operationId: onCustomerDeleted
+      message:
+        $ref: '#/components/messages/CustomerEvent'
+  customer.updated:
+    description: Occurs whenever any property of a customer changes.
+    subscribe:
+      operationId: onCustomerUpdated
+      message:
+        $ref: '#/components/messages/CustomerEvent'
+  customer.subscription.created:
+    description: Occurs whenever a customer is signed up for a new plan.
+    subscribe:
+      operationId: onCustomerSubscriptionCreated
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.deleted:
+    description: Occurs whenever a customer's subscription ends.
+    subscribe:
+      operationId: onCustomerSubscriptionDeleted
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.paused:
+    description: Occurs whenever a customer's subscription is paused.
+    subscribe:
+      operationId: onCustomerSubscriptionPaused
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.pending_update_applied:
+    description: Occurs whenever a customer's subscription's pending update is applied.
+    subscribe:
+      operationId: onCustomerSubscriptionPendingUpdateApplied
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.pending_update_expired:
+    description: Occurs whenever a customer's subscription's pending update expires.
+    subscribe:
+      operationId: onCustomerSubscriptionPendingUpdateExpired
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.resumed:
+    description: Occurs whenever a customer's subscription is no longer paused.
+    subscribe:
+      operationId: onCustomerSubscriptionResumed
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.trial_will_end:
+    description: Occurs three days before a subscription's trial period is scheduled to end.
+    subscribe:
+      operationId: onCustomerSubscriptionTrialWillEnd
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.subscription.updated:
+    description: Occurs whenever a subscription changes.
+    subscribe:
+      operationId: onCustomerSubscriptionUpdated
+      message:
+        $ref: '#/components/messages/SubscriptionEvent'
+  customer.source.created:
+    description: Occurs whenever a new source is created for a customer.
+    subscribe:
+      operationId: onCustomerSourceCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  customer.source.deleted:
+    description: Occurs whenever a source is removed from a customer.
+    subscribe:
+      operationId: onCustomerSourceDeleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  customer.source.updated:
+    description: Occurs whenever a source's details are changed.
+    subscribe:
+      operationId: onCustomerSourceUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  customer.tax_id.created:
+    description: Occurs whenever a tax ID is created for a customer.
+    subscribe:
+      operationId: onCustomerTaxIdCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  customer.tax_id.deleted:
+    description: Occurs whenever a tax ID is deleted from a customer.
+    subscribe:
+      operationId: onCustomerTaxIdDeleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  customer.tax_id.updated:
+    description: Occurs whenever a customer's tax ID is updated.
+    subscribe:
+      operationId: onCustomerTaxIdUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  invoice.created:
+    description: Occurs whenever a new invoice is created.
+    subscribe:
+      operationId: onInvoiceCreated
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.deleted:
+    description: Occurs whenever a draft invoice is deleted.
+    subscribe:
+      operationId: onInvoiceDeleted
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.finalization_failed:
+    description: Occurs whenever a draft invoice cannot be finalized.
+    subscribe:
+      operationId: onInvoiceFinalizationFailed
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.finalized:
+    description: Occurs whenever a draft invoice is finalized and updated to be an open invoice.
+    subscribe:
+      operationId: onInvoiceFinalized
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.marked_uncollectible:
+    description: Occurs whenever an invoice is marked uncollectible.
+    subscribe:
+      operationId: onInvoiceMarkedUncollectible
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.paid:
+    description: Occurs whenever an invoice payment attempt succeeds or an invoice is marked as paid out-of-band.
+    subscribe:
+      operationId: onInvoicePaid
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.payment_action_required:
+    description: Occurs whenever an invoice payment attempt requires further user action to complete.
+    subscribe:
+      operationId: onInvoicePaymentActionRequired
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.payment_failed:
+    description: Occurs whenever an invoice payment attempt fails.
+    subscribe:
+      operationId: onInvoicePaymentFailed
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.payment_succeeded:
+    description: Occurs whenever an invoice payment attempt succeeds.
+    subscribe:
+      operationId: onInvoicePaymentSucceeded
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.sent:
+    description: Occurs whenever an invoice email is sent out.
+    subscribe:
+      operationId: onInvoiceSent
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.upcoming:
+    description: Occurs X number of days before a subscription is scheduled to create an invoice.
+    subscribe:
+      operationId: onInvoiceUpcoming
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.updated:
+    description: Occurs whenever an invoice changes.
+    subscribe:
+      operationId: onInvoiceUpdated
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  invoice.voided:
+    description: Occurs whenever an invoice is voided.
+    subscribe:
+      operationId: onInvoiceVoided
+      message:
+        $ref: '#/components/messages/InvoiceEvent'
+  issuing_authorization.created:
+    description: Occurs whenever an authorization is created.
+    subscribe:
+      operationId: onIssuingAuthorizationCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  issuing_authorization.updated:
+    description: Occurs whenever an authorization is updated.
+    subscribe:
+      operationId: onIssuingAuthorizationUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  issuing_card.created:
+    description: Occurs whenever a card is created.
+    subscribe:
+      operationId: onIssuingCardCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  issuing_card.updated:
+    description: Occurs whenever a card is updated.
+    subscribe:
+      operationId: onIssuingCardUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  issuing_transaction.created:
+    description: Occurs whenever an issuing transaction is created.
+    subscribe:
+      operationId: onIssuingTransactionCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  issuing_transaction.updated:
+    description: Occurs whenever an issuing transaction is updated.
+    subscribe:
+      operationId: onIssuingTransactionUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payment_intent.amount_capturable_updated:
+    description: Occurs when a PaymentIntent has funds to be captured.
+    subscribe:
+      operationId: onPaymentIntentAmountCapturableUpdated
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.canceled:
+    description: Occurs when a PaymentIntent is canceled.
+    subscribe:
+      operationId: onPaymentIntentCanceled
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.created:
+    description: Occurs when a new PaymentIntent is created.
+    subscribe:
+      operationId: onPaymentIntentCreated
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.partially_funded:
+    description: Occurs when funds are applied to a customer_balance PaymentIntent.
+    subscribe:
+      operationId: onPaymentIntentPartiallyFunded
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.payment_failed:
+    description: Occurs when a PaymentIntent has failed the attempt to create a payment method or a payment.
+    subscribe:
+      operationId: onPaymentIntentPaymentFailed
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.processing:
+    description: Occurs when a PaymentIntent has started processing.
+    subscribe:
+      operationId: onPaymentIntentProcessing
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.requires_action:
+    description: Occurs when a PaymentIntent transitions to requires_action state.
+    subscribe:
+      operationId: onPaymentIntentRequiresAction
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_intent.succeeded:
+    description: Occurs when a PaymentIntent has successfully completed payment.
+    subscribe:
+      operationId: onPaymentIntentSucceeded
+      message:
+        $ref: '#/components/messages/PaymentIntentEvent'
+  payment_link.created:
+    description: Occurs when a payment link is created.
+    subscribe:
+      operationId: onPaymentLinkCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payment_link.updated:
+    description: Occurs when a payment link is updated.
+    subscribe:
+      operationId: onPaymentLinkUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payment_method.attached:
+    description: Occurs whenever a new payment method is attached to a customer.
+    subscribe:
+      operationId: onPaymentMethodAttached
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payment_method.detached:
+    description: Occurs whenever a payment method is detached from a customer.
+    subscribe:
+      operationId: onPaymentMethodDetached
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payment_method.updated:
+    description: Occurs whenever a payment method is updated.
+    subscribe:
+      operationId: onPaymentMethodUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  payout.canceled:
+    description: Occurs whenever a payout is canceled.
+    subscribe:
+      operationId: onPayoutCanceled
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  payout.created:
+    description: Occurs whenever a payout is created.
+    subscribe:
+      operationId: onPayoutCreated
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  payout.failed:
+    description: Occurs whenever a payout attempt fails.
+    subscribe:
+      operationId: onPayoutFailed
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  payout.paid:
+    description: Occurs whenever a payout is expected to be available in the destination account.
+    subscribe:
+      operationId: onPayoutPaid
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  payout.reconciliation_completed:
+    description: Occurs whenever a payout's reconciliation status changes to completed.
+    subscribe:
+      operationId: onPayoutReconciliationCompleted
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  payout.updated:
+    description: Occurs whenever a payout is updated.
+    subscribe:
+      operationId: onPayoutUpdated
+      message:
+        $ref: '#/components/messages/PayoutEvent'
+  price.created:
+    description: Occurs whenever a price is created.
+    subscribe:
+      operationId: onPriceCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  price.deleted:
+    description: Occurs whenever a price is deleted.
+    subscribe:
+      operationId: onPriceDeleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  price.updated:
+    description: Occurs whenever a price is updated.
+    subscribe:
+      operationId: onPriceUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  product.created:
+    description: Occurs whenever a product is created.
+    subscribe:
+      operationId: onProductCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  product.deleted:
+    description: Occurs whenever a product is deleted.
+    subscribe:
+      operationId: onProductDeleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  product.updated:
+    description: Occurs whenever a product is updated.
+    subscribe:
+      operationId: onProductUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  radar.early_fraud_warning.created:
+    description: Occurs whenever an early fraud warning is created.
+    subscribe:
+      operationId: onRadarEarlyFraudWarningCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  radar.early_fraud_warning.updated:
+    description: Occurs whenever an early fraud warning is updated.
+    subscribe:
+      operationId: onRadarEarlyFraudWarningUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  refund.created:
+    description: Occurs whenever a refund from a customer's cash balance is created.
+    subscribe:
+      operationId: onRefundCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  refund.updated:
+    description: Occurs whenever a refund is updated.
+    subscribe:
+      operationId: onRefundUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  review.closed:
+    description: Occurs whenever a review is closed.
+    subscribe:
+      operationId: onReviewClosed
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  review.opened:
+    description: Occurs whenever a review is opened.
+    subscribe:
+      operationId: onReviewOpened
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  setup_intent.canceled:
+    description: Occurs when a SetupIntent is canceled.
+    subscribe:
+      operationId: onSetupIntentCanceled
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  setup_intent.created:
+    description: Occurs when a new SetupIntent is created.
+    subscribe:
+      operationId: onSetupIntentCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  setup_intent.requires_action:
+    description: Occurs when a SetupIntent is in the requires_action state.
+    subscribe:
+      operationId: onSetupIntentRequiresAction
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  setup_intent.setup_failed:
+    description: Occurs when a SetupIntent has failed to set up a payment method.
+    subscribe:
+      operationId: onSetupIntentSetupFailed
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  setup_intent.succeeded:
+    description: Occurs when a SetupIntent has successfully set up a payment method.
+    subscribe:
+      operationId: onSetupIntentSucceeded
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  sigma.scheduled_query_run.created:
+    description: Occurs whenever a Sigma scheduled query run finishes.
+    subscribe:
+      operationId: onSigmaScheduledQueryRunCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.aborted:
+    description: Occurs whenever a subscription schedule is aborted.
+    subscribe:
+      operationId: onSubscriptionScheduleAborted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.canceled:
+    description: Occurs whenever a subscription schedule is canceled.
+    subscribe:
+      operationId: onSubscriptionScheduleCanceled
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.completed:
+    description: Occurs whenever a new subscription schedule is completed.
+    subscribe:
+      operationId: onSubscriptionScheduleCompleted
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.created:
+    description: Occurs whenever a subscription schedule is created.
+    subscribe:
+      operationId: onSubscriptionScheduleCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.expiring:
+    description: Occurs whenever a subscription schedule is expiring.
+    subscribe:
+      operationId: onSubscriptionScheduleExpiring
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.released:
+    description: Occurs whenever a subscription schedule is released.
+    subscribe:
+      operationId: onSubscriptionScheduleReleased
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  subscription_schedule.updated:
+    description: Occurs whenever a subscription schedule is updated.
+    subscribe:
+      operationId: onSubscriptionScheduleUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  tax.settings.updated:
+    description: Occurs whenever tax settings are updated.
+    subscribe:
+      operationId: onTaxSettingsUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  transfer.created:
+    description: Occurs whenever a transfer is created.
+    subscribe:
+      operationId: onTransferCreated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  transfer.reversed:
+    description: Occurs whenever a transfer is reversed.
+    subscribe:
+      operationId: onTransferReversed
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+  transfer.updated:
+    description: Occurs whenever a transfer's description or metadata is updated.
+    subscribe:
+      operationId: onTransferUpdated
+      message:
+        $ref: '#/components/messages/GenericStripeEvent'
+components:
+  messages:
+    GenericStripeEvent:
+      name: GenericStripeEvent
+      title: Stripe Event
+      summary: A generic Stripe webhook event.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    AccountUpdatedEvent:
+      name: AccountUpdatedEvent
+      title: Account Updated Event
+      summary: Occurs whenever an account status or property has changed.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    ChargeEvent:
+      name: ChargeEvent
+      title: Charge Event
+      summary: A webhook event related to charges.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    CheckoutSessionEvent:
+      name: CheckoutSessionEvent
+      title: Checkout Session Event
+      summary: A webhook event related to Checkout Sessions.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    CustomerEvent:
+      name: CustomerEvent
+      title: Customer Event
+      summary: A webhook event related to customers.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    DisputeEvent:
+      name: DisputeEvent
+      title: Dispute Event
+      summary: A webhook event related to disputes.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    InvoiceEvent:
+      name: InvoiceEvent
+      title: Invoice Event
+      summary: A webhook event related to invoices.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    PaymentIntentEvent:
+      name: PaymentIntentEvent
+      title: Payment Intent Event
+      summary: A webhook event related to PaymentIntents.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    PayoutEvent:
+      name: PayoutEvent
+      title: Payout Event
+      summary: A webhook event related to payouts.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+    SubscriptionEvent:
+      name: SubscriptionEvent
+      title: Subscription Event
+      summary: A webhook event related to subscriptions.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Event'
+  schemas:
+    Event:
+      type: object
+      description: >-
+        Events are Stripe's way of letting you know when something interesting
+        happens in your account. When an interesting event occurs, a new Event
+        object is created and sent to your configured webhook endpoints.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event.
+        object:
+          type: string
+          const: event
+          description: String representing the object's type.
+        account:
+          type: string
+          description: The connected account that originated the event (Connect only).
+        api_version:
+          type: string
+          description: The Stripe API version used to render data.
+        created:
+          type: integer
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+        data:
+          type: object
+          description: Object containing data associated with the event.
+          properties:
+            object:
+              type: object
+              description: The object associated with this event (e.g., a charge, invoice, subscription).
+            previous_attributes:
+              type: object
+              description: Object containing the names of attributes that have changed and previous values (for *.updated events).
+          required:
+            - object
+        livemode:
+          type: boolean
+          description: Has the value true if the object exists in live mode.
+        pending_webhooks:
+          type: integer
+          description: Number of webhooks that haven't been successfully delivered.
+        request:
+          type: object
+          description: Information on the API request that triggered the event.
+          properties:
+            id:
+              type:
+                - string
+                - 'null'
+              description: ID of the API request that caused the event.
+            idempotency_key:
+              type:
+                - string
+                - 'null'
+              description: The idempotency key transmitted during the request.
+        type:
+          type: string
+          description: Description of the event (e.g., charge.succeeded, invoice.paid).
+      required:
+        - id
+        - object
+        - api_version
+        - created
+        - data
+        - livemode
+        - pending_webhooks
+        - type
+  securitySchemes:
+    webhook_signature:
+      type: httpApiKey
+      name: Stripe-Signature
+      in: header
+      description: >-
+        Stripe signs webhook events by including a signature in the
+        Stripe-Signature header. This allows you to verify that the events were
+        sent by Stripe, not by a third party.

@@ -1,0 +1,343 @@
+openapi: 3.1.0
+info:
+  title: Stripe Entitlements API
+  description: >-
+    Entitlements enable you to map the features of your internal service to
+    Stripe products. After you map your features, Stripe notifies you about
+    when to provision or de-provision access according to your customers
+    subscription status.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2024-06-20'
+  x-stripeSpecFilename: spec3
+security:
+  - basicAuth: []
+  - bearerAuth: []
+servers:
+  - url: https://api.stripe.com/
+paths:
+  /v1/entitlements/active_entitlements:
+    get:
+      summary: List Active Entitlements
+      description: <p>Retrieve a list of active entitlements for a customer.</p>
+      operationId: GetEntitlementsActiveEntitlements
+      parameters:
+        - name: customer
+          in: query
+          required: true
+          description: The ID of the customer.
+          schema:
+            type: string
+            maxLength: 5000
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/entitlements.active_entitlement'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+  /v1/entitlements/active_entitlements/{id}:
+    get:
+      summary: Retrieve Active Entitlement
+      description: <p>Retrieve an active entitlement.</p>
+      operationId: GetEntitlementsActiveEntitlementsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entitlements.active_entitlement'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+  /v1/entitlements/features:
+    get:
+      summary: List Features
+      description: <p>Retrieve a list of features.</p>
+      operationId: GetEntitlementsFeatures
+      parameters:
+        - name: ending_before
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: starting_after
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    enum:
+                      - list
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/entitlements.feature'
+                  has_more:
+                    type: boolean
+                  url:
+                    type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+    post:
+      summary: Create Feature
+      description: <p>Creates a feature.</p>
+      operationId: PostEntitlementsFeatures
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - lookup_key
+                - name
+              properties:
+                lookup_key:
+                  type: string
+                  description: A unique key you provide for the feature.
+                  maxLength: 5000
+                name:
+                  type: string
+                  description: The feature's name, for your own purpose, not meant to be displayable to the customer.
+                  maxLength: 80
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entitlements.feature'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+  /v1/entitlements/features/{id}:
+    get:
+      summary: Retrieve Feature
+      description: <p>Retrieves a feature.</p>
+      operationId: GetEntitlementsFeaturesId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entitlements.feature'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+    post:
+      summary: Update Feature
+      description: <p>Update a feature's metadata or other properties.</p>
+      operationId: PostEntitlementsFeaturesId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                metadata:
+                  type: object
+                  additionalProperties:
+                    type: string
+                name:
+                  type: string
+                  maxLength: 80
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entitlements.feature'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Entitlements
+components:
+  schemas:
+    entitlements.active_entitlement:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - entitlements.active_entitlement
+        feature:
+          type: string
+        livemode:
+          type: boolean
+        lookup_key:
+          type: string
+      required:
+        - id
+        - object
+        - feature
+        - livemode
+        - lookup_key
+    entitlements.feature:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+            - entitlements.feature
+        active:
+          type: boolean
+        livemode:
+          type: boolean
+        lookup_key:
+          type: string
+          maxLength: 5000
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        name:
+          type: string
+          maxLength: 80
+      required:
+        - id
+        - object
+        - active
+        - livemode
+        - lookup_key
+        - metadata
+        - name
+    error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
