@@ -666,6 +666,55 @@ You can configure webhook endpoints via the API to be notified about events that
 - [Change Log](https://stripe.com/docs/upgrades#api-versions)
 - [Terms of Service](https://stripe.com/privacy)
 - [Support](https://support.stripe.com/)
+- [AsyncAPI](asyncapi/stripe-webhooks-asyncapi.yml)
+- [Spectral Rules](rules/stripe-rules.yml)
+- [Vocabulary](vocabulary/stripe-vocabulary.yml)
+
+## Capabilities
+
+### Workflow Capabilities
+
+| Capability | Description |
+|---|---|
+| [Payment Processing](capabilities/payment-processing.yaml) | End-to-end payment processing — PaymentIntents, Checkout, Refunds, Disputes |
+| [Subscription Billing](capabilities/subscription-billing.yaml) | Recurring billing — Customers, Invoices, Billing Portal |
+| [Financial Operations](capabilities/financial-operations.yaml) | Financial ops — Payouts, Refunds, Disputes |
+
+### Shared API Definitions
+
+| API | File |
+|---|---|
+| Payment Intents | [shared/payment-intents.yaml](capabilities/shared/payment-intents.yaml) |
+| Checkout | [shared/checkout.yaml](capabilities/shared/checkout.yaml) |
+| Customers | [shared/customers.yaml](capabilities/shared/customers.yaml) |
+| Billing | [shared/billing.yaml](capabilities/shared/billing.yaml) |
+| Invoices | [shared/invoices.yaml](capabilities/shared/invoices.yaml) |
+| Refunds | [shared/refunds.yaml](capabilities/shared/refunds.yaml) |
+| Disputes | [shared/disputes.yaml](capabilities/shared/disputes.yaml) |
+| Payouts | [shared/payouts.yaml](capabilities/shared/payouts.yaml) |
+
+## JSON Schemas
+
+- [stripe-customer.json](json-schema/stripe-customer.json)
+- [stripe-payment-intent.json](json-schema/stripe-payment-intent.json)
+- [stripe-subscription.json](json-schema/stripe-subscription.json)
+- [stripe-charge.json](json-schema/stripe-charge.json)
+- [stripe-invoice.json](json-schema/stripe-invoice.json)
+- [stripe-event.json](json-schema/stripe-event.json)
+- [stripe-product.json](json-schema/stripe-product.json)
+- [stripe-price.json](json-schema/stripe-price.json)
+
+## JSON Structures
+
+- [stripe-payment-intent-structure.json](json-structure/stripe-payment-intent-structure.json)
+- [stripe-customer-structure.json](json-structure/stripe-customer-structure.json)
+- [stripe-invoice-structure.json](json-structure/stripe-invoice-structure.json)
+
+## Examples
+
+- [Create Payment Intent](examples/stripe-create-payment-intent-example.json)
+- [Create Checkout Session](examples/stripe-create-checkout-session-example.json)
+- [Create Customer](examples/stripe-create-customer-example.json)
 
 ## Maintainers
 

@@ -1,0 +1,255 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Stripe Subscription Billing"
+  description: >-
+    Unified capability for subscription and recurring billing workflows. Combines Stripe Customers,
+    Billing Portal, and Invoices APIs to support customer lifecycle management, subscription administration,
+    and invoice processing. Used by SaaS platforms and subscription businesses.
+  tags:
+    - Stripe
+    - Subscriptions
+    - Billing
+    - Customers
+    - Invoices
+    - SaaS
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STRIPE_API_KEY: STRIPE_API_KEY
+
+capability:
+  consumes:
+    - import: stripe-customers
+      location: ./shared/customers.yaml
+    - import: stripe-billing
+      location: ./shared/billing.yaml
+    - import: stripe-invoices
+      location: ./shared/invoices.yaml
+
+  exposes:
+    - type: rest
+      port: 8081
+      namespace: stripe-subscription-billing-api
+      description: "Unified REST API for Stripe subscription and billing management."
+      resources:
+        - path: /v1/customers
+          name: customers
+          description: "Customer management"
+          operations:
+            - method: GET
+              name: list-customers
+              description: "List customers"
+              call: "stripe-customers.list-customers"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-customer
+              description: "Create a customer"
+              call: "stripe-customers.create-customer"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/customers/{customer}
+          name: customer
+          description: "Individual customer"
+          operations:
+            - method: GET
+              name: get-customer
+              description: "Get a customer"
+              call: "stripe-customers.get-customer"
+              with:
+                customer: "rest.customer"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/invoices
+          name: invoices
+          description: "Invoice management"
+          operations:
+            - method: GET
+              name: list-invoices
+              description: "List invoices"
+              call: "stripe-invoices.list-invoices"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-invoice
+              description: "Create an invoice"
+              call: "stripe-invoices.create-invoice"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/invoices/{invoice}
+          name: invoice
+          description: "Individual invoice"
+          operations:
+            - method: GET
+              name: get-invoice
+              description: "Get an invoice"
+              call: "stripe-invoices.get-invoice"
+              with:
+                invoice: "rest.invoice"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/billing-portal-sessions
+          name: portal-sessions
+          description: "Customer self-service billing portal"
+          operations:
+            - method: POST
+              name: create-portal-session
+              description: "Create a billing portal session for a customer"
+              call: "stripe-billing.create-portal-session"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/payouts
+          name: payouts
+          description: "Payout management"
+          operations:
+            - method: GET
+              name: list-payouts
+              description: "List payouts"
+              call: "stripe-payouts.list-payouts"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9081
+      namespace: stripe-subscription-billing-mcp
+      transport: http
+      description: "MCP server for AI-assisted Stripe subscription and billing management."
+      tools:
+        - name: list-customers
+          description: "List Stripe customers"
+          hints:
+            readOnly: true
+          call: "stripe-customers.list-customers"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-customer
+          description: "Create a new Stripe customer"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-customers.create-customer"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-customer
+          description: "Retrieve a Stripe customer by ID"
+          hints:
+            readOnly: true
+          call: "stripe-customers.get-customer"
+          with:
+            customer: "tools.customer"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: search-customers
+          description: "Search Stripe customers by query"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "stripe-customers.search-customers"
+          with:
+            query: "tools.query"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-invoices
+          description: "List Stripe invoices with optional status filter"
+          hints:
+            readOnly: true
+          call: "stripe-invoices.list-invoices"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-invoice
+          description: "Create a new Stripe invoice"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-invoices.create-invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-invoice
+          description: "Retrieve a Stripe invoice by ID"
+          hints:
+            readOnly: true
+          call: "stripe-invoices.get-invoice"
+          with:
+            invoice: "tools.invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: finalize-invoice
+          description: "Finalize a Stripe draft invoice so it can be paid"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-invoices.finalize-invoice"
+          with:
+            invoice: "tools.invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: pay-invoice
+          description: "Attempt to pay a Stripe invoice"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-invoices.pay-invoice"
+          with:
+            invoice: "tools.invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: send-invoice
+          description: "Email a Stripe invoice to the customer"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-invoices.send-invoice"
+          with:
+            invoice: "tools.invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: void-invoice
+          description: "Void an open Stripe invoice"
+          hints:
+            readOnly: false
+            destructive: true
+          call: "stripe-invoices.void-invoice"
+          with:
+            invoice: "tools.invoice"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-portal-session
+          description: "Create a Stripe billing portal session so a customer can manage their subscription"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-billing.create-portal-session"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-portal-configurations
+          description: "List Stripe billing portal configurations"
+          hints:
+            readOnly: true
+          call: "stripe-billing.list-portal-configurations"
+          outputParameters:
+            - type: object
+              mapping: "$."

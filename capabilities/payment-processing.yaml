@@ -1,0 +1,290 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Stripe Payment Processing"
+  description: >-
+    Unified capability for end-to-end payment processing workflows. Combines Stripe Payment Intents
+    and Checkout APIs to support payment creation, confirmation, capture, refunds, and dispute management.
+    Used by e-commerce platforms, SaaS billing teams, and payment operations engineers.
+  tags:
+    - Stripe
+    - Payments
+    - Checkout
+    - Refunds
+    - Disputes
+    - E-Commerce
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STRIPE_API_KEY: STRIPE_API_KEY
+
+capability:
+  consumes:
+    - import: stripe-payment-intents
+      location: ./shared/payment-intents.yaml
+    - import: stripe-checkout
+      location: ./shared/checkout.yaml
+    - import: stripe-refunds
+      location: ./shared/refunds.yaml
+    - import: stripe-disputes
+      location: ./shared/disputes.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: stripe-payment-processing-api
+      description: "Unified REST API for Stripe payment processing workflows."
+      resources:
+        - path: /v1/payment-intents
+          name: payment-intents
+          description: "Manage payment intents for custom payment flows"
+          operations:
+            - method: GET
+              name: list-payment-intents
+              description: "List payment intents"
+              call: "stripe-payment-intents.list-payment-intents"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-payment-intent
+              description: "Create a payment intent"
+              call: "stripe-payment-intents.create-payment-intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/payment-intents/{intent}
+          name: payment-intent
+          description: "Individual payment intent"
+          operations:
+            - method: GET
+              name: get-payment-intent
+              description: "Get a payment intent"
+              call: "stripe-payment-intents.get-payment-intent"
+              with:
+                intent: "rest.intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/payment-intents/{intent}/confirm
+          name: payment-intent-confirm
+          description: "Confirm a payment intent"
+          operations:
+            - method: POST
+              name: confirm-payment-intent
+              description: "Confirm payment intent"
+              call: "stripe-payment-intents.confirm-payment-intent"
+              with:
+                intent: "rest.intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/payment-intents/{intent}/capture
+          name: payment-intent-capture
+          description: "Capture payment funds"
+          operations:
+            - method: POST
+              name: capture-payment-intent
+              description: "Capture authorized payment"
+              call: "stripe-payment-intents.capture-payment-intent"
+              with:
+                intent: "rest.intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/checkout-sessions
+          name: checkout-sessions
+          description: "Hosted checkout sessions"
+          operations:
+            - method: GET
+              name: list-checkout-sessions
+              description: "List checkout sessions"
+              call: "stripe-checkout.list-checkout-sessions"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-checkout-session
+              description: "Create a hosted checkout session"
+              call: "stripe-checkout.create-checkout-session"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/refunds
+          name: refunds
+          description: "Payment refunds"
+          operations:
+            - method: GET
+              name: list-refunds
+              description: "List refunds"
+              call: "stripe-refunds.list-refunds"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-refund
+              description: "Create a refund"
+              call: "stripe-refunds.create-refund"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/disputes
+          name: disputes
+          description: "Payment disputes and chargebacks"
+          operations:
+            - method: GET
+              name: list-disputes
+              description: "List disputes"
+              call: "stripe-disputes.list-disputes"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/disputes/{dispute}
+          name: dispute
+          description: "Individual dispute"
+          operations:
+            - method: GET
+              name: get-dispute
+              description: "Get a dispute"
+              call: "stripe-disputes.get-dispute"
+              with:
+                dispute: "rest.dispute"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9080
+      namespace: stripe-payment-processing-mcp
+      transport: http
+      description: "MCP server for AI-assisted Stripe payment processing workflows."
+      tools:
+        - name: list-payment-intents
+          description: "List Stripe payment intents with optional filters"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "stripe-payment-intents.list-payment-intents"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-payment-intent
+          description: "Create a new Stripe payment intent for collecting payment"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.create-payment-intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-payment-intent
+          description: "Retrieve a Stripe payment intent by ID"
+          hints:
+            readOnly: true
+          call: "stripe-payment-intents.get-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: confirm-payment-intent
+          description: "Confirm a Stripe payment intent to execute the payment"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.confirm-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: capture-payment-intent
+          description: "Capture authorized funds for a Stripe payment intent"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.capture-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: cancel-payment-intent
+          description: "Cancel an uncaptured Stripe payment intent"
+          hints:
+            readOnly: false
+            destructive: true
+          call: "stripe-payment-intents.cancel-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-checkout-session
+          description: "Create a Stripe hosted checkout page for payment collection"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-checkout.create-checkout-session"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-checkout-session
+          description: "Retrieve details of a Stripe checkout session"
+          hints:
+            readOnly: true
+          call: "stripe-checkout.get-checkout-session"
+          with:
+            session: "tools.session"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-refund
+          description: "Create a refund on a Stripe charge or payment intent"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-refunds.create-refund"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-refunds
+          description: "List Stripe refunds"
+          hints:
+            readOnly: true
+          call: "stripe-refunds.list-refunds"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-disputes
+          description: "List Stripe payment disputes (chargebacks)"
+          hints:
+            readOnly: true
+          call: "stripe-disputes.list-disputes"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-dispute
+          description: "Get details of a specific Stripe dispute"
+          hints:
+            readOnly: true
+          call: "stripe-disputes.get-dispute"
+          with:
+            dispute: "tools.dispute"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: update-dispute
+          description: "Update evidence for a Stripe dispute to contest a chargeback"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-disputes.update-dispute"
+          with:
+            dispute: "tools.dispute"
+          outputParameters:
+            - type: object
+              mapping: "$."

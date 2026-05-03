@@ -1,0 +1,241 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Stripe Customers API"
+  description: >-
+    Manage Stripe customer objects including creating, updating, deleting customers,
+    and managing their payment methods, subscriptions, bank accounts, and tax IDs.
+  tags:
+    - Stripe
+    - Customers
+    - Identity
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STRIPE_API_KEY: STRIPE_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: stripe-customers
+      baseUri: https://api.stripe.com
+      description: "Stripe Customers API for managing customer records and payment methods."
+      authentication:
+        type: bearer
+        token: "{{STRIPE_API_KEY}}"
+      resources:
+        - name: customers
+          path: /v1/customers
+          description: "Customer collection operations"
+          operations:
+            - name: list-customers
+              method: GET
+              description: "List all customers"
+              inputParameters:
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Max items to return"
+                - name: email
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by email address"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-customer
+              method: POST
+              description: "Create a new customer"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  email: "{{tools.email}}"
+                  name: "{{tools.name}}"
+
+        - name: customers-search
+          path: /v1/customers/search
+          description: "Search customers"
+          operations:
+            - name: search-customers
+              method: GET
+              description: "Search customers using query syntax"
+              inputParameters:
+                - name: query
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: customer
+          path: /v1/customers/{customer}
+          description: "Individual customer operations"
+          operations:
+            - name: get-customer
+              method: GET
+              description: "Retrieve a customer by ID"
+              inputParameters:
+                - name: customer
+                  in: path
+                  type: string
+                  required: true
+                  description: "Customer ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: update-customer
+              method: POST
+              description: "Update a customer"
+              inputParameters:
+                - name: customer
+                  in: path
+                  type: string
+                  required: true
+                  description: "Customer ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: delete-customer
+              method: DELETE
+              description: "Delete a customer permanently"
+              inputParameters:
+                - name: customer
+                  in: path
+                  type: string
+                  required: true
+                  description: "Customer ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: customer-payment-methods
+          path: /v1/customers/{customer}/payment_methods
+          description: "Customer payment methods"
+          operations:
+            - name: list-customer-payment-methods
+              method: GET
+              description: "List all payment methods for a customer"
+              inputParameters:
+                - name: customer
+                  in: path
+                  type: string
+                  required: true
+                  description: "Customer ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8102
+      namespace: stripe-customers-rest
+      resources:
+        - path: /v1/customers
+          name: customers
+          operations:
+            - method: GET
+              name: list-customers
+              description: "List customers"
+              call: "stripe-customers.list-customers"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-customer
+              description: "Create a customer"
+              call: "stripe-customers.create-customer"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/customers/{customer}
+          name: customer
+          operations:
+            - method: GET
+              name: get-customer
+              description: "Get a customer"
+              call: "stripe-customers.get-customer"
+              with:
+                customer: "rest.customer"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9102
+      namespace: stripe-customers-mcp
+      transport: http
+      tools:
+        - name: list-customers
+          description: "List Stripe customers"
+          hints:
+            readOnly: true
+          call: "stripe-customers.list-customers"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-customer
+          description: "Create a new Stripe customer"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-customers.create-customer"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-customer
+          description: "Retrieve a Stripe customer by ID"
+          hints:
+            readOnly: true
+          call: "stripe-customers.get-customer"
+          with:
+            customer: "tools.customer"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: search-customers
+          description: "Search Stripe customers by query"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "stripe-customers.search-customers"
+          with:
+            query: "tools.query"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-customer
+          description: "Delete a Stripe customer"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "stripe-customers.delete-customer"
+          with:
+            customer: "tools.customer"
+          outputParameters:
+            - type: object
+              mapping: "$."

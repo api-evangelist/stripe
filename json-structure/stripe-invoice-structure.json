@@ -1,0 +1,93 @@
+{
+  "name": "Invoice",
+  "description": "Stripe Invoice object representing a statement of amounts owed for subscription or one-time charges.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (prefix: in_)",
+      "example": "in_1NrJaN2eZvKYlo2CAzJH3Z4b"
+    },
+    "object": {
+      "type": "string",
+      "value": "invoice"
+    },
+    "status": {
+      "type": "string",
+      "description": "Invoice status",
+      "enum": ["draft", "open", "paid", "uncollectible", "void"]
+    },
+    "amount_due": {
+      "type": "integer",
+      "description": "Final amount due (in cents)"
+    },
+    "amount_paid": {
+      "type": "integer",
+      "description": "Amount already paid"
+    },
+    "amount_remaining": {
+      "type": "integer",
+      "description": "Amount still remaining to be paid"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO 4217 currency code"
+    },
+    "customer": {
+      "type": "string",
+      "description": "ID of the customer"
+    },
+    "subscription": {
+      "type": "string",
+      "description": "ID of the subscription that generated this invoice"
+    },
+    "payment_intent": {
+      "type": "string",
+      "description": "ID of the PaymentIntent for this invoice"
+    },
+    "due_date": {
+      "type": "integer",
+      "description": "Unix timestamp when payment is due"
+    },
+    "period_start": {
+      "type": "integer",
+      "description": "Start of the billing period (Unix timestamp)"
+    },
+    "period_end": {
+      "type": "integer",
+      "description": "End of the billing period (Unix timestamp)"
+    },
+    "lines": {
+      "type": "object",
+      "description": "List of line items on the invoice"
+    },
+    "subtotal": {
+      "type": "integer",
+      "description": "Subtotal before discounts and taxes"
+    },
+    "tax": {
+      "type": "integer",
+      "description": "Tax amount"
+    },
+    "total": {
+      "type": "integer",
+      "description": "Total after discounts and tax"
+    },
+    "hosted_invoice_url": {
+      "type": "string",
+      "description": "URL for the hosted invoice page"
+    },
+    "invoice_pdf": {
+      "type": "string",
+      "description": "URL to download the invoice PDF"
+    },
+    "created": {
+      "type": "integer",
+      "description": "Unix timestamp when the invoice was created"
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Whether the invoice is in live mode"
+    }
+  }
+}

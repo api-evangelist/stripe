@@ -1,0 +1,84 @@
+{
+  "name": "PaymentIntent",
+  "description": "The PaymentIntent object represents a payment lifecycle from creation through confirmation and capture.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the object (prefix: pi_)",
+      "example": "pi_3NrJaN2eZvKYlo2C0Vd5ghiA"
+    },
+    "object": {
+      "type": "string",
+      "description": "String representing the object's type",
+      "value": "payment_intent"
+    },
+    "amount": {
+      "type": "integer",
+      "description": "Amount intended to be collected in the smallest currency unit (cents)",
+      "example": 2000
+    },
+    "amount_capturable": {
+      "type": "integer",
+      "description": "Amount that can be captured from the PaymentIntent"
+    },
+    "amount_received": {
+      "type": "integer",
+      "description": "Amount received by the merchant"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Three-letter ISO 4217 currency code",
+      "example": "usd"
+    },
+    "status": {
+      "type": "string",
+      "description": "Payment lifecycle status",
+      "enum": ["requires_payment_method", "requires_confirmation", "requires_action", "processing", "requires_capture", "canceled", "succeeded"]
+    },
+    "customer": {
+      "type": "string",
+      "description": "ID of the Customer this PaymentIntent belongs to",
+      "example": "cus_NffrFeUfNV2Hib"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "ID of the PaymentMethod attached to this PaymentIntent",
+      "example": "pm_1NrJaN2eZvKYlo2CAzJH3Z4b"
+    },
+    "capture_method": {
+      "type": "string",
+      "description": "Controls when the funds will be captured",
+      "enum": ["automatic", "automatic_async", "manual"]
+    },
+    "confirmation_method": {
+      "type": "string",
+      "description": "Confirmation method for the payment",
+      "enum": ["automatic", "manual"]
+    },
+    "description": {
+      "type": "string",
+      "description": "An arbitrary string attached to the object. Often useful for displaying to users."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Set of key-value pairs for storing additional information"
+    },
+    "created": {
+      "type": "integer",
+      "description": "Time at which the object was created (Unix timestamp)"
+    },
+    "livemode": {
+      "type": "boolean",
+      "description": "Has the value true if the object exists in live mode"
+    },
+    "charges": {
+      "type": "object",
+      "description": "Charges created by this PaymentIntent"
+    },
+    "client_secret": {
+      "type": "string",
+      "description": "The client secret for use in client-side confirmation"
+    }
+  }
+}

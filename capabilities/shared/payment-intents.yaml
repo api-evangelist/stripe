@@ -1,0 +1,277 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Stripe Payment Intents API"
+  description: >-
+    A PaymentIntent guides you through the process of collecting a payment from a customer.
+    Supports creating, confirming, capturing, canceling, and searching payment intents.
+  tags:
+    - Stripe
+    - Payments
+    - Payment Intents
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STRIPE_API_KEY: STRIPE_API_KEY
+
+capability:
+  consumes:
+    - type: http
+      namespace: stripe-payment-intents
+      baseUri: https://api.stripe.com
+      description: "Stripe Payment Intents API for creating and managing payment flows."
+      authentication:
+        type: bearer
+        token: "{{STRIPE_API_KEY}}"
+      resources:
+        - name: payment-intents
+          path: /v1/payment_intents
+          description: "Payment intent collection operations"
+          operations:
+            - name: list-payment-intents
+              method: GET
+              description: "List all payment intents"
+              inputParameters:
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum number of items to return"
+                - name: customer
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by customer ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-payment-intent
+              method: POST
+              description: "Create a new payment intent"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  amount: "{{tools.amount}}"
+                  currency: "{{tools.currency}}"
+                  customer: "{{tools.customer}}"
+
+        - name: payment-intent-search
+          path: /v1/payment_intents/search
+          description: "Search payment intents"
+          operations:
+            - name: search-payment-intents
+              method: GET
+              description: "Search payment intents by query string"
+              inputParameters:
+                - name: query
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: payment-intent
+          path: /v1/payment_intents/{intent}
+          description: "Individual payment intent operations"
+          operations:
+            - name: get-payment-intent
+              method: GET
+              description: "Retrieve a payment intent by ID"
+              inputParameters:
+                - name: intent
+                  in: path
+                  type: string
+                  required: true
+                  description: "Payment intent ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: update-payment-intent
+              method: POST
+              description: "Update a payment intent"
+              inputParameters:
+                - name: intent
+                  in: path
+                  type: string
+                  required: true
+                  description: "Payment intent ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: payment-intent-confirm
+          path: /v1/payment_intents/{intent}/confirm
+          description: "Confirm a payment intent"
+          operations:
+            - name: confirm-payment-intent
+              method: POST
+              description: "Confirm a payment intent to execute the payment"
+              inputParameters:
+                - name: intent
+                  in: path
+                  type: string
+                  required: true
+                  description: "Payment intent ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: payment-intent-capture
+          path: /v1/payment_intents/{intent}/capture
+          description: "Capture an authorized payment intent"
+          operations:
+            - name: capture-payment-intent
+              method: POST
+              description: "Capture funds for an authorized payment intent"
+              inputParameters:
+                - name: intent
+                  in: path
+                  type: string
+                  required: true
+                  description: "Payment intent ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: payment-intent-cancel
+          path: /v1/payment_intents/{intent}/cancel
+          description: "Cancel a payment intent"
+          operations:
+            - name: cancel-payment-intent
+              method: POST
+              description: "Cancel a payment intent that has not been captured"
+              inputParameters:
+                - name: intent
+                  in: path
+                  type: string
+                  required: true
+                  description: "Payment intent ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: stripe-payment-intents-rest
+      resources:
+        - path: /v1/payment-intents
+          name: payment-intents
+          operations:
+            - method: GET
+              name: list-payment-intents
+              description: "List all payment intents"
+              call: "stripe-payment-intents.list-payment-intents"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-payment-intent
+              description: "Create a payment intent"
+              call: "stripe-payment-intents.create-payment-intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/payment-intents/{intent}
+          name: payment-intent
+          operations:
+            - method: GET
+              name: get-payment-intent
+              description: "Get a payment intent"
+              call: "stripe-payment-intents.get-payment-intent"
+              with:
+                intent: "rest.intent"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: stripe-payment-intents-mcp
+      transport: http
+      tools:
+        - name: list-payment-intents
+          description: "List all Stripe payment intents"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "stripe-payment-intents.list-payment-intents"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-payment-intent
+          description: "Create a new Stripe payment intent"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.create-payment-intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-payment-intent
+          description: "Retrieve a specific payment intent"
+          hints:
+            readOnly: true
+          call: "stripe-payment-intents.get-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: confirm-payment-intent
+          description: "Confirm a payment intent to execute payment"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.confirm-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: capture-payment-intent
+          description: "Capture authorized funds for a payment intent"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "stripe-payment-intents.capture-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: cancel-payment-intent
+          description: "Cancel a payment intent"
+          hints:
+            readOnly: false
+            destructive: true
+          call: "stripe-payment-intents.cancel-payment-intent"
+          with:
+            intent: "tools.intent"
+          outputParameters:
+            - type: object
+              mapping: "$."

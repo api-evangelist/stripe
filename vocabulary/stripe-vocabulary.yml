@@ -1,0 +1,266 @@
+name: Stripe
+description: >-
+  Vocabulary of key terms, concepts, objects, and operations used across the Stripe Payments platform.
+  Covers payment processing, billing, financial operations, and platform connectivity.
+version: "1.0"
+created: "2026-05-02"
+modified: "2026-05-02"
+tags:
+  - Commerce
+  - Payments
+  - Financial Services
+  - Fintech
+
+terms:
+  - term: PaymentIntent
+    definition: >-
+      The core object guiding payment collection. A PaymentIntent tracks the lifecycle of a payment
+      from creation through confirmation and capture. Always create one PaymentIntent per order.
+    category: Core Object
+    tags:
+      - Payments
+      - Core
+
+  - term: Checkout Session
+    definition: >-
+      A hosted or embedded payment form created for a single transaction. Stripe handles the UI
+      and payment method collection. Supports one-time payments, subscriptions, and setup mode.
+    category: Core Object
+    tags:
+      - Checkout
+      - Payments
+
+  - term: Charge
+    definition: >-
+      Represents a single attempt to debit a payment method. Created when a PaymentIntent is
+      confirmed successfully. Contains status, amount, currency, and dispute information.
+    category: Core Object
+    tags:
+      - Charges
+      - Payments
+
+  - term: Customer
+    definition: >-
+      A Stripe object representing a business's customer. Stores payment methods, subscription data,
+      balance, and metadata. Required for recurring billing and saved payment methods.
+    category: Core Object
+    tags:
+      - Customers
+      - Identity
+
+  - term: Subscription
+    definition: >-
+      A recurring billing agreement between a customer and a merchant. Manages billing cycles,
+      trial periods, proration, and automatic invoice generation.
+    category: Core Object
+    tags:
+      - Subscriptions
+      - Billing
+
+  - term: Invoice
+    definition: >-
+      A statement of amounts owed. Invoices can be drafted, finalized, paid, voided, or marked
+      uncollectible. They are automatically created for subscriptions.
+    category: Core Object
+    tags:
+      - Invoices
+      - Billing
+
+  - term: PaymentMethod
+    definition: >-
+      Represents a customer's payment instrument (card, bank account, wallet, etc.). Attached
+      to customers and used across PaymentIntents and SetupIntents.
+    category: Core Object
+    tags:
+      - Payment Methods
+      - Payments
+
+  - term: Refund
+    definition: >-
+      Represents a reversal of a charge. Can be full or partial. May have reason codes and is
+      reflected in the original charge's refunds list.
+    category: Core Object
+    tags:
+      - Refunds
+      - Payments
+
+  - term: Dispute
+    definition: >-
+      Occurs when a customer questions a charge with their card issuer (chargeback). Stripe
+      provides evidence submission capabilities to contest disputes.
+    category: Core Object
+    tags:
+      - Disputes
+      - Risk Management
+
+  - term: Payout
+    definition: >-
+      The transfer of collected funds to a connected bank account. Payouts can be automatic
+      (scheduled) or manual. Status transitions: pending → paid or failed.
+    category: Core Object
+    tags:
+      - Payouts
+      - Financial Operations
+
+  - term: Balance
+    definition: >-
+      The current available and pending funds in a Stripe account. Tracks pending (not yet
+      available) and available (ready for payout) amounts by currency.
+    category: Core Object
+    tags:
+      - Balance
+      - Financial Operations
+
+  - term: Account
+    definition: >-
+      A Stripe account representing a business. In Connect, custom and express accounts are
+      created under a platform account to enable marketplace or SaaS payment flows.
+    category: Core Object
+    tags:
+      - Accounts
+      - Connect
+
+  - term: Connect
+    definition: >-
+      Stripe's platform product enabling marketplaces and SaaS platforms to move money to
+      third parties. Uses connected accounts, transfers, and application fees.
+    category: Platform Feature
+    tags:
+      - Connect
+      - Platform
+
+  - term: Transfer
+    definition: >-
+      Moves funds from a platform's Stripe balance to a connected account. Used in Connect
+      to distribute marketplace earnings.
+    category: Core Object
+    tags:
+      - Transfers
+      - Connect
+
+  - term: Price
+    definition: >-
+      Defines the unit cost, currency, and billing cycle for a product. Prices can be
+      recurring (for subscriptions) or one-time.
+    category: Core Object
+    tags:
+      - Prices
+      - Billing
+
+  - term: Product
+    definition: >-
+      Represents a good or service sold through Stripe. Products can have multiple Prices
+      attached for different billing intervals or currencies.
+    category: Core Object
+    tags:
+      - Products
+      - Catalog
+
+  - term: Coupon
+    definition: >-
+      A percent-off or amount-off discount applied to subscriptions, invoices, or checkout sessions.
+    category: Core Object
+    tags:
+      - Coupons
+      - Discounts
+
+  - term: SetupIntent
+    definition: >-
+      Used to save a payment method for future use without immediately collecting payment.
+      Triggers 3DS authentication and SCA where required.
+    category: Core Object
+    tags:
+      - Setup
+      - Payment Methods
+
+  - term: Webhook
+    definition: >-
+      An HTTP callback triggered by events in a Stripe account. Events include
+      payment_intent.succeeded, invoice.payment_failed, customer.subscription.deleted, etc.
+    category: Integration Pattern
+    tags:
+      - Webhooks
+      - Events
+
+  - term: Idempotency Key
+    definition: >-
+      A unique key included in request headers to safely retry failed API calls without
+      risk of duplicate processing. Stripe caches responses for 24 hours.
+    category: API Pattern
+    tags:
+      - Idempotency
+      - Reliability
+
+  - term: Radar
+    definition: >-
+      Stripe's machine learning fraud detection system. Evaluates charges based on risk signals
+      and applies rules to block, allow, or review suspicious transactions.
+    category: Platform Feature
+    tags:
+      - Radar
+      - Fraud Detection
+      - Risk Management
+
+  - term: Issuing
+    definition: >-
+      Stripe's platform for creating and managing virtual and physical payment cards. Used by
+      businesses that need to issue cards to employees, contractors, or customers.
+    category: Platform Feature
+    tags:
+      - Issuing
+      - Cards
+
+  - term: Terminal
+    definition: >-
+      Stripe's in-person payment solution using hardware card readers. Supports contactless,
+      chip, and magnetic stripe payments via SDK and REST API.
+    category: Platform Feature
+    tags:
+      - Terminal
+      - In-Person Payments
+
+  - term: Treasury
+    definition: >-
+      Stripe's financial accounts product allowing platforms to create bank-like financial
+      accounts for their users with FDIC insurance, transfers, and outbound payments.
+    category: Platform Feature
+    tags:
+      - Treasury
+      - Financial Accounts
+
+  - term: Financial Connections
+    definition: >-
+      Allows customers to link their bank accounts directly for instant balance verification,
+      account ownership verification, and ACH payments.
+    category: Platform Feature
+    tags:
+      - Financial Connections
+      - Bank Linking
+
+  - term: Payment Link
+    definition: >-
+      A shareable URL that creates a hosted payment page without requiring code. Customers
+      follow the link to complete a purchase.
+    category: Core Object
+    tags:
+      - Payment Links
+      - No-Code
+
+  - term: Meter
+    definition: >-
+      Tracks usage events for usage-based billing. Meters aggregate events and report
+      usage to subscriptions via billing periods.
+    category: Core Object
+    tags:
+      - Billing
+      - Meters
+      - Usage-Based
+
+  - term: Billing Portal
+    definition: >-
+      A Stripe-hosted self-service page where customers can manage their subscriptions,
+      update payment methods, view invoices, and cancel plans.
+    category: Platform Feature
+    tags:
+      - Billing
+      - Self-Service

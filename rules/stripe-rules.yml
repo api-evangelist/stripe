@@ -1,0 +1,119 @@
+extends: spectral:oas
+rules:
+  stripe-versioned-paths:
+    description: All Stripe API paths must start with /v1/
+    message: "Path '{{property}}' must begin with /v1/"
+    given: "$.paths[*]~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/v1/"
+
+  stripe-operation-id-camel-case:
+    description: Stripe operationIds use PascalCase (e.g., GetCharge, CreatePaymentIntent)
+    message: "operationId '{{value}}' should use PascalCase"
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9]+$"
+
+  stripe-operation-id-required:
+    description: All Stripe operations must have an operationId
+    message: "Operation at {{path}} is missing operationId"
+    given: "$.paths[*][get,post,put,patch,delete]"
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+
+  stripe-tags-required:
+    description: All Stripe operations must have at least one tag
+    message: "Operation '{{path}}' must include at least one tag"
+    given: "$.paths[*][get,post,put,patch,delete]"
+    severity: warn
+    then:
+      field: tags
+      function: truthy
+
+  stripe-auth-defined:
+    description: Stripe API must define security schemes (basicAuth or bearerAuth)
+    message: "API must define at least one security scheme"
+    given: "$.components.securitySchemes"
+    severity: error
+    then:
+      function: truthy
+
+  stripe-response-200-defined:
+    description: All Stripe operations must define a 200 response
+    message: "Operation '{{path}}' must define a 200 success response"
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    severity: warn
+    then:
+      field: "200"
+      function: truthy
+
+  stripe-error-response-defined:
+    description: Stripe operations should define error responses
+    message: "Operation should define an error response"
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    severity: hint
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ["400"]
+            - required: ["401"]
+            - required: ["404"]
+            - required: ["default"]
+
+  stripe-no-trailing-slash:
+    description: Stripe paths must not have trailing slashes
+    message: "Path '{{property}}' must not end with a slash"
+    given: "$.paths[*]~"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/$"
+
+  stripe-expand-param-style:
+    description: Expand parameters in Stripe must use deepObject style
+    message: "Expand parameter '{{path}}' should use style: deepObject"
+    given: "$.paths[*][get,post,put,patch,delete].parameters[?(@.name=='expand')]"
+    severity: hint
+    then:
+      field: style
+      function: enumeration
+      functionOptions:
+        values:
+          - deepObject
+
+  stripe-content-type-json:
+    description: Stripe POST/PUT/PATCH operations that have request bodies should support application/x-www-form-urlencoded or application/json
+    message: "Request body at '{{path}}' should declare a media type"
+    given: "$.paths[*][post,put,patch].requestBody.content"
+    severity: hint
+    then:
+      function: truthy
+
+  stripe-info-contact:
+    description: Stripe OpenAPI specs must include contact info
+    message: "Info object must include contact details"
+    given: "$.info"
+    severity: warn
+    then:
+      field: contact
+      function: truthy
+
+  stripe-servers-defined:
+    description: Stripe API must define servers
+    message: "API must define at least one server"
+    given: "$"
+    severity: error
+    then:
+      field: servers
+      function: truthy
