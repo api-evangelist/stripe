@@ -1,0 +1,60 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Stripe
+providerId: stripe
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Rate Limiting
+  - Payments
+description: Stripe API rate limits enforced per-account in live and test modes separately. Limits are
+  not published per-tier; raise via support for high-volume needs.
+sources:
+  - https://stripe.com/pricing
+  - https://docs.stripe.com/rate-limits
+headers:
+  requestId: Request-Id
+responseCodes:
+  throttled: 429
+  lockTimeout: 429
+limits:
+  - name: Read requests (live mode)
+    scope: account
+    metric: requests_per_second
+    limit: 100
+    timeFrame: second
+  - name: Write requests (live mode)
+    scope: account
+    metric: requests_per_second
+    limit: 100
+    timeFrame: second
+  - name: Read requests (test mode)
+    scope: account
+    metric: requests_per_second
+    limit: 25
+    timeFrame: second
+  - name: Write requests (test mode)
+    scope: account
+    metric: requests_per_second
+    limit: 25
+    timeFrame: second
+  - name: Search API
+    scope: account
+    metric: requests_per_second
+    limit: 20
+    timeFrame: second
+  - name: Files API uploads
+    scope: account
+    metric: requests_per_second
+    limit: 20
+    timeFrame: second
+policies:
+  - name: Lock contention
+    description: Concurrent writes to the same object can return 429 with a 'lock_timeout' error; retry
+      with backoff.
+  - name: Idempotency
+    description: Use Idempotency-Key header for safe retries on POST/DELETE.
+  - name: Live vs test
+    description: Test mode has lower limits; do not load-test in test mode.

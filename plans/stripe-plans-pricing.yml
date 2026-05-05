@@ -1,0 +1,219 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Stripe
+providerId: stripe
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Payments
+  - Billing
+  - Tax
+  - Identity
+  - Fraud Prevention
+description: Stripe is product-priced rather than tiered. Each product has its own per-transaction or
+  per-month rate. Custom pricing (IC+ / interchange-plus) available for high-volume merchants.
+sources:
+  - https://stripe.com/pricing
+plans:
+  - id: stripe-payments-standard
+    name: Payments — Standard
+    type: usage-based
+    description: Standard pricing for online card payments.
+    entries:
+      - label: Domestic card transaction
+        name: tx_domestic
+        type: metered
+        metric: transaction
+        limit: -1
+        timeFrame: usage
+        geo: US
+        unit: 1
+        price: 2.9% + $0.30
+        userMultiplied: false
+      - label: International card surcharge
+        name: tx_international
+        type: metered
+        metric: transaction
+        limit: -1
+        timeFrame: usage
+        geo: non-US
+        unit: 1
+        price: +1.5%
+        userMultiplied: false
+      - label: Currency conversion
+        name: tx_fx
+        type: metered
+        metric: transaction
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: +1.0%
+        userMultiplied: false
+    elements:
+      - name: 100+ payment methods
+      - name: Built-in fraud prevention
+      - name: Prebuilt UI components
+      - name: Link accelerated checkout
+  - id: stripe-radar
+    name: Radar for Fraud Teams
+    type: usage-based
+    description: Advanced fraud protection. Free 30-day trial.
+    entries:
+      - label: Per screened transaction
+        name: screen
+        type: metered
+        metric: transaction
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.0002'
+        userMultiplied: false
+    elements:
+      - name: Customizable fraud rules
+      - name: Manual review queues
+      - name: Visa Verifi / Mastercard Ethoca dispute prevention
+  - id: stripe-billing-paymonthly
+    name: Billing — Pay Monthly
+    type: subscription
+    description: Subscription billing platform; flat monthly fee for high volume.
+    entries:
+      - label: Monthly platform fee
+        name: platform
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '620.00'
+        userMultiplied: false
+    elements:
+      - name: Recurring + usage-based billing
+      - name: Smart Retries
+      - name: Composable subscription APIs
+  - id: stripe-billing-payg
+    name: Billing — Pay As You Go
+    type: usage-based
+    description: 0.7% of billing volume; ideal for unpredictable volume.
+    entries:
+      - label: Billing volume %
+        name: billing_pct
+        type: metered
+        metric: USD_billed
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.007'
+        userMultiplied: false
+    elements:
+      - name: No recurring fees
+      - name: Pay only on what you bill
+  - id: stripe-tax-complete
+    name: Tax — Complete
+    type: subscription
+    description: $90+/month. Tax filing and registration in 90+ countries.
+    entries:
+      - label: Monthly base
+        name: tax_complete
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '90.00'
+        userMultiplied: false
+    elements:
+      - name: Tax threshold monitoring in 100+ countries
+      - name: Automated registration / filing in 90+ countries
+  - id: stripe-tax-basic
+    name: Tax — Basic
+    type: usage-based
+    description: 0.5% per no-code transaction or $0.50 per API call.
+    entries:
+      - label: Per no-code transaction
+        name: tax_nocode
+        type: metered
+        metric: transaction
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.005'
+        userMultiplied: false
+      - label: Per API tax calculation
+        name: tax_api
+        type: metered
+        metric: calculation
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.50'
+        userMultiplied: false
+    elements:
+      - name: Automated tax for limited regions
+      - name: Integrates with Billing/Checkout/Payment Links
+  - id: stripe-sigma
+    name: Sigma
+    type: subscription
+    description: $15/month or $10+/month annual. SQL queries on Stripe data.
+    entries:
+      - label: Monthly
+        name: sigma_monthly
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '15.00'
+        userMultiplied: false
+    elements:
+      - name: Interactive SQL
+      - name: AI natural-language queries
+      - name: Scheduled reports
+  - id: stripe-data-pipeline
+    name: Data Pipeline
+    type: subscription
+    description: $65/month or $50+/month annual. Auto-deliver Stripe data to warehouse.
+    entries:
+      - label: Monthly
+        name: pipeline_monthly
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '65.00'
+        userMultiplied: false
+    elements:
+      - name: Automated warehouse delivery
+      - name: Includes Sigma access
+      - name: Streamlines financial close
+  - id: stripe-custom
+    name: Custom (IC+)
+    type: enterprise
+    description: Interchange-plus pricing and volume discounts negotiated with sales.
+    entries:
+      - label: Custom rate
+        name: custom
+        type: subscription
+        metric: contract
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: custom
+        userMultiplied: false
+    elements:
+      - name: IC+ pricing
+      - name: Volume discounts
+      - name: Country-specific rate customization
+      - name: Technical account management
