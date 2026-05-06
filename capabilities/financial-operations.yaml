@@ -1,223 +1,470 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Stripe Financial Operations"
-  description: >-
-    Unified capability for financial operations and treasury workflows. Combines Stripe Payouts,
-    Refunds, Disputes, and Balance APIs to support payout management, refund processing, chargeback
-    handling, and balance monitoring. Used by finance teams and payment operations engineers.
+  label: Stripe Financial Operations
+  description: Unified capability for financial operations and treasury workflows. Combines Stripe Payouts, Refunds, Disputes,
+    and Balance APIs to support payout management, refund processing, chargeback handling, and balance monitoring. Used by
+    finance teams and payment operations engineers.
   tags:
-    - Stripe
-    - Payouts
-    - Refunds
-    - Disputes
-    - Financial Operations
-    - Treasury
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - Stripe
+  - Payouts
+  - Refunds
+  - Disputes
+  - Financial Operations
+  - Treasury
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      STRIPE_API_KEY: STRIPE_API_KEY
-
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
 capability:
   consumes:
-    - import: stripe-payouts
-      location: ./shared/payouts.yaml
-    - import: stripe-refunds
-      location: ./shared/refunds.yaml
-    - import: stripe-disputes
-      location: ./shared/disputes.yaml
-
+  - type: http
+    namespace: stripe-payouts
+    baseUri: https://api.stripe.com
+    description: Stripe Payouts API for managing bank transfers.
+    authentication:
+      type: bearer
+      token: '{{STRIPE_API_KEY}}'
+    resources:
+    - name: payouts
+      path: /v1/payouts
+      description: Payout collection
+      operations:
+      - name: list-payouts
+        method: GET
+        description: List all payouts
+        inputParameters:
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Max items to return
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: Filter by status (pending, paid, failed, canceled)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-payout
+        method: POST
+        description: Create a payout to bank account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            amount: '{{tools.amount}}'
+            currency: '{{tools.currency}}'
+    - name: payout
+      path: /v1/payouts/{payout}
+      description: Individual payout
+      operations:
+      - name: get-payout
+        method: GET
+        description: Retrieve a payout by ID
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+          description: Payout ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payout-cancel
+      path: /v1/payouts/{payout}/cancel
+      description: Cancel a payout
+      operations:
+      - name: cancel-payout
+        method: POST
+        description: Cancel a pending payout
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+          description: Payout ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payout-reverse
+      path: /v1/payouts/{payout}/reverse
+      description: Reverse a payout
+      operations:
+      - name: reverse-payout
+        method: POST
+        description: Reverse a payout that has already been sent
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+          description: Payout ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: stripe-refunds
+    baseUri: https://api.stripe.com
+    description: Stripe Refunds API for managing charge reversals.
+    authentication:
+      type: bearer
+      token: '{{STRIPE_API_KEY}}'
+    resources:
+    - name: refunds
+      path: /v1/refunds
+      description: Refund collection
+      operations:
+      - name: list-refunds
+        method: GET
+        description: List all refunds
+        inputParameters:
+        - name: charge
+          in: query
+          type: string
+          required: false
+          description: Filter by charge ID
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Max items to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-refund
+        method: POST
+        description: Create a refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            charge: '{{tools.charge}}'
+            amount: '{{tools.amount}}'
+    - name: refund
+      path: /v1/refunds/{refund}
+      description: Individual refund
+      operations:
+      - name: get-refund
+        method: GET
+        description: Retrieve a refund by ID
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+          description: Refund ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refund-cancel
+      path: /v1/refunds/{refund}/cancel
+      description: Cancel a refund
+      operations:
+      - name: cancel-refund
+        method: POST
+        description: Cancel a pending refund
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+          description: Refund ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: stripe-disputes
+    baseUri: https://api.stripe.com
+    description: Stripe Disputes API for managing chargebacks.
+    authentication:
+      type: bearer
+      token: '{{STRIPE_API_KEY}}'
+    resources:
+    - name: disputes
+      path: /v1/disputes
+      description: Dispute collection
+      operations:
+      - name: list-disputes
+        method: GET
+        description: List all disputes
+        inputParameters:
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Max items to return
+        - name: charge
+          in: query
+          type: string
+          required: false
+          description: Filter by charge ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: dispute
+      path: /v1/disputes/{dispute}
+      description: Individual dispute
+      operations:
+      - name: get-dispute
+        method: GET
+        description: Retrieve a dispute by ID
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+          description: Dispute ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-dispute
+        method: POST
+        description: Update dispute evidence
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+          description: Dispute ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: dispute-close
+      path: /v1/disputes/{dispute}/close
+      description: Close a dispute
+      operations:
+      - name: close-dispute
+        method: POST
+        description: Close a dispute by accepting the chargeback
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+          description: Dispute ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8082
-      namespace: stripe-financial-ops-api
-      description: "Unified REST API for Stripe financial operations."
-      resources:
-        - path: /v1/payouts
-          name: payouts
-          description: "Payout management"
-          operations:
-            - method: GET
-              name: list-payouts
-              description: "List payouts"
-              call: "stripe-payouts.list-payouts"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-payout
-              description: "Create a payout"
-              call: "stripe-payouts.create-payout"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/payouts/{payout}
-          name: payout
-          description: "Individual payout"
-          operations:
-            - method: GET
-              name: get-payout
-              description: "Get a payout"
-              call: "stripe-payouts.get-payout"
-              with:
-                payout: "rest.payout"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/refunds
-          name: refunds
-          description: "Refund management"
-          operations:
-            - method: GET
-              name: list-refunds
-              description: "List refunds"
-              call: "stripe-refunds.list-refunds"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-refund
-              description: "Create a refund"
-              call: "stripe-refunds.create-refund"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/disputes
-          name: disputes
-          description: "Dispute management"
-          operations:
-            - method: GET
-              name: list-disputes
-              description: "List disputes"
-              call: "stripe-disputes.list-disputes"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/disputes/{dispute}
-          name: dispute
-          description: "Individual dispute"
-          operations:
-            - method: GET
-              name: get-dispute
-              description: "Get a dispute"
-              call: "stripe-disputes.get-dispute"
-              with:
-                dispute: "rest.dispute"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9082
-      namespace: stripe-financial-ops-mcp
-      transport: http
-      description: "MCP server for AI-assisted Stripe financial operations."
-      tools:
-        - name: list-payouts
-          description: "List Stripe payouts to bank accounts"
-          hints:
-            readOnly: true
-          call: "stripe-payouts.list-payouts"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-payout
-          description: "Create a Stripe payout to a bank account"
-          hints:
-            readOnly: false
-            destructive: false
-          call: "stripe-payouts.create-payout"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-payout
-          description: "Retrieve a Stripe payout by ID"
-          hints:
-            readOnly: true
-          call: "stripe-payouts.get-payout"
-          with:
-            payout: "tools.payout"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: cancel-payout
-          description: "Cancel a pending Stripe payout"
-          hints:
-            readOnly: false
-            destructive: true
-          call: "stripe-payouts.cancel-payout"
-          with:
-            payout: "tools.payout"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: reverse-payout
-          description: "Reverse a completed Stripe payout"
-          hints:
-            readOnly: false
-            destructive: true
-          call: "stripe-payouts.reverse-payout"
-          with:
-            payout: "tools.payout"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-refunds
-          description: "List Stripe refunds"
-          hints:
-            readOnly: true
-          call: "stripe-refunds.list-refunds"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-refund
-          description: "Issue a refund on a Stripe charge"
-          hints:
-            readOnly: false
-            destructive: false
-          call: "stripe-refunds.create-refund"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-refund
-          description: "Retrieve a Stripe refund by ID"
-          hints:
-            readOnly: true
-          call: "stripe-refunds.get-refund"
-          with:
-            refund: "tools.refund"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-disputes
-          description: "List Stripe disputes (chargebacks)"
-          hints:
-            readOnly: true
-          call: "stripe-disputes.list-disputes"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-dispute
-          description: "Get details of a Stripe dispute"
-          hints:
-            readOnly: true
-          call: "stripe-disputes.get-dispute"
-          with:
-            dispute: "tools.dispute"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-dispute
-          description: "Submit evidence for a Stripe dispute to contest a chargeback"
-          hints:
-            readOnly: false
-            destructive: false
-          call: "stripe-disputes.update-dispute"
-          with:
-            dispute: "tools.dispute"
-          outputParameters:
-            - type: object
-              mapping: "$."
+  - type: rest
+    port: 8082
+    namespace: stripe-financial-ops-api
+    description: Unified REST API for Stripe financial operations.
+    resources:
+    - path: /v1/payouts
+      name: payouts
+      description: Payout management
+      operations:
+      - method: GET
+        name: list-payouts
+        description: List payouts
+        call: stripe-payouts.list-payouts
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-payout
+        description: Create a payout
+        call: stripe-payouts.create-payout
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payouts/{payout}
+      name: payout
+      description: Individual payout
+      operations:
+      - method: GET
+        name: get-payout
+        description: Get a payout
+        call: stripe-payouts.get-payout
+        with:
+          payout: rest.payout
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/refunds
+      name: refunds
+      description: Refund management
+      operations:
+      - method: GET
+        name: list-refunds
+        description: List refunds
+        call: stripe-refunds.list-refunds
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-refund
+        description: Create a refund
+        call: stripe-refunds.create-refund
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/disputes
+      name: disputes
+      description: Dispute management
+      operations:
+      - method: GET
+        name: list-disputes
+        description: List disputes
+        call: stripe-disputes.list-disputes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/disputes/{dispute}
+      name: dispute
+      description: Individual dispute
+      operations:
+      - method: GET
+        name: get-dispute
+        description: Get a dispute
+        call: stripe-disputes.get-dispute
+        with:
+          dispute: rest.dispute
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9082
+    namespace: stripe-financial-ops-mcp
+    transport: http
+    description: MCP server for AI-assisted Stripe financial operations.
+    tools:
+    - name: list-payouts
+      description: List Stripe payouts to bank accounts
+      hints:
+        readOnly: true
+      call: stripe-payouts.list-payouts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-payout
+      description: Create a Stripe payout to a bank account
+      hints:
+        readOnly: false
+        destructive: false
+      call: stripe-payouts.create-payout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-payout
+      description: Retrieve a Stripe payout by ID
+      hints:
+        readOnly: true
+      call: stripe-payouts.get-payout
+      with:
+        payout: tools.payout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: cancel-payout
+      description: Cancel a pending Stripe payout
+      hints:
+        readOnly: false
+        destructive: true
+      call: stripe-payouts.cancel-payout
+      with:
+        payout: tools.payout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: reverse-payout
+      description: Reverse a completed Stripe payout
+      hints:
+        readOnly: false
+        destructive: true
+      call: stripe-payouts.reverse-payout
+      with:
+        payout: tools.payout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-refunds
+      description: List Stripe refunds
+      hints:
+        readOnly: true
+      call: stripe-refunds.list-refunds
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-refund
+      description: Issue a refund on a Stripe charge
+      hints:
+        readOnly: false
+        destructive: false
+      call: stripe-refunds.create-refund
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-refund
+      description: Retrieve a Stripe refund by ID
+      hints:
+        readOnly: true
+      call: stripe-refunds.get-refund
+      with:
+        refund: tools.refund
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-disputes
+      description: List Stripe disputes (chargebacks)
+      hints:
+        readOnly: true
+      call: stripe-disputes.list-disputes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-dispute
+      description: Get details of a Stripe dispute
+      hints:
+        readOnly: true
+      call: stripe-disputes.get-dispute
+      with:
+        dispute: tools.dispute
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-dispute
+      description: Submit evidence for a Stripe dispute to contest a chargeback
+      hints:
+        readOnly: false
+        destructive: false
+      call: stripe-disputes.update-dispute
+      with:
+        dispute: tools.dispute
+      outputParameters:
+      - type: object
+        mapping: $.
