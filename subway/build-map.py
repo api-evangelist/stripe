@@ -286,16 +286,16 @@ def generate_candidates(x, y, label, font_size, station_radius):
     anchor_y, anchor, rotation, polygon).
     """
     out = []
-    # Primary tilted-rotation candidates (±32°)
-    for distance in (8, 14, 22):
+    # Primary tilted-rotation candidates (±32° / ±20° / ±45°)
+    for distance in (8, 14, 22, 32):
         for side in ("above", "above_right", "below", "below_left"):
-            for angle in (-32, -20, -45):
+            for angle in (-32, -20, -45, 0):
                 ax, ay, an, rot, poly = make_candidate(
                     x, y, label, font_size, station_radius, side, distance, angle
                 )
                 out.append((f"{side}@{distance}rot{angle}", ax, ay, an, rot, poly))
-    # Pure horizontal candidates at multiple sides + distances
-    for distance in (8, 14, 22, 36, 50):
+    # Pure horizontal candidates at multiple sides + far distances
+    for distance in (8, 14, 22, 36, 50, 70, 95):
         for side in ("above_h", "below_h", "right", "left"):
             ax, ay, an, rot, poly = make_candidate(
                 x, y, label, font_size, station_radius, side, distance, 0
@@ -352,6 +352,23 @@ def _seg_crosses_polygon(seg, poly):
     return False
 
 
+LINE_STROKE_HALF = 5  # rendered subway-line stroke is 9px (-> ~4.5 half) — round up
+
+
+def _inflate_polygon(poly, dist):
+    """Return a polygon expanded outward from its centroid by `dist` pixels."""
+    n = len(poly)
+    cx = sum(p[0] for p in poly) / n
+    cy = sum(p[1] for p in poly) / n
+    inflated = []
+    for (px, py) in poly:
+        dx = px - cx
+        dy = py - cy
+        d = math.hypot(dx, dy) or 1e-9
+        inflated.append((px + dx / d * dist, py + dy / d * dist))
+    return inflated
+
+
 def _polygons_overlap(p1, p2):
     """True if two convex polygons overlap (cheap conservative check)."""
     return _boxes_overlap(_bbox(p1), _bbox(p2), expand=2)
@@ -380,10 +397,19 @@ def score_box(poly, this_xy, all_stations, all_segments_other, placed_label_poly
         if _boxes_overlap(bb, ob, expand=4):
             score += 6000
 
-    # Other lines crossing the rotated label polygon — HARD rejection
+    # Other lines crossing the rotated label polygon — HARD rejection.
+    # Use the polygon's bbox expanded uniformly (stroke half-width +
+    # visual safety margin); this way thin rotated rectangles still get
+    # full perpendicular clearance, not just radial inflation from the centroid.
+    pad = LINE_STROKE_HALF + 5
+    fat_bbox = (bx1 - pad, by1 - pad, bx2 + pad, by2 + pad)
+    fat_box_poly = [
+        (fat_bbox[0], fat_bbox[1]), (fat_bbox[2], fat_bbox[1]),
+        (fat_bbox[2], fat_bbox[3]), (fat_bbox[0], fat_bbox[3]),
+    ]
     crossings = 0
     for seg in all_segments_other:
-        if _seg_crosses_polygon(seg, poly):
+        if _seg_crosses_polygon(seg, fat_box_poly):
             crossings += 1
     score += crossings * 5000
 
@@ -555,15 +581,16 @@ def main():
         # segments immediately adjacent to this station (so a label perpendicular
         # to its own line is fine close in).
         own_segs = segments_by_line[li]
-        # Find segments whose endpoints are within ~30px of this station — these
-        # are local enough that a perpendicular label would naturally cross them.
+        # Find segments whose endpoints are within ~14px of this station — these
+        # are immediately local; the rest of the own line is forbidden too so the
+        # label must be perpendicular and clear.
         own_local = []
         own_far = []
         for s in own_segs:
             (ax_s, ay_s), (bx_s, by_s) = s
             d_a = math.hypot(ax_s - x, ay_s - y)
             d_b = math.hypot(bx_s - x, by_s - y)
-            if min(d_a, d_b) < 32:
+            if min(d_a, d_b) < 14:
                 own_local.append(s)
             else:
                 own_far.append(s)
@@ -582,6 +609,16 @@ def main():
         scored.sort(key=lambda t: t[0])
         best_score, best_tag, ax, ay, anchor, rot, poly = scored[0]
         placed_label_polys.append(poly)
+
+        # Diagnostic — flag any label that still crosses a non-own line
+        bb = _bbox(poly)
+        pad = LINE_STROKE_HALF + 5
+        fat = [(bb[0]-pad, bb[1]-pad), (bb[2]+pad, bb[1]-pad),
+               (bb[2]+pad, bb[3]+pad), (bb[0]-pad, bb[3]+pad)]
+        n_cross = sum(1 for s in forbidden_segments if _seg_crosses_polygon(s, fat))
+        if n_cross > 0:
+            print(f"  ! {st!r} ({ln['name']}): label still crosses {n_cross} segment(s) "
+                  f"using placement={best_tag} score={best_score:.0f}")
 
         # Render the chosen label
         rot_attr = f' transform="rotate({rot} {ax} {ay})"' if rot else ''
