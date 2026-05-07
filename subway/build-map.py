@@ -221,56 +221,87 @@ def _rotate(corners, cx, cy, deg):
              cy + (px - cx) * s + (py - cy) * c) for (px, py) in corners]
 
 
-def candidate_box(x, y, label, font_size, kind, station_radius):
-    """Return (anchor_x, anchor_y, anchor, rotation, polygon).
+def make_candidate(x, y, label, font_size, station_radius,
+                   side, distance, angle):
+    """Generate a candidate label placement.
 
-    polygon is a list of 4 (x,y) corner points of the rendered text in canvas coords.
+    side: 'above', 'below', 'left', 'right'
+    distance: pixels from station edge
+    angle: rotation in degrees (0 = horizontal, -32 = tilted up to the right)
+    Returns (anchor_x, anchor_y, anchor, rotation, polygon).
     """
     w, h = text_extent(label, font_size)
-    pad = station_radius + 8
+    pad = station_radius + distance
 
-    if kind == "above_rot":
+    if side == "above":
+        # text-anchor=end -> text fans up-LEFT
         ax, ay = x, y - pad
         c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
               (ax, ay + h / 2), (ax - w, ay + h / 2)]
-        return ax, ay, "end", -32, _rotate(c0, ax, ay, -32)
-    if kind == "below_rot":
-        ax, ay = x, y + pad + 4
+        anchor = "end"
+        return ax, ay, anchor, angle, _rotate(c0, ax, ay, angle)
+    if side == "above_right":
+        # text-anchor=start -> text fans up-RIGHT
+        ax, ay = x, y - pad
         c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
               (ax + w, ay + h / 2), (ax, ay + h / 2)]
-        return ax, ay, "start", -32, _rotate(c0, ax, ay, -32)
-    if kind == "right":
+        return ax, ay, "start", angle, _rotate(c0, ax, ay, angle)
+    if side == "below":
+        ax, ay = x, y + pad + h * 0.4
+        c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
+              (ax + w, ay + h / 2), (ax, ay + h / 2)]
+        return ax, ay, "start", angle, _rotate(c0, ax, ay, angle)
+    if side == "below_left":
+        ax, ay = x, y + pad + h * 0.4
+        c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
+              (ax, ay + h / 2), (ax - w, ay + h / 2)]
+        return ax, ay, "end", angle, _rotate(c0, ax, ay, angle)
+    if side == "right":
         ax, ay = x + pad, y + 4
         c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
               (ax + w, ay + h / 2), (ax, ay + h / 2)]
         return ax, ay, "start", 0, c0
-    if kind == "left":
+    if side == "left":
         ax, ay = x - pad, y + 4
         c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
               (ax, ay + h / 2), (ax - w, ay + h / 2)]
         return ax, ay, "end", 0, c0
-    if kind == "above_rot_right":
-        ax, ay = x, y - pad
-        c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
-              (ax + w, ay + h / 2), (ax, ay + h / 2)]
-        return ax, ay, "start", -32, _rotate(c0, ax, ay, -32)
-    if kind == "below_rot_left":
-        ax, ay = x, y + pad + 4
-        c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
-              (ax, ay + h / 2), (ax - w, ay + h / 2)]
-        return ax, ay, "end", -32, _rotate(c0, ax, ay, -32)
-    if kind == "above_h":
-        # horizontal above
+    if side == "above_h":
+        # horizontal above (centered)
         ax, ay = x, y - pad
         c0 = [(ax - w / 2, ay - h / 2), (ax + w / 2, ay - h / 2),
               (ax + w / 2, ay + h / 2), (ax - w / 2, ay + h / 2)]
         return ax, ay, "middle", 0, c0
-    if kind == "below_h":
-        ax, ay = x, y + pad + h
+    if side == "below_h":
+        ax, ay = x, y + pad + h * 0.4
         c0 = [(ax - w / 2, ay - h / 2), (ax + w / 2, ay - h / 2),
               (ax + w / 2, ay + h / 2), (ax - w / 2, ay + h / 2)]
         return ax, ay, "middle", 0, c0
-    raise ValueError(kind)
+    raise ValueError(side)
+
+
+def generate_candidates(x, y, label, font_size, station_radius):
+    """Generate a wide set of candidate label placements at varying
+    distances, sides, and angles. Returns list of (kind_label, anchor_x,
+    anchor_y, anchor, rotation, polygon).
+    """
+    out = []
+    # Primary tilted-rotation candidates (±32°)
+    for distance in (8, 14, 22):
+        for side in ("above", "above_right", "below", "below_left"):
+            for angle in (-32, -20, -45):
+                ax, ay, an, rot, poly = make_candidate(
+                    x, y, label, font_size, station_radius, side, distance, angle
+                )
+                out.append((f"{side}@{distance}rot{angle}", ax, ay, an, rot, poly))
+    # Pure horizontal candidates at multiple sides + distances
+    for distance in (8, 14, 22, 36, 50):
+        for side in ("above_h", "below_h", "right", "left"):
+            ax, ay, an, rot, poly = make_candidate(
+                x, y, label, font_size, station_radius, side, distance, 0
+            )
+            out.append((f"{side}@{distance}", ax, ay, an, rot, poly))
+    return out
 
 
 def _bbox(corners):
@@ -330,40 +361,53 @@ def score_box(poly, this_xy, all_stations, all_segments_other, placed_label_poly
               static_obstacles):
     """Lower score = better label position.
 
+    Line crossings are treated as a *hard* rejection (5000+ penalty), so the
+    optimizer will only accept a line-crossing label if literally no other
+    candidate is available.
+
     poly is a list of 4 (x, y) rotated corner points.
     """
     score = 0
     bb = _bbox(poly)
     bx1, by1, bx2, by2 = bb
 
-    # Off-canvas penalty
+    # Off-canvas penalty (hard)
     if bx1 < 6 or by1 < 6 or bx2 > W - 6 or by2 > H - 6:
-        score += 2000
+        score += 8000
 
-    # Overlap with already-placed label polygons
+    # Reserved areas (legend, key, title) — hard
+    for ob in static_obstacles:
+        if _boxes_overlap(bb, ob, expand=4):
+            score += 6000
+
+    # Other lines crossing the rotated label polygon — HARD rejection
+    crossings = 0
+    for seg in all_segments_other:
+        if _seg_crosses_polygon(seg, poly):
+            crossings += 1
+    score += crossings * 5000
+
+    # Overlap with already-placed label polygons (still hard but smaller)
     for pp in placed_label_polys:
         if _polygons_overlap(poly, pp):
-            score += 100
+            score += 800
 
-    # Stations falling inside (or near) the label polygon (use bbox + small margin)
+    # Stations falling inside (or near) the label polygon
     for (sx, sy) in all_stations:
         if (sx, sy) == this_xy:
             continue
         if bx1 - 6 <= sx <= bx2 + 6 and by1 - 6 <= sy <= by2 + 6:
             if _point_in_poly((sx, sy), poly):
-                score += 200
+                score += 1200
             else:
-                score += 50  # near-miss
+                score += 80  # near-miss
 
-    # Other lines actually crossing the rotated label polygon — heavy penalty
-    for seg in all_segments_other:
-        if _seg_crosses_polygon(seg, poly):
-            score += 150
-
-    # Reserved areas (legend, key, title)
-    for ob in static_obstacles:
-        if _boxes_overlap(bb, ob, expand=4):
-            score += 500
+    # Mild preference for closer-to-station labels (encourages compactness when
+    # multiple positions are equally valid)
+    cx = (bx1 + bx2) / 2
+    cy = (by1 + by2) / 2
+    dist_to_station = math.hypot(cx - this_xy[0], cy - this_xy[1])
+    score += dist_to_station * 0.4
 
     return score
 
@@ -423,14 +467,39 @@ def main():
     # All station centers (one entry per unique x,y — interchanges are deduped)
     all_station_xy = list({(x, y) for ln in LINES for (_, (x, y)) in ln["stations"]})
 
-    # All segments per line (used to detect labels crossing OTHER lines)
+    # All segments per line (used to detect labels crossing OTHER lines).
+    # Densely sample the actual Catmull-Rom curve so collision detection
+    # matches the *rendered* line, not the straight-segment proxy.
+    def sample_catmull_rom(points, samples_per_segment=10, tension=0.6):
+        """Return list of (x,y) points sampled along the smooth curve."""
+        if len(points) < 2:
+            return list(points)
+        out = [points[0]]
+        n = len(points)
+        for i in range(n - 1):
+            p0 = points[i - 1] if i > 0 else points[i]
+            p1 = points[i]
+            p2 = points[i + 1]
+            p3 = points[i + 2] if i + 2 < n else p2
+            for k in range(1, samples_per_segment + 1):
+                t = k / samples_per_segment
+                # Catmull-Rom in cubic Bezier control points form
+                # P(t) = (1-t)^3 p1 + 3(1-t)^2 t cp1 + 3(1-t) t^2 cp2 + t^3 p2
+                cp1 = (p1[0] + (p2[0] - p0[0]) * tension / 3,
+                       p1[1] + (p2[1] - p0[1]) * tension / 3)
+                cp2 = (p2[0] - (p3[0] - p1[0]) * tension / 3,
+                       p2[1] - (p3[1] - p1[1]) * tension / 3)
+                u = 1 - t
+                bx = u**3 * p1[0] + 3*u*u*t*cp1[0] + 3*u*t*t*cp2[0] + t**3 * p2[0]
+                by = u**3 * p1[1] + 3*u*u*t*cp1[1] + 3*u*t*t*cp2[1] + t**3 * p2[1]
+                out.append((bx, by))
+        return out
+
     segments_by_line = []
     for ln in LINES:
-        segs = []
         pts = [pos for (_, pos) in ln["stations"]]
-        # Use straight segments between consecutive station pairs as a coarse proxy
-        for i in range(len(pts) - 1):
-            segs.append((pts[i], pts[i + 1]))
+        sampled = sample_catmull_rom(pts, samples_per_segment=12, tension=0.6)
+        segs = [(sampled[i], sampled[i + 1]) for i in range(len(sampled) - 1)]
         segments_by_line.append(segs)
 
     # Reserved zones (legend column on the left, title at the top)
@@ -481,25 +550,37 @@ def main():
         weight = "700" if is_inter else "600"
         font_size_n = 10.5 if is_inter else 10
 
-        # Build other-line segments list (excludes ALL segments on this station's line
-        # so labels are allowed to extend along their own line)
-        other_segments = [s for ll in range(len(LINES)) if ll != li
-                          for s in segments_by_line[ll]]
+        # Build the segment list against which this label must not cross.
+        # All other lines are forbidden. The own line is forbidden EXCEPT the
+        # segments immediately adjacent to this station (so a label perpendicular
+        # to its own line is fine close in).
+        own_segs = segments_by_line[li]
+        # Find segments whose endpoints are within ~30px of this station — these
+        # are local enough that a perpendicular label would naturally cross them.
+        own_local = []
+        own_far = []
+        for s in own_segs:
+            (ax_s, ay_s), (bx_s, by_s) = s
+            d_a = math.hypot(ax_s - x, ay_s - y)
+            d_b = math.hypot(bx_s - x, by_s - y)
+            if min(d_a, d_b) < 32:
+                own_local.append(s)
+            else:
+                own_far.append(s)
 
-        # Generate candidates and score them
-        candidate_kinds = ["above_rot", "below_rot",
-                           "above_rot_right", "below_rot_left",
-                           "right", "left",
-                           "above_h", "below_h"]
+        forbidden_segments = own_far + [
+            s for ll in range(len(LINES)) if ll != li for s in segments_by_line[ll]
+        ]
+
         scored = []
-        for kind in candidate_kinds:
-            ax, ay, anchor, rot, poly = candidate_box(x, y, label, font_size_n, kind, r)
-            s = score_box(poly, (x, y), all_station_xy, other_segments,
+        for tag, ax, ay, anchor, rot, poly in generate_candidates(
+                x, y, label, font_size_n, r):
+            s = score_box(poly, (x, y), all_station_xy, forbidden_segments,
                           placed_label_polys, static_obstacles)
-            scored.append((s, kind, ax, ay, anchor, rot, poly))
+            scored.append((s, tag, ax, ay, anchor, rot, poly))
 
         scored.sort(key=lambda t: t[0])
-        best_score, best_kind, ax, ay, anchor, rot, poly = scored[0]
+        best_score, best_tag, ax, ay, anchor, rot, poly = scored[0]
         placed_label_polys.append(poly)
 
         # Render the chosen label
