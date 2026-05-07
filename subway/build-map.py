@@ -5,14 +5,17 @@ Each Stripe OpenAPI file is a station; APIs are grouped onto colored lines that
 mirror Stripe's product taxonomy (Payments, Billing, Connect, etc.).
 
 Lines are rendered as smooth cubic Bezier curves through hand-placed waypoints
-so the map has the bends, arcs, and crossings of a real underground map rather
-than parallel straight lines.
+so the map has the bends, arcs, and crossings of a real underground map.
+Labels use collision-aware placement: for every station we try several candidate
+positions (above-rotated, below-rotated, left-horizontal, right-horizontal) and
+pick the one with the most surrounding whitespace.
 
 Outputs an HTML file with embedded SVG (for browser viewing + printing) at
 8.5x11 in landscape orientation, plus a standalone SVG.
 """
 
 import html
+import math
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -203,6 +206,129 @@ def catmull_rom_path(points, tension=0.5):
 
 
 # ---------------------------------------------------------------------------
+# Collision-aware label placement
+# ---------------------------------------------------------------------------
+
+def text_extent(label, font_size):
+    """Approximate width/height of a rendered label."""
+    return len(label) * font_size * 0.55, font_size * 1.1
+
+
+def _rotate(corners, cx, cy, deg):
+    rad = math.radians(deg)
+    c, s = math.cos(rad), math.sin(rad)
+    return [(cx + (px - cx) * c - (py - cy) * s,
+             cy + (px - cx) * s + (py - cy) * c) for (px, py) in corners]
+
+
+def candidate_box(x, y, label, font_size, kind, station_radius):
+    """Return (anchor_x, anchor_y, anchor, rotation, bbox).
+
+    Where bbox is (xmin, ymin, xmax, ymax) of the rendered text in canvas coords.
+    """
+    w, h = text_extent(label, font_size)
+    pad = station_radius + 8
+
+    if kind == "above_rot":
+        ax, ay = x, y - pad
+        # text-anchor=end, rotation -32: text occupies (ax-w, ay-h/2) to (ax, ay+h/2) before rotation
+        c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
+              (ax, ay + h / 2), (ax - w, ay + h / 2)]
+        rotated = _rotate(c0, ax, ay, -32)
+        return ax, ay, "end", -32, _bbox(rotated)
+    if kind == "below_rot":
+        ax, ay = x, y + pad + 4
+        c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
+              (ax + w, ay + h / 2), (ax, ay + h / 2)]
+        rotated = _rotate(c0, ax, ay, -32)
+        return ax, ay, "start", -32, _bbox(rotated)
+    if kind == "right":
+        ax, ay = x + pad, y + 4
+        c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
+              (ax + w, ay + h / 2), (ax, ay + h / 2)]
+        return ax, ay, "start", 0, _bbox(c0)
+    if kind == "left":
+        ax, ay = x - pad, y + 4
+        c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
+              (ax, ay + h / 2), (ax - w, ay + h / 2)]
+        return ax, ay, "end", 0, _bbox(c0)
+    if kind == "above_rot_right":
+        # rotated -32 above, fanning up-RIGHT (anchor=start)
+        ax, ay = x, y - pad
+        c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
+              (ax + w, ay + h / 2), (ax, ay + h / 2)]
+        rotated = _rotate(c0, ax, ay, -32)
+        return ax, ay, "start", -32, _bbox(rotated)
+    if kind == "below_rot_left":
+        # rotated -32 below, fanning down-LEFT (anchor=end)
+        ax, ay = x, y + pad + 4
+        c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
+              (ax, ay + h / 2), (ax - w, ay + h / 2)]
+        rotated = _rotate(c0, ax, ay, -32)
+        return ax, ay, "end", -32, _bbox(rotated)
+    raise ValueError(kind)
+
+
+def _bbox(corners):
+    xs = [c[0] for c in corners]
+    ys = [c[1] for c in corners]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _boxes_overlap(b1, b2, expand=0):
+    return not (b1[2] + expand < b2[0] or b2[2] + expand < b1[0]
+                or b1[3] + expand < b2[1] or b2[3] + expand < b1[1])
+
+
+def _seg_intersects_bbox(seg, bb, margin=2):
+    """Quick test: does segment (x1,y1)-(x2,y2) come within margin of bbox bb?"""
+    (x1, y1), (x2, y2) = seg
+    bx1, by1, bx2, by2 = bb[0] - margin, bb[1] - margin, bb[2] + margin, bb[3] + margin
+    # If both endpoints on same side of bbox plane, no intersection
+    if (x1 < bx1 and x2 < bx1) or (x1 > bx2 and x2 > bx2):
+        return False
+    if (y1 < by1 and y2 < by1) or (y1 > by2 and y2 > by2):
+        return False
+    # Otherwise approximate true (close enough for our purposes)
+    return True
+
+
+def score_box(bb, this_xy, all_stations, all_segments_other, placed_label_boxes,
+              static_obstacles):
+    """Lower score = better label position."""
+    score = 0
+    bx1, by1, bx2, by2 = bb
+
+    # Off-canvas penalty
+    if bx1 < 6 or by1 < 6 or bx2 > W - 6 or by2 > H - 6:
+        score += 1000
+
+    # Overlap with already-placed label boxes
+    for pb in placed_label_boxes:
+        if _boxes_overlap(bb, pb, expand=2):
+            score += 80
+
+    # Stations falling inside (or near) the label box
+    for (sx, sy) in all_stations:
+        if (sx, sy) == this_xy:
+            continue
+        if bx1 - 8 <= sx <= bx2 + 8 and by1 - 8 <= sy <= by2 + 8:
+            score += 60
+
+    # Other lines crossing the label box
+    for seg in all_segments_other:
+        if _seg_intersects_bbox(seg, bb):
+            score += 18
+
+    # Reserved areas (legend, key, title)
+    for ob in static_obstacles:
+        if _boxes_overlap(bb, ob, expand=4):
+            score += 200
+
+    return score
+
+
+# ---------------------------------------------------------------------------
 # Rendering
 # ---------------------------------------------------------------------------
 
@@ -251,100 +377,99 @@ def main():
     STATION_RING_W = 2.5
     INTERCHANGE_RING_W = 3.5
 
-    # Track which stations we've already labeled (so interchange labels appear once)
-    labeled = set()
+    # ------------------------------------------------------------------
+    # Build obstacle data for collision-aware label placement
+    # ------------------------------------------------------------------
+    # All station centers (one entry per unique x,y — interchanges are deduped)
+    all_station_xy = list({(x, y) for ln in LINES for (_, (x, y)) in ln["stations"]})
 
+    # All segments per line (used to detect labels crossing OTHER lines)
+    segments_by_line = []
+    for ln in LINES:
+        segs = []
+        pts = [pos for (_, pos) in ln["stations"]]
+        # Use straight segments between consecutive station pairs as a coarse proxy
+        for i in range(len(pts) - 1):
+            segs.append((pts[i], pts[i + 1]))
+        segments_by_line.append(segs)
+
+    # Reserved zones (legend column on the left, title at the top)
+    static_obstacles = [
+        (10, 0, 220, 80),                  # title
+        (10, 85, 220, 320),                # legend + key column on the left
+        (W - 50, H - 25, W, H),            # source line bottom-right
+    ]
+
+    # Collect placed label boxes as we go so subsequent labels don't overlap them
+    placed_label_boxes = []
+    # Track which interchange names we've already drawn (one circle + one label each)
+    drawn_inter = set()
+
+    # Order: place interchange stations FIRST so they get the best placement,
+    # then go line by line.
+    iter_order = []
     for li, ln in enumerate(LINES):
-        for si, (st, (x, y)) in enumerate(ln["stations"]):
-            is_inter = st in interchange_names
-            r = INTERCHANGE_R if is_inter else STATION_R
-            ring = "#1A1F2C" if is_inter else ln["color"]
-            ring_w = INTERCHANGE_RING_W if is_inter else STATION_RING_W
+        for si, (st, pos) in enumerate(ln["stations"]):
+            iter_order.append((st in interchange_names, li, si))
+    # Stable sort so interchanges (True) come first
+    iter_order.sort(key=lambda t: (not t[0], t[1], t[2]))
 
-            # Skip duplicate interchange circles (they'd render on top of each other)
-            station_key = (st, x, y)
-            if is_inter and station_key in labeled:
-                # Still need the marker once — we'll draw it the first time we see it
-                continue
+    for is_inter_first, li, si in iter_order:
+        ln = LINES[li]
+        st, (x, y) = ln["stations"][si]
+        is_inter = st in interchange_names
+        r = INTERCHANGE_R if is_inter else STATION_R
+        ring = "#1A1F2C" if is_inter else ln["color"]
+        ring_w = INTERCHANGE_RING_W if is_inter else STATION_RING_W
 
-            tooltip = f"{st} — {ln['name']} line"
-            if is_inter:
-                others = [LINES[other_li]["name"] for (other_li, _, _, _) in by_name[st]]
-                tooltip = f"{st} — interchange across: {', '.join(others)}"
+        if is_inter and st in drawn_inter:
+            continue  # already drawn (circle + label) on the first line we saw
 
-            parts.append(
-                f'<circle cx="{x}" cy="{y}" r="{r}" fill="#FFFFFF" '
-                f'stroke="{ring}" stroke-width="{ring_w}">'
-                f'<title>{html.escape(tooltip)}</title>'
-                f'</circle>'
-            )
+        tooltip = f"{st} — {ln['name']} line"
+        if is_inter:
+            others = [LINES[other_li]["name"] for (other_li, _, _, _) in by_name[st]]
+            tooltip = f"{st} — interchange across: {', '.join(others)}"
 
-            # Label: pick a side based on the line's direction at this station,
-            # plus alternate above/below to reduce overlap.
-            label = ABBREV.get(st, st)
-            weight = "700" if is_inter else "600"
-            font_size = "10.5" if is_inter else "10"
+        parts.append(
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="#FFFFFF" '
+            f'stroke="{ring}" stroke-width="{ring_w}">'
+            f'<title>{html.escape(tooltip)}</title>'
+            f'</circle>'
+        )
 
-            # Choose label placement angle by inspecting where neighbors sit.
-            # For mostly-horizontal segments: alternate above/below at -32°.
-            # For mostly-vertical segments (Issuing & Treasury): label to the right.
-            # For arcs (Catalog & Tax, Sustainability): label outward.
-            stations_in_line = ln["stations"]
-            prev_pos = stations_in_line[si - 1][1] if si > 0 else None
-            next_pos = stations_in_line[si + 1][1] if si + 1 < len(stations_in_line) else None
-            ref = next_pos or prev_pos or (x, y)
-            dx = ref[0] - x
-            dy = ref[1] - y
+        label = ABBREV.get(st, st)
+        weight = "700" if is_inter else "600"
+        font_size_n = 10.5 if is_inter else 10
 
-            strategy = ln.get("label_strategy")
-            if strategy == "above_rotated":
-                # Always place rotated above-label, fan up-left (away from arc interior)
-                offset = r + 8
-                tx, ty = x, y - offset
-                parts.append(
-                    f'<text x="{tx}" y="{ty}" font-size="{font_size}" fill="#1A1F2C" '
-                    f'text-anchor="end" font-weight="{weight}" '
-                    f'transform="rotate(-32 {tx} {ty})">{html.escape(label)}</text>'
-                )
-                labeled.add(station_key)
-                continue
+        # Build other-line segments list (excludes ALL segments on this station's line
+        # so labels are allowed to extend along their own line)
+        other_segments = [s for ll in range(len(LINES)) if ll != li
+                          for s in segments_by_line[ll]]
 
-            # If line moves mostly vertically here, place label to right (or left if near right edge)
-            if abs(dy) > 1.6 * abs(dx):
-                # Vertical segment — label to the right by default, but to the left
-                # if the station is near the right canvas edge.
-                if x > W - 140:
-                    tx, ty = x - r - 8, y + 4
-                    parts.append(
-                        f'<text x="{tx}" y="{ty}" font-size="{font_size}" fill="#1A1F2C" '
-                        f'text-anchor="end" font-weight="{weight}">{html.escape(label)}</text>'
-                    )
-                else:
-                    tx, ty = x + r + 8, y + 4
-                    parts.append(
-                        f'<text x="{tx}" y="{ty}" font-size="{font_size}" fill="#1A1F2C" '
-                        f'text-anchor="start" font-weight="{weight}">{html.escape(label)}</text>'
-                    )
-            else:
-                # Horizontal-ish segment — alternate above/below
-                above = (si % 2 == 0)
-                offset = r + 8
-                if above:
-                    tx, ty = x, y - offset
-                    parts.append(
-                        f'<text x="{tx}" y="{ty}" font-size="{font_size}" fill="#1A1F2C" '
-                        f'text-anchor="end" font-weight="{weight}" '
-                        f'transform="rotate(-32 {tx} {ty})">{html.escape(label)}</text>'
-                    )
-                else:
-                    tx, ty = x, y + offset + 4
-                    parts.append(
-                        f'<text x="{tx}" y="{ty}" font-size="{font_size}" fill="#1A1F2C" '
-                        f'text-anchor="start" font-weight="{weight}" '
-                        f'transform="rotate(-32 {tx} {ty})">{html.escape(label)}</text>'
-                    )
+        # Generate candidates and score them
+        candidate_kinds = ["above_rot", "below_rot", "right", "left",
+                           "above_rot_right", "below_rot_left"]
+        scored = []
+        for kind in candidate_kinds:
+            ax, ay, anchor, rot, bb = candidate_box(x, y, label, font_size_n, kind, r)
+            s = score_box(bb, (x, y), all_station_xy, other_segments,
+                          placed_label_boxes, static_obstacles)
+            scored.append((s, kind, ax, ay, anchor, rot, bb))
 
-            labeled.add(station_key)
+        scored.sort(key=lambda t: t[0])
+        best_score, best_kind, ax, ay, anchor, rot, bb = scored[0]
+        placed_label_boxes.append(bb)
+
+        # Render the chosen label
+        rot_attr = f' transform="rotate({rot} {ax} {ay})"' if rot else ''
+        parts.append(
+            f'<text x="{ax}" y="{ay}" font-size="{font_size_n}" fill="#1A1F2C" '
+            f'text-anchor="{anchor}" font-weight="{weight}"{rot_attr}>'
+            f'{html.escape(label)}</text>'
+        )
+
+        if is_inter:
+            drawn_inter.add(st)
 
     # ----- Legend: stacked at top-left in the empty corner -----
     parts.append('<g>')
