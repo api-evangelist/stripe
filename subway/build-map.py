@@ -222,50 +222,54 @@ def _rotate(corners, cx, cy, deg):
 
 
 def candidate_box(x, y, label, font_size, kind, station_radius):
-    """Return (anchor_x, anchor_y, anchor, rotation, bbox).
+    """Return (anchor_x, anchor_y, anchor, rotation, polygon).
 
-    Where bbox is (xmin, ymin, xmax, ymax) of the rendered text in canvas coords.
+    polygon is a list of 4 (x,y) corner points of the rendered text in canvas coords.
     """
     w, h = text_extent(label, font_size)
     pad = station_radius + 8
 
     if kind == "above_rot":
         ax, ay = x, y - pad
-        # text-anchor=end, rotation -32: text occupies (ax-w, ay-h/2) to (ax, ay+h/2) before rotation
         c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
               (ax, ay + h / 2), (ax - w, ay + h / 2)]
-        rotated = _rotate(c0, ax, ay, -32)
-        return ax, ay, "end", -32, _bbox(rotated)
+        return ax, ay, "end", -32, _rotate(c0, ax, ay, -32)
     if kind == "below_rot":
         ax, ay = x, y + pad + 4
         c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
               (ax + w, ay + h / 2), (ax, ay + h / 2)]
-        rotated = _rotate(c0, ax, ay, -32)
-        return ax, ay, "start", -32, _bbox(rotated)
+        return ax, ay, "start", -32, _rotate(c0, ax, ay, -32)
     if kind == "right":
         ax, ay = x + pad, y + 4
         c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
               (ax + w, ay + h / 2), (ax, ay + h / 2)]
-        return ax, ay, "start", 0, _bbox(c0)
+        return ax, ay, "start", 0, c0
     if kind == "left":
         ax, ay = x - pad, y + 4
         c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
               (ax, ay + h / 2), (ax - w, ay + h / 2)]
-        return ax, ay, "end", 0, _bbox(c0)
+        return ax, ay, "end", 0, c0
     if kind == "above_rot_right":
-        # rotated -32 above, fanning up-RIGHT (anchor=start)
         ax, ay = x, y - pad
         c0 = [(ax, ay - h / 2), (ax + w, ay - h / 2),
               (ax + w, ay + h / 2), (ax, ay + h / 2)]
-        rotated = _rotate(c0, ax, ay, -32)
-        return ax, ay, "start", -32, _bbox(rotated)
+        return ax, ay, "start", -32, _rotate(c0, ax, ay, -32)
     if kind == "below_rot_left":
-        # rotated -32 below, fanning down-LEFT (anchor=end)
         ax, ay = x, y + pad + 4
         c0 = [(ax - w, ay - h / 2), (ax, ay - h / 2),
               (ax, ay + h / 2), (ax - w, ay + h / 2)]
-        rotated = _rotate(c0, ax, ay, -32)
-        return ax, ay, "end", -32, _bbox(rotated)
+        return ax, ay, "end", -32, _rotate(c0, ax, ay, -32)
+    if kind == "above_h":
+        # horizontal above
+        ax, ay = x, y - pad
+        c0 = [(ax - w / 2, ay - h / 2), (ax + w / 2, ay - h / 2),
+              (ax + w / 2, ay + h / 2), (ax - w / 2, ay + h / 2)]
+        return ax, ay, "middle", 0, c0
+    if kind == "below_h":
+        ax, ay = x, y + pad + h
+        c0 = [(ax - w / 2, ay - h / 2), (ax + w / 2, ay - h / 2),
+              (ax + w / 2, ay + h / 2), (ax - w / 2, ay + h / 2)]
+        return ax, ay, "middle", 0, c0
     raise ValueError(kind)
 
 
@@ -280,50 +284,86 @@ def _boxes_overlap(b1, b2, expand=0):
                 or b1[3] + expand < b2[1] or b2[3] + expand < b1[1])
 
 
-def _seg_intersects_bbox(seg, bb, margin=2):
-    """Quick test: does segment (x1,y1)-(x2,y2) come within margin of bbox bb?"""
-    (x1, y1), (x2, y2) = seg
-    bx1, by1, bx2, by2 = bb[0] - margin, bb[1] - margin, bb[2] + margin, bb[3] + margin
-    # If both endpoints on same side of bbox plane, no intersection
-    if (x1 < bx1 and x2 < bx1) or (x1 > bx2 and x2 > bx2):
-        return False
-    if (y1 < by1 and y2 < by1) or (y1 > by2 and y2 > by2):
-        return False
-    # Otherwise approximate true (close enough for our purposes)
-    return True
+def _segments_intersect(p1, p2, p3, p4):
+    """Return True iff line segment p1->p2 crosses segment p3->p4."""
+    def ccw(a, b, c):
+        return (c[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (c[0] - a[0])
+    return (ccw(p1, p3, p4) != ccw(p2, p3, p4) and
+            ccw(p1, p2, p3) != ccw(p1, p2, p4))
 
 
-def score_box(bb, this_xy, all_stations, all_segments_other, placed_label_boxes,
+def _point_in_poly(pt, poly):
+    """Standard ray-casting point-in-polygon test."""
+    x, y = pt
+    inside = False
+    n = len(poly)
+    j = n - 1
+    for i in range(n):
+        xi, yi = poly[i]
+        xj, yj = poly[j]
+        if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-9) + xi):
+            inside = not inside
+        j = i
+    return inside
+
+
+def _seg_crosses_polygon(seg, poly):
+    """True if line segment intersects (or is fully inside) the polygon."""
+    p1, p2 = seg
+    if _point_in_poly(p1, poly) or _point_in_poly(p2, poly):
+        return True
+    n = len(poly)
+    for i in range(n):
+        a = poly[i]
+        b = poly[(i + 1) % n]
+        if _segments_intersect(p1, p2, a, b):
+            return True
+    return False
+
+
+def _polygons_overlap(p1, p2):
+    """True if two convex polygons overlap (cheap conservative check)."""
+    return _boxes_overlap(_bbox(p1), _bbox(p2), expand=2)
+
+
+def score_box(poly, this_xy, all_stations, all_segments_other, placed_label_polys,
               static_obstacles):
-    """Lower score = better label position."""
+    """Lower score = better label position.
+
+    poly is a list of 4 (x, y) rotated corner points.
+    """
     score = 0
+    bb = _bbox(poly)
     bx1, by1, bx2, by2 = bb
 
     # Off-canvas penalty
     if bx1 < 6 or by1 < 6 or bx2 > W - 6 or by2 > H - 6:
-        score += 1000
+        score += 2000
 
-    # Overlap with already-placed label boxes
-    for pb in placed_label_boxes:
-        if _boxes_overlap(bb, pb, expand=2):
-            score += 80
+    # Overlap with already-placed label polygons
+    for pp in placed_label_polys:
+        if _polygons_overlap(poly, pp):
+            score += 100
 
-    # Stations falling inside (or near) the label box
+    # Stations falling inside (or near) the label polygon (use bbox + small margin)
     for (sx, sy) in all_stations:
         if (sx, sy) == this_xy:
             continue
-        if bx1 - 8 <= sx <= bx2 + 8 and by1 - 8 <= sy <= by2 + 8:
-            score += 60
+        if bx1 - 6 <= sx <= bx2 + 6 and by1 - 6 <= sy <= by2 + 6:
+            if _point_in_poly((sx, sy), poly):
+                score += 200
+            else:
+                score += 50  # near-miss
 
-    # Other lines crossing the label box
+    # Other lines actually crossing the rotated label polygon — heavy penalty
     for seg in all_segments_other:
-        if _seg_intersects_bbox(seg, bb):
-            score += 18
+        if _seg_crosses_polygon(seg, poly):
+            score += 150
 
     # Reserved areas (legend, key, title)
     for ob in static_obstacles:
         if _boxes_overlap(bb, ob, expand=4):
-            score += 200
+            score += 500
 
     return score
 
@@ -400,8 +440,8 @@ def main():
         (W - 50, H - 25, W, H),            # source line bottom-right
     ]
 
-    # Collect placed label boxes as we go so subsequent labels don't overlap them
-    placed_label_boxes = []
+    # Collect placed label polygons as we go so subsequent labels don't overlap them
+    placed_label_polys = []
     # Track which interchange names we've already drawn (one circle + one label each)
     drawn_inter = set()
 
@@ -447,18 +487,20 @@ def main():
                           for s in segments_by_line[ll]]
 
         # Generate candidates and score them
-        candidate_kinds = ["above_rot", "below_rot", "right", "left",
-                           "above_rot_right", "below_rot_left"]
+        candidate_kinds = ["above_rot", "below_rot",
+                           "above_rot_right", "below_rot_left",
+                           "right", "left",
+                           "above_h", "below_h"]
         scored = []
         for kind in candidate_kinds:
-            ax, ay, anchor, rot, bb = candidate_box(x, y, label, font_size_n, kind, r)
-            s = score_box(bb, (x, y), all_station_xy, other_segments,
-                          placed_label_boxes, static_obstacles)
-            scored.append((s, kind, ax, ay, anchor, rot, bb))
+            ax, ay, anchor, rot, poly = candidate_box(x, y, label, font_size_n, kind, r)
+            s = score_box(poly, (x, y), all_station_xy, other_segments,
+                          placed_label_polys, static_obstacles)
+            scored.append((s, kind, ax, ay, anchor, rot, poly))
 
         scored.sort(key=lambda t: t[0])
-        best_score, best_kind, ax, ay, anchor, rot, bb = scored[0]
-        placed_label_boxes.append(bb)
+        best_score, best_kind, ax, ay, anchor, rot, poly = scored[0]
+        placed_label_polys.append(poly)
 
         # Render the chosen label
         rot_attr = f' transform="rotate({rot} {ax} {ay})"' if rot else ''
@@ -480,23 +522,19 @@ def main():
         f'letter-spacing="1.5">LINES</text>'
     )
     for i, ln in enumerate(LINES):
-        cy = ly0 + 18 + i * 16
+        cy = ly0 + 18 + i * 18
         parts.append(
             f'<line x1="{lx0}" y1="{cy - 3}" x2="{lx0 + 18}" y2="{cy - 3}" '
             f'stroke="{ln["color"]}" stroke-width="5" stroke-linecap="round" />'
         )
         parts.append(
-            f'<text x="{lx0 + 26}" y="{cy}" font-size="9.5" fill="#1A1F2C" '
+            f'<text x="{lx0 + 26}" y="{cy}" font-size="10" fill="#1A1F2C" '
             f'font-weight="600">{html.escape(ln["name"])}</text>'
-        )
-        parts.append(
-            f'<text x="{lx0 + 26}" y="{cy + 10}" font-size="8.5" fill="#8A92A6">'
-            f'{len(ln["stations"])} APIs</text>'
         )
 
     # ----- Key: bottom-left corner under the legend column -----
     kx = 30
-    ky = ly0 + 18 + len(LINES) * 16 + 18
+    ky = ly0 + 18 + len(LINES) * 18 + 18
     parts.append(
         f'<text x="{kx}" y="{ky}" font-size="10" font-weight="700" fill="#1A1F2C" '
         f'letter-spacing="1.5">KEY</text>'
