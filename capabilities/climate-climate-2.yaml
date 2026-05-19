@@ -1,0 +1,833 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Climate API — Climate
+  description: 'Stripe Climate API — Climate. 15 operations. Lead operation: Stripe Get   Climate Orders. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Climate
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: climate-climate-2
+    baseUri: https://api.stripe.com
+    description: Stripe Climate API — Climate business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-climate-orders
+      path: /v1/climate/orders
+      operations:
+      - name: getclimateorders
+        method: GET
+        description: Stripe Get   Climate Orders
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postclimateorders
+        method: POST
+        description: Stripe Post   Climate Orders
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-climate-orders-order
+      path: /v1/climate/orders/{order}
+      operations:
+      - name: getclimateordersorder
+        method: GET
+        description: Stripe Get   Climate Orders Order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postclimateordersorder
+        method: POST
+        description: Stripe Post   Climate Orders Order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-orders-order-cancel
+      path: /v1/climate/orders/{order}/cancel
+      operations:
+      - name: postclimateordersordercancel
+        method: POST
+        description: Stripe Post   Climate Orders Order Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-products
+      path: /v1/climate/products
+      operations:
+      - name: getclimateproducts
+        method: GET
+        description: Stripe Get   Climate Products
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-products-product
+      path: /v1/climate/products/{product}
+      operations:
+      - name: getclimateproductsproduct
+        method: GET
+        description: Stripe Get   Climate Products Product
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: product
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-reservations
+      path: /v1/climate/reservations
+      operations:
+      - name: getclimatereservations
+        method: GET
+        description: Stripe Get   Climate Reservations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postclimatereservations
+        method: POST
+        description: Stripe Post   Climate Reservations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-climate-reservations-order
+      path: /v1/climate/reservations/{order}
+      operations:
+      - name: getclimatereservationsorder
+        method: GET
+        description: Stripe Get   Climate Reservations Order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postclimatereservationsorder
+        method: POST
+        description: Stripe Post   Climate Reservations Order
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-reservations-order-cancel
+      path: /v1/climate/reservations/{order}/cancel
+      operations:
+      - name: postclimatereservationsordercancel
+        method: POST
+        description: Stripe Post   Climate Reservations Order Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-reservations-order-confirm
+      path: /v1/climate/reservations/{order}/confirm
+      operations:
+      - name: postclimatereservationsorderconfirm
+        method: POST
+        description: Stripe Post   Climate Reservations Order Confirm
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: path
+          type: string
+          description: Unique identifier of the order.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-suppliers
+      path: /v1/climate/suppliers
+      operations:
+      - name: getclimatesuppliers
+        method: GET
+        description: Stripe Get   Climate Suppliers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-climate-suppliers-supplier
+      path: /v1/climate/suppliers/{supplier}
+      operations:
+      - name: getclimatesupplierssupplier
+        method: GET
+        description: Stripe Get   Climate Suppliers Supplier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: supplier
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: climate-climate-2-rest
+    port: 8080
+    description: REST adapter for Stripe Climate API — Climate. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/climate/orders
+      name: v1-climate-orders
+      description: REST surface for v1-climate-orders.
+      operations:
+      - method: GET
+        name: getclimateorders
+        description: Stripe Get   Climate Orders
+        call: climate-climate-2.getclimateorders
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postclimateorders
+        description: Stripe Post   Climate Orders
+        call: climate-climate-2.postclimateorders
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/orders/{order}
+      name: v1-climate-orders-order
+      description: REST surface for v1-climate-orders-order.
+      operations:
+      - method: GET
+        name: getclimateordersorder
+        description: Stripe Get   Climate Orders Order
+        call: climate-climate-2.getclimateordersorder
+        with:
+          expand: rest.expand
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postclimateordersorder
+        description: Stripe Post   Climate Orders Order
+        call: climate-climate-2.postclimateordersorder
+        with:
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/orders/{order}/cancel
+      name: v1-climate-orders-order-cancel
+      description: REST surface for v1-climate-orders-order-cancel.
+      operations:
+      - method: POST
+        name: postclimateordersordercancel
+        description: Stripe Post   Climate Orders Order Cancel
+        call: climate-climate-2.postclimateordersordercancel
+        with:
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/products
+      name: v1-climate-products
+      description: REST surface for v1-climate-products.
+      operations:
+      - method: GET
+        name: getclimateproducts
+        description: Stripe Get   Climate Products
+        call: climate-climate-2.getclimateproducts
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/products/{product}
+      name: v1-climate-products-product
+      description: REST surface for v1-climate-products-product.
+      operations:
+      - method: GET
+        name: getclimateproductsproduct
+        description: Stripe Get   Climate Products Product
+        call: climate-climate-2.getclimateproductsproduct
+        with:
+          expand: rest.expand
+          product: rest.product
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/reservations
+      name: v1-climate-reservations
+      description: REST surface for v1-climate-reservations.
+      operations:
+      - method: GET
+        name: getclimatereservations
+        description: Stripe Get   Climate Reservations
+        call: climate-climate-2.getclimatereservations
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postclimatereservations
+        description: Stripe Post   Climate Reservations
+        call: climate-climate-2.postclimatereservations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/reservations/{order}
+      name: v1-climate-reservations-order
+      description: REST surface for v1-climate-reservations-order.
+      operations:
+      - method: GET
+        name: getclimatereservationsorder
+        description: Stripe Get   Climate Reservations Order
+        call: climate-climate-2.getclimatereservationsorder
+        with:
+          expand: rest.expand
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postclimatereservationsorder
+        description: Stripe Post   Climate Reservations Order
+        call: climate-climate-2.postclimatereservationsorder
+        with:
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/reservations/{order}/cancel
+      name: v1-climate-reservations-order-cancel
+      description: REST surface for v1-climate-reservations-order-cancel.
+      operations:
+      - method: POST
+        name: postclimatereservationsordercancel
+        description: Stripe Post   Climate Reservations Order Cancel
+        call: climate-climate-2.postclimatereservationsordercancel
+        with:
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/reservations/{order}/confirm
+      name: v1-climate-reservations-order-confirm
+      description: REST surface for v1-climate-reservations-order-confirm.
+      operations:
+      - method: POST
+        name: postclimatereservationsorderconfirm
+        description: Stripe Post   Climate Reservations Order Confirm
+        call: climate-climate-2.postclimatereservationsorderconfirm
+        with:
+          order: rest.order
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/suppliers
+      name: v1-climate-suppliers
+      description: REST surface for v1-climate-suppliers.
+      operations:
+      - method: GET
+        name: getclimatesuppliers
+        description: Stripe Get   Climate Suppliers
+        call: climate-climate-2.getclimatesuppliers
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/climate/suppliers/{supplier}
+      name: v1-climate-suppliers-supplier
+      description: REST surface for v1-climate-suppliers-supplier.
+      operations:
+      - method: GET
+        name: getclimatesupplierssupplier
+        description: Stripe Get   Climate Suppliers Supplier
+        call: climate-climate-2.getclimatesupplierssupplier
+        with:
+          expand: rest.expand
+          supplier: rest.supplier
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: climate-climate-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Climate API — Climate. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-get-climate-orders
+      description: Stripe Get   Climate Orders
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimateorders
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-orders
+      description: Stripe Post   Climate Orders
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimateorders
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-orders-order
+      description: Stripe Get   Climate Orders Order
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimateordersorder
+      with:
+        expand: tools.expand
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-orders-order
+      description: Stripe Post   Climate Orders Order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimateordersorder
+      with:
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-orders-order-2
+      description: Stripe Post   Climate Orders Order Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimateordersordercancel
+      with:
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-products
+      description: Stripe Get   Climate Products
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimateproducts
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-products-product
+      description: Stripe Get   Climate Products Product
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimateproductsproduct
+      with:
+        expand: tools.expand
+        product: tools.product
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-reservations
+      description: Stripe Get   Climate Reservations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimatereservations
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-reservations
+      description: Stripe Post   Climate Reservations
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimatereservations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-reservations-order
+      description: Stripe Get   Climate Reservations Order
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimatereservationsorder
+      with:
+        expand: tools.expand
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-reservations-order
+      description: Stripe Post   Climate Reservations Order
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimatereservationsorder
+      with:
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-reservations-order-2
+      description: Stripe Post   Climate Reservations Order Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimatereservationsordercancel
+      with:
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-climate-reservations-order-3
+      description: Stripe Post   Climate Reservations Order Confirm
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: climate-climate-2.postclimatereservationsorderconfirm
+      with:
+        order: tools.order
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-suppliers
+      description: Stripe Get   Climate Suppliers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimatesuppliers
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-climate-suppliers-supplier
+      description: Stripe Get   Climate Suppliers Supplier
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: climate-climate-2.getclimatesupplierssupplier
+      with:
+        expand: tools.expand
+        supplier: tools.supplier
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

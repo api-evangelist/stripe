@@ -1,0 +1,458 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Customers API — Delete
+  description: 'Stripe Customers API — Delete. 8 operations. Lead operation: Stripe Delete   Customers Customer. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customers-delete
+    baseUri: https://api.stripe.com
+    description: Stripe Customers API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-customers-customer
+      path: /v1/customers/{customer}
+      operations:
+      - name: deletecustomerscustomer
+        method: DELETE
+        description: Stripe Delete   Customers Customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-bank_accounts-id
+      path: /v1/customers/{customer}/bank_accounts/{id}
+      operations:
+      - name: deletecustomerscustomerbankaccountsid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Bank Accounts Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-cards-id
+      path: /v1/customers/{customer}/cards/{id}
+      operations:
+      - name: deletecustomerscustomercardsid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Cards Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-discount
+      path: /v1/customers/{customer}/discount
+      operations:
+      - name: deletecustomerscustomerdiscount
+        method: DELETE
+        description: Stripe Delete   Customers Customer Discount
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-sources-id
+      path: /v1/customers/{customer}/sources/{id}
+      operations:
+      - name: deletecustomerscustomersourcesid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Sources Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-subscriptions-subscription_exposed_id
+      path: /v1/customers/{customer}/subscriptions/{subscription_exposed_id}
+      operations:
+      - name: deletecustomerscustomersubscriptionssubscriptionexposedid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-subscriptions-subscription_exposed_id-discount
+      path: /v1/customers/{customer}/subscriptions/{subscription_exposed_id}/discount
+      operations:
+      - name: deletecustomerscustomersubscriptionssubscriptionexposediddiscount
+        method: DELETE
+        description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id Discount
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-tax_ids-id
+      path: /v1/customers/{customer}/tax_ids/{id}
+      operations:
+      - name: deletecustomerscustomertaxidsid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Tax Ids Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customers-delete-rest
+    port: 8080
+    description: REST adapter for Stripe Customers API — Delete. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/customers/{customer}
+      name: v1-customers-customer
+      description: REST surface for v1-customers-customer.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomer
+        description: Stripe Delete   Customers Customer
+        call: customers-delete.deletecustomerscustomer
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/bank-accounts/{id}
+      name: v1-customers-customer-bank-accounts-id
+      description: REST surface for v1-customers-customer-bank_accounts-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomerbankaccountsid
+        description: Stripe Delete   Customers Customer Bank Accounts Id
+        call: customers-delete.deletecustomerscustomerbankaccountsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/cards/{id}
+      name: v1-customers-customer-cards-id
+      description: REST surface for v1-customers-customer-cards-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomercardsid
+        description: Stripe Delete   Customers Customer Cards Id
+        call: customers-delete.deletecustomerscustomercardsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/discount
+      name: v1-customers-customer-discount
+      description: REST surface for v1-customers-customer-discount.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomerdiscount
+        description: Stripe Delete   Customers Customer Discount
+        call: customers-delete.deletecustomerscustomerdiscount
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/sources/{id}
+      name: v1-customers-customer-sources-id
+      description: REST surface for v1-customers-customer-sources-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomersourcesid
+        description: Stripe Delete   Customers Customer Sources Id
+        call: customers-delete.deletecustomerscustomersourcesid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/subscriptions/{subscription-exposed-id}
+      name: v1-customers-customer-subscriptions-subscription-exposed-id
+      description: REST surface for v1-customers-customer-subscriptions-subscription_exposed_id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomersubscriptionssubscriptionexposedid
+        description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id
+        call: customers-delete.deletecustomerscustomersubscriptionssubscriptionexposedid
+        with:
+          customer: rest.customer
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/subscriptions/{subscription-exposed-id}/discount
+      name: v1-customers-customer-subscriptions-subscription-exposed-id-discount
+      description: REST surface for v1-customers-customer-subscriptions-subscription_exposed_id-discount.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomersubscriptionssubscriptionexposediddiscount
+        description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id Discount
+        call: customers-delete.deletecustomerscustomersubscriptionssubscriptionexposediddiscount
+        with:
+          customer: rest.customer
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/tax-ids/{id}
+      name: v1-customers-customer-tax-ids-id
+      description: REST surface for v1-customers-customer-tax_ids-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomertaxidsid
+        description: Stripe Delete   Customers Customer Tax Ids Id
+        call: customers-delete.deletecustomerscustomertaxidsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customers-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Customers API — Delete. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-delete-customers-customer
+      description: Stripe Delete   Customers Customer
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomer
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-bank
+      description: Stripe Delete   Customers Customer Bank Accounts Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomerbankaccountsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-cards
+      description: Stripe Delete   Customers Customer Cards Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomercardsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-discount
+      description: Stripe Delete   Customers Customer Discount
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomerdiscount
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-sources
+      description: Stripe Delete   Customers Customer Sources Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomersourcesid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-subscriptions
+      description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomersubscriptionssubscriptionexposedid
+      with:
+        customer: tools.customer
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-subscriptions-2
+      description: Stripe Delete   Customers Customer Subscriptions Subscription Exposed Id Discount
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomersubscriptionssubscriptionexposediddiscount
+      with:
+        customer: tools.customer
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-tax
+      description: Stripe Delete   Customers Customer Tax Ids Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-delete.deletecustomerscustomertaxidsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

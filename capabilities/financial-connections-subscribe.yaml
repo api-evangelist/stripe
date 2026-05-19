@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Financial Connections API — Subscribe
+  description: 'Stripe Financial Connections API — Subscribe. 1 operations. Lead operation: Stripe Post   Financial Connections
+    Accounts Subscribe. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Subscribe
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: financial-connections-subscribe
+    baseUri: https://api.stripe.com
+    description: Stripe Financial Connections API — Subscribe business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-financial_connections-accounts-account-subscribe
+      path: /v1/financial_connections/accounts/{account}/subscribe
+      operations:
+      - name: postfinancialconnectionsaccountsaccountsubscribe
+        method: POST
+        description: Stripe Post   Financial Connections Accounts Subscribe
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: financial-connections-subscribe-rest
+    port: 8080
+    description: REST adapter for Stripe Financial Connections API — Subscribe. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/financial-connections/accounts/{account}/subscribe
+      name: v1-financial-connections-accounts-account-subscribe
+      description: REST surface for v1-financial_connections-accounts-account-subscribe.
+      operations:
+      - method: POST
+        name: postfinancialconnectionsaccountsaccountsubscribe
+        description: Stripe Post   Financial Connections Accounts Subscribe
+        call: financial-connections-subscribe.postfinancialconnectionsaccountsaccountsubscribe
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: financial-connections-subscribe-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Financial Connections API — Subscribe. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: stripe-post-financial-connections-accounts
+      description: Stripe Post   Financial Connections Accounts Subscribe
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: financial-connections-subscribe.postfinancialconnectionsaccountsaccountsubscribe
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

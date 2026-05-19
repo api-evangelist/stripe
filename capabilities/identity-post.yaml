@@ -1,0 +1,224 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Identity API — Post
+  description: 'Stripe Identity API — Post. 4 operations. Lead operation: Stripe Post   Identity Verification Sessions. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: identity-post
+    baseUri: https://api.stripe.com
+    description: Stripe Identity API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-identity-verification_sessions
+      path: /v1/identity/verification_sessions
+      operations:
+      - name: postidentityverificationsessions
+        method: POST
+        description: Stripe Post   Identity Verification Sessions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-identity-verification_sessions-session
+      path: /v1/identity/verification_sessions/{session}
+      operations:
+      - name: postidentityverificationsessionssession
+        method: POST
+        description: Stripe Post   Identity Verification Sessions Session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-identity-verification_sessions-session-cancel
+      path: /v1/identity/verification_sessions/{session}/cancel
+      operations:
+      - name: postidentityverificationsessionssessioncancel
+        method: POST
+        description: Stripe Post   Identity Verification Sessions Session Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-identity-verification_sessions-session-redact
+      path: /v1/identity/verification_sessions/{session}/redact
+      operations:
+      - name: postidentityverificationsessionssessionredact
+        method: POST
+        description: Stripe Post   Identity Verification Sessions Session Redact
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: identity-post-rest
+    port: 8080
+    description: REST adapter for Stripe Identity API — Post. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/identity/verification-sessions
+      name: v1-identity-verification-sessions
+      description: REST surface for v1-identity-verification_sessions.
+      operations:
+      - method: POST
+        name: postidentityverificationsessions
+        description: Stripe Post   Identity Verification Sessions
+        call: identity-post.postidentityverificationsessions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/identity/verification-sessions/{session}
+      name: v1-identity-verification-sessions-session
+      description: REST surface for v1-identity-verification_sessions-session.
+      operations:
+      - method: POST
+        name: postidentityverificationsessionssession
+        description: Stripe Post   Identity Verification Sessions Session
+        call: identity-post.postidentityverificationsessionssession
+        with:
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/identity/verification-sessions/{session}/cancel
+      name: v1-identity-verification-sessions-session-cancel
+      description: REST surface for v1-identity-verification_sessions-session-cancel.
+      operations:
+      - method: POST
+        name: postidentityverificationsessionssessioncancel
+        description: Stripe Post   Identity Verification Sessions Session Cancel
+        call: identity-post.postidentityverificationsessionssessioncancel
+        with:
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/identity/verification-sessions/{session}/redact
+      name: v1-identity-verification-sessions-session-redact
+      description: REST surface for v1-identity-verification_sessions-session-redact.
+      operations:
+      - method: POST
+        name: postidentityverificationsessionssessionredact
+        description: Stripe Post   Identity Verification Sessions Session Redact
+        call: identity-post.postidentityverificationsessionssessionredact
+        with:
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: identity-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Identity API — Post. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-identity-verification-sessions
+      description: Stripe Post   Identity Verification Sessions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: identity-post.postidentityverificationsessions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-identity-verification-sessions-2
+      description: Stripe Post   Identity Verification Sessions Session
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: identity-post.postidentityverificationsessionssession
+      with:
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-identity-verification-sessions-3
+      description: Stripe Post   Identity Verification Sessions Session Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: identity-post.postidentityverificationsessionssessioncancel
+      with:
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-identity-verification-sessions-4
+      description: Stripe Post   Identity Verification Sessions Session Redact
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: identity-post.postidentityverificationsessionssessionredact
+      with:
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

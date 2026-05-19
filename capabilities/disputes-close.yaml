@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Disputes API — Close
+  description: 'Stripe Disputes API — Close. 1 operations. Lead operation: Stripe Post   Disputes Dispute Close. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Close
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: disputes-close
+    baseUri: https://api.stripe.com
+    description: Stripe Disputes API — Close business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-disputes-dispute-close
+      path: /v1/disputes/{dispute}/close
+      operations:
+      - name: postdisputesdisputeclose
+        method: POST
+        description: Stripe Post   Disputes Dispute Close
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: disputes-close-rest
+    port: 8080
+    description: REST adapter for Stripe Disputes API — Close. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/disputes/{dispute}/close
+      name: v1-disputes-dispute-close
+      description: REST surface for v1-disputes-dispute-close.
+      operations:
+      - method: POST
+        name: postdisputesdisputeclose
+        description: Stripe Post   Disputes Dispute Close
+        call: disputes-close.postdisputesdisputeclose
+        with:
+          dispute: rest.dispute
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: disputes-close-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Disputes API — Close. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-disputes-dispute-close
+      description: Stripe Post   Disputes Dispute Close
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: disputes-close.postdisputesdisputeclose
+      with:
+        dispute: tools.dispute
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

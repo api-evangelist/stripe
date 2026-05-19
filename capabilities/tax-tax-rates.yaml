@@ -1,0 +1,258 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Tax API — Tax Rates
+  description: 'Stripe Tax API — Tax Rates. 4 operations. Lead operation: Tax Rates. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Tax Rates
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: tax-tax-rates
+    baseUri: https://api.stripe.com
+    description: Stripe Tax API — Tax Rates business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-tax_rates
+      path: /v1/tax_rates
+      operations:
+      - name: gettaxrates
+        method: GET
+        description: <p>Returns a list of your tax rates. Tax rates are returned sorted by creation date, with the most recently
+          created tax rates appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: active
+          in: query
+          type: boolean
+          description: Optional flag to filter by tax rates that are either active or inactive (archived).
+        - name: created
+          in: query
+          type: string
+          description: Optional range for filtering created date.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: inclusive
+          in: query
+          type: boolean
+          description: Optional flag to filter by tax rates that are inclusive (or those that are not inclusive).
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: posttaxrates
+        method: POST
+        description: <p>Creates a new tax rate.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-tax_rates-tax_rate
+      path: /v1/tax_rates/{tax_rate}
+      operations:
+      - name: gettaxratestaxrate
+        method: GET
+        description: <p>Retrieves a tax rate with the given ID</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: tax_rate
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: posttaxratestaxrate
+        method: POST
+        description: <p>Updates an existing tax rate.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tax_rate
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: tax-tax-rates-rest
+    port: 8080
+    description: REST adapter for Stripe Tax API — Tax Rates. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/tax-rates
+      name: v1-tax-rates
+      description: REST surface for v1-tax_rates.
+      operations:
+      - method: GET
+        name: gettaxrates
+        description: <p>Returns a list of your tax rates. Tax rates are returned sorted by creation date, with the most recently
+          created tax rates appearing first.</p>
+        call: tax-tax-rates.gettaxrates
+        with:
+          active: rest.active
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          inclusive: rest.inclusive
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttaxrates
+        description: <p>Creates a new tax rate.</p>
+        call: tax-tax-rates.posttaxrates
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/tax-rates/{tax-rate}
+      name: v1-tax-rates-tax-rate
+      description: REST surface for v1-tax_rates-tax_rate.
+      operations:
+      - method: GET
+        name: gettaxratestaxrate
+        description: <p>Retrieves a tax rate with the given ID</p>
+        call: tax-tax-rates.gettaxratestaxrate
+        with:
+          expand: rest.expand
+          tax_rate: rest.tax_rate
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttaxratestaxrate
+        description: <p>Updates an existing tax rate.</p>
+        call: tax-tax-rates.posttaxratestaxrate
+        with:
+          tax_rate: rest.tax_rate
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: tax-tax-rates-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Tax API — Tax Rates. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: p-returns-list-your-tax-rates
+      description: <p>Returns a list of your tax rates. Tax rates are returned sorted by creation date, with the most recently
+        created tax rates appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: tax-tax-rates.gettaxrates
+      with:
+        active: tools.active
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        inclusive: tools.inclusive
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-tax-rate-p
+      description: <p>Creates a new tax rate.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: tax-tax-rates.posttaxrates
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-tax-rate-given-id
+      description: <p>Retrieves a tax rate with the given ID</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: tax-tax-rates.gettaxratestaxrate
+      with:
+        expand: tools.expand
+        tax_rate: tools.tax_rate
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-existing-tax-rate-p
+      description: <p>Updates an existing tax rate.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: tax-tax-rates.posttaxratestaxrate
+      with:
+        tax_rate: tools.tax_rate
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

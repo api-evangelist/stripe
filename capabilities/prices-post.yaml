@@ -1,0 +1,128 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Prices API — Post
+  description: 'Stripe Prices API — Post. 2 operations. Lead operation: Stripe Post   Prices. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: prices-post
+    baseUri: https://api.stripe.com
+    description: Stripe Prices API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-prices
+      path: /v1/prices
+      operations:
+      - name: postprices
+        method: POST
+        description: Stripe Post   Prices
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-prices-price
+      path: /v1/prices/{price}
+      operations:
+      - name: postpricesprice
+        method: POST
+        description: Stripe Post   Prices
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: price
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: prices-post-rest
+    port: 8080
+    description: REST adapter for Stripe Prices API — Post. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/prices
+      name: v1-prices
+      description: REST surface for v1-prices.
+      operations:
+      - method: POST
+        name: postprices
+        description: Stripe Post   Prices
+        call: prices-post.postprices
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/prices/{price}
+      name: v1-prices-price
+      description: REST surface for v1-prices-price.
+      operations:
+      - method: POST
+        name: postpricesprice
+        description: Stripe Post   Prices
+        call: prices-post.postpricesprice
+        with:
+          price: rest.price
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: prices-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Prices API — Post. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-prices
+      description: Stripe Post   Prices
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: prices-post.postprices
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-prices-2
+      description: Stripe Post   Prices
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: prices-post.postpricesprice
+      with:
+        price: tools.price
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

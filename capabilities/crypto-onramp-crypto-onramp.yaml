@@ -1,0 +1,129 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Crypto Onramp API — Crypto Onramp
+  description: 'Stripe Crypto Onramp API — Crypto Onramp. 2 operations. Lead operation: List Onramp Sessions. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Crypto Onramp
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: crypto-onramp-crypto-onramp
+    baseUri: https://api.stripe.com
+    description: Stripe Crypto Onramp API — Crypto Onramp business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-crypto-onramp_sessions
+      path: /v1/crypto/onramp_sessions
+      operations:
+      - name: getcryptoonrampsessions
+        method: GET
+        description: List Onramp Sessions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+    - name: v1-crypto-onramp_sessions-onramp_session
+      path: /v1/crypto/onramp_sessions/{onramp_session}
+      operations:
+      - name: getcryptoonrampsessionsonrampsession
+        method: GET
+        description: Retrieve Onramp Session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: onramp_session
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: crypto-onramp-crypto-onramp-rest
+    port: 8080
+    description: REST adapter for Stripe Crypto Onramp API — Crypto Onramp. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/crypto/onramp-sessions
+      name: v1-crypto-onramp-sessions
+      description: REST surface for v1-crypto-onramp_sessions.
+      operations:
+      - method: GET
+        name: getcryptoonrampsessions
+        description: List Onramp Sessions
+        call: crypto-onramp-crypto-onramp.getcryptoonrampsessions
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/crypto/onramp-sessions/{onramp-session}
+      name: v1-crypto-onramp-sessions-onramp-session
+      description: REST surface for v1-crypto-onramp_sessions-onramp_session.
+      operations:
+      - method: GET
+        name: getcryptoonrampsessionsonrampsession
+        description: Retrieve Onramp Session
+        call: crypto-onramp-crypto-onramp.getcryptoonrampsessionsonrampsession
+        with:
+          onramp_session: rest.onramp_session
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: crypto-onramp-crypto-onramp-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Crypto Onramp API — Crypto Onramp. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-onramp-sessions
+      description: List Onramp Sessions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: crypto-onramp-crypto-onramp.getcryptoonrampsessions
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-onramp-session
+      description: Retrieve Onramp Session
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: crypto-onramp-crypto-onramp.getcryptoonrampsessionsonrampsession
+      with:
+        onramp_session: tools.onramp_session
+      outputParameters:
+      - type: object
+        mapping: $.

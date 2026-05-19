@@ -1,0 +1,260 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Reporting API — Reporting
+  description: 'Stripe Reporting API — Reporting. 5 operations. Lead operation: Stripe List Report Runs. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Reporting
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: reporting-reporting-2
+    baseUri: https://api.stripe.com
+    description: Stripe Reporting API — Reporting business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-reporting-report_runs
+      path: /v1/reporting/report_runs
+      operations:
+      - name: getreportingreportruns
+        method: GET
+        description: Stripe List Report Runs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: postreportingreportruns
+        method: POST
+        description: Stripe Create Report Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-reporting-report_runs-report_run
+      path: /v1/reporting/report_runs/{report_run}
+      operations:
+      - name: getreportingreportrunsreportrun
+        method: GET
+        description: Stripe Retrieve Report Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: report_run
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+    - name: v1-reporting-report_types
+      path: /v1/reporting/report_types
+      operations:
+      - name: getreportingreporttypes
+        method: GET
+        description: Stripe List Report Types
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+    - name: v1-reporting-report_types-report_type
+      path: /v1/reporting/report_types/{report_type}
+      operations:
+      - name: getreportingreporttypesreporttype
+        method: GET
+        description: Stripe Retrieve Report Type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: report_type
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: reporting-reporting-2-rest
+    port: 8080
+    description: REST adapter for Stripe Reporting API — Reporting. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/reporting/report-runs
+      name: v1-reporting-report-runs
+      description: REST surface for v1-reporting-report_runs.
+      operations:
+      - method: GET
+        name: getreportingreportruns
+        description: Stripe List Report Runs
+        call: reporting-reporting-2.getreportingreportruns
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postreportingreportruns
+        description: Stripe Create Report Run
+        call: reporting-reporting-2.postreportingreportruns
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/reporting/report-runs/{report-run}
+      name: v1-reporting-report-runs-report-run
+      description: REST surface for v1-reporting-report_runs-report_run.
+      operations:
+      - method: GET
+        name: getreportingreportrunsreportrun
+        description: Stripe Retrieve Report Run
+        call: reporting-reporting-2.getreportingreportrunsreportrun
+        with:
+          report_run: rest.report_run
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/reporting/report-types
+      name: v1-reporting-report-types
+      description: REST surface for v1-reporting-report_types.
+      operations:
+      - method: GET
+        name: getreportingreporttypes
+        description: Stripe List Report Types
+        call: reporting-reporting-2.getreportingreporttypes
+        with:
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/reporting/report-types/{report-type}
+      name: v1-reporting-report-types-report-type
+      description: REST surface for v1-reporting-report_types-report_type.
+      operations:
+      - method: GET
+        name: getreportingreporttypesreporttype
+        description: Stripe Retrieve Report Type
+        call: reporting-reporting-2.getreportingreporttypesreporttype
+        with:
+          report_type: rest.report_type
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: reporting-reporting-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Reporting API — Reporting. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-list-report-runs
+      description: Stripe List Report Runs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reporting-reporting-2.getreportingreportruns
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-report-run
+      description: Stripe Create Report Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: reporting-reporting-2.postreportingreportruns
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-report-run
+      description: Stripe Retrieve Report Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reporting-reporting-2.getreportingreportrunsreportrun
+      with:
+        report_run: tools.report_run
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-report-types
+      description: Stripe List Report Types
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reporting-reporting-2.getreportingreporttypes
+      with:
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-report-type
+      description: Stripe Retrieve Report Type
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: reporting-reporting-2.getreportingreporttypesreporttype
+      with:
+        report_type: tools.report_type
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.

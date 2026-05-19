@@ -1,0 +1,512 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Subscription API — Subscriptions
+  description: 'Stripe Subscription API — Subscriptions. 8 operations. Lead operation: Subscriptions. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Subscriptions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: subscription-subscriptions
+    baseUri: https://api.stripe.com
+    description: Stripe Subscription API — Subscriptions business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-subscriptions
+      path: /v1/subscriptions
+      operations:
+      - name: getsubscriptions
+        method: GET
+        description: <p>By default, returns a list of subscriptions that have not been canceled. In order to list canceled
+          subscriptions, specify <code>status=canceled</code>.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: automatic_tax
+          in: query
+          type: object
+          description: Filter subscriptions by their automatic tax settings.
+        - name: collection_method
+          in: query
+          type: string
+          description: The collection method of the subscriptions to retrieve. Either `charge_automatically` or `send_invoice`.
+        - name: created
+          in: query
+          type: string
+        - name: current_period_end
+          in: query
+          type: string
+        - name: current_period_start
+          in: query
+          type: string
+        - name: customer
+          in: query
+          type: string
+          description: The ID of the customer whose subscriptions will be retrieved.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: price
+          in: query
+          type: string
+          description: Filter for subscriptions that contain this recurring price ID.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: The status of the subscriptions to retrieve. Passing in a value of `canceled` will return all canceled
+            subscriptions, including those belonging to deleted custo
+        - name: test_clock
+          in: query
+          type: string
+          description: Filter for subscriptions that are associated with the specified test clock. The response will not include
+            subscriptions with test clocks if this and the custome
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postsubscriptions
+        method: POST
+        description: <p>Creates a new subscription on an existing customer. Each customer can have up to 500 active or scheduled
+          subscriptions.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-subscriptions-search
+      path: /v1/subscriptions/search
+      operations:
+      - name: getsubscriptionssearch
+        method: GET
+        description: <p>Search for subscriptions you’ve previously created using Stripe’s <a href="/docs/search#search-query-language">Search
+          Query Language</a>.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: page
+          in: query
+          type: string
+          description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first
+            call. Use the next_page value returned in a previous respons
+        - name: query
+          in: query
+          type: string
+          description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language)
+            and the list of supported [query fields for subscript
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-subscriptions-subscription_exposed_id
+      path: /v1/subscriptions/{subscription_exposed_id}
+      operations:
+      - name: deletesubscriptionssubscriptionexposedid
+        method: DELETE
+        description: <p>Cancels a customer’s subscription immediately. The customer will not be charged again for the subscription.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getsubscriptionssubscriptionexposedid
+        method: GET
+        description: <p>Retrieves the subscription with the given ID.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postsubscriptionssubscriptionexposedid
+        method: POST
+        description: <p>Updates an existing subscription to match the specified parameters.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-subscriptions-subscription_exposed_id-discount
+      path: /v1/subscriptions/{subscription_exposed_id}/discount
+      operations:
+      - name: deletesubscriptionssubscriptionexposediddiscount
+        method: DELETE
+        description: <p>Removes the currently applied discount on a subscription.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-subscriptions-subscription-resume
+      path: /v1/subscriptions/{subscription}/resume
+      operations:
+      - name: postsubscriptionssubscriptionresume
+        method: POST
+        description: <p>Initiates resumption of a paused subscription, optionally resetting the billing cycle anchor and creating
+          prorations. If a resumption invoice is generated, it must be paid or marked uncollectible before the subscription
+          will be unpaused.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: subscription-subscriptions-rest
+    port: 8080
+    description: REST adapter for Stripe Subscription API — Subscriptions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/subscriptions
+      name: v1-subscriptions
+      description: REST surface for v1-subscriptions.
+      operations:
+      - method: GET
+        name: getsubscriptions
+        description: <p>By default, returns a list of subscriptions that have not been canceled. In order to list canceled
+          subscriptions, specify <code>status=canceled</code>.</p>
+        call: subscription-subscriptions.getsubscriptions
+        with:
+          automatic_tax: rest.automatic_tax
+          collection_method: rest.collection_method
+          created: rest.created
+          current_period_end: rest.current_period_end
+          current_period_start: rest.current_period_start
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          price: rest.price
+          starting_after: rest.starting_after
+          status: rest.status
+          test_clock: rest.test_clock
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsubscriptions
+        description: <p>Creates a new subscription on an existing customer. Each customer can have up to 500 active or scheduled
+          subscriptions.</p>
+        call: subscription-subscriptions.postsubscriptions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscriptions/search
+      name: v1-subscriptions-search
+      description: REST surface for v1-subscriptions-search.
+      operations:
+      - method: GET
+        name: getsubscriptionssearch
+        description: <p>Search for subscriptions you’ve previously created using Stripe’s <a href="/docs/search#search-query-language">Search
+          Query Language</a>.
+        call: subscription-subscriptions.getsubscriptionssearch
+        with:
+          expand: rest.expand
+          limit: rest.limit
+          page: rest.page
+          query: rest.query
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscriptions/{subscription-exposed-id}
+      name: v1-subscriptions-subscription-exposed-id
+      description: REST surface for v1-subscriptions-subscription_exposed_id.
+      operations:
+      - method: DELETE
+        name: deletesubscriptionssubscriptionexposedid
+        description: <p>Cancels a customer’s subscription immediately. The customer will not be charged again for the subscription.</p>
+        call: subscription-subscriptions.deletesubscriptionssubscriptionexposedid
+        with:
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getsubscriptionssubscriptionexposedid
+        description: <p>Retrieves the subscription with the given ID.</p>
+        call: subscription-subscriptions.getsubscriptionssubscriptionexposedid
+        with:
+          expand: rest.expand
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsubscriptionssubscriptionexposedid
+        description: <p>Updates an existing subscription to match the specified parameters.
+        call: subscription-subscriptions.postsubscriptionssubscriptionexposedid
+        with:
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscriptions/{subscription-exposed-id}/discount
+      name: v1-subscriptions-subscription-exposed-id-discount
+      description: REST surface for v1-subscriptions-subscription_exposed_id-discount.
+      operations:
+      - method: DELETE
+        name: deletesubscriptionssubscriptionexposediddiscount
+        description: <p>Removes the currently applied discount on a subscription.</p>
+        call: subscription-subscriptions.deletesubscriptionssubscriptionexposediddiscount
+        with:
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscriptions/{subscription}/resume
+      name: v1-subscriptions-subscription-resume
+      description: REST surface for v1-subscriptions-subscription-resume.
+      operations:
+      - method: POST
+        name: postsubscriptionssubscriptionresume
+        description: <p>Initiates resumption of a paused subscription, optionally resetting the billing cycle anchor and creating
+          prorations. If a resumption invoice is generated, it must be paid or marked uncollectible before the subscription
+          will be unpaused.
+        call: subscription-subscriptions.postsubscriptionssubscriptionresume
+        with:
+          subscription: rest.subscription
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: subscription-subscriptions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Subscription API — Subscriptions. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: p-by-default-returns-list-subscriptions
+      description: <p>By default, returns a list of subscriptions that have not been canceled. In order to list canceled subscriptions,
+        specify <code>status=canceled</code>.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscriptions.getsubscriptions
+      with:
+        automatic_tax: tools.automatic_tax
+        collection_method: tools.collection_method
+        created: tools.created
+        current_period_end: tools.current_period_end
+        current_period_start: tools.current_period_start
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        price: tools.price
+        starting_after: tools.starting_after
+        status: tools.status
+        test_clock: tools.test_clock
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-subscription-existing-customer
+      description: <p>Creates a new subscription on an existing customer. Each customer can have up to 500 active or scheduled
+        subscriptions.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscriptions.postsubscriptions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-search-subscriptions-you-ve-previously-created
+      description: <p>Search for subscriptions you’ve previously created using Stripe’s <a href="/docs/search#search-query-language">Search
+        Query Language</a>.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscriptions.getsubscriptionssearch
+      with:
+        expand: tools.expand
+        limit: tools.limit
+        page: tools.page
+        query: tools.query
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-cancels-customer-s-subscription-immediately-customer
+      description: <p>Cancels a customer’s subscription immediately. The customer will not be charged again for the subscription.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: subscription-subscriptions.deletesubscriptionssubscriptionexposedid
+      with:
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-subscription-given-id-p
+      description: <p>Retrieves the subscription with the given ID.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscriptions.getsubscriptionssubscriptionexposedid
+      with:
+        expand: tools.expand
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-existing-subscription-match-specified
+      description: <p>Updates an existing subscription to match the specified parameters.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscriptions.postsubscriptionssubscriptionexposedid
+      with:
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-removes-currently-applied-discount-subscription
+      description: <p>Removes the currently applied discount on a subscription.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: subscription-subscriptions.deletesubscriptionssubscriptionexposediddiscount
+      with:
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-initiates-resumption-paused-subscription-optionally
+      description: <p>Initiates resumption of a paused subscription, optionally resetting the billing cycle anchor and creating
+        prorations. If a resumption invoice is generated, it must be paid or marked uncollectible before the subscription
+        will be unpaused.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscriptions.postsubscriptionssubscriptionresume
+      with:
+        subscription: tools.subscription
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

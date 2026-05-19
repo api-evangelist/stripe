@@ -1,0 +1,277 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Promotion Codes API — Promotion Codes
+  description: 'Stripe Promotion Codes API — Promotion Codes. 4 operations. Lead operation: Promotion Codes. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Promotion Codes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: promotion-codes-promotion-codes
+    baseUri: https://api.stripe.com
+    description: Stripe Promotion Codes API — Promotion Codes business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-promotion_codes
+      path: /v1/promotion_codes
+      operations:
+      - name: getpromotioncodes
+        method: GET
+        description: <p>Returns a list of your promotion codes.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: active
+          in: query
+          type: boolean
+          description: Filter promotion codes by whether they are active.
+        - name: code
+          in: query
+          type: string
+          description: Only return promotion codes that have this case-insensitive code.
+        - name: coupon
+          in: query
+          type: string
+          description: Only return promotion codes for this coupon.
+        - name: created
+          in: query
+          type: string
+          description: 'A filter on the list, based on the object `created` field. The value can be a string with an integer
+            Unix timestamp, or it can be a dictionary with a number of '
+        - name: customer
+          in: query
+          type: string
+          description: Only return promotion codes that are restricted to this customer.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postpromotioncodes
+        method: POST
+        description: <p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer,
+          redemption limit, and expiration date.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-promotion_codes-promotion_code
+      path: /v1/promotion_codes/{promotion_code}
+      operations:
+      - name: getpromotioncodespromotioncode
+        method: GET
+        description: <p>Retrieves the promotion code with the given ID. In order to retrieve a promotion code by the customer-facing
+          <code>code</code> use <a href="/docs/api/promotion_codes/list">list</a> with the desired <code>code</code>.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: promotion_code
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postpromotioncodespromotioncode
+        method: POST
+        description: <p>Updates the specified promotion code by setting the values of the parameters passed. Most fields are,
+          by design, not editable.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: promotion_code
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: promotion-codes-promotion-codes-rest
+    port: 8080
+    description: REST adapter for Stripe Promotion Codes API — Promotion Codes. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/promotion-codes
+      name: v1-promotion-codes
+      description: REST surface for v1-promotion_codes.
+      operations:
+      - method: GET
+        name: getpromotioncodes
+        description: <p>Returns a list of your promotion codes.</p>
+        call: promotion-codes-promotion-codes.getpromotioncodes
+        with:
+          active: rest.active
+          code: rest.code
+          coupon: rest.coupon
+          created: rest.created
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpromotioncodes
+        description: <p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer,
+          redemption limit, and expiration date.</p>
+        call: promotion-codes-promotion-codes.postpromotioncodes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/promotion-codes/{promotion-code}
+      name: v1-promotion-codes-promotion-code
+      description: REST surface for v1-promotion_codes-promotion_code.
+      operations:
+      - method: GET
+        name: getpromotioncodespromotioncode
+        description: <p>Retrieves the promotion code with the given ID. In order to retrieve a promotion code by the customer-facing
+          <code>code</code> use <a href="/docs/api/promotion_codes/list">list</a> with the desired <code>code</code>.</p>
+        call: promotion-codes-promotion-codes.getpromotioncodespromotioncode
+        with:
+          expand: rest.expand
+          promotion_code: rest.promotion_code
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpromotioncodespromotioncode
+        description: <p>Updates the specified promotion code by setting the values of the parameters passed. Most fields are,
+          by design, not editable.</p>
+        call: promotion-codes-promotion-codes.postpromotioncodespromotioncode
+        with:
+          promotion_code: rest.promotion_code
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: promotion-codes-promotion-codes-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Promotion Codes API — Promotion Codes. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: p-returns-list-your-promotion-codes
+      description: <p>Returns a list of your promotion codes.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: promotion-codes-promotion-codes.getpromotioncodes
+      with:
+        active: tools.active
+        code: tools.code
+        coupon: tools.coupon
+        created: tools.created
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-a-promotion-code-points-coupon
+      description: <p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer, redemption
+        limit, and expiration date.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: promotion-codes-promotion-codes.postpromotioncodes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-promotion-code-given-id
+      description: <p>Retrieves the promotion code with the given ID. In order to retrieve a promotion code by the customer-facing
+        <code>code</code> use <a href="/docs/api/promotion_codes/list">list</a> with the desired <code>code</code>.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: promotion-codes-promotion-codes.getpromotioncodespromotioncode
+      with:
+        expand: tools.expand
+        promotion_code: tools.promotion_code
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-promotion-code-setting
+      description: <p>Updates the specified promotion code by setting the values of the parameters passed. Most fields are,
+        by design, not editable.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: promotion-codes-promotion-codes.postpromotioncodespromotioncode
+      with:
+        promotion_code: tools.promotion_code
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

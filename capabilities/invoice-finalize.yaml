@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Invoice API — Finalize
+  description: 'Stripe Invoice API — Finalize. 1 operations. Lead operation: Stripe Post   Invoices Invoice Finalize. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Finalize
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: invoice-finalize
+    baseUri: https://api.stripe.com
+    description: Stripe Invoice API — Finalize business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-invoices-invoice-finalize
+      path: /v1/invoices/{invoice}/finalize
+      operations:
+      - name: postinvoicesinvoicefinalize
+        method: POST
+        description: Stripe Post   Invoices Invoice Finalize
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: invoice
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: invoice-finalize-rest
+    port: 8080
+    description: REST adapter for Stripe Invoice API — Finalize. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/invoices/{invoice}/finalize
+      name: v1-invoices-invoice-finalize
+      description: REST surface for v1-invoices-invoice-finalize.
+      operations:
+      - method: POST
+        name: postinvoicesinvoicefinalize
+        description: Stripe Post   Invoices Invoice Finalize
+        call: invoice-finalize.postinvoicesinvoicefinalize
+        with:
+          invoice: rest.invoice
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: invoice-finalize-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Invoice API — Finalize. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-invoices-invoice-finalize
+      description: Stripe Post   Invoices Invoice Finalize
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: invoice-finalize.postinvoicesinvoicefinalize
+      with:
+        invoice: tools.invoice
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

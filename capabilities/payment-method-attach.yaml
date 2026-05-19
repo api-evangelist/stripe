@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Method API — Attach
+  description: 'Stripe Payment Method API — Attach. 1 operations. Lead operation: Stripe Post   Payment Methods Attach. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Attach
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-method-attach
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Method API — Attach business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_methods-payment_method-attach
+      path: /v1/payment_methods/{payment_method}/attach
+      operations:
+      - name: postpaymentmethodspaymentmethodattach
+        method: POST
+        description: Stripe Post   Payment Methods Attach
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-method-attach-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Method API — Attach. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-methods/{payment-method}/attach
+      name: v1-payment-methods-payment-method-attach
+      description: REST surface for v1-payment_methods-payment_method-attach.
+      operations:
+      - method: POST
+        name: postpaymentmethodspaymentmethodattach
+        description: Stripe Post   Payment Methods Attach
+        call: payment-method-attach.postpaymentmethodspaymentmethodattach
+        with:
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-method-attach-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Method API — Attach. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-methods-attach
+      description: Stripe Post   Payment Methods Attach
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-attach.postpaymentmethodspaymentmethodattach
+      with:
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

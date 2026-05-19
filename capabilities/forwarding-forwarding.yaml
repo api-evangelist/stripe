@@ -1,0 +1,174 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Forwarding API — Forwarding
+  description: 'Stripe Forwarding API — Forwarding. 3 operations. Lead operation: Stripe List Forwarding Requests. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Forwarding
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: forwarding-forwarding
+    baseUri: https://api.stripe.com
+    description: Stripe Forwarding API — Forwarding business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-forwarding-requests
+      path: /v1/forwarding/requests
+      operations:
+      - name: getforwardingrequests
+        method: GET
+        description: Stripe List Forwarding Requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: postforwardingrequests
+        method: POST
+        description: Stripe Create Forwarding Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-forwarding-requests-id
+      path: /v1/forwarding/requests/{id}
+      operations:
+      - name: getforwardingrequestsid
+        method: GET
+        description: Stripe Retrieve Forwarding Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: forwarding-forwarding-rest
+    port: 8080
+    description: REST adapter for Stripe Forwarding API — Forwarding. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/forwarding/requests
+      name: v1-forwarding-requests
+      description: REST surface for v1-forwarding-requests.
+      operations:
+      - method: GET
+        name: getforwardingrequests
+        description: Stripe List Forwarding Requests
+        call: forwarding-forwarding.getforwardingrequests
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postforwardingrequests
+        description: Stripe Create Forwarding Request
+        call: forwarding-forwarding.postforwardingrequests
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/forwarding/requests/{id}
+      name: v1-forwarding-requests-id
+      description: REST surface for v1-forwarding-requests-id.
+      operations:
+      - method: GET
+        name: getforwardingrequestsid
+        description: Stripe Retrieve Forwarding Request
+        call: forwarding-forwarding.getforwardingrequestsid
+        with:
+          id: rest.id
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: forwarding-forwarding-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Forwarding API — Forwarding. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-list-forwarding-requests
+      description: Stripe List Forwarding Requests
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: forwarding-forwarding.getforwardingrequests
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-forwarding-request
+      description: Stripe Create Forwarding Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: forwarding-forwarding.postforwardingrequests
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-forwarding-request
+      description: Stripe Retrieve Forwarding Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: forwarding-forwarding.getforwardingrequestsid
+      with:
+        id: tools.id
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,890 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Customers API — Post
+  description: 'Stripe Customers API — Post. 17 operations. Lead operation: Stripe Post   Customers. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customers-post
+    baseUri: https://api.stripe.com
+    description: Stripe Customers API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-customers
+      path: /v1/customers
+      operations:
+      - name: postcustomers
+        method: POST
+        description: Stripe Post   Customers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer
+      path: /v1/customers/{customer}
+      operations:
+      - name: postcustomerscustomer
+        method: POST
+        description: Stripe Post   Customers Customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-balance_transactions
+      path: /v1/customers/{customer}/balance_transactions
+      operations:
+      - name: postcustomerscustomerbalancetransactions
+        method: POST
+        description: Stripe Post   Customers Customer Balance Transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-customers-customer-balance_transactions-transaction
+      path: /v1/customers/{customer}/balance_transactions/{transaction}
+      operations:
+      - name: postcustomerscustomerbalancetransactionstransaction
+        method: POST
+        description: Stripe Post   Customers Customer Balance Transactions Transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: transaction
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-bank_accounts
+      path: /v1/customers/{customer}/bank_accounts
+      operations:
+      - name: postcustomerscustomerbankaccounts
+        method: POST
+        description: Stripe Post   Customers Customer Bank Accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-bank_accounts-id
+      path: /v1/customers/{customer}/bank_accounts/{id}
+      operations:
+      - name: postcustomerscustomerbankaccountsid
+        method: POST
+        description: Stripe Post   Customers Customer Bank Accounts Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-bank_accounts-id-verify
+      path: /v1/customers/{customer}/bank_accounts/{id}/verify
+      operations:
+      - name: postcustomerscustomerbankaccountsidverify
+        method: POST
+        description: Stripe Post   Customers Customer Bank Accounts Id Verify
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-cards
+      path: /v1/customers/{customer}/cards
+      operations:
+      - name: postcustomerscustomercards
+        method: POST
+        description: Stripe Post   Customers Customer Cards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-cards-id
+      path: /v1/customers/{customer}/cards/{id}
+      operations:
+      - name: postcustomerscustomercardsid
+        method: POST
+        description: Stripe Post   Customers Customer Cards Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-cash_balance
+      path: /v1/customers/{customer}/cash_balance
+      operations:
+      - name: postcustomerscustomercashbalance
+        method: POST
+        description: Stripe Post   Customers Customer Cash Balance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-funding_instructions
+      path: /v1/customers/{customer}/funding_instructions
+      operations:
+      - name: postcustomerscustomerfundinginstructions
+        method: POST
+        description: Stripe Post   Customers Customer Funding Instructions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-customers-customer-sources
+      path: /v1/customers/{customer}/sources
+      operations:
+      - name: postcustomerscustomersources
+        method: POST
+        description: Stripe Post   Customers Customer Sources
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-sources-id
+      path: /v1/customers/{customer}/sources/{id}
+      operations:
+      - name: postcustomerscustomersourcesid
+        method: POST
+        description: Stripe Post   Customers Customer Sources Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-sources-id-verify
+      path: /v1/customers/{customer}/sources/{id}/verify
+      operations:
+      - name: postcustomerscustomersourcesidverify
+        method: POST
+        description: Stripe Post   Customers Customer Sources Id Verify
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-subscriptions
+      path: /v1/customers/{customer}/subscriptions
+      operations:
+      - name: postcustomerscustomersubscriptions
+        method: POST
+        description: Stripe Post   Customers Customer Subscriptions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-subscriptions-subscription_exposed_id
+      path: /v1/customers/{customer}/subscriptions/{subscription_exposed_id}
+      operations:
+      - name: postcustomerscustomersubscriptionssubscriptionexposedid
+        method: POST
+        description: Stripe Post   Customers Customer Subscriptions Subscription Exposed Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: subscription_exposed_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-customers-customer-tax_ids
+      path: /v1/customers/{customer}/tax_ids
+      operations:
+      - name: postcustomerscustomertaxids
+        method: POST
+        description: Stripe Post   Customers Customer Tax Ids
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customers-post-rest
+    port: 8080
+    description: REST adapter for Stripe Customers API — Post. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/customers
+      name: v1-customers
+      description: REST surface for v1-customers.
+      operations:
+      - method: POST
+        name: postcustomers
+        description: Stripe Post   Customers
+        call: customers-post.postcustomers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}
+      name: v1-customers-customer
+      description: REST surface for v1-customers-customer.
+      operations:
+      - method: POST
+        name: postcustomerscustomer
+        description: Stripe Post   Customers Customer
+        call: customers-post.postcustomerscustomer
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/balance-transactions
+      name: v1-customers-customer-balance-transactions
+      description: REST surface for v1-customers-customer-balance_transactions.
+      operations:
+      - method: POST
+        name: postcustomerscustomerbalancetransactions
+        description: Stripe Post   Customers Customer Balance Transactions
+        call: customers-post.postcustomerscustomerbalancetransactions
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/balance-transactions/{transaction}
+      name: v1-customers-customer-balance-transactions-transaction
+      description: REST surface for v1-customers-customer-balance_transactions-transaction.
+      operations:
+      - method: POST
+        name: postcustomerscustomerbalancetransactionstransaction
+        description: Stripe Post   Customers Customer Balance Transactions Transaction
+        call: customers-post.postcustomerscustomerbalancetransactionstransaction
+        with:
+          customer: rest.customer
+          transaction: rest.transaction
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/bank-accounts
+      name: v1-customers-customer-bank-accounts
+      description: REST surface for v1-customers-customer-bank_accounts.
+      operations:
+      - method: POST
+        name: postcustomerscustomerbankaccounts
+        description: Stripe Post   Customers Customer Bank Accounts
+        call: customers-post.postcustomerscustomerbankaccounts
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/bank-accounts/{id}
+      name: v1-customers-customer-bank-accounts-id
+      description: REST surface for v1-customers-customer-bank_accounts-id.
+      operations:
+      - method: POST
+        name: postcustomerscustomerbankaccountsid
+        description: Stripe Post   Customers Customer Bank Accounts Id
+        call: customers-post.postcustomerscustomerbankaccountsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/bank-accounts/{id}/verify
+      name: v1-customers-customer-bank-accounts-id-verify
+      description: REST surface for v1-customers-customer-bank_accounts-id-verify.
+      operations:
+      - method: POST
+        name: postcustomerscustomerbankaccountsidverify
+        description: Stripe Post   Customers Customer Bank Accounts Id Verify
+        call: customers-post.postcustomerscustomerbankaccountsidverify
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/cards
+      name: v1-customers-customer-cards
+      description: REST surface for v1-customers-customer-cards.
+      operations:
+      - method: POST
+        name: postcustomerscustomercards
+        description: Stripe Post   Customers Customer Cards
+        call: customers-post.postcustomerscustomercards
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/cards/{id}
+      name: v1-customers-customer-cards-id
+      description: REST surface for v1-customers-customer-cards-id.
+      operations:
+      - method: POST
+        name: postcustomerscustomercardsid
+        description: Stripe Post   Customers Customer Cards Id
+        call: customers-post.postcustomerscustomercardsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/cash-balance
+      name: v1-customers-customer-cash-balance
+      description: REST surface for v1-customers-customer-cash_balance.
+      operations:
+      - method: POST
+        name: postcustomerscustomercashbalance
+        description: Stripe Post   Customers Customer Cash Balance
+        call: customers-post.postcustomerscustomercashbalance
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/funding-instructions
+      name: v1-customers-customer-funding-instructions
+      description: REST surface for v1-customers-customer-funding_instructions.
+      operations:
+      - method: POST
+        name: postcustomerscustomerfundinginstructions
+        description: Stripe Post   Customers Customer Funding Instructions
+        call: customers-post.postcustomerscustomerfundinginstructions
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/sources
+      name: v1-customers-customer-sources
+      description: REST surface for v1-customers-customer-sources.
+      operations:
+      - method: POST
+        name: postcustomerscustomersources
+        description: Stripe Post   Customers Customer Sources
+        call: customers-post.postcustomerscustomersources
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/sources/{id}
+      name: v1-customers-customer-sources-id
+      description: REST surface for v1-customers-customer-sources-id.
+      operations:
+      - method: POST
+        name: postcustomerscustomersourcesid
+        description: Stripe Post   Customers Customer Sources Id
+        call: customers-post.postcustomerscustomersourcesid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/sources/{id}/verify
+      name: v1-customers-customer-sources-id-verify
+      description: REST surface for v1-customers-customer-sources-id-verify.
+      operations:
+      - method: POST
+        name: postcustomerscustomersourcesidverify
+        description: Stripe Post   Customers Customer Sources Id Verify
+        call: customers-post.postcustomerscustomersourcesidverify
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/subscriptions
+      name: v1-customers-customer-subscriptions
+      description: REST surface for v1-customers-customer-subscriptions.
+      operations:
+      - method: POST
+        name: postcustomerscustomersubscriptions
+        description: Stripe Post   Customers Customer Subscriptions
+        call: customers-post.postcustomerscustomersubscriptions
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/subscriptions/{subscription-exposed-id}
+      name: v1-customers-customer-subscriptions-subscription-exposed-id
+      description: REST surface for v1-customers-customer-subscriptions-subscription_exposed_id.
+      operations:
+      - method: POST
+        name: postcustomerscustomersubscriptionssubscriptionexposedid
+        description: Stripe Post   Customers Customer Subscriptions Subscription Exposed Id
+        call: customers-post.postcustomerscustomersubscriptionssubscriptionexposedid
+        with:
+          customer: rest.customer
+          subscription_exposed_id: rest.subscription_exposed_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/tax-ids
+      name: v1-customers-customer-tax-ids
+      description: REST surface for v1-customers-customer-tax_ids.
+      operations:
+      - method: POST
+        name: postcustomerscustomertaxids
+        description: Stripe Post   Customers Customer Tax Ids
+        call: customers-post.postcustomerscustomertaxids
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customers-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Customers API — Post. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-customers
+      description: Stripe Post   Customers
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer
+      description: Stripe Post   Customers Customer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomer
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-balance
+      description: Stripe Post   Customers Customer Balance Transactions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerbalancetransactions
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-balance-2
+      description: Stripe Post   Customers Customer Balance Transactions Transaction
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerbalancetransactionstransaction
+      with:
+        customer: tools.customer
+        transaction: tools.transaction
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-bank
+      description: Stripe Post   Customers Customer Bank Accounts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerbankaccounts
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-bank-2
+      description: Stripe Post   Customers Customer Bank Accounts Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerbankaccountsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-bank-3
+      description: Stripe Post   Customers Customer Bank Accounts Id Verify
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerbankaccountsidverify
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-cards
+      description: Stripe Post   Customers Customer Cards
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomercards
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-cards-2
+      description: Stripe Post   Customers Customer Cards Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomercardsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-cash
+      description: Stripe Post   Customers Customer Cash Balance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomercashbalance
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-funding
+      description: Stripe Post   Customers Customer Funding Instructions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomerfundinginstructions
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-sources
+      description: Stripe Post   Customers Customer Sources
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomersources
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-sources-2
+      description: Stripe Post   Customers Customer Sources Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomersourcesid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-sources-3
+      description: Stripe Post   Customers Customer Sources Id Verify
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomersourcesidverify
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-subscriptions
+      description: Stripe Post   Customers Customer Subscriptions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomersubscriptions
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-subscriptions-2
+      description: Stripe Post   Customers Customer Subscriptions Subscription Exposed Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomersubscriptionssubscriptionexposedid
+      with:
+        customer: tools.customer
+        subscription_exposed_id: tools.subscription_exposed_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-tax
+      description: Stripe Post   Customers Customer Tax Ids
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-post.postcustomerscustomertaxids
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

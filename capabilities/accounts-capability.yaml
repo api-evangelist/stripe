@@ -1,0 +1,142 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Accounts API — Capability
+  description: 'Stripe Accounts API — Capability. 2 operations. Lead operation: Stripe Retrieve Capability. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Capability
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: accounts-capability
+    baseUri: https://api.stripe.com
+    description: Stripe Accounts API — Capability business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-account-capabilities-capability
+      path: /v1/accounts/{account}/capabilities/{capability}
+      operations:
+      - name: getaccountsaccountcapabilitiescapability
+        method: GET
+        description: Stripe Retrieve Capability
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: capability
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postaccountsaccountcapabilitiescapability
+        method: POST
+        description: Stripe Update Capability
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: capability
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: accounts-capability-rest
+    port: 8080
+    description: REST adapter for Stripe Accounts API — Capability. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/accounts/{account}/capabilities/{capability}
+      name: v1-accounts-account-capabilities-capability
+      description: REST surface for v1-accounts-account-capabilities-capability.
+      operations:
+      - method: GET
+        name: getaccountsaccountcapabilitiescapability
+        description: Stripe Retrieve Capability
+        call: accounts-capability.getaccountsaccountcapabilitiescapability
+        with:
+          account: rest.account
+          capability: rest.capability
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccountsaccountcapabilitiescapability
+        description: Stripe Update Capability
+        call: accounts-capability.postaccountsaccountcapabilitiescapability
+        with:
+          account: rest.account
+          capability: rest.capability
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: accounts-capability-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Accounts API — Capability. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-retrieve-capability
+      description: Stripe Retrieve Capability
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: accounts-capability.getaccountsaccountcapabilitiescapability
+      with:
+        account: tools.account
+        capability: tools.capability
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-capability
+      description: Stripe Update Capability
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-capability.postaccountsaccountcapabilitiescapability
+      with:
+        account: tools.account
+        capability: tools.capability
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

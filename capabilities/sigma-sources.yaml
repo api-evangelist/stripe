@@ -1,0 +1,433 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Sources API — Sources
+  description: 'Stripe Sources API — Sources. 7 operations. Lead operation: Sources. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Sources
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sigma-sources
+    baseUri: https://api.stripe.com
+    description: Stripe Sources API — Sources business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-sources
+      path: /v1/sources
+      operations:
+      - name: postsources
+        method: POST
+        description: <p>Creates a new source object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source
+      path: /v1/sources/{source}
+      operations:
+      - name: getsourcessource
+        method: GET
+        description: <p>Retrieves an existing source object. Supply the unique source ID from a source creation request and
+          Stripe will return the corresponding up-to-date source object information.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_secret
+          in: query
+          type: string
+          description: The client secret of the source. Required if a publishable key is used to retrieve the source.
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postsourcessource
+        method: POST
+        description: <p>Updates the specified source by setting the values of the parameters passed. Any parameters not provided
+          will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source-mandate_notifications-mandate_notification
+      path: /v1/sources/{source}/mandate_notifications/{mandate_notification}
+      operations:
+      - name: getsourcessourcemandatenotificationsmandatenotification
+        method: GET
+        description: <p>Retrieves a new Source MandateNotification.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: mandate_notification
+          in: path
+          type: string
+          required: true
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source-source_transactions
+      path: /v1/sources/{source}/source_transactions
+      operations:
+      - name: getsourcessourcesourcetransactions
+        method: GET
+        description: <p>List source transactions for a given source.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source-source_transactions-source_transaction
+      path: /v1/sources/{source}/source_transactions/{source_transaction}
+      operations:
+      - name: getsourcessourcesourcetransactionssourcetransaction
+        method: GET
+        description: <p>Retrieve an existing source transaction object. Supply the unique source ID from a source creation
+          request and the source transaction ID and Stripe will return the corresponding up-to-date source object information.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: source_transaction
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source-verify
+      path: /v1/sources/{source}/verify
+      operations:
+      - name: postsourcessourceverify
+        method: POST
+        description: <p>Verify a given source.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sigma-sources-rest
+    port: 8080
+    description: REST adapter for Stripe Sources API — Sources. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/sources
+      name: v1-sources
+      description: REST surface for v1-sources.
+      operations:
+      - method: POST
+        name: postsources
+        description: <p>Creates a new source object.</p>
+        call: sigma-sources.postsources
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}
+      name: v1-sources-source
+      description: REST surface for v1-sources-source.
+      operations:
+      - method: GET
+        name: getsourcessource
+        description: <p>Retrieves an existing source object. Supply the unique source ID from a source creation request and
+          Stripe will return the corresponding up-to-date source object information.</p>
+        call: sigma-sources.getsourcessource
+        with:
+          client_secret: rest.client_secret
+          expand: rest.expand
+          source: rest.source
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsourcessource
+        description: <p>Updates the specified source by setting the values of the parameters passed. Any parameters not provided
+          will be left unchanged.</p>
+        call: sigma-sources.postsourcessource
+        with:
+          source: rest.source
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}/mandate-notifications/{mandate-notification}
+      name: v1-sources-source-mandate-notifications-mandate-notification
+      description: REST surface for v1-sources-source-mandate_notifications-mandate_notification.
+      operations:
+      - method: GET
+        name: getsourcessourcemandatenotificationsmandatenotification
+        description: <p>Retrieves a new Source MandateNotification.</p>
+        call: sigma-sources.getsourcessourcemandatenotificationsmandatenotification
+        with:
+          expand: rest.expand
+          mandate_notification: rest.mandate_notification
+          source: rest.source
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}/source-transactions
+      name: v1-sources-source-source-transactions
+      description: REST surface for v1-sources-source-source_transactions.
+      operations:
+      - method: GET
+        name: getsourcessourcesourcetransactions
+        description: <p>List source transactions for a given source.</p>
+        call: sigma-sources.getsourcessourcesourcetransactions
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          source: rest.source
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}/source-transactions/{source-transaction}
+      name: v1-sources-source-source-transactions-source-transaction
+      description: REST surface for v1-sources-source-source_transactions-source_transaction.
+      operations:
+      - method: GET
+        name: getsourcessourcesourcetransactionssourcetransaction
+        description: <p>Retrieve an existing source transaction object. Supply the unique source ID from a source creation
+          request and the source transaction ID and Stripe will return the corresponding up-to-date source object information.</p>
+        call: sigma-sources.getsourcessourcesourcetransactionssourcetransaction
+        with:
+          expand: rest.expand
+          source: rest.source
+          source_transaction: rest.source_transaction
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}/verify
+      name: v1-sources-source-verify
+      description: REST surface for v1-sources-source-verify.
+      operations:
+      - method: POST
+        name: postsourcessourceverify
+        description: <p>Verify a given source.</p>
+        call: sigma-sources.postsourcessourceverify
+        with:
+          source: rest.source
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sigma-sources-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Sources API — Sources. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: p-creates-new-source-object-p
+      description: <p>Creates a new source object.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sigma-sources.postsources
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-existing-source-object-supply
+      description: <p>Retrieves an existing source object. Supply the unique source ID from a source creation request and
+        Stripe will return the corresponding up-to-date source object information.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sources.getsourcessource
+      with:
+        client_secret: tools.client_secret
+        expand: tools.expand
+        source: tools.source
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-source-setting-values
+      description: <p>Updates the specified source by setting the values of the parameters passed. Any parameters not provided
+        will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sigma-sources.postsourcessource
+      with:
+        source: tools.source
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-new-source-mandatenotification-p
+      description: <p>Retrieves a new Source MandateNotification.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sources.getsourcessourcemandatenotificationsmandatenotification
+      with:
+        expand: tools.expand
+        mandate_notification: tools.mandate_notification
+        source: tools.source
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-list-source-transactions-given-source
+      description: <p>List source transactions for a given source.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sources.getsourcessourcesourcetransactions
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        source: tools.source
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieve-existing-source-transaction-object
+      description: <p>Retrieve an existing source transaction object. Supply the unique source ID from a source creation request
+        and the source transaction ID and Stripe will return the corresponding up-to-date source object information.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sources.getsourcessourcesourcetransactionssourcetransaction
+      with:
+        expand: tools.expand
+        source: tools.source
+        source_transaction: tools.source_transaction
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-verify-given-source-p
+      description: <p>Verify a given source.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sigma-sources.postsourcessourceverify
+      with:
+        source: tools.source
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

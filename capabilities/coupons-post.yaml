@@ -1,0 +1,128 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Coupons API — Post
+  description: 'Stripe Coupons API — Post. 2 operations. Lead operation: Stripe Post   Coupons. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coupons-post
+    baseUri: https://api.stripe.com
+    description: Stripe Coupons API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-coupons
+      path: /v1/coupons
+      operations:
+      - name: postcoupons
+        method: POST
+        description: Stripe Post   Coupons
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-coupons-coupon
+      path: /v1/coupons/{coupon}
+      operations:
+      - name: postcouponscoupon
+        method: POST
+        description: Stripe Post   Coupons Coupon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: coupon
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coupons-post-rest
+    port: 8080
+    description: REST adapter for Stripe Coupons API — Post. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/coupons
+      name: v1-coupons
+      description: REST surface for v1-coupons.
+      operations:
+      - method: POST
+        name: postcoupons
+        description: Stripe Post   Coupons
+        call: coupons-post.postcoupons
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/coupons/{coupon}
+      name: v1-coupons-coupon
+      description: REST surface for v1-coupons-coupon.
+      operations:
+      - method: POST
+        name: postcouponscoupon
+        description: Stripe Post   Coupons Coupon
+        call: coupons-post.postcouponscoupon
+        with:
+          coupon: rest.coupon
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coupons-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Coupons API — Post. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-coupons
+      description: Stripe Post   Coupons
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coupons-post.postcoupons
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-coupons-coupon
+      description: Stripe Post   Coupons Coupon
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coupons-post.postcouponscoupon
+      with:
+        coupon: tools.coupon
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Checkout API — Expire
+  description: 'Stripe Checkout API — Expire. 1 operations. Lead operation: Stripe Post   Checkout Sessions Session Expire.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Expire
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: checkout-expire
+    baseUri: https://api.stripe.com
+    description: Stripe Checkout API — Expire business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-checkout-sessions-session-expire
+      path: /v1/checkout/sessions/{session}/expire
+      operations:
+      - name: postcheckoutsessionssessionexpire
+        method: POST
+        description: Stripe Post   Checkout Sessions Session Expire
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: checkout-expire-rest
+    port: 8080
+    description: REST adapter for Stripe Checkout API — Expire. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/checkout/sessions/{session}/expire
+      name: v1-checkout-sessions-session-expire
+      description: REST surface for v1-checkout-sessions-session-expire.
+      operations:
+      - method: POST
+        name: postcheckoutsessionssessionexpire
+        description: Stripe Post   Checkout Sessions Session Expire
+        call: checkout-expire.postcheckoutsessionssessionexpire
+        with:
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: checkout-expire-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Checkout API — Expire. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-checkout-sessions-session
+      description: Stripe Post   Checkout Sessions Session Expire
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: checkout-expire.postcheckoutsessionssessionexpire
+      with:
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

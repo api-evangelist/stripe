@@ -1,0 +1,241 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Application Fees API — Refund
+  description: 'Stripe Application Fees API — Refund. 4 operations. Lead operation: Stripe Retrieve Application Fee Refund.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Refund
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: application-fees-refund
+    baseUri: https://api.stripe.com
+    description: Stripe Application Fees API — Refund business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-application_fees-fee-refunds-id
+      path: /v1/application_fees/{fee}/refunds/{id}
+      operations:
+      - name: getapplicationfeesfeerefundsid
+        method: GET
+        description: Stripe Retrieve Application Fee Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: fee
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postapplicationfeesfeerefundsid
+        method: POST
+        description: Stripe Update Application Fee Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fee
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-application_fees-id-refund
+      path: /v1/application_fees/{id}/refund
+      operations:
+      - name: postapplicationfeesidrefund
+        method: POST
+        description: Stripe Refund Application Fee
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-application_fees-id-refunds
+      path: /v1/application_fees/{id}/refunds
+      operations:
+      - name: postapplicationfeesidrefunds
+        method: POST
+        description: Stripe Create Application Fee Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: application-fees-refund-rest
+    port: 8080
+    description: REST adapter for Stripe Application Fees API — Refund. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/application-fees/{fee}/refunds/{id}
+      name: v1-application-fees-fee-refunds-id
+      description: REST surface for v1-application_fees-fee-refunds-id.
+      operations:
+      - method: GET
+        name: getapplicationfeesfeerefundsid
+        description: Stripe Retrieve Application Fee Refund
+        call: application-fees-refund.getapplicationfeesfeerefundsid
+        with:
+          expand: rest.expand
+          fee: rest.fee
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postapplicationfeesfeerefundsid
+        description: Stripe Update Application Fee Refund
+        call: application-fees-refund.postapplicationfeesfeerefundsid
+        with:
+          fee: rest.fee
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/application-fees/{id}/refund
+      name: v1-application-fees-id-refund
+      description: REST surface for v1-application_fees-id-refund.
+      operations:
+      - method: POST
+        name: postapplicationfeesidrefund
+        description: Stripe Refund Application Fee
+        call: application-fees-refund.postapplicationfeesidrefund
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/application-fees/{id}/refunds
+      name: v1-application-fees-id-refunds
+      description: REST surface for v1-application_fees-id-refunds.
+      operations:
+      - method: POST
+        name: postapplicationfeesidrefunds
+        description: Stripe Create Application Fee Refund
+        call: application-fees-refund.postapplicationfeesidrefunds
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: application-fees-refund-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Application Fees API — Refund. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-retrieve-application-fee-refund
+      description: Stripe Retrieve Application Fee Refund
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: application-fees-refund.getapplicationfeesfeerefundsid
+      with:
+        expand: tools.expand
+        fee: tools.fee
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-application-fee-refund
+      description: Stripe Update Application Fee Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: application-fees-refund.postapplicationfeesfeerefundsid
+      with:
+        fee: tools.fee
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-refund-application-fee
+      description: Stripe Refund Application Fee
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: application-fees-refund.postapplicationfeesidrefund
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-application-fee-refund
+      description: Stripe Create Application Fee Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: application-fees-refund.postapplicationfeesidrefunds
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

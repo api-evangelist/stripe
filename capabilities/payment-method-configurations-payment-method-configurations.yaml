@@ -1,0 +1,212 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Method Configurations API — Payment Method Configurations
+  description: 'Stripe Payment Method Configurations API — Payment Method Configurations. 4 operations. Lead operation: Stripe
+    List Payment Method Configurations. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Payment Method Configurations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-method-configurations-payment-method-configurations
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Method Configurations API — Payment Method Configurations business capability. Self-contained,
+      no shared references.
+    resources:
+    - name: v1-payment_method_configurations
+      path: /v1/payment_method_configurations
+      operations:
+      - name: getpaymentmethodconfigurations
+        method: GET
+        description: Stripe List Payment Method Configurations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: application
+          in: query
+          type: string
+          description: The Connect application to filter by.
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+      - name: postpaymentmethodconfigurations
+        method: POST
+        description: Stripe Create Payment Method Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_method_configurations-configuration
+      path: /v1/payment_method_configurations/{configuration}
+      operations:
+      - name: getpaymentmethodconfigurationsconfiguration
+        method: GET
+        description: Stripe Retrieve Payment Method Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+      - name: postpaymentmethodconfigurationsconfiguration
+        method: POST
+        description: Stripe Update Payment Method Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-method-configurations-payment-method-configurations-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Method Configurations API — Payment Method Configurations. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-method-configurations
+      name: v1-payment-method-configurations
+      description: REST surface for v1-payment_method_configurations.
+      operations:
+      - method: GET
+        name: getpaymentmethodconfigurations
+        description: Stripe List Payment Method Configurations
+        call: payment-method-configurations-payment-method-configurations.getpaymentmethodconfigurations
+        with:
+          application: rest.application
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpaymentmethodconfigurations
+        description: Stripe Create Payment Method Configuration
+        call: payment-method-configurations-payment-method-configurations.postpaymentmethodconfigurations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-method-configurations/{configuration}
+      name: v1-payment-method-configurations-configuration
+      description: REST surface for v1-payment_method_configurations-configuration.
+      operations:
+      - method: GET
+        name: getpaymentmethodconfigurationsconfiguration
+        description: Stripe Retrieve Payment Method Configuration
+        call: payment-method-configurations-payment-method-configurations.getpaymentmethodconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpaymentmethodconfigurationsconfiguration
+        description: Stripe Update Payment Method Configuration
+        call: payment-method-configurations-payment-method-configurations.postpaymentmethodconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-method-configurations-payment-method-configurations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Method Configurations API — Payment Method Configurations. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: stripe-list-payment-method-configurations
+      description: Stripe List Payment Method Configurations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-method-configurations-payment-method-configurations.getpaymentmethodconfigurations
+      with:
+        application: tools.application
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-payment-method-configuration
+      description: Stripe Create Payment Method Configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-configurations-payment-method-configurations.postpaymentmethodconfigurations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-payment-method-configuration
+      description: Stripe Retrieve Payment Method Configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-method-configurations-payment-method-configurations.getpaymentmethodconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-payment-method-configuration
+      description: Stripe Update Payment Method Configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-configurations-payment-method-configurations.postpaymentmethodconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

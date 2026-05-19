@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Identity API — Redact
+  description: 'Stripe Identity API — Redact. 1 operations. Lead operation: Stripe Post   Identity Verification Sessions Session
+    Redact. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Redact
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: identity-redact
+    baseUri: https://api.stripe.com
+    description: Stripe Identity API — Redact business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-identity-verification_sessions-session-redact
+      path: /v1/identity/verification_sessions/{session}/redact
+      operations:
+      - name: postidentityverificationsessionssessionredact
+        method: POST
+        description: Stripe Post   Identity Verification Sessions Session Redact
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: identity-redact-rest
+    port: 8080
+    description: REST adapter for Stripe Identity API — Redact. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/identity/verification-sessions/{session}/redact
+      name: v1-identity-verification-sessions-session-redact
+      description: REST surface for v1-identity-verification_sessions-session-redact.
+      operations:
+      - method: POST
+        name: postidentityverificationsessionssessionredact
+        description: Stripe Post   Identity Verification Sessions Session Redact
+        call: identity-redact.postidentityverificationsessionssessionredact
+        with:
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: identity-redact-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Identity API — Redact. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-identity-verification-sessions
+      description: Stripe Post   Identity Verification Sessions Session Redact
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: identity-redact.postidentityverificationsessionssessionredact
+      with:
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

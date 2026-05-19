@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Link API — Link Account Sessions
+  description: 'Stripe Link API — Link Account Sessions. 2 operations. Lead operation: Link Account Sessions. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Link Account Sessions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: link-link-account-sessions
+    baseUri: https://api.stripe.com
+    description: Stripe Link API — Link Account Sessions business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-link_account_sessions
+      path: /v1/link_account_sessions
+      operations:
+      - name: postlinkaccountsessions
+        method: POST
+        description: <p>To launch the Financial Connections authorization flow, create a <code>Session</code>. The session’s
+          <code>client_secret</code> can be used to launch the flow using Stripe.js.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-link_account_sessions-session
+      path: /v1/link_account_sessions/{session}
+      operations:
+      - name: getlinkaccountsessionssession
+        method: GET
+        description: <p>Retrieves the details of a Financial Connections <code>Session</code></p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: session
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: link-link-account-sessions-rest
+    port: 8080
+    description: REST adapter for Stripe Link API — Link Account Sessions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/link-account-sessions
+      name: v1-link-account-sessions
+      description: REST surface for v1-link_account_sessions.
+      operations:
+      - method: POST
+        name: postlinkaccountsessions
+        description: <p>To launch the Financial Connections authorization flow, create a <code>Session</code>. The session’s
+          <code>client_secret</code> can be used to launch the flow using Stripe.js.</p>
+        call: link-link-account-sessions.postlinkaccountsessions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/link-account-sessions/{session}
+      name: v1-link-account-sessions-session
+      description: REST surface for v1-link_account_sessions-session.
+      operations:
+      - method: GET
+        name: getlinkaccountsessionssession
+        description: <p>Retrieves the details of a Financial Connections <code>Session</code></p>
+        call: link-link-account-sessions.getlinkaccountsessionssession
+        with:
+          expand: rest.expand
+          session: rest.session
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: link-link-account-sessions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Link API — Link Account Sessions. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: p-to-launch-financial-connections-authorization
+      description: <p>To launch the Financial Connections authorization flow, create a <code>Session</code>. The session’s
+        <code>client_secret</code> can be used to launch the flow using Stripe.js.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: link-link-account-sessions.postlinkaccountsessions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-details-financial-connections-code-session
+      description: <p>Retrieves the details of a Financial Connections <code>Session</code></p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: link-link-account-sessions.getlinkaccountsessionssession
+      with:
+        expand: tools.expand
+        session: tools.session
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,454 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Quotes API — Quotes
+  description: 'Stripe Quotes API — Quotes. 9 operations. Lead operation: Stripe List Quotes. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Quotes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: quotes-quotes-2
+    baseUri: https://api.stripe.com
+    description: Stripe Quotes API — Quotes business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-quotes
+      path: /v1/quotes
+      operations:
+      - name: getquotes
+        method: GET
+        description: Stripe List Quotes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: query
+          type: string
+          description: The ID of the customer whose quotes will be retrieved.
+        - name: status
+          in: query
+          type: string
+          description: The status of the quotes to retrieve.
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: postquotes
+        method: POST
+        description: Stripe Create Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote
+      path: /v1/quotes/{quote}
+      operations:
+      - name: getquotesquote
+        method: GET
+        description: Stripe Retrieve Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+      - name: postquotesquote
+        method: POST
+        description: Stripe Update Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-accept
+      path: /v1/quotes/{quote}/accept
+      operations:
+      - name: postquotesquoteaccept
+        method: POST
+        description: Stripe Accept Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+    - name: v1-quotes-quote-cancel
+      path: /v1/quotes/{quote}/cancel
+      operations:
+      - name: postquotesquotecancel
+        method: POST
+        description: Stripe Cancel Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+    - name: v1-quotes-quote-finalize
+      path: /v1/quotes/{quote}/finalize
+      operations:
+      - name: postquotesquotefinalize
+        method: POST
+        description: Stripe Finalize Quote
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-line_items
+      path: /v1/quotes/{quote}/line_items
+      operations:
+      - name: getquotesquotelineitems
+        method: GET
+        description: Stripe List Quote Line Items
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+    - name: v1-quotes-quote-pdf
+      path: /v1/quotes/{quote}/pdf
+      operations:
+      - name: getquotesquotepdf
+        method: GET
+        description: Stripe Download Quote PDF
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: quotes-quotes-2-rest
+    port: 8080
+    description: REST adapter for Stripe Quotes API — Quotes. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/quotes
+      name: v1-quotes
+      description: REST surface for v1-quotes.
+      operations:
+      - method: GET
+        name: getquotes
+        description: Stripe List Quotes
+        call: quotes-quotes-2.getquotes
+        with:
+          customer: rest.customer
+          status: rest.status
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postquotes
+        description: Stripe Create Quote
+        call: quotes-quotes-2.postquotes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}
+      name: v1-quotes-quote
+      description: REST surface for v1-quotes-quote.
+      operations:
+      - method: GET
+        name: getquotesquote
+        description: Stripe Retrieve Quote
+        call: quotes-quotes-2.getquotesquote
+        with:
+          quote: rest.quote
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postquotesquote
+        description: Stripe Update Quote
+        call: quotes-quotes-2.postquotesquote
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/accept
+      name: v1-quotes-quote-accept
+      description: REST surface for v1-quotes-quote-accept.
+      operations:
+      - method: POST
+        name: postquotesquoteaccept
+        description: Stripe Accept Quote
+        call: quotes-quotes-2.postquotesquoteaccept
+        with:
+          quote: rest.quote
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/cancel
+      name: v1-quotes-quote-cancel
+      description: REST surface for v1-quotes-quote-cancel.
+      operations:
+      - method: POST
+        name: postquotesquotecancel
+        description: Stripe Cancel Quote
+        call: quotes-quotes-2.postquotesquotecancel
+        with:
+          quote: rest.quote
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/finalize
+      name: v1-quotes-quote-finalize
+      description: REST surface for v1-quotes-quote-finalize.
+      operations:
+      - method: POST
+        name: postquotesquotefinalize
+        description: Stripe Finalize Quote
+        call: quotes-quotes-2.postquotesquotefinalize
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/line-items
+      name: v1-quotes-quote-line-items
+      description: REST surface for v1-quotes-quote-line_items.
+      operations:
+      - method: GET
+        name: getquotesquotelineitems
+        description: Stripe List Quote Line Items
+        call: quotes-quotes-2.getquotesquotelineitems
+        with:
+          quote: rest.quote
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/pdf
+      name: v1-quotes-quote-pdf
+      description: REST surface for v1-quotes-quote-pdf.
+      operations:
+      - method: GET
+        name: getquotesquotepdf
+        description: Stripe Download Quote PDF
+        call: quotes-quotes-2.getquotesquotepdf
+        with:
+          quote: rest.quote
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: quotes-quotes-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Quotes API — Quotes. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-list-quotes
+      description: Stripe List Quotes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes-2.getquotes
+      with:
+        customer: tools.customer
+        status: tools.status
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-quote
+      description: Stripe Create Quote
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes-2.postquotes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-quote
+      description: Stripe Retrieve Quote
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes-2.getquotesquote
+      with:
+        quote: tools.quote
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-quote
+      description: Stripe Update Quote
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes-2.postquotesquote
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-accept-quote
+      description: Stripe Accept Quote
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes-2.postquotesquoteaccept
+      with:
+        quote: tools.quote
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-cancel-quote
+      description: Stripe Cancel Quote
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes-2.postquotesquotecancel
+      with:
+        quote: tools.quote
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-finalize-quote
+      description: Stripe Finalize Quote
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes-2.postquotesquotefinalize
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-quote-line-items
+      description: Stripe List Quote Line Items
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes-2.getquotesquotelineitems
+      with:
+        quote: tools.quote
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-download-quote-pdf
+      description: Stripe Download Quote PDF
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes-2.getquotesquotepdf
+      with:
+        quote: tools.quote
+      outputParameters:
+      - type: object
+        mapping: $.

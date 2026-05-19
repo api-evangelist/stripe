@@ -1,0 +1,261 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Customers API — Tax
+  description: 'Stripe Customers API — Tax. 4 operations. Lead operation: Stripe Get   Customers Customer Tax Ids. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Tax
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customers-tax
+    baseUri: https://api.stripe.com
+    description: Stripe Customers API — Tax business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-customers-customer-tax_ids
+      path: /v1/customers/{customer}/tax_ids
+      operations:
+      - name: getcustomerscustomertaxids
+        method: GET
+        description: Stripe Get   Customers Customer Tax Ids
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postcustomerscustomertaxids
+        method: POST
+        description: Stripe Post   Customers Customer Tax Ids
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-customers-customer-tax_ids-id
+      path: /v1/customers/{customer}/tax_ids/{id}
+      operations:
+      - name: deletecustomerscustomertaxidsid
+        method: DELETE
+        description: Stripe Delete   Customers Customer Tax Ids Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getcustomerscustomertaxidsid
+        method: GET
+        description: Stripe Get   Customers Customer Tax Ids Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customers-tax-rest
+    port: 8080
+    description: REST adapter for Stripe Customers API — Tax. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/customers/{customer}/tax-ids
+      name: v1-customers-customer-tax-ids
+      description: REST surface for v1-customers-customer-tax_ids.
+      operations:
+      - method: GET
+        name: getcustomerscustomertaxids
+        description: Stripe Get   Customers Customer Tax Ids
+        call: customers-tax.getcustomerscustomertaxids
+        with:
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postcustomerscustomertaxids
+        description: Stripe Post   Customers Customer Tax Ids
+        call: customers-tax.postcustomerscustomertaxids
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/tax-ids/{id}
+      name: v1-customers-customer-tax-ids-id
+      description: REST surface for v1-customers-customer-tax_ids-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomertaxidsid
+        description: Stripe Delete   Customers Customer Tax Ids Id
+        call: customers-tax.deletecustomerscustomertaxidsid
+        with:
+          customer: rest.customer
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getcustomerscustomertaxidsid
+        description: Stripe Get   Customers Customer Tax Ids Id
+        call: customers-tax.getcustomerscustomertaxidsid
+        with:
+          customer: rest.customer
+          expand: rest.expand
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customers-tax-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Customers API — Tax. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-get-customers-customer-tax
+      description: Stripe Get   Customers Customer Tax Ids
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customers-tax.getcustomerscustomertaxids
+      with:
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-customers-customer-tax
+      description: Stripe Post   Customers Customer Tax Ids
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: customers-tax.postcustomerscustomertaxids
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-customers-customer-tax
+      description: Stripe Delete   Customers Customer Tax Ids Id
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: customers-tax.deletecustomerscustomertaxidsid
+      with:
+        customer: tools.customer
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-customers-customer-tax-2
+      description: Stripe Get   Customers Customer Tax Ids Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customers-tax.getcustomerscustomertaxidsid
+      with:
+        customer: tools.customer
+        expand: tools.expand
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

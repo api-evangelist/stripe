@@ -1,0 +1,268 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Refunds API — Refunds
+  description: 'Stripe Refunds API — Refunds. 5 operations. Lead operation: Stripe List Refunds. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Refunds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: refunds-refunds-2
+    baseUri: https://api.stripe.com
+    description: Stripe Refunds API — Refunds business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-refunds
+      path: /v1/refunds
+      operations:
+      - name: getrefunds
+        method: GET
+        description: Stripe List Refunds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: query
+          type: string
+          description: Only return refunds for the charge specified by this charge ID.
+        - name: payment_intent
+          in: query
+          type: string
+          description: Only return refunds for the PaymentIntent specified by this ID.
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: postrefunds
+        method: POST
+        description: Stripe Create Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-refunds-refund
+      path: /v1/refunds/{refund}
+      operations:
+      - name: getrefundsrefund
+        method: GET
+        description: Stripe Retrieve Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+      - name: postrefundsrefund
+        method: POST
+        description: Stripe Update Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-refunds-refund-cancel
+      path: /v1/refunds/{refund}/cancel
+      operations:
+      - name: postrefundsrefundcancel
+        method: POST
+        description: Stripe Cancel Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: refunds-refunds-2-rest
+    port: 8080
+    description: REST adapter for Stripe Refunds API — Refunds. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/refunds
+      name: v1-refunds
+      description: REST surface for v1-refunds.
+      operations:
+      - method: GET
+        name: getrefunds
+        description: Stripe List Refunds
+        call: refunds-refunds-2.getrefunds
+        with:
+          charge: rest.charge
+          payment_intent: rest.payment_intent
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postrefunds
+        description: Stripe Create Refund
+        call: refunds-refunds-2.postrefunds
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/refunds/{refund}
+      name: v1-refunds-refund
+      description: REST surface for v1-refunds-refund.
+      operations:
+      - method: GET
+        name: getrefundsrefund
+        description: Stripe Retrieve Refund
+        call: refunds-refunds-2.getrefundsrefund
+        with:
+          refund: rest.refund
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postrefundsrefund
+        description: Stripe Update Refund
+        call: refunds-refunds-2.postrefundsrefund
+        with:
+          refund: rest.refund
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/refunds/{refund}/cancel
+      name: v1-refunds-refund-cancel
+      description: REST surface for v1-refunds-refund-cancel.
+      operations:
+      - method: POST
+        name: postrefundsrefundcancel
+        description: Stripe Cancel Refund
+        call: refunds-refunds-2.postrefundsrefundcancel
+        with:
+          refund: rest.refund
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: refunds-refunds-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Refunds API — Refunds. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-list-refunds
+      description: Stripe List Refunds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: refunds-refunds-2.getrefunds
+      with:
+        charge: tools.charge
+        payment_intent: tools.payment_intent
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-refund
+      description: Stripe Create Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: refunds-refunds-2.postrefunds
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-refund
+      description: Stripe Retrieve Refund
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: refunds-refunds-2.getrefundsrefund
+      with:
+        refund: tools.refund
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-refund
+      description: Stripe Update Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: refunds-refunds-2.postrefundsrefund
+      with:
+        refund: tools.refund
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-cancel-refund
+      description: Stripe Cancel Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: refunds-refunds-2.postrefundsrefundcancel
+      with:
+        refund: tools.refund
+      outputParameters:
+      - type: object
+        mapping: $.

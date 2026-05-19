@@ -1,0 +1,291 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Billing API — Billing Portal
+  description: 'Stripe Billing API — Billing Portal. 5 operations. Lead operation: Billing Portal. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Billing Portal
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: billing-billing-portal
+    baseUri: https://api.stripe.com
+    description: Stripe Billing API — Billing Portal business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-billing_portal-configurations
+      path: /v1/billing_portal/configurations
+      operations:
+      - name: getbillingportalconfigurations
+        method: GET
+        description: <p>Returns a list of configurations that describe the functionality of the customer portal.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: active
+          in: query
+          type: boolean
+          description: Only return configurations that are active or inactive (e.g., pass `true` to only list active configurations).
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: is_default
+          in: query
+          type: boolean
+          description: Only return the default or non-default configurations (e.g., pass `true` to only list the default configuration).
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postbillingportalconfigurations
+        method: POST
+        description: <p>Creates a configuration that describes the functionality and behavior of a PortalSession</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-billing_portal-configurations-configuration
+      path: /v1/billing_portal/configurations/{configuration}
+      operations:
+      - name: getbillingportalconfigurationsconfiguration
+        method: GET
+        description: <p>Retrieves a configuration that describes the functionality of the customer portal.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postbillingportalconfigurationsconfiguration
+        method: POST
+        description: <p>Updates a configuration that describes the functionality of the customer portal.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-billing_portal-sessions
+      path: /v1/billing_portal/sessions
+      operations:
+      - name: postbillingportalsessions
+        method: POST
+        description: <p>Creates a session of the customer portal.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: billing-billing-portal-rest
+    port: 8080
+    description: REST adapter for Stripe Billing API — Billing Portal. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/billing-portal/configurations
+      name: v1-billing-portal-configurations
+      description: REST surface for v1-billing_portal-configurations.
+      operations:
+      - method: GET
+        name: getbillingportalconfigurations
+        description: <p>Returns a list of configurations that describe the functionality of the customer portal.</p>
+        call: billing-billing-portal.getbillingportalconfigurations
+        with:
+          active: rest.active
+          ending_before: rest.ending_before
+          expand: rest.expand
+          is_default: rest.is_default
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbillingportalconfigurations
+        description: <p>Creates a configuration that describes the functionality and behavior of a PortalSession</p>
+        call: billing-billing-portal.postbillingportalconfigurations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/billing-portal/configurations/{configuration}
+      name: v1-billing-portal-configurations-configuration
+      description: REST surface for v1-billing_portal-configurations-configuration.
+      operations:
+      - method: GET
+        name: getbillingportalconfigurationsconfiguration
+        description: <p>Retrieves a configuration that describes the functionality of the customer portal.</p>
+        call: billing-billing-portal.getbillingportalconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postbillingportalconfigurationsconfiguration
+        description: <p>Updates a configuration that describes the functionality of the customer portal.</p>
+        call: billing-billing-portal.postbillingportalconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/billing-portal/sessions
+      name: v1-billing-portal-sessions
+      description: REST surface for v1-billing_portal-sessions.
+      operations:
+      - method: POST
+        name: postbillingportalsessions
+        description: <p>Creates a session of the customer portal.</p>
+        call: billing-billing-portal.postbillingportalsessions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: billing-billing-portal-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Billing API — Billing Portal. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: p-returns-list-configurations-that-describe
+      description: <p>Returns a list of configurations that describe the functionality of the customer portal.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: billing-billing-portal.getbillingportalconfigurations
+      with:
+        active: tools.active
+        ending_before: tools.ending_before
+        expand: tools.expand
+        is_default: tools.is_default
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-configuration-that-describes-functionality
+      description: <p>Creates a configuration that describes the functionality and behavior of a PortalSession</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: billing-billing-portal.postbillingportalconfigurations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-configuration-that-describes-functionality
+      description: <p>Retrieves a configuration that describes the functionality of the customer portal.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: billing-billing-portal.getbillingportalconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-configuration-that-describes-functionality
+      description: <p>Updates a configuration that describes the functionality of the customer portal.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: billing-billing-portal.postbillingportalconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-session-customer-portal-p
+      description: <p>Creates a session of the customer portal.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: billing-billing-portal.postbillingportalsessions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

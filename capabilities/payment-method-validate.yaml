@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Method API — Validate
+  description: 'Stripe Payment Method API — Validate. 1 operations. Lead operation: Stripe Post   Payment Method Domains Validate.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Validate
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-method-validate
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Method API — Validate business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_method_domains-payment_method_domain-validate
+      path: /v1/payment_method_domains/{payment_method_domain}/validate
+      operations:
+      - name: postpaymentmethoddomainspaymentmethoddomainvalidate
+        method: POST
+        description: Stripe Post   Payment Method Domains Validate
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method_domain
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-method-validate-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Method API — Validate. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-method-domains/{payment-method-domain}/validate
+      name: v1-payment-method-domains-payment-method-domain-validate
+      description: REST surface for v1-payment_method_domains-payment_method_domain-validate.
+      operations:
+      - method: POST
+        name: postpaymentmethoddomainspaymentmethoddomainvalidate
+        description: Stripe Post   Payment Method Domains Validate
+        call: payment-method-validate.postpaymentmethoddomainspaymentmethoddomainvalidate
+        with:
+          payment_method_domain: rest.payment_method_domain
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-method-validate-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Method API — Validate. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-method-domains
+      description: Stripe Post   Payment Method Domains Validate
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: payment-method-validate.postpaymentmethoddomainspaymentmethoddomainvalidate
+      with:
+        payment_method_domain: tools.payment_method_domain
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

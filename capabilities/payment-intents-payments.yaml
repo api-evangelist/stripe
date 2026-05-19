@@ -1,0 +1,615 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Intents API — Payments
+  description: 'Stripe Payment Intents API — Payments. 11 operations. Lead operation: Stripe Get   Payment Intents. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Payments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-intents-payments
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Intents API — Payments business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_intents
+      path: /v1/payment_intents
+      operations:
+      - name: getpaymentintents
+        method: GET
+        description: Stripe Get   Payment Intents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+          description: A filter on the list, based on the object `created` field. The value can be a string with an integer
+            Unix timestamp or a dictionary with a number of different q
+        - name: customer
+          in: query
+          type: string
+          description: Only return PaymentIntents for the customer that this customer ID specifies.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postpaymentintents
+        method: POST
+        description: Stripe Post   Payment Intents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-payment_intents-search
+      path: /v1/payment_intents/search
+      operations:
+      - name: getpaymentintentssearch
+        method: GET
+        description: Stripe Get   Payment Intents Search
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: page
+          in: query
+          type: string
+          description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first
+            call. Use the next_page value returned in a previous respons
+        - name: query
+          in: query
+          type: string
+          description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language)
+            and the list of supported [query fields for payment i
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent
+      path: /v1/payment_intents/{intent}
+      operations:
+      - name: getpaymentintentsintent
+        method: GET
+        description: Stripe Get   Payment Intents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_secret
+          in: query
+          type: string
+          description: The client secret of the PaymentIntent. We require it if you use a publishable key to retrieve the
+            source.
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postpaymentintentsintent
+        method: POST
+        description: Stripe Post   Payment Intents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent-apply_customer_balance
+      path: /v1/payment_intents/{intent}/apply_customer_balance
+      operations:
+      - name: postpaymentintentsintentapplycustomerbalance
+        method: POST
+        description: Stripe Post   Payment Intents Apply Customer Balance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent-cancel
+      path: /v1/payment_intents/{intent}/cancel
+      operations:
+      - name: postpaymentintentsintentcancel
+        method: POST
+        description: Stripe Post   Payment Intents Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent-capture
+      path: /v1/payment_intents/{intent}/capture
+      operations:
+      - name: postpaymentintentsintentcapture
+        method: POST
+        description: Stripe Post   Payment Intents Capture
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent-confirm
+      path: /v1/payment_intents/{intent}/confirm
+      operations:
+      - name: postpaymentintentsintentconfirm
+        method: POST
+        description: Stripe Post   Payment Intents Confirm
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_intents-intent-increment_authorization
+      path: /v1/payment_intents/{intent}/increment_authorization
+      operations:
+      - name: postpaymentintentsintentincrementauthorization
+        method: POST
+        description: Stripe Post   Payment Intents Increment Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-payment_intents-intent-verify_microdeposits
+      path: /v1/payment_intents/{intent}/verify_microdeposits
+      operations:
+      - name: postpaymentintentsintentverifymicrodeposits
+        method: POST
+        description: Stripe Post   Payment Intents Verify Microdeposits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-intents-payments-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Intents API — Payments. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-intents
+      name: v1-payment-intents
+      description: REST surface for v1-payment_intents.
+      operations:
+      - method: GET
+        name: getpaymentintents
+        description: Stripe Get   Payment Intents
+        call: payment-intents-payments.getpaymentintents
+        with:
+          created: rest.created
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpaymentintents
+        description: Stripe Post   Payment Intents
+        call: payment-intents-payments.postpaymentintents
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/search
+      name: v1-payment-intents-search
+      description: REST surface for v1-payment_intents-search.
+      operations:
+      - method: GET
+        name: getpaymentintentssearch
+        description: Stripe Get   Payment Intents Search
+        call: payment-intents-payments.getpaymentintentssearch
+        with:
+          expand: rest.expand
+          limit: rest.limit
+          page: rest.page
+          query: rest.query
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}
+      name: v1-payment-intents-intent
+      description: REST surface for v1-payment_intents-intent.
+      operations:
+      - method: GET
+        name: getpaymentintentsintent
+        description: Stripe Get   Payment Intents
+        call: payment-intents-payments.getpaymentintentsintent
+        with:
+          client_secret: rest.client_secret
+          expand: rest.expand
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postpaymentintentsintent
+        description: Stripe Post   Payment Intents
+        call: payment-intents-payments.postpaymentintentsintent
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/apply-customer-balance
+      name: v1-payment-intents-intent-apply-customer-balance
+      description: REST surface for v1-payment_intents-intent-apply_customer_balance.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentapplycustomerbalance
+        description: Stripe Post   Payment Intents Apply Customer Balance
+        call: payment-intents-payments.postpaymentintentsintentapplycustomerbalance
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/cancel
+      name: v1-payment-intents-intent-cancel
+      description: REST surface for v1-payment_intents-intent-cancel.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentcancel
+        description: Stripe Post   Payment Intents Cancel
+        call: payment-intents-payments.postpaymentintentsintentcancel
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/capture
+      name: v1-payment-intents-intent-capture
+      description: REST surface for v1-payment_intents-intent-capture.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentcapture
+        description: Stripe Post   Payment Intents Capture
+        call: payment-intents-payments.postpaymentintentsintentcapture
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/confirm
+      name: v1-payment-intents-intent-confirm
+      description: REST surface for v1-payment_intents-intent-confirm.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentconfirm
+        description: Stripe Post   Payment Intents Confirm
+        call: payment-intents-payments.postpaymentintentsintentconfirm
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/increment-authorization
+      name: v1-payment-intents-intent-increment-authorization
+      description: REST surface for v1-payment_intents-intent-increment_authorization.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentincrementauthorization
+        description: Stripe Post   Payment Intents Increment Authorization
+        call: payment-intents-payments.postpaymentintentsintentincrementauthorization
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-intents/{intent}/verify-microdeposits
+      name: v1-payment-intents-intent-verify-microdeposits
+      description: REST surface for v1-payment_intents-intent-verify_microdeposits.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentverifymicrodeposits
+        description: Stripe Post   Payment Intents Verify Microdeposits
+        call: payment-intents-payments.postpaymentintentsintentverifymicrodeposits
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-intents-payments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Intents API — Payments. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-get-payment-intents
+      description: Stripe Get   Payment Intents
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-intents-payments.getpaymentintents
+      with:
+        created: tools.created
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents
+      description: Stripe Post   Payment Intents
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintents
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-payment-intents-search
+      description: Stripe Get   Payment Intents Search
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-intents-payments.getpaymentintentssearch
+      with:
+        expand: tools.expand
+        limit: tools.limit
+        page: tools.page
+        query: tools.query
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-payment-intents-2
+      description: Stripe Get   Payment Intents
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payment-intents-payments.getpaymentintentsintent
+      with:
+        client_secret: tools.client_secret
+        expand: tools.expand
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-2
+      description: Stripe Post   Payment Intents
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintent
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-apply
+      description: Stripe Post   Payment Intents Apply Customer Balance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentapplycustomerbalance
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-cancel
+      description: Stripe Post   Payment Intents Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentcancel
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-capture
+      description: Stripe Post   Payment Intents Capture
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentcapture
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-confirm
+      description: Stripe Post   Payment Intents Confirm
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentconfirm
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-increment
+      description: Stripe Post   Payment Intents Increment Authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentincrementauthorization
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-intents-verify
+      description: Stripe Post   Payment Intents Verify Microdeposits
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-payments.postpaymentintentsintentverifymicrodeposits
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

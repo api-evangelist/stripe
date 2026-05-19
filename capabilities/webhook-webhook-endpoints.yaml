@@ -1,0 +1,290 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Webhook API — Webhook Endpoints
+  description: 'Stripe Webhook API — Webhook Endpoints. 5 operations. Lead operation: Webhook Endpoints. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Webhook Endpoints
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: webhook-webhook-endpoints
+    baseUri: https://api.stripe.com
+    description: Stripe Webhook API — Webhook Endpoints business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-webhook_endpoints
+      path: /v1/webhook_endpoints
+      operations:
+      - name: getwebhookendpoints
+        method: GET
+        description: <p>Returns a list of your webhook endpoints.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postwebhookendpoints
+        method: POST
+        description: <p>A webhook endpoint must have a <code>url</code> and a list of <code>enabled_events</code>. You may
+          optionally specify the Boolean <code>connect</code> parameter. If set to true, then a Connect webhook endpoint that
+          notifies the specified
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-webhook_endpoints-webhook_endpoint
+      path: /v1/webhook_endpoints/{webhook_endpoint}
+      operations:
+      - name: deletewebhookendpointswebhookendpoint
+        method: DELETE
+        description: <p>You can also delete webhook endpoints via the <a href="https://dashboard.stripe.com/account/webhooks">webhook
+          endpoint management</a> page of the Stripe dashboard.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: webhook_endpoint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getwebhookendpointswebhookendpoint
+        method: GET
+        description: <p>Retrieves the webhook endpoint with the given ID.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: webhook_endpoint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postwebhookendpointswebhookendpoint
+        method: POST
+        description: <p>Updates the webhook endpoint. You may edit the <code>url</code>, the list of <code>enabled_events</code>,
+          and the status of your endpoint.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: webhook_endpoint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: webhook-webhook-endpoints-rest
+    port: 8080
+    description: REST adapter for Stripe Webhook API — Webhook Endpoints. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/webhook-endpoints
+      name: v1-webhook-endpoints
+      description: REST surface for v1-webhook_endpoints.
+      operations:
+      - method: GET
+        name: getwebhookendpoints
+        description: <p>Returns a list of your webhook endpoints.</p>
+        call: webhook-webhook-endpoints.getwebhookendpoints
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postwebhookendpoints
+        description: <p>A webhook endpoint must have a <code>url</code> and a list of <code>enabled_events</code>. You may
+          optionally specify the Boolean <code>connect</code> parameter. If set to true, then a Connect webhook endpoint that
+          notifies the specified
+        call: webhook-webhook-endpoints.postwebhookendpoints
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/webhook-endpoints/{webhook-endpoint}
+      name: v1-webhook-endpoints-webhook-endpoint
+      description: REST surface for v1-webhook_endpoints-webhook_endpoint.
+      operations:
+      - method: DELETE
+        name: deletewebhookendpointswebhookendpoint
+        description: <p>You can also delete webhook endpoints via the <a href="https://dashboard.stripe.com/account/webhooks">webhook
+          endpoint management</a> page of the Stripe dashboard.</p>
+        call: webhook-webhook-endpoints.deletewebhookendpointswebhookendpoint
+        with:
+          webhook_endpoint: rest.webhook_endpoint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getwebhookendpointswebhookendpoint
+        description: <p>Retrieves the webhook endpoint with the given ID.</p>
+        call: webhook-webhook-endpoints.getwebhookendpointswebhookendpoint
+        with:
+          expand: rest.expand
+          webhook_endpoint: rest.webhook_endpoint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postwebhookendpointswebhookendpoint
+        description: <p>Updates the webhook endpoint. You may edit the <code>url</code>, the list of <code>enabled_events</code>,
+          and the status of your endpoint.</p>
+        call: webhook-webhook-endpoints.postwebhookendpointswebhookendpoint
+        with:
+          webhook_endpoint: rest.webhook_endpoint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: webhook-webhook-endpoints-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Webhook API — Webhook Endpoints. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: p-returns-list-your-webhook-endpoints
+      description: <p>Returns a list of your webhook endpoints.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: webhook-webhook-endpoints.getwebhookendpoints
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-a-webhook-endpoint-must-have
+      description: <p>A webhook endpoint must have a <code>url</code> and a list of <code>enabled_events</code>. You may optionally
+        specify the Boolean <code>connect</code> parameter. If set to true, then a Connect webhook endpoint that notifies
+        the specified
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: webhook-webhook-endpoints.postwebhookendpoints
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-you-can-also-delete-webhook
+      description: <p>You can also delete webhook endpoints via the <a href="https://dashboard.stripe.com/account/webhooks">webhook
+        endpoint management</a> page of the Stripe dashboard.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: webhook-webhook-endpoints.deletewebhookendpointswebhookendpoint
+      with:
+        webhook_endpoint: tools.webhook_endpoint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-webhook-endpoint-given-id
+      description: <p>Retrieves the webhook endpoint with the given ID.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: webhook-webhook-endpoints.getwebhookendpointswebhookendpoint
+      with:
+        expand: tools.expand
+        webhook_endpoint: tools.webhook_endpoint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-webhook-endpoint-you-may
+      description: <p>Updates the webhook endpoint. You may edit the <code>url</code>, the list of <code>enabled_events</code>,
+        and the status of your endpoint.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: webhook-webhook-endpoints.postwebhookendpointswebhookendpoint
+      with:
+        webhook_endpoint: tools.webhook_endpoint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

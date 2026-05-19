@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Method API — Detach
+  description: 'Stripe Payment Method API — Detach. 1 operations. Lead operation: Stripe Post   Payment Methods Detach. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Detach
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-method-detach
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Method API — Detach business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_methods-payment_method-detach
+      path: /v1/payment_methods/{payment_method}/detach
+      operations:
+      - name: postpaymentmethodspaymentmethoddetach
+        method: POST
+        description: Stripe Post   Payment Methods Detach
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-method-detach-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Method API — Detach. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-methods/{payment-method}/detach
+      name: v1-payment-methods-payment-method-detach
+      description: REST surface for v1-payment_methods-payment_method-detach.
+      operations:
+      - method: POST
+        name: postpaymentmethodspaymentmethoddetach
+        description: Stripe Post   Payment Methods Detach
+        call: payment-method-detach.postpaymentmethodspaymentmethoddetach
+        with:
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-method-detach-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Method API — Detach. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-methods-detach
+      description: Stripe Post   Payment Methods Detach
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-detach.postpaymentmethodspaymentmethoddetach
+      with:
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,181 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Credit Notes API — Identifiers
+  description: 'Stripe Credit Notes API — Identifiers. 3 operations. Lead operation: Stripe Get   Credit Notes Id. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Identifiers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: credit-notes-identifiers
+    baseUri: https://api.stripe.com
+    description: Stripe Credit Notes API — Identifiers business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-credit_notes-id
+      path: /v1/credit_notes/{id}
+      operations:
+      - name: getcreditnotesid
+        method: GET
+        description: Stripe Get   Credit Notes Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postcreditnotesid
+        method: POST
+        description: Stripe Post   Credit Notes Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-credit_notes-id-void
+      path: /v1/credit_notes/{id}/void
+      operations:
+      - name: postcreditnotesidvoid
+        method: POST
+        description: Stripe Post   Credit Notes Id Void
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: credit-notes-identifiers-rest
+    port: 8080
+    description: REST adapter for Stripe Credit Notes API — Identifiers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/credit-notes/{id}
+      name: v1-credit-notes-id
+      description: REST surface for v1-credit_notes-id.
+      operations:
+      - method: GET
+        name: getcreditnotesid
+        description: Stripe Get   Credit Notes Id
+        call: credit-notes-identifiers.getcreditnotesid
+        with:
+          expand: rest.expand
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postcreditnotesid
+        description: Stripe Post   Credit Notes Id
+        call: credit-notes-identifiers.postcreditnotesid
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/credit-notes/{id}/void
+      name: v1-credit-notes-id-void
+      description: REST surface for v1-credit_notes-id-void.
+      operations:
+      - method: POST
+        name: postcreditnotesidvoid
+        description: Stripe Post   Credit Notes Id Void
+        call: credit-notes-identifiers.postcreditnotesidvoid
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: credit-notes-identifiers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Credit Notes API — Identifiers. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-get-credit-notes-id
+      description: Stripe Get   Credit Notes Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: credit-notes-identifiers.getcreditnotesid
+      with:
+        expand: tools.expand
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-credit-notes-id
+      description: Stripe Post   Credit Notes Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: credit-notes-identifiers.postcreditnotesid
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-credit-notes-id-2
+      description: Stripe Post   Credit Notes Id Void
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: credit-notes-identifiers.postcreditnotesidvoid
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

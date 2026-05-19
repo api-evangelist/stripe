@@ -1,0 +1,1658 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Issuing API — Issuing
+  description: 'Stripe Issuing API — Issuing. 27 operations. Lead operation: Issuing. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Issuing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: issuing-issuing
+    baseUri: https://api.stripe.com
+    description: Stripe Issuing API — Issuing business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-issuing-authorizations
+      path: /v1/issuing/authorizations
+      operations:
+      - name: getissuingauthorizations
+        method: GET
+        description: <p>Returns a list of Issuing <code>Authorization</code> objects. The objects are sorted in descending
+          order by creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card
+          in: query
+          type: string
+          description: Only return authorizations that belong to the given card.
+        - name: cardholder
+          in: query
+          type: string
+          description: Only return authorizations that belong to the given cardholder.
+        - name: created
+          in: query
+          type: string
+          description: Only return authorizations that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: Only return authorizations with the given status. One of `pending`, `closed`, or `reversed`.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-authorizations-authorization
+      path: /v1/issuing/authorizations/{authorization}
+      operations:
+      - name: getissuingauthorizationsauthorization
+        method: GET
+        description: <p>Retrieves an Issuing <code>Authorization</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: authorization
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingauthorizationsauthorization
+        method: POST
+        description: <p>Updates the specified Issuing <code>Authorization</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: authorization
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-authorizations-authorization-approve
+      path: /v1/issuing/authorizations/{authorization}/approve
+      operations:
+      - name: postissuingauthorizationsauthorizationapprove
+        method: POST
+        description: '<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be
+          made within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real-time authorization</a>
+          flow. '
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: authorization
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-authorizations-authorization-decline
+      path: /v1/issuing/authorizations/{authorization}/decline
+      operations:
+      - name: postissuingauthorizationsauthorizationdecline
+        method: POST
+        description: <p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be
+          made within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real time authorization</a>
+          flow.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: authorization
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-cardholders
+      path: /v1/issuing/cardholders
+      operations:
+      - name: getissuingcardholders
+        method: GET
+        description: <p>Returns a list of Issuing <code>Cardholder</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+          description: Only return cardholders that were created during the given date interval.
+        - name: email
+          in: query
+          type: string
+          description: Only return cardholders that have the given email address.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: phone_number
+          in: query
+          type: string
+          description: Only return cardholders that have the given phone number.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: Only return cardholders that have the given status. One of `active`, `inactive`, or `blocked`.
+        - name: type
+          in: query
+          type: string
+          description: Only return cardholders that have the given type. One of `individual` or `company`.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingcardholders
+        method: POST
+        description: <p>Creates a new Issuing <code>Cardholder</code> object that can be issued cards.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-issuing-cardholders-cardholder
+      path: /v1/issuing/cardholders/{cardholder}
+      operations:
+      - name: getissuingcardholderscardholder
+        method: GET
+        description: <p>Retrieves an Issuing <code>Cardholder</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cardholder
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingcardholderscardholder
+        method: POST
+        description: <p>Updates the specified Issuing <code>Cardholder</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cardholder
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-cards
+      path: /v1/issuing/cards
+      operations:
+      - name: getissuingcards
+        method: GET
+        description: <p>Returns a list of Issuing <code>Card</code> objects. The objects are sorted in descending order by
+          creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: cardholder
+          in: query
+          type: string
+          description: Only return cards belonging to the Cardholder with the provided ID.
+        - name: created
+          in: query
+          type: string
+          description: Only return cards that were issued during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: exp_month
+          in: query
+          type: integer
+          description: Only return cards that have the given expiration month.
+        - name: exp_year
+          in: query
+          type: integer
+          description: Only return cards that have the given expiration year.
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: last4
+          in: query
+          type: string
+          description: Only return cards that have the given last four digits.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: Only return cards that have the given status. One of `active`, `inactive`, or `canceled`.
+        - name: type
+          in: query
+          type: string
+          description: Only return cards that have the given type. One of `virtual` or `physical`.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingcards
+        method: POST
+        description: <p>Creates an Issuing <code>Card</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-issuing-cards-card
+      path: /v1/issuing/cards/{card}
+      operations:
+      - name: getissuingcardscard
+        method: GET
+        description: <p>Retrieves an Issuing <code>Card</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingcardscard
+        method: POST
+        description: <p>Updates the specified Issuing <code>Card</code> object by setting the values of the parameters passed.
+          Any parameters not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-disputes
+      path: /v1/issuing/disputes
+      operations:
+      - name: getissuingdisputes
+        method: GET
+        description: <p>Returns a list of Issuing <code>Dispute</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+          description: Select Issuing disputes that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: Select Issuing disputes with the given status.
+        - name: transaction
+          in: query
+          type: string
+          description: Select the Issuing dispute for the given transaction.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingdisputes
+        method: POST
+        description: <p>Creates an Issuing <code>Dispute</code> object. Individual pieces of evidence within the <code>evidence</code>
+          object are optional at this point. Stripe only validates that required evidence is present during submission. Refer
+          to <a href
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-disputes-dispute
+      path: /v1/issuing/disputes/{dispute}
+      operations:
+      - name: getissuingdisputesdispute
+        method: GET
+        description: <p>Retrieves an Issuing <code>Dispute</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingdisputesdispute
+        method: POST
+        description: <p>Updates the specified Issuing <code>Dispute</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged. Properties on the <code>evidence</code> object can be
+          unset by passing in an em
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-disputes-dispute-submit
+      path: /v1/issuing/disputes/{dispute}/submit
+      operations:
+      - name: postissuingdisputesdisputesubmit
+        method: POST
+        description: <p>Submits an Issuing <code>Dispute</code> to the card network. Stripe validates that all evidence fields
+          required for the dispute’s reason are present. For more details, see <a href="/docs/issuing/purchases/disputes#dispute-reasons-and-evi
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dispute
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-settlements
+      path: /v1/issuing/settlements
+      operations:
+      - name: getissuingsettlements
+        method: GET
+        description: <p>Returns a list of Issuing <code>Settlement</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+          description: Only return issuing settlements that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-settlements-settlement
+      path: /v1/issuing/settlements/{settlement}
+      operations:
+      - name: getissuingsettlementssettlement
+        method: GET
+        description: <p>Retrieves an Issuing <code>Settlement</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: settlement
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingsettlementssettlement
+        method: POST
+        description: <p>Updates the specified Issuing <code>Settlement</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: settlement
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-tokens
+      path: /v1/issuing/tokens
+      operations:
+      - name: getissuingtokens
+        method: GET
+        description: <p>Lists all Issuing <code>Token</code> objects for a given card.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card
+          in: query
+          type: string
+          description: The Issuing card identifier to list tokens for.
+          required: true
+        - name: created
+          in: query
+          type: string
+          description: Select Issuing tokens that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: Select Issuing tokens with the given status.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-tokens-token
+      path: /v1/issuing/tokens/{token}
+      operations:
+      - name: getissuingtokenstoken
+        method: GET
+        description: <p>Retrieves an Issuing <code>Token</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: token
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingtokenstoken
+        method: POST
+        description: <p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-issuing-transactions
+      path: /v1/issuing/transactions
+      operations:
+      - name: getissuingtransactions
+        method: GET
+        description: <p>Returns a list of Issuing <code>Transaction</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: card
+          in: query
+          type: string
+          description: Only return transactions that belong to the given card.
+        - name: cardholder
+          in: query
+          type: string
+          description: Only return transactions that belong to the given cardholder.
+        - name: created
+          in: query
+          type: string
+          description: Only return transactions that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: type
+          in: query
+          type: string
+          description: Only return transactions that have the given type. One of `capture` or `refund`.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-issuing-transactions-transaction
+      path: /v1/issuing/transactions/{transaction}
+      operations:
+      - name: getissuingtransactionstransaction
+        method: GET
+        description: <p>Retrieves an Issuing <code>Transaction</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: transaction
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postissuingtransactionstransaction
+        method: POST
+        description: <p>Updates the specified Issuing <code>Transaction</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: transaction
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: issuing-issuing-rest
+    port: 8080
+    description: REST adapter for Stripe Issuing API — Issuing. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/issuing/authorizations
+      name: v1-issuing-authorizations
+      description: REST surface for v1-issuing-authorizations.
+      operations:
+      - method: GET
+        name: getissuingauthorizations
+        description: <p>Returns a list of Issuing <code>Authorization</code> objects. The objects are sorted in descending
+          order by creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingauthorizations
+        with:
+          card: rest.card
+          cardholder: rest.cardholder
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          status: rest.status
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/authorizations/{authorization}
+      name: v1-issuing-authorizations-authorization
+      description: REST surface for v1-issuing-authorizations-authorization.
+      operations:
+      - method: GET
+        name: getissuingauthorizationsauthorization
+        description: <p>Retrieves an Issuing <code>Authorization</code> object.</p>
+        call: issuing-issuing.getissuingauthorizationsauthorization
+        with:
+          authorization: rest.authorization
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingauthorizationsauthorization
+        description: <p>Updates the specified Issuing <code>Authorization</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        call: issuing-issuing.postissuingauthorizationsauthorization
+        with:
+          authorization: rest.authorization
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/authorizations/{authorization}/approve
+      name: v1-issuing-authorizations-authorization-approve
+      description: REST surface for v1-issuing-authorizations-authorization-approve.
+      operations:
+      - method: POST
+        name: postissuingauthorizationsauthorizationapprove
+        description: '<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be
+          made within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real-time authorization</a>
+          flow. '
+        call: issuing-issuing.postissuingauthorizationsauthorizationapprove
+        with:
+          authorization: rest.authorization
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/authorizations/{authorization}/decline
+      name: v1-issuing-authorizations-authorization-decline
+      description: REST surface for v1-issuing-authorizations-authorization-decline.
+      operations:
+      - method: POST
+        name: postissuingauthorizationsauthorizationdecline
+        description: <p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be
+          made within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real time authorization</a>
+          flow.
+        call: issuing-issuing.postissuingauthorizationsauthorizationdecline
+        with:
+          authorization: rest.authorization
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/cardholders
+      name: v1-issuing-cardholders
+      description: REST surface for v1-issuing-cardholders.
+      operations:
+      - method: GET
+        name: getissuingcardholders
+        description: <p>Returns a list of Issuing <code>Cardholder</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingcardholders
+        with:
+          created: rest.created
+          email: rest.email
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          phone_number: rest.phone_number
+          starting_after: rest.starting_after
+          status: rest.status
+          type: rest.type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingcardholders
+        description: <p>Creates a new Issuing <code>Cardholder</code> object that can be issued cards.</p>
+        call: issuing-issuing.postissuingcardholders
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/cardholders/{cardholder}
+      name: v1-issuing-cardholders-cardholder
+      description: REST surface for v1-issuing-cardholders-cardholder.
+      operations:
+      - method: GET
+        name: getissuingcardholderscardholder
+        description: <p>Retrieves an Issuing <code>Cardholder</code> object.</p>
+        call: issuing-issuing.getissuingcardholderscardholder
+        with:
+          cardholder: rest.cardholder
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingcardholderscardholder
+        description: <p>Updates the specified Issuing <code>Cardholder</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        call: issuing-issuing.postissuingcardholderscardholder
+        with:
+          cardholder: rest.cardholder
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/cards
+      name: v1-issuing-cards
+      description: REST surface for v1-issuing-cards.
+      operations:
+      - method: GET
+        name: getissuingcards
+        description: <p>Returns a list of Issuing <code>Card</code> objects. The objects are sorted in descending order by
+          creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingcards
+        with:
+          cardholder: rest.cardholder
+          created: rest.created
+          ending_before: rest.ending_before
+          exp_month: rest.exp_month
+          exp_year: rest.exp_year
+          expand: rest.expand
+          last4: rest.last4
+          limit: rest.limit
+          starting_after: rest.starting_after
+          status: rest.status
+          type: rest.type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingcards
+        description: <p>Creates an Issuing <code>Card</code> object.</p>
+        call: issuing-issuing.postissuingcards
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/cards/{card}
+      name: v1-issuing-cards-card
+      description: REST surface for v1-issuing-cards-card.
+      operations:
+      - method: GET
+        name: getissuingcardscard
+        description: <p>Retrieves an Issuing <code>Card</code> object.</p>
+        call: issuing-issuing.getissuingcardscard
+        with:
+          card: rest.card
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingcardscard
+        description: <p>Updates the specified Issuing <code>Card</code> object by setting the values of the parameters passed.
+          Any parameters not provided will be left unchanged.</p>
+        call: issuing-issuing.postissuingcardscard
+        with:
+          card: rest.card
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/disputes
+      name: v1-issuing-disputes
+      description: REST surface for v1-issuing-disputes.
+      operations:
+      - method: GET
+        name: getissuingdisputes
+        description: <p>Returns a list of Issuing <code>Dispute</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingdisputes
+        with:
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          status: rest.status
+          transaction: rest.transaction
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingdisputes
+        description: <p>Creates an Issuing <code>Dispute</code> object. Individual pieces of evidence within the <code>evidence</code>
+          object are optional at this point. Stripe only validates that required evidence is present during submission. Refer
+          to <a href
+        call: issuing-issuing.postissuingdisputes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/disputes/{dispute}
+      name: v1-issuing-disputes-dispute
+      description: REST surface for v1-issuing-disputes-dispute.
+      operations:
+      - method: GET
+        name: getissuingdisputesdispute
+        description: <p>Retrieves an Issuing <code>Dispute</code> object.</p>
+        call: issuing-issuing.getissuingdisputesdispute
+        with:
+          dispute: rest.dispute
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingdisputesdispute
+        description: <p>Updates the specified Issuing <code>Dispute</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged. Properties on the <code>evidence</code> object can be
+          unset by passing in an em
+        call: issuing-issuing.postissuingdisputesdispute
+        with:
+          dispute: rest.dispute
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/disputes/{dispute}/submit
+      name: v1-issuing-disputes-dispute-submit
+      description: REST surface for v1-issuing-disputes-dispute-submit.
+      operations:
+      - method: POST
+        name: postissuingdisputesdisputesubmit
+        description: <p>Submits an Issuing <code>Dispute</code> to the card network. Stripe validates that all evidence fields
+          required for the dispute’s reason are present. For more details, see <a href="/docs/issuing/purchases/disputes#dispute-reasons-and-evi
+        call: issuing-issuing.postissuingdisputesdisputesubmit
+        with:
+          dispute: rest.dispute
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/settlements
+      name: v1-issuing-settlements
+      description: REST surface for v1-issuing-settlements.
+      operations:
+      - method: GET
+        name: getissuingsettlements
+        description: <p>Returns a list of Issuing <code>Settlement</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingsettlements
+        with:
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/settlements/{settlement}
+      name: v1-issuing-settlements-settlement
+      description: REST surface for v1-issuing-settlements-settlement.
+      operations:
+      - method: GET
+        name: getissuingsettlementssettlement
+        description: <p>Retrieves an Issuing <code>Settlement</code> object.</p>
+        call: issuing-issuing.getissuingsettlementssettlement
+        with:
+          expand: rest.expand
+          settlement: rest.settlement
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingsettlementssettlement
+        description: <p>Updates the specified Issuing <code>Settlement</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        call: issuing-issuing.postissuingsettlementssettlement
+        with:
+          settlement: rest.settlement
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/tokens
+      name: v1-issuing-tokens
+      description: REST surface for v1-issuing-tokens.
+      operations:
+      - method: GET
+        name: getissuingtokens
+        description: <p>Lists all Issuing <code>Token</code> objects for a given card.</p>
+        call: issuing-issuing.getissuingtokens
+        with:
+          card: rest.card
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          status: rest.status
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/tokens/{token}
+      name: v1-issuing-tokens-token
+      description: REST surface for v1-issuing-tokens-token.
+      operations:
+      - method: GET
+        name: getissuingtokenstoken
+        description: <p>Retrieves an Issuing <code>Token</code> object.</p>
+        call: issuing-issuing.getissuingtokenstoken
+        with:
+          expand: rest.expand
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingtokenstoken
+        description: <p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>
+        call: issuing-issuing.postissuingtokenstoken
+        with:
+          token: rest.token
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/transactions
+      name: v1-issuing-transactions
+      description: REST surface for v1-issuing-transactions.
+      operations:
+      - method: GET
+        name: getissuingtransactions
+        description: <p>Returns a list of Issuing <code>Transaction</code> objects. The objects are sorted in descending order
+          by creation date, with the most recently created object appearing first.</p>
+        call: issuing-issuing.getissuingtransactions
+        with:
+          card: rest.card
+          cardholder: rest.cardholder
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          type: rest.type
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/issuing/transactions/{transaction}
+      name: v1-issuing-transactions-transaction
+      description: REST surface for v1-issuing-transactions-transaction.
+      operations:
+      - method: GET
+        name: getissuingtransactionstransaction
+        description: <p>Retrieves an Issuing <code>Transaction</code> object.</p>
+        call: issuing-issuing.getissuingtransactionstransaction
+        with:
+          expand: rest.expand
+          transaction: rest.transaction
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postissuingtransactionstransaction
+        description: <p>Updates the specified Issuing <code>Transaction</code> object by setting the values of the parameters
+          passed. Any parameters not provided will be left unchanged.</p>
+        call: issuing-issuing.postissuingtransactionstransaction
+        with:
+          transaction: rest.transaction
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: issuing-issuing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Issuing API — Issuing. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: p-returns-list-issuing-code-authorization-code
+      description: <p>Returns a list of Issuing <code>Authorization</code> objects. The objects are sorted in descending order
+        by creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingauthorizations
+      with:
+        card: tools.card
+        cardholder: tools.cardholder
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        status: tools.status
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-authorization-code-object
+      description: <p>Retrieves an Issuing <code>Authorization</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingauthorizationsauthorization
+      with:
+        authorization: tools.authorization
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-authorization-code
+      description: <p>Updates the specified Issuing <code>Authorization</code> object by setting the values of the parameters
+        passed. Any parameters not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingauthorizationsauthorization
+      with:
+        authorization: tools.authorization
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deprecated-approves-pending-issuing-code-authorization
+      description: '<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be made
+        within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real-time authorization</a>
+        flow. '
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingauthorizationsauthorizationapprove
+      with:
+        authorization: tools.authorization
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deprecated-declines-pending-issuing-code-authorization
+      description: <p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be made
+        within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real time authorization</a>
+        flow.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingauthorizationsauthorizationdecline
+      with:
+        authorization: tools.authorization
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-issuing-code-cardholder-code
+      description: <p>Returns a list of Issuing <code>Cardholder</code> objects. The objects are sorted in descending order
+        by creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingcardholders
+      with:
+        created: tools.created
+        email: tools.email
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        phone_number: tools.phone_number
+        starting_after: tools.starting_after
+        status: tools.status
+        type: tools.type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-issuing-code-cardholder-code
+      description: <p>Creates a new Issuing <code>Cardholder</code> object that can be issued cards.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingcardholders
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-cardholder-code-object
+      description: <p>Retrieves an Issuing <code>Cardholder</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingcardholderscardholder
+      with:
+        cardholder: tools.cardholder
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-cardholder-code
+      description: <p>Updates the specified Issuing <code>Cardholder</code> object by setting the values of the parameters
+        passed. Any parameters not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingcardholderscardholder
+      with:
+        cardholder: tools.cardholder
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-issuing-code-card-code
+      description: <p>Returns a list of Issuing <code>Card</code> objects. The objects are sorted in descending order by creation
+        date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingcards
+      with:
+        cardholder: tools.cardholder
+        created: tools.created
+        ending_before: tools.ending_before
+        exp_month: tools.exp_month
+        exp_year: tools.exp_year
+        expand: tools.expand
+        last4: tools.last4
+        limit: tools.limit
+        starting_after: tools.starting_after
+        status: tools.status
+        type: tools.type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-issuing-code-card-code-object
+      description: <p>Creates an Issuing <code>Card</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingcards
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-card-code-object
+      description: <p>Retrieves an Issuing <code>Card</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingcardscard
+      with:
+        card: tools.card
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-card-code
+      description: <p>Updates the specified Issuing <code>Card</code> object by setting the values of the parameters passed.
+        Any parameters not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingcardscard
+      with:
+        card: tools.card
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-issuing-code-dispute-code
+      description: <p>Returns a list of Issuing <code>Dispute</code> objects. The objects are sorted in descending order by
+        creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingdisputes
+      with:
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        status: tools.status
+        transaction: tools.transaction
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-issuing-code-dispute-code-object
+      description: <p>Creates an Issuing <code>Dispute</code> object. Individual pieces of evidence within the <code>evidence</code>
+        object are optional at this point. Stripe only validates that required evidence is present during submission. Refer
+        to <a href
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingdisputes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-dispute-code-object
+      description: <p>Retrieves an Issuing <code>Dispute</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingdisputesdispute
+      with:
+        dispute: tools.dispute
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-dispute-code
+      description: <p>Updates the specified Issuing <code>Dispute</code> object by setting the values of the parameters passed.
+        Any parameters not provided will be left unchanged. Properties on the <code>evidence</code> object can be unset by
+        passing in an em
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingdisputesdispute
+      with:
+        dispute: tools.dispute
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-submits-issuing-code-dispute-code-card
+      description: <p>Submits an Issuing <code>Dispute</code> to the card network. Stripe validates that all evidence fields
+        required for the dispute’s reason are present. For more details, see <a href="/docs/issuing/purchases/disputes#dispute-reasons-and-evi
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingdisputesdisputesubmit
+      with:
+        dispute: tools.dispute
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-issuing-code-settlement-code
+      description: <p>Returns a list of Issuing <code>Settlement</code> objects. The objects are sorted in descending order
+        by creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingsettlements
+      with:
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-settlement-code-object
+      description: <p>Retrieves an Issuing <code>Settlement</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingsettlementssettlement
+      with:
+        expand: tools.expand
+        settlement: tools.settlement
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-settlement-code
+      description: <p>Updates the specified Issuing <code>Settlement</code> object by setting the values of the parameters
+        passed. Any parameters not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingsettlementssettlement
+      with:
+        settlement: tools.settlement
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-lists-all-issuing-code-token-code
+      description: <p>Lists all Issuing <code>Token</code> objects for a given card.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingtokens
+      with:
+        card: tools.card
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        status: tools.status
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-token-code-object
+      description: <p>Retrieves an Issuing <code>Token</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingtokenstoken
+      with:
+        expand: tools.expand
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-attempts-update-specified-issuing-code-token
+      description: <p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingtokenstoken
+      with:
+        token: tools.token
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-issuing-code-transaction-code
+      description: <p>Returns a list of Issuing <code>Transaction</code> objects. The objects are sorted in descending order
+        by creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingtransactions
+      with:
+        card: tools.card
+        cardholder: tools.cardholder
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        type: tools.type
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-issuing-code-transaction-code-object
+      description: <p>Retrieves an Issuing <code>Transaction</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issuing-issuing.getissuingtransactionstransaction
+      with:
+        expand: tools.expand
+        transaction: tools.transaction
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-issuing-code-transaction-code
+      description: <p>Updates the specified Issuing <code>Transaction</code> object by setting the values of the parameters
+        passed. Any parameters not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issuing-issuing.postissuingtransactionstransaction
+      with:
+        transaction: tools.transaction
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

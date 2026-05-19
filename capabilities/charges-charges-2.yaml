@@ -1,0 +1,794 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Charges API — Charges
+  description: 'Stripe Charges API — Charges. 14 operations. Lead operation: Stripe Get   Charges. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Charges
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: charges-charges-2
+    baseUri: https://api.stripe.com
+    description: Stripe Charges API — Charges business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-charges
+      path: /v1/charges
+      operations:
+      - name: getcharges
+        method: GET
+        description: Stripe Get   Charges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+        - name: customer
+          in: query
+          type: string
+          description: Only return charges for the customer specified by this customer ID.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: payment_intent
+          in: query
+          type: string
+          description: Only return charges that were created by the PaymentIntent specified by this PaymentIntent ID.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: transfer_group
+          in: query
+          type: string
+          description: Only return charges for this transfer group.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postcharges
+        method: POST
+        description: Stripe Post   Charges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-search
+      path: /v1/charges/search
+      operations:
+      - name: getchargessearch
+        method: GET
+        description: Stripe Get   Charges Search
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: page
+          in: query
+          type: string
+          description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first
+            call. Use the next_page value returned in a previous respons
+        - name: query
+          in: query
+          type: string
+          description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language)
+            and the list of supported [query fields for charges](
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge
+      path: /v1/charges/{charge}
+      operations:
+      - name: getchargescharge
+        method: GET
+        description: Stripe Get   Charges Charge
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postchargescharge
+        method: POST
+        description: Stripe Post   Charges Charge
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-capture
+      path: /v1/charges/{charge}/capture
+      operations:
+      - name: postchargeschargecapture
+        method: POST
+        description: Stripe Post   Charges Charge Capture
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-dispute
+      path: /v1/charges/{charge}/dispute
+      operations:
+      - name: getchargeschargedispute
+        method: GET
+        description: Stripe Get   Charges Charge Dispute
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postchargeschargedispute
+        method: POST
+        description: Stripe Post   Charges Charge Dispute
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-dispute-close
+      path: /v1/charges/{charge}/dispute/close
+      operations:
+      - name: postchargeschargedisputeclose
+        method: POST
+        description: Stripe Post   Charges Charge Dispute Close
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-refund
+      path: /v1/charges/{charge}/refund
+      operations:
+      - name: postchargeschargerefund
+        method: POST
+        description: Stripe Post   Charges Charge Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          description: The identifier of the charge to refund.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-refunds
+      path: /v1/charges/{charge}/refunds
+      operations:
+      - name: getchargeschargerefunds
+        method: GET
+        description: Stripe Get   Charges Charge Refunds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postchargeschargerefunds
+        method: POST
+        description: Stripe Post   Charges Charge Refunds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          description: The identifier of the charge to refund.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-charges-charge-refunds-refund
+      path: /v1/charges/{charge}/refunds/{refund}
+      operations:
+      - name: getchargeschargerefundsrefund
+        method: GET
+        description: Stripe Get   Charges Charge Refunds Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: refund
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postchargeschargerefundsrefund
+        method: POST
+        description: Stripe Post   Charges Charge Refunds Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: path
+          type: string
+          required: true
+        - name: refund
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: charges-charges-2-rest
+    port: 8080
+    description: REST adapter for Stripe Charges API — Charges. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/charges
+      name: v1-charges
+      description: REST surface for v1-charges.
+      operations:
+      - method: GET
+        name: getcharges
+        description: Stripe Get   Charges
+        call: charges-charges-2.getcharges
+        with:
+          created: rest.created
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          payment_intent: rest.payment_intent
+          starting_after: rest.starting_after
+          transfer_group: rest.transfer_group
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postcharges
+        description: Stripe Post   Charges
+        call: charges-charges-2.postcharges
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/search
+      name: v1-charges-search
+      description: REST surface for v1-charges-search.
+      operations:
+      - method: GET
+        name: getchargessearch
+        description: Stripe Get   Charges Search
+        call: charges-charges-2.getchargessearch
+        with:
+          expand: rest.expand
+          limit: rest.limit
+          page: rest.page
+          query: rest.query
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}
+      name: v1-charges-charge
+      description: REST surface for v1-charges-charge.
+      operations:
+      - method: GET
+        name: getchargescharge
+        description: Stripe Get   Charges Charge
+        call: charges-charges-2.getchargescharge
+        with:
+          charge: rest.charge
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postchargescharge
+        description: Stripe Post   Charges Charge
+        call: charges-charges-2.postchargescharge
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/capture
+      name: v1-charges-charge-capture
+      description: REST surface for v1-charges-charge-capture.
+      operations:
+      - method: POST
+        name: postchargeschargecapture
+        description: Stripe Post   Charges Charge Capture
+        call: charges-charges-2.postchargeschargecapture
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/dispute
+      name: v1-charges-charge-dispute
+      description: REST surface for v1-charges-charge-dispute.
+      operations:
+      - method: GET
+        name: getchargeschargedispute
+        description: Stripe Get   Charges Charge Dispute
+        call: charges-charges-2.getchargeschargedispute
+        with:
+          charge: rest.charge
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postchargeschargedispute
+        description: Stripe Post   Charges Charge Dispute
+        call: charges-charges-2.postchargeschargedispute
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/dispute/close
+      name: v1-charges-charge-dispute-close
+      description: REST surface for v1-charges-charge-dispute-close.
+      operations:
+      - method: POST
+        name: postchargeschargedisputeclose
+        description: Stripe Post   Charges Charge Dispute Close
+        call: charges-charges-2.postchargeschargedisputeclose
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/refund
+      name: v1-charges-charge-refund
+      description: REST surface for v1-charges-charge-refund.
+      operations:
+      - method: POST
+        name: postchargeschargerefund
+        description: Stripe Post   Charges Charge Refund
+        call: charges-charges-2.postchargeschargerefund
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/refunds
+      name: v1-charges-charge-refunds
+      description: REST surface for v1-charges-charge-refunds.
+      operations:
+      - method: GET
+        name: getchargeschargerefunds
+        description: Stripe Get   Charges Charge Refunds
+        call: charges-charges-2.getchargeschargerefunds
+        with:
+          charge: rest.charge
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postchargeschargerefunds
+        description: Stripe Post   Charges Charge Refunds
+        call: charges-charges-2.postchargeschargerefunds
+        with:
+          charge: rest.charge
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/charges/{charge}/refunds/{refund}
+      name: v1-charges-charge-refunds-refund
+      description: REST surface for v1-charges-charge-refunds-refund.
+      operations:
+      - method: GET
+        name: getchargeschargerefundsrefund
+        description: Stripe Get   Charges Charge Refunds Refund
+        call: charges-charges-2.getchargeschargerefundsrefund
+        with:
+          charge: rest.charge
+          expand: rest.expand
+          refund: rest.refund
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postchargeschargerefundsrefund
+        description: Stripe Post   Charges Charge Refunds Refund
+        call: charges-charges-2.postchargeschargerefundsrefund
+        with:
+          charge: rest.charge
+          refund: rest.refund
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: charges-charges-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Charges API — Charges. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-get-charges
+      description: Stripe Get   Charges
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getcharges
+      with:
+        created: tools.created
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        payment_intent: tools.payment_intent
+        starting_after: tools.starting_after
+        transfer_group: tools.transfer_group
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges
+      description: Stripe Post   Charges
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postcharges
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-charges-search
+      description: Stripe Get   Charges Search
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getchargessearch
+      with:
+        expand: tools.expand
+        limit: tools.limit
+        page: tools.page
+        query: tools.query
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-charges-charge
+      description: Stripe Get   Charges Charge
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getchargescharge
+      with:
+        charge: tools.charge
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge
+      description: Stripe Post   Charges Charge
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargescharge
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-capture
+      description: Stripe Post   Charges Charge Capture
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargecapture
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-charges-charge-dispute
+      description: Stripe Get   Charges Charge Dispute
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getchargeschargedispute
+      with:
+        charge: tools.charge
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-dispute
+      description: Stripe Post   Charges Charge Dispute
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargedispute
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-dispute-2
+      description: Stripe Post   Charges Charge Dispute Close
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargedisputeclose
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-refund
+      description: Stripe Post   Charges Charge Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargerefund
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-charges-charge-refunds
+      description: Stripe Get   Charges Charge Refunds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getchargeschargerefunds
+      with:
+        charge: tools.charge
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-refunds
+      description: Stripe Post   Charges Charge Refunds
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargerefunds
+      with:
+        charge: tools.charge
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-charges-charge-refunds-2
+      description: Stripe Get   Charges Charge Refunds Refund
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: charges-charges-2.getchargeschargerefundsrefund
+      with:
+        charge: tools.charge
+        expand: tools.expand
+        refund: tools.refund
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-charges-charge-refunds-2
+      description: Stripe Post   Charges Charge Refunds Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: charges-charges-2.postchargeschargerefundsrefund
+      with:
+        charge: tools.charge
+        refund: tools.refund
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

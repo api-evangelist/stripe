@@ -1,0 +1,174 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Coupons API — Coupon
+  description: 'Stripe Coupons API — Coupon. 3 operations. Lead operation: Stripe Delete   Coupons Coupon. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Coupon
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coupons-coupon
+    baseUri: https://api.stripe.com
+    description: Stripe Coupons API — Coupon business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-coupons-coupon
+      path: /v1/coupons/{coupon}
+      operations:
+      - name: deletecouponscoupon
+        method: DELETE
+        description: Stripe Delete   Coupons Coupon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: coupon
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getcouponscoupon
+        method: GET
+        description: Stripe Get   Coupons Coupon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: coupon
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postcouponscoupon
+        method: POST
+        description: Stripe Post   Coupons Coupon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: coupon
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coupons-coupon-rest
+    port: 8080
+    description: REST adapter for Stripe Coupons API — Coupon. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/coupons/{coupon}
+      name: v1-coupons-coupon
+      description: REST surface for v1-coupons-coupon.
+      operations:
+      - method: DELETE
+        name: deletecouponscoupon
+        description: Stripe Delete   Coupons Coupon
+        call: coupons-coupon.deletecouponscoupon
+        with:
+          coupon: rest.coupon
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getcouponscoupon
+        description: Stripe Get   Coupons Coupon
+        call: coupons-coupon.getcouponscoupon
+        with:
+          coupon: rest.coupon
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postcouponscoupon
+        description: Stripe Post   Coupons Coupon
+        call: coupons-coupon.postcouponscoupon
+        with:
+          coupon: rest.coupon
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coupons-coupon-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Coupons API — Coupon. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-delete-coupons-coupon
+      description: Stripe Delete   Coupons Coupon
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coupons-coupon.deletecouponscoupon
+      with:
+        coupon: tools.coupon
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-get-coupons-coupon
+      description: Stripe Get   Coupons Coupon
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coupons-coupon.getcouponscoupon
+      with:
+        coupon: tools.coupon
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-coupons-coupon
+      description: Stripe Post   Coupons Coupon
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coupons-coupon.postcouponscoupon
+      with:
+        coupon: tools.coupon
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

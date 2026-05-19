@@ -1,0 +1,108 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Invoice API — Search
+  description: 'Stripe Invoice API — Search. 1 operations. Lead operation: Stripe Get   Invoices Search. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Search
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: invoice-search
+    baseUri: https://api.stripe.com
+    description: Stripe Invoice API — Search business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-invoices-search
+      path: /v1/invoices/search
+      operations:
+      - name: getinvoicessearch
+        method: GET
+        description: Stripe Get   Invoices Search
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: page
+          in: query
+          type: string
+          description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first
+            call. Use the next_page value returned in a previous respons
+        - name: query
+          in: query
+          type: string
+          description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language)
+            and the list of supported [query fields for invoices]
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: invoice-search-rest
+    port: 8080
+    description: REST adapter for Stripe Invoice API — Search. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/invoices/search
+      name: v1-invoices-search
+      description: REST surface for v1-invoices-search.
+      operations:
+      - method: GET
+        name: getinvoicessearch
+        description: Stripe Get   Invoices Search
+        call: invoice-search.getinvoicessearch
+        with:
+          expand: rest.expand
+          limit: rest.limit
+          page: rest.page
+          query: rest.query
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: invoice-search-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Invoice API — Search. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-get-invoices-search
+      description: Stripe Get   Invoices Search
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: invoice-search.getinvoicessearch
+      with:
+        expand: tools.expand
+        limit: tools.limit
+        page: tools.page
+        query: tools.query
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

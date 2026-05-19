@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Application Fees API — Create
+  description: 'Stripe Application Fees API — Create. 1 operations. Lead operation: Stripe Create Application Fee Refund.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Create
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: application-fees-create
+    baseUri: https://api.stripe.com
+    description: Stripe Application Fees API — Create business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-application_fees-id-refunds
+      path: /v1/application_fees/{id}/refunds
+      operations:
+      - name: postapplicationfeesidrefunds
+        method: POST
+        description: Stripe Create Application Fee Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: application-fees-create-rest
+    port: 8080
+    description: REST adapter for Stripe Application Fees API — Create. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/application-fees/{id}/refunds
+      name: v1-application-fees-id-refunds
+      description: REST surface for v1-application_fees-id-refunds.
+      operations:
+      - method: POST
+        name: postapplicationfeesidrefunds
+        description: Stripe Create Application Fee Refund
+        call: application-fees-create.postapplicationfeesidrefunds
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: application-fees-create-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Application Fees API — Create. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-create-application-fee-refund
+      description: Stripe Create Application Fee Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: application-fees-create.postapplicationfeesidrefunds
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

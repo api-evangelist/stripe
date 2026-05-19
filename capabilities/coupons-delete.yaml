@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Coupons API — Delete
+  description: 'Stripe Coupons API — Delete. 1 operations. Lead operation: Stripe Delete   Coupons Coupon. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coupons-delete
+    baseUri: https://api.stripe.com
+    description: Stripe Coupons API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-coupons-coupon
+      path: /v1/coupons/{coupon}
+      operations:
+      - name: deletecouponscoupon
+        method: DELETE
+        description: Stripe Delete   Coupons Coupon
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: coupon
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coupons-delete-rest
+    port: 8080
+    description: REST adapter for Stripe Coupons API — Delete. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/coupons/{coupon}
+      name: v1-coupons-coupon
+      description: REST surface for v1-coupons-coupon.
+      operations:
+      - method: DELETE
+        name: deletecouponscoupon
+        description: Stripe Delete   Coupons Coupon
+        call: coupons-delete.deletecouponscoupon
+        with:
+          coupon: rest.coupon
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coupons-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Coupons API — Delete. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-delete-coupons-coupon
+      description: Stripe Delete   Coupons Coupon
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coupons-delete.deletecouponscoupon
+      with:
+        coupon: tools.coupon
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

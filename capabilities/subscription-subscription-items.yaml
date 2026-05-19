@@ -1,0 +1,417 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Subscription API — Subscription Items
+  description: 'Stripe Subscription API — Subscription Items. 7 operations. Lead operation: Subscription Items. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Subscription Items
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: subscription-subscription-items
+    baseUri: https://api.stripe.com
+    description: Stripe Subscription API — Subscription Items business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-subscription_items
+      path: /v1/subscription_items
+      operations:
+      - name: getsubscriptionitems
+        method: GET
+        description: <p>Returns a list of your subscription items for a given subscription.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: subscription
+          in: query
+          type: string
+          description: The ID of the subscription whose items will be retrieved.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postsubscriptionitems
+        method: POST
+        description: <p>Adds a new item to an existing subscription. No existing items will be changed or replaced.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-subscription_items-item
+      path: /v1/subscription_items/{item}
+      operations:
+      - name: deletesubscriptionitemsitem
+        method: DELETE
+        description: <p>Deletes an item from the subscription. Removing a subscription item from a subscription will not cancel
+          the subscription.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getsubscriptionitemsitem
+        method: GET
+        description: <p>Retrieves the subscription item with the given ID.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postsubscriptionitemsitem
+        method: POST
+        description: <p>Updates the plan or quantity of an item on a current subscription.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-subscription_items-subscription_item-usage_record_summaries
+      path: /v1/subscription_items/{subscription_item}/usage_record_summaries
+      operations:
+      - name: getsubscriptionitemssubscriptionitemusagerecordsummaries
+        method: GET
+        description: '<p>For the specified subscription item, returns a list of summary objects. Each object in the list provides
+          usage information that’s been summarized from multiple usage records and over a subscription billing period (e.g.,
+          15 usage records '
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: subscription_item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-subscription_items-subscription_item-usage_records
+      path: /v1/subscription_items/{subscription_item}/usage_records
+      operations:
+      - name: postsubscriptionitemssubscriptionitemusagerecords
+        method: POST
+        description: <p>Creates a usage record for a specified subscription item and date, and fills it with a quantity.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription_item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: subscription-subscription-items-rest
+    port: 8080
+    description: REST adapter for Stripe Subscription API — Subscription Items. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/subscription-items
+      name: v1-subscription-items
+      description: REST surface for v1-subscription_items.
+      operations:
+      - method: GET
+        name: getsubscriptionitems
+        description: <p>Returns a list of your subscription items for a given subscription.</p>
+        call: subscription-subscription-items.getsubscriptionitems
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          subscription: rest.subscription
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsubscriptionitems
+        description: <p>Adds a new item to an existing subscription. No existing items will be changed or replaced.</p>
+        call: subscription-subscription-items.postsubscriptionitems
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscription-items/{item}
+      name: v1-subscription-items-item
+      description: REST surface for v1-subscription_items-item.
+      operations:
+      - method: DELETE
+        name: deletesubscriptionitemsitem
+        description: <p>Deletes an item from the subscription. Removing a subscription item from a subscription will not cancel
+          the subscription.</p>
+        call: subscription-subscription-items.deletesubscriptionitemsitem
+        with:
+          item: rest.item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getsubscriptionitemsitem
+        description: <p>Retrieves the subscription item with the given ID.</p>
+        call: subscription-subscription-items.getsubscriptionitemsitem
+        with:
+          expand: rest.expand
+          item: rest.item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsubscriptionitemsitem
+        description: <p>Updates the plan or quantity of an item on a current subscription.</p>
+        call: subscription-subscription-items.postsubscriptionitemsitem
+        with:
+          item: rest.item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscription-items/{subscription-item}/usage-record-summaries
+      name: v1-subscription-items-subscription-item-usage-record-summaries
+      description: REST surface for v1-subscription_items-subscription_item-usage_record_summaries.
+      operations:
+      - method: GET
+        name: getsubscriptionitemssubscriptionitemusagerecordsummaries
+        description: '<p>For the specified subscription item, returns a list of summary objects. Each object in the list provides
+          usage information that’s been summarized from multiple usage records and over a subscription billing period (e.g.,
+          15 usage records '
+        call: subscription-subscription-items.getsubscriptionitemssubscriptionitemusagerecordsummaries
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          subscription_item: rest.subscription_item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/subscription-items/{subscription-item}/usage-records
+      name: v1-subscription-items-subscription-item-usage-records
+      description: REST surface for v1-subscription_items-subscription_item-usage_records.
+      operations:
+      - method: POST
+        name: postsubscriptionitemssubscriptionitemusagerecords
+        description: <p>Creates a usage record for a specified subscription item and date, and fills it with a quantity.</p>
+        call: subscription-subscription-items.postsubscriptionitemssubscriptionitemusagerecords
+        with:
+          subscription_item: rest.subscription_item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: subscription-subscription-items-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Subscription API — Subscription Items. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: p-returns-list-your-subscription-items
+      description: <p>Returns a list of your subscription items for a given subscription.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscription-items.getsubscriptionitems
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        subscription: tools.subscription
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-adds-new-item-existing-subscription
+      description: <p>Adds a new item to an existing subscription. No existing items will be changed or replaced.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscription-items.postsubscriptionitems
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-item-subscription-removing-subscription
+      description: <p>Deletes an item from the subscription. Removing a subscription item from a subscription will not cancel
+        the subscription.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: subscription-subscription-items.deletesubscriptionitemsitem
+      with:
+        item: tools.item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-subscription-item-given-id
+      description: <p>Retrieves the subscription item with the given ID.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscription-items.getsubscriptionitemsitem
+      with:
+        expand: tools.expand
+        item: tools.item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-plan-quantity-item-current
+      description: <p>Updates the plan or quantity of an item on a current subscription.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscription-items.postsubscriptionitemsitem
+      with:
+        item: tools.item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-for-specified-subscription-item-returns
+      description: '<p>For the specified subscription item, returns a list of summary objects. Each object in the list provides
+        usage information that’s been summarized from multiple usage records and over a subscription billing period (e.g.,
+        15 usage records '
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: subscription-subscription-items.getsubscriptionitemssubscriptionitemusagerecordsummaries
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        subscription_item: tools.subscription_item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-usage-record-specified-subscription
+      description: <p>Creates a usage record for a specified subscription item and date, and fills it with a quantity.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: subscription-subscription-items.postsubscriptionitemssubscriptionitemusagerecords
+      with:
+        subscription_item: tools.subscription_item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

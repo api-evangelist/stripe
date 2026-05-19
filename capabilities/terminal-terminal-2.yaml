@@ -1,0 +1,1079 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Terminal API — Terminal
+  description: 'Stripe Terminal API — Terminal. 21 operations. Lead operation: Terminal. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Terminal
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: terminal-terminal-2
+    baseUri: https://api.stripe.com
+    description: Stripe Terminal API — Terminal business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-terminal-configurations
+      path: /v1/terminal/configurations
+      operations:
+      - name: getterminalconfigurations
+        method: GET
+        description: <p>Returns a list of <code>Configuration</code> objects.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: is_account_default
+          in: query
+          type: boolean
+          description: if present, only return the account default or non-default configurations.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminalconfigurations
+        method: POST
+        description: <p>Creates a new <code>Configuration</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-configurations-configuration
+      path: /v1/terminal/configurations/{configuration}
+      operations:
+      - name: deleteterminalconfigurationsconfiguration
+        method: DELETE
+        description: <p>Deletes a <code>Configuration</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getterminalconfigurationsconfiguration
+        method: GET
+        description: <p>Retrieves a <code>Configuration</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminalconfigurationsconfiguration
+        method: POST
+        description: <p>Updates a new <code>Configuration</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-connection_tokens
+      path: /v1/terminal/connection_tokens
+      operations:
+      - name: postterminalconnectiontokens
+        method: POST
+        description: <p>To connect to a reader the Stripe Terminal SDK needs to retrieve a short-lived connection token from
+          Stripe, proxied through your server. On your backend, add an endpoint that creates and returns a connection token.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-locations
+      path: /v1/terminal/locations
+      operations:
+      - name: getterminallocations
+        method: GET
+        description: <p>Returns a list of <code>Location</code> objects.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminallocations
+        method: POST
+        description: <p>Creates a new <code>Location</code> object.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-terminal-locations-location
+      path: /v1/terminal/locations/{location}
+      operations:
+      - name: deleteterminallocationslocation
+        method: DELETE
+        description: <p>Deletes a <code>Location</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: location
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getterminallocationslocation
+        method: GET
+        description: <p>Retrieves a <code>Location</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: location
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminallocationslocation
+        method: POST
+        description: <p>Updates a <code>Location</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: location
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-readers
+      path: /v1/terminal/readers
+      operations:
+      - name: getterminalreaders
+        method: GET
+        description: <p>Returns a list of <code>Reader</code> objects.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: device_type
+          in: query
+          type: string
+          description: Filters readers by device type
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: location
+          in: query
+          type: string
+          description: A location ID to filter the response list to only readers at the specific location
+        - name: serial_number
+          in: query
+          type: string
+          description: Filters readers by serial number
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: A status filter to filter readers to only offline or online readers
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminalreaders
+        method: POST
+        description: <p>Creates a new <code>Reader</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-terminal-readers-reader
+      path: /v1/terminal/readers/{reader}
+      operations:
+      - name: deleteterminalreadersreader
+        method: DELETE
+        description: <p>Deletes a <code>Reader</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getterminalreadersreader
+        method: GET
+        description: <p>Retrieves a <code>Reader</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postterminalreadersreader
+        method: POST
+        description: <p>Updates a <code>Reader</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-readers-reader-cancel_action
+      path: /v1/terminal/readers/{reader}/cancel_action
+      operations:
+      - name: postterminalreadersreadercancelaction
+        method: POST
+        description: <p>Cancels the current reader action.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-readers-reader-process_payment_intent
+      path: /v1/terminal/readers/{reader}/process_payment_intent
+      operations:
+      - name: postterminalreadersreaderprocesspaymentintent
+        method: POST
+        description: <p>Initiates a payment flow on a Reader.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-terminal-readers-reader-process_setup_intent
+      path: /v1/terminal/readers/{reader}/process_setup_intent
+      operations:
+      - name: postterminalreadersreaderprocesssetupintent
+        method: POST
+        description: <p>Initiates a setup intent flow on a Reader.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-terminal-readers-reader-refund_payment
+      path: /v1/terminal/readers/{reader}/refund_payment
+      operations:
+      - name: postterminalreadersreaderrefundpayment
+        method: POST
+        description: <p>Initiates a refund on a Reader</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-terminal-readers-reader-set_reader_display
+      path: /v1/terminal/readers/{reader}/set_reader_display
+      operations:
+      - name: postterminalreadersreadersetreaderdisplay
+        method: POST
+        description: <p>Sets reader display to show cart details.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reader
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: terminal-terminal-2-rest
+    port: 8080
+    description: REST adapter for Stripe Terminal API — Terminal. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/terminal/configurations
+      name: v1-terminal-configurations
+      description: REST surface for v1-terminal-configurations.
+      operations:
+      - method: GET
+        name: getterminalconfigurations
+        description: <p>Returns a list of <code>Configuration</code> objects.</p>
+        call: terminal-terminal-2.getterminalconfigurations
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          is_account_default: rest.is_account_default
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminalconfigurations
+        description: <p>Creates a new <code>Configuration</code> object.</p>
+        call: terminal-terminal-2.postterminalconfigurations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/configurations/{configuration}
+      name: v1-terminal-configurations-configuration
+      description: REST surface for v1-terminal-configurations-configuration.
+      operations:
+      - method: DELETE
+        name: deleteterminalconfigurationsconfiguration
+        description: <p>Deletes a <code>Configuration</code> object.</p>
+        call: terminal-terminal-2.deleteterminalconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getterminalconfigurationsconfiguration
+        description: <p>Retrieves a <code>Configuration</code> object.</p>
+        call: terminal-terminal-2.getterminalconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminalconfigurationsconfiguration
+        description: <p>Updates a new <code>Configuration</code> object.</p>
+        call: terminal-terminal-2.postterminalconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/connection-tokens
+      name: v1-terminal-connection-tokens
+      description: REST surface for v1-terminal-connection_tokens.
+      operations:
+      - method: POST
+        name: postterminalconnectiontokens
+        description: <p>To connect to a reader the Stripe Terminal SDK needs to retrieve a short-lived connection token from
+          Stripe, proxied through your server. On your backend, add an endpoint that creates and returns a connection token.</p>
+        call: terminal-terminal-2.postterminalconnectiontokens
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/locations
+      name: v1-terminal-locations
+      description: REST surface for v1-terminal-locations.
+      operations:
+      - method: GET
+        name: getterminallocations
+        description: <p>Returns a list of <code>Location</code> objects.</p>
+        call: terminal-terminal-2.getterminallocations
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminallocations
+        description: <p>Creates a new <code>Location</code> object.
+        call: terminal-terminal-2.postterminallocations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/locations/{location}
+      name: v1-terminal-locations-location
+      description: REST surface for v1-terminal-locations-location.
+      operations:
+      - method: DELETE
+        name: deleteterminallocationslocation
+        description: <p>Deletes a <code>Location</code> object.</p>
+        call: terminal-terminal-2.deleteterminallocationslocation
+        with:
+          location: rest.location
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getterminallocationslocation
+        description: <p>Retrieves a <code>Location</code> object.</p>
+        call: terminal-terminal-2.getterminallocationslocation
+        with:
+          expand: rest.expand
+          location: rest.location
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminallocationslocation
+        description: <p>Updates a <code>Location</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged.</p>
+        call: terminal-terminal-2.postterminallocationslocation
+        with:
+          location: rest.location
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers
+      name: v1-terminal-readers
+      description: REST surface for v1-terminal-readers.
+      operations:
+      - method: GET
+        name: getterminalreaders
+        description: <p>Returns a list of <code>Reader</code> objects.</p>
+        call: terminal-terminal-2.getterminalreaders
+        with:
+          device_type: rest.device_type
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          location: rest.location
+          serial_number: rest.serial_number
+          starting_after: rest.starting_after
+          status: rest.status
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminalreaders
+        description: <p>Creates a new <code>Reader</code> object.</p>
+        call: terminal-terminal-2.postterminalreaders
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}
+      name: v1-terminal-readers-reader
+      description: REST surface for v1-terminal-readers-reader.
+      operations:
+      - method: DELETE
+        name: deleteterminalreadersreader
+        description: <p>Deletes a <code>Reader</code> object.</p>
+        call: terminal-terminal-2.deleteterminalreadersreader
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getterminalreadersreader
+        description: <p>Retrieves a <code>Reader</code> object.</p>
+        call: terminal-terminal-2.getterminalreadersreader
+        with:
+          expand: rest.expand
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postterminalreadersreader
+        description: <p>Updates a <code>Reader</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged.</p>
+        call: terminal-terminal-2.postterminalreadersreader
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}/cancel-action
+      name: v1-terminal-readers-reader-cancel-action
+      description: REST surface for v1-terminal-readers-reader-cancel_action.
+      operations:
+      - method: POST
+        name: postterminalreadersreadercancelaction
+        description: <p>Cancels the current reader action.</p>
+        call: terminal-terminal-2.postterminalreadersreadercancelaction
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}/process-payment-intent
+      name: v1-terminal-readers-reader-process-payment-intent
+      description: REST surface for v1-terminal-readers-reader-process_payment_intent.
+      operations:
+      - method: POST
+        name: postterminalreadersreaderprocesspaymentintent
+        description: <p>Initiates a payment flow on a Reader.</p>
+        call: terminal-terminal-2.postterminalreadersreaderprocesspaymentintent
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}/process-setup-intent
+      name: v1-terminal-readers-reader-process-setup-intent
+      description: REST surface for v1-terminal-readers-reader-process_setup_intent.
+      operations:
+      - method: POST
+        name: postterminalreadersreaderprocesssetupintent
+        description: <p>Initiates a setup intent flow on a Reader.</p>
+        call: terminal-terminal-2.postterminalreadersreaderprocesssetupintent
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}/refund-payment
+      name: v1-terminal-readers-reader-refund-payment
+      description: REST surface for v1-terminal-readers-reader-refund_payment.
+      operations:
+      - method: POST
+        name: postterminalreadersreaderrefundpayment
+        description: <p>Initiates a refund on a Reader</p>
+        call: terminal-terminal-2.postterminalreadersreaderrefundpayment
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/terminal/readers/{reader}/set-reader-display
+      name: v1-terminal-readers-reader-set-reader-display
+      description: REST surface for v1-terminal-readers-reader-set_reader_display.
+      operations:
+      - method: POST
+        name: postterminalreadersreadersetreaderdisplay
+        description: <p>Sets reader display to show cart details.</p>
+        call: terminal-terminal-2.postterminalreadersreadersetreaderdisplay
+        with:
+          reader: rest.reader
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: terminal-terminal-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Terminal API — Terminal. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: p-returns-list-code-configuration-code-objects
+      description: <p>Returns a list of <code>Configuration</code> objects.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminalconfigurations
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        is_account_default: tools.is_account_default
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-code-configuration-code-object
+      description: <p>Creates a new <code>Configuration</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalconfigurations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-code-configuration-code-object-p
+      description: <p>Deletes a <code>Configuration</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: terminal-terminal-2.deleteterminalconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-code-configuration-code-object-p
+      description: <p>Retrieves a <code>Configuration</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminalconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-new-code-configuration-code-object
+      description: <p>Updates a new <code>Configuration</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-to-connect-reader-stripe-terminal
+      description: <p>To connect to a reader the Stripe Terminal SDK needs to retrieve a short-lived connection token from
+        Stripe, proxied through your server. On your backend, add an endpoint that creates and returns a connection token.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalconnectiontokens
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-code-location-code-objects
+      description: <p>Returns a list of <code>Location</code> objects.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminallocations
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-code-location-code-object
+      description: <p>Creates a new <code>Location</code> object.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminallocations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-code-location-code-object-p
+      description: <p>Deletes a <code>Location</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: terminal-terminal-2.deleteterminallocationslocation
+      with:
+        location: tools.location
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-code-location-code-object-p
+      description: <p>Retrieves a <code>Location</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminallocationslocation
+      with:
+        expand: tools.expand
+        location: tools.location
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-code-location-code-object-setting
+      description: <p>Updates a <code>Location</code> object by setting the values of the parameters passed. Any parameters
+        not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminallocationslocation
+      with:
+        location: tools.location
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-code-reader-code-objects
+      description: <p>Returns a list of <code>Reader</code> objects.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminalreaders
+      with:
+        device_type: tools.device_type
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        location: tools.location
+        serial_number: tools.serial_number
+        starting_after: tools.starting_after
+        status: tools.status
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-code-reader-code-object
+      description: <p>Creates a new <code>Reader</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreaders
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-code-reader-code-object-p
+      description: <p>Deletes a <code>Reader</code> object.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: terminal-terminal-2.deleteterminalreadersreader
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-code-reader-code-object-p
+      description: <p>Retrieves a <code>Reader</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: terminal-terminal-2.getterminalreadersreader
+      with:
+        expand: tools.expand
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-code-reader-code-object-setting
+      description: <p>Updates a <code>Reader</code> object by setting the values of the parameters passed. Any parameters
+        not provided will be left unchanged.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreader
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-cancels-current-reader-action-p
+      description: <p>Cancels the current reader action.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreadercancelaction
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-initiates-payment-flow-reader-p
+      description: <p>Initiates a payment flow on a Reader.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreaderprocesspaymentintent
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-initiates-setup-intent-flow-reader
+      description: <p>Initiates a setup intent flow on a Reader.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreaderprocesssetupintent
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-initiates-refund-reader-p
+      description: <p>Initiates a refund on a Reader</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreaderrefundpayment
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-sets-reader-display-show-cart
+      description: <p>Sets reader display to show cart details.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: terminal-terminal-2.postterminalreadersreadersetreaderdisplay
+      with:
+        reader: tools.reader
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

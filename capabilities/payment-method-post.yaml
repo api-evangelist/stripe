@@ -1,0 +1,452 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Method API — Post
+  description: 'Stripe Payment Method API — Post. 9 operations. Lead operation: Stripe Post   Payment Method Configurations.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-method-post
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Method API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_method_configurations
+      path: /v1/payment_method_configurations
+      operations:
+      - name: postpaymentmethodconfigurations
+        method: POST
+        description: Stripe Post   Payment Method Configurations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_method_configurations-configuration
+      path: /v1/payment_method_configurations/{configuration}
+      operations:
+      - name: postpaymentmethodconfigurationsconfiguration
+        method: POST
+        description: Stripe Post   Payment Method Configurations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: configuration
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_method_domains
+      path: /v1/payment_method_domains
+      operations:
+      - name: postpaymentmethoddomains
+        method: POST
+        description: Stripe Post   Payment Method Domains
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-payment_method_domains-payment_method_domain
+      path: /v1/payment_method_domains/{payment_method_domain}
+      operations:
+      - name: postpaymentmethoddomainspaymentmethoddomain
+        method: POST
+        description: Stripe Post   Payment Method Domains
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method_domain
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_method_domains-payment_method_domain-validate
+      path: /v1/payment_method_domains/{payment_method_domain}/validate
+      operations:
+      - name: postpaymentmethoddomainspaymentmethoddomainvalidate
+        method: POST
+        description: Stripe Post   Payment Method Domains Validate
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method_domain
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_methods
+      path: /v1/payment_methods
+      operations:
+      - name: postpaymentmethods
+        method: POST
+        description: Stripe Post   Payment Methods
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_methods-payment_method
+      path: /v1/payment_methods/{payment_method}
+      operations:
+      - name: postpaymentmethodspaymentmethod
+        method: POST
+        description: Stripe Post   Payment Methods
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payment_methods-payment_method-attach
+      path: /v1/payment_methods/{payment_method}/attach
+      operations:
+      - name: postpaymentmethodspaymentmethodattach
+        method: POST
+        description: Stripe Post   Payment Methods Attach
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-payment_methods-payment_method-detach
+      path: /v1/payment_methods/{payment_method}/detach
+      operations:
+      - name: postpaymentmethodspaymentmethoddetach
+        method: POST
+        description: Stripe Post   Payment Methods Detach
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-method-post-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Method API — Post. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-method-configurations
+      name: v1-payment-method-configurations
+      description: REST surface for v1-payment_method_configurations.
+      operations:
+      - method: POST
+        name: postpaymentmethodconfigurations
+        description: Stripe Post   Payment Method Configurations
+        call: payment-method-post.postpaymentmethodconfigurations
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-method-configurations/{configuration}
+      name: v1-payment-method-configurations-configuration
+      description: REST surface for v1-payment_method_configurations-configuration.
+      operations:
+      - method: POST
+        name: postpaymentmethodconfigurationsconfiguration
+        description: Stripe Post   Payment Method Configurations
+        call: payment-method-post.postpaymentmethodconfigurationsconfiguration
+        with:
+          configuration: rest.configuration
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-method-domains
+      name: v1-payment-method-domains
+      description: REST surface for v1-payment_method_domains.
+      operations:
+      - method: POST
+        name: postpaymentmethoddomains
+        description: Stripe Post   Payment Method Domains
+        call: payment-method-post.postpaymentmethoddomains
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-method-domains/{payment-method-domain}
+      name: v1-payment-method-domains-payment-method-domain
+      description: REST surface for v1-payment_method_domains-payment_method_domain.
+      operations:
+      - method: POST
+        name: postpaymentmethoddomainspaymentmethoddomain
+        description: Stripe Post   Payment Method Domains
+        call: payment-method-post.postpaymentmethoddomainspaymentmethoddomain
+        with:
+          payment_method_domain: rest.payment_method_domain
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-method-domains/{payment-method-domain}/validate
+      name: v1-payment-method-domains-payment-method-domain-validate
+      description: REST surface for v1-payment_method_domains-payment_method_domain-validate.
+      operations:
+      - method: POST
+        name: postpaymentmethoddomainspaymentmethoddomainvalidate
+        description: Stripe Post   Payment Method Domains Validate
+        call: payment-method-post.postpaymentmethoddomainspaymentmethoddomainvalidate
+        with:
+          payment_method_domain: rest.payment_method_domain
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-methods
+      name: v1-payment-methods
+      description: REST surface for v1-payment_methods.
+      operations:
+      - method: POST
+        name: postpaymentmethods
+        description: Stripe Post   Payment Methods
+        call: payment-method-post.postpaymentmethods
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-methods/{payment-method}
+      name: v1-payment-methods-payment-method
+      description: REST surface for v1-payment_methods-payment_method.
+      operations:
+      - method: POST
+        name: postpaymentmethodspaymentmethod
+        description: Stripe Post   Payment Methods
+        call: payment-method-post.postpaymentmethodspaymentmethod
+        with:
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-methods/{payment-method}/attach
+      name: v1-payment-methods-payment-method-attach
+      description: REST surface for v1-payment_methods-payment_method-attach.
+      operations:
+      - method: POST
+        name: postpaymentmethodspaymentmethodattach
+        description: Stripe Post   Payment Methods Attach
+        call: payment-method-post.postpaymentmethodspaymentmethodattach
+        with:
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payment-methods/{payment-method}/detach
+      name: v1-payment-methods-payment-method-detach
+      description: REST surface for v1-payment_methods-payment_method-detach.
+      operations:
+      - method: POST
+        name: postpaymentmethodspaymentmethoddetach
+        description: Stripe Post   Payment Methods Detach
+        call: payment-method-post.postpaymentmethodspaymentmethoddetach
+        with:
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-method-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Method API — Post. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-method-configurations
+      description: Stripe Post   Payment Method Configurations
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethodconfigurations
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-method-configurations-2
+      description: Stripe Post   Payment Method Configurations
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethodconfigurationsconfiguration
+      with:
+        configuration: tools.configuration
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-method-domains
+      description: Stripe Post   Payment Method Domains
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethoddomains
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-method-domains-2
+      description: Stripe Post   Payment Method Domains
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethoddomainspaymentmethoddomain
+      with:
+        payment_method_domain: tools.payment_method_domain
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-method-domains-3
+      description: Stripe Post   Payment Method Domains Validate
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethoddomainspaymentmethoddomainvalidate
+      with:
+        payment_method_domain: tools.payment_method_domain
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-methods
+      description: Stripe Post   Payment Methods
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethods
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-methods-2
+      description: Stripe Post   Payment Methods
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethodspaymentmethod
+      with:
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-methods-attach
+      description: Stripe Post   Payment Methods Attach
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethodspaymentmethodattach
+      with:
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payment-methods-detach
+      description: Stripe Post   Payment Methods Detach
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-method-post.postpaymentmethodspaymentmethoddetach
+      with:
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

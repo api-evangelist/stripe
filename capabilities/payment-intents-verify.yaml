@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Intents API — Verify
+  description: 'Stripe Payment Intents API — Verify. 1 operations. Lead operation: Stripe Post   Payment Intents Verify Microdeposits.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Verify
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-intents-verify
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Intents API — Verify business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_intents-intent-verify_microdeposits
+      path: /v1/payment_intents/{intent}/verify_microdeposits
+      operations:
+      - name: postpaymentintentsintentverifymicrodeposits
+        method: POST
+        description: Stripe Post   Payment Intents Verify Microdeposits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-intents-verify-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Intents API — Verify. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-intents/{intent}/verify-microdeposits
+      name: v1-payment-intents-intent-verify-microdeposits
+      description: REST surface for v1-payment_intents-intent-verify_microdeposits.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentverifymicrodeposits
+        description: Stripe Post   Payment Intents Verify Microdeposits
+        call: payment-intents-verify.postpaymentintentsintentverifymicrodeposits
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-intents-verify-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Intents API — Verify. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-intents-verify
+      description: Stripe Post   Payment Intents Verify Microdeposits
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-verify.postpaymentintentsintentverifymicrodeposits
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

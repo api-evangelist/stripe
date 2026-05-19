@@ -1,0 +1,98 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Customers API — Method
+  description: 'Stripe Customers API — Method. 1 operations. Lead operation: Stripe Get   Customers Customer Payment Methods
+    Payment Method. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Method
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customers-method
+    baseUri: https://api.stripe.com
+    description: Stripe Customers API — Method business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-customers-customer-payment_methods-payment_method
+      path: /v1/customers/{customer}/payment_methods/{payment_method}
+      operations:
+      - name: getcustomerscustomerpaymentmethodspaymentmethod
+        method: GET
+        description: Stripe Get   Customers Customer Payment Methods Payment Method
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: payment_method
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customers-method-rest
+    port: 8080
+    description: REST adapter for Stripe Customers API — Method. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/customers/{customer}/payment-methods/{payment-method}
+      name: v1-customers-customer-payment-methods-payment-method
+      description: REST surface for v1-customers-customer-payment_methods-payment_method.
+      operations:
+      - method: GET
+        name: getcustomerscustomerpaymentmethodspaymentmethod
+        description: Stripe Get   Customers Customer Payment Methods Payment Method
+        call: customers-method.getcustomerscustomerpaymentmethodspaymentmethod
+        with:
+          customer: rest.customer
+          expand: rest.expand
+          payment_method: rest.payment_method
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customers-method-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Customers API — Method. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-get-customers-customer-payment
+      description: Stripe Get   Customers Customer Payment Methods Payment Method
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customers-method.getcustomerscustomerpaymentmethodspaymentmethod
+      with:
+        customer: tools.customer
+        expand: tools.expand
+        payment_method: tools.payment_method
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

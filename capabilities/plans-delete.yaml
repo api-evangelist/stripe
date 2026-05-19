@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Plans API — Delete
+  description: 'Stripe Plans API — Delete. 1 operations. Lead operation: Stripe Delete   Plans. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: plans-delete
+    baseUri: https://api.stripe.com
+    description: Stripe Plans API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-plans-plan
+      path: /v1/plans/{plan}
+      operations:
+      - name: deleteplansplan
+        method: DELETE
+        description: Stripe Delete   Plans
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: plan
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: plans-delete-rest
+    port: 8080
+    description: REST adapter for Stripe Plans API — Delete. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/plans/{plan}
+      name: v1-plans-plan
+      description: REST surface for v1-plans-plan.
+      operations:
+      - method: DELETE
+        name: deleteplansplan
+        description: Stripe Delete   Plans
+        call: plans-delete.deleteplansplan
+        with:
+          plan: rest.plan
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: plans-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Plans API — Delete. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-delete-plans
+      description: Stripe Delete   Plans
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: plans-delete.deleteplansplan
+      with:
+        plan: tools.plan
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

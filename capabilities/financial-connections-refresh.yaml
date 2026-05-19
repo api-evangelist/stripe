@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Financial Connections API — Refresh
+  description: 'Stripe Financial Connections API — Refresh. 1 operations. Lead operation: Stripe Post   Financial Connections
+    Accounts Refresh. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Refresh
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: financial-connections-refresh
+    baseUri: https://api.stripe.com
+    description: Stripe Financial Connections API — Refresh business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-financial_connections-accounts-account-refresh
+      path: /v1/financial_connections/accounts/{account}/refresh
+      operations:
+      - name: postfinancialconnectionsaccountsaccountrefresh
+        method: POST
+        description: Stripe Post   Financial Connections Accounts Refresh
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: financial-connections-refresh-rest
+    port: 8080
+    description: REST adapter for Stripe Financial Connections API — Refresh. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/financial-connections/accounts/{account}/refresh
+      name: v1-financial-connections-accounts-account-refresh
+      description: REST surface for v1-financial_connections-accounts-account-refresh.
+      operations:
+      - method: POST
+        name: postfinancialconnectionsaccountsaccountrefresh
+        description: Stripe Post   Financial Connections Accounts Refresh
+        call: financial-connections-refresh.postfinancialconnectionsaccountsaccountrefresh
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: financial-connections-refresh-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Financial Connections API — Refresh. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: stripe-post-financial-connections-accounts
+      description: Stripe Post   Financial Connections Accounts Refresh
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: financial-connections-refresh.postfinancialconnectionsaccountsaccountrefresh
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

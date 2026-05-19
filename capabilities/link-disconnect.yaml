@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Link API — Disconnect
+  description: 'Stripe Link API — Disconnect. 1 operations. Lead operation: Stripe Post   Linked Accounts Disconnect. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Disconnect
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: link-disconnect
+    baseUri: https://api.stripe.com
+    description: Stripe Link API — Disconnect business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-linked_accounts-account-disconnect
+      path: /v1/linked_accounts/{account}/disconnect
+      operations:
+      - name: postlinkedaccountsaccountdisconnect
+        method: POST
+        description: Stripe Post   Linked Accounts Disconnect
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: link-disconnect-rest
+    port: 8080
+    description: REST adapter for Stripe Link API — Disconnect. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/linked-accounts/{account}/disconnect
+      name: v1-linked-accounts-account-disconnect
+      description: REST surface for v1-linked_accounts-account-disconnect.
+      operations:
+      - method: POST
+        name: postlinkedaccountsaccountdisconnect
+        description: Stripe Post   Linked Accounts Disconnect
+        call: link-disconnect.postlinkedaccountsaccountdisconnect
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: link-disconnect-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Link API — Disconnect. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-linked-accounts-disconnect
+      description: Stripe Post   Linked Accounts Disconnect
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: link-disconnect.postlinkedaccountsaccountdisconnect
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

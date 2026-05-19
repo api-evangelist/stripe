@@ -1,0 +1,335 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Test Helpers API — Test Helpers
+  description: 'Stripe Test Helpers API — Test Helpers. 7 operations. Lead operation: Stripe Fund Customer Cash Balance. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Test Helpers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: test-helpers-test-helpers
+    baseUri: https://api.stripe.com
+    description: Stripe Test Helpers API — Test Helpers business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-test_helpers-customers-customer-fund_cash_balance
+      path: /v1/test_helpers/customers/{customer}/fund_cash_balance
+      operations:
+      - name: posttesthelperscustomerscustomerfundcashbalance
+        method: POST
+        description: Stripe Fund Customer Cash Balance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-test_helpers-refunds-refund-expire
+      path: /v1/test_helpers/refunds/{refund}/expire
+      operations:
+      - name: posttesthelpersrefundsrefundexpire
+        method: POST
+        description: Stripe Expire Refund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: refund
+          in: path
+          type: string
+          required: true
+    - name: v1-test_helpers-test_clocks
+      path: /v1/test_helpers/test_clocks
+      operations:
+      - name: gettesthelperstestclocks
+        method: GET
+        description: Stripe List Test Clocks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+      - name: posttesthelperstestclocks
+        method: POST
+        description: Stripe Create Test Clock
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-test_helpers-test_clocks-test_clock
+      path: /v1/test_helpers/test_clocks/{test_clock}
+      operations:
+      - name: gettesthelperstestclockstestclock
+        method: GET
+        description: Stripe Retrieve Test Clock
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: test_clock
+          in: path
+          type: string
+          required: true
+      - name: deletetesthelperstestclockstestclock
+        method: DELETE
+        description: Stripe Delete Test Clock
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: test_clock
+          in: path
+          type: string
+          required: true
+    - name: v1-test_helpers-test_clocks-test_clock-advance
+      path: /v1/test_helpers/test_clocks/{test_clock}/advance
+      operations:
+      - name: posttesthelperstestclockstestclockadvance
+        method: POST
+        description: Stripe Advance Test Clock
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: test_clock
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: test-helpers-test-helpers-rest
+    port: 8080
+    description: REST adapter for Stripe Test Helpers API — Test Helpers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/test-helpers/customers/{customer}/fund-cash-balance
+      name: v1-test-helpers-customers-customer-fund-cash-balance
+      description: REST surface for v1-test_helpers-customers-customer-fund_cash_balance.
+      operations:
+      - method: POST
+        name: posttesthelperscustomerscustomerfundcashbalance
+        description: Stripe Fund Customer Cash Balance
+        call: test-helpers-test-helpers.posttesthelperscustomerscustomerfundcashbalance
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/test-helpers/refunds/{refund}/expire
+      name: v1-test-helpers-refunds-refund-expire
+      description: REST surface for v1-test_helpers-refunds-refund-expire.
+      operations:
+      - method: POST
+        name: posttesthelpersrefundsrefundexpire
+        description: Stripe Expire Refund
+        call: test-helpers-test-helpers.posttesthelpersrefundsrefundexpire
+        with:
+          refund: rest.refund
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/test-helpers/test-clocks
+      name: v1-test-helpers-test-clocks
+      description: REST surface for v1-test_helpers-test_clocks.
+      operations:
+      - method: GET
+        name: gettesthelperstestclocks
+        description: Stripe List Test Clocks
+        call: test-helpers-test-helpers.gettesthelperstestclocks
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttesthelperstestclocks
+        description: Stripe Create Test Clock
+        call: test-helpers-test-helpers.posttesthelperstestclocks
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/test-helpers/test-clocks/{test-clock}
+      name: v1-test-helpers-test-clocks-test-clock
+      description: REST surface for v1-test_helpers-test_clocks-test_clock.
+      operations:
+      - method: GET
+        name: gettesthelperstestclockstestclock
+        description: Stripe Retrieve Test Clock
+        call: test-helpers-test-helpers.gettesthelperstestclockstestclock
+        with:
+          test_clock: rest.test_clock
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletetesthelperstestclockstestclock
+        description: Stripe Delete Test Clock
+        call: test-helpers-test-helpers.deletetesthelperstestclockstestclock
+        with:
+          test_clock: rest.test_clock
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/test-helpers/test-clocks/{test-clock}/advance
+      name: v1-test-helpers-test-clocks-test-clock-advance
+      description: REST surface for v1-test_helpers-test_clocks-test_clock-advance.
+      operations:
+      - method: POST
+        name: posttesthelperstestclockstestclockadvance
+        description: Stripe Advance Test Clock
+        call: test-helpers-test-helpers.posttesthelperstestclockstestclockadvance
+        with:
+          test_clock: rest.test_clock
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: test-helpers-test-helpers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Test Helpers API — Test Helpers. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-fund-customer-cash-balance
+      description: Stripe Fund Customer Cash Balance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: test-helpers-test-helpers.posttesthelperscustomerscustomerfundcashbalance
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-expire-refund
+      description: Stripe Expire Refund
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: test-helpers-test-helpers.posttesthelpersrefundsrefundexpire
+      with:
+        refund: tools.refund
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-test-clocks
+      description: Stripe List Test Clocks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: test-helpers-test-helpers.gettesthelperstestclocks
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-test-clock
+      description: Stripe Create Test Clock
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: test-helpers-test-helpers.posttesthelperstestclocks
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-test-clock
+      description: Stripe Retrieve Test Clock
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: test-helpers-test-helpers.gettesthelperstestclockstestclock
+      with:
+        test_clock: tools.test_clock
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-test-clock
+      description: Stripe Delete Test Clock
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: test-helpers-test-helpers.deletetesthelperstestclockstestclock
+      with:
+        test_clock: tools.test_clock
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-advance-test-clock
+      description: Stripe Advance Test Clock
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: test-helpers-test-helpers.posttesthelperstestclockstestclockadvance
+      with:
+        test_clock: tools.test_clock
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,797 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Accounts API — Account
+  description: 'Stripe Accounts API — Account. 16 operations. Lead operation: Stripe Retrieve Account. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Account
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: accounts-account
+    baseUri: https://api.stripe.com
+    description: Stripe Accounts API — Account business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-account
+      path: /v1/account
+      operations:
+      - name: getaccount
+        method: GET
+        description: Stripe Retrieve Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-account_links
+      path: /v1/account_links
+      operations:
+      - name: postaccountlinks
+        method: POST
+        description: Stripe Create Account Link
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-account_sessions
+      path: /v1/account_sessions
+      operations:
+      - name: postaccountsessions
+        method: POST
+        description: Stripe Create Account Session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts
+      path: /v1/accounts
+      operations:
+      - name: postaccounts
+        method: POST
+        description: Stripe Create Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account
+      path: /v1/accounts/{account}
+      operations:
+      - name: deleteaccountsaccount
+        method: DELETE
+        description: Stripe Delete Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getaccountsaccount
+        method: GET
+        description: Stripe Retrieve Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postaccountsaccount
+        method: POST
+        description: Stripe Update Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-bank_accounts
+      path: /v1/accounts/{account}/bank_accounts
+      operations:
+      - name: postaccountsaccountbankaccounts
+        method: POST
+        description: Stripe Create Bank Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-bank_accounts-id
+      path: /v1/accounts/{account}/bank_accounts/{id}
+      operations:
+      - name: deleteaccountsaccountbankaccountsid
+        method: DELETE
+        description: Stripe Delete Bank Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getaccountsaccountbankaccountsid
+        method: GET
+        description: Stripe Retrieve Bank Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postaccountsaccountbankaccountsid
+        method: POST
+        description: Stripe Update Bank Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-external_accounts
+      path: /v1/accounts/{account}/external_accounts
+      operations:
+      - name: postaccountsaccountexternalaccounts
+        method: POST
+        description: Stripe Create External Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-external_accounts-id
+      path: /v1/accounts/{account}/external_accounts/{id}
+      operations:
+      - name: deleteaccountsaccountexternalaccountsid
+        method: DELETE
+        description: Stripe Delete External Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getaccountsaccountexternalaccountsid
+        method: GET
+        description: Stripe Retrieve External Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postaccountsaccountexternalaccountsid
+        method: POST
+        description: Stripe Update External Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-reject
+      path: /v1/accounts/{account}/reject
+      operations:
+      - name: postaccountsaccountreject
+        method: POST
+        description: Stripe Reject Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: rest
+    namespace: accounts-account-rest
+    port: 8080
+    description: REST adapter for Stripe Accounts API — Account. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/account
+      name: v1-account
+      description: REST surface for v1-account.
+      operations:
+      - method: GET
+        name: getaccount
+        description: Stripe Retrieve Account
+        call: accounts-account.getaccount
+        with:
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/account-links
+      name: v1-account-links
+      description: REST surface for v1-account_links.
+      operations:
+      - method: POST
+        name: postaccountlinks
+        description: Stripe Create Account Link
+        call: accounts-account.postaccountlinks
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/account-sessions
+      name: v1-account-sessions
+      description: REST surface for v1-account_sessions.
+      operations:
+      - method: POST
+        name: postaccountsessions
+        description: Stripe Create Account Session
+        call: accounts-account.postaccountsessions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts
+      name: v1-accounts
+      description: REST surface for v1-accounts.
+      operations:
+      - method: POST
+        name: postaccounts
+        description: Stripe Create Account
+        call: accounts-account.postaccounts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}
+      name: v1-accounts-account
+      description: REST surface for v1-accounts-account.
+      operations:
+      - method: DELETE
+        name: deleteaccountsaccount
+        description: Stripe Delete Account
+        call: accounts-account.deleteaccountsaccount
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getaccountsaccount
+        description: Stripe Retrieve Account
+        call: accounts-account.getaccountsaccount
+        with:
+          account: rest.account
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccountsaccount
+        description: Stripe Update Account
+        call: accounts-account.postaccountsaccount
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/bank-accounts
+      name: v1-accounts-account-bank-accounts
+      description: REST surface for v1-accounts-account-bank_accounts.
+      operations:
+      - method: POST
+        name: postaccountsaccountbankaccounts
+        description: Stripe Create Bank Account
+        call: accounts-account.postaccountsaccountbankaccounts
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/bank-accounts/{id}
+      name: v1-accounts-account-bank-accounts-id
+      description: REST surface for v1-accounts-account-bank_accounts-id.
+      operations:
+      - method: DELETE
+        name: deleteaccountsaccountbankaccountsid
+        description: Stripe Delete Bank Account
+        call: accounts-account.deleteaccountsaccountbankaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getaccountsaccountbankaccountsid
+        description: Stripe Retrieve Bank Account
+        call: accounts-account.getaccountsaccountbankaccountsid
+        with:
+          account: rest.account
+          expand: rest.expand
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccountsaccountbankaccountsid
+        description: Stripe Update Bank Account
+        call: accounts-account.postaccountsaccountbankaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/external-accounts
+      name: v1-accounts-account-external-accounts
+      description: REST surface for v1-accounts-account-external_accounts.
+      operations:
+      - method: POST
+        name: postaccountsaccountexternalaccounts
+        description: Stripe Create External Account
+        call: accounts-account.postaccountsaccountexternalaccounts
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/external-accounts/{id}
+      name: v1-accounts-account-external-accounts-id
+      description: REST surface for v1-accounts-account-external_accounts-id.
+      operations:
+      - method: DELETE
+        name: deleteaccountsaccountexternalaccountsid
+        description: Stripe Delete External Account
+        call: accounts-account.deleteaccountsaccountexternalaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getaccountsaccountexternalaccountsid
+        description: Stripe Retrieve External Account
+        call: accounts-account.getaccountsaccountexternalaccountsid
+        with:
+          account: rest.account
+          expand: rest.expand
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccountsaccountexternalaccountsid
+        description: Stripe Update External Account
+        call: accounts-account.postaccountsaccountexternalaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/reject
+      name: v1-accounts-account-reject
+      description: REST surface for v1-accounts-account-reject.
+      operations:
+      - method: POST
+        name: postaccountsaccountreject
+        description: Stripe Reject Account
+        call: accounts-account.postaccountsaccountreject
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: accounts-account-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Accounts API — Account. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-retrieve-account
+      description: Stripe Retrieve Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: accounts-account.getaccount
+      with:
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-account-link
+      description: Stripe Create Account Link
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountlinks
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-account-session
+      description: Stripe Create Account Session
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsessions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-account
+      description: Stripe Create Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccounts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-account
+      description: Stripe Delete Account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: accounts-account.deleteaccountsaccount
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-account-2
+      description: Stripe Retrieve Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: accounts-account.getaccountsaccount
+      with:
+        account: tools.account
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-account
+      description: Stripe Update Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccount
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-bank-account
+      description: Stripe Create Bank Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccountbankaccounts
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-bank-account
+      description: Stripe Delete Bank Account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: accounts-account.deleteaccountsaccountbankaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-bank-account
+      description: Stripe Retrieve Bank Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: accounts-account.getaccountsaccountbankaccountsid
+      with:
+        account: tools.account
+        expand: tools.expand
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-bank-account
+      description: Stripe Update Bank Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccountbankaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-external-account
+      description: Stripe Create External Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccountexternalaccounts
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-external-account
+      description: Stripe Delete External Account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: accounts-account.deleteaccountsaccountexternalaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-external-account
+      description: Stripe Retrieve External Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: accounts-account.getaccountsaccountexternalaccountsid
+      with:
+        account: tools.account
+        expand: tools.expand
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-external-account
+      description: Stripe Update External Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccountexternalaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-reject-account
+      description: Stripe Reject Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-account.postaccountsaccountreject
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

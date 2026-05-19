@@ -1,0 +1,667 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Radar API — Radar
+  description: 'Stripe Radar API — Radar. 11 operations. Lead operation: Radar. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Radar
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: radar-radar
+    baseUri: https://api.stripe.com
+    description: Stripe Radar API — Radar business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-radar-early_fraud_warnings
+      path: /v1/radar/early_fraud_warnings
+      operations:
+      - name: getradarearlyfraudwarnings
+        method: GET
+        description: <p>Returns a list of early fraud warnings.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: charge
+          in: query
+          type: string
+          description: Only return early fraud warnings for the charge specified by this charge ID.
+        - name: created
+          in: query
+          type: string
+          description: Only return early fraud warnings that were created during the given date interval.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: payment_intent
+          in: query
+          type: string
+          description: Only return early fraud warnings for charges that were created by the PaymentIntent specified by this
+            PaymentIntent ID.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-radar-early_fraud_warnings-early_fraud_warning
+      path: /v1/radar/early_fraud_warnings/{early_fraud_warning}
+      operations:
+      - name: getradarearlyfraudwarningsearlyfraudwarning
+        method: GET
+        description: <p>Retrieves the details of an early fraud warning that has previously been created. </p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: early_fraud_warning
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-radar-value_list_items
+      path: /v1/radar/value_list_items
+      operations:
+      - name: getradarvaluelistitems
+        method: GET
+        description: <p>Returns a list of <code>ValueListItem</code> objects. The objects are sorted in descending order by
+          creation date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: created
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: value
+          in: query
+          type: string
+          description: Return items belonging to the parent list whose value matches the specified value (using an "is like"
+            match).
+        - name: value_list
+          in: query
+          type: string
+          description: Identifier for the parent value list this item belongs to.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postradarvaluelistitems
+        method: POST
+        description: <p>Creates a new <code>ValueListItem</code> object, which is added to the specified parent value list.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-radar-value_list_items-item
+      path: /v1/radar/value_list_items/{item}
+      operations:
+      - name: deleteradarvaluelistitemsitem
+        method: DELETE
+        description: <p>Deletes a <code>ValueListItem</code> object, removing it from its parent value list.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getradarvaluelistitemsitem
+        method: GET
+        description: <p>Retrieves a <code>ValueListItem</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: item
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-radar-value_lists
+      path: /v1/radar/value_lists
+      operations:
+      - name: getradarvaluelists
+        method: GET
+        description: <p>Returns a list of <code>ValueList</code> objects. The objects are sorted in descending order by creation
+          date, with the most recently created object appearing first.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: alias
+          in: query
+          type: string
+          description: The alias used to reference the value list when writing rules.
+        - name: contains
+          in: query
+          type: string
+          description: A value contained within a value list - returns all value lists containing this value.
+        - name: created
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postradarvaluelists
+        method: POST
+        description: <p>Creates a new <code>ValueList</code> object, which can then be referenced in rules.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-radar-value_lists-value_list
+      path: /v1/radar/value_lists/{value_list}
+      operations:
+      - name: deleteradarvaluelistsvaluelist
+        method: DELETE
+        description: <p>Deletes a <code>ValueList</code> object, also deleting any items contained within the value list.
+          To be deleted, a value list must not be referenced in any rules.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: value_list
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getradarvaluelistsvaluelist
+        method: GET
+        description: <p>Retrieves a <code>ValueList</code> object.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: value_list
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postradarvaluelistsvaluelist
+        method: POST
+        description: <p>Updates a <code>ValueList</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged. Note that <code>item_type</code> is immutable.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: value_list
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: radar-radar-rest
+    port: 8080
+    description: REST adapter for Stripe Radar API — Radar. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/radar/early-fraud-warnings
+      name: v1-radar-early-fraud-warnings
+      description: REST surface for v1-radar-early_fraud_warnings.
+      operations:
+      - method: GET
+        name: getradarearlyfraudwarnings
+        description: <p>Returns a list of early fraud warnings.</p>
+        call: radar-radar.getradarearlyfraudwarnings
+        with:
+          charge: rest.charge
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          payment_intent: rest.payment_intent
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/radar/early-fraud-warnings/{early-fraud-warning}
+      name: v1-radar-early-fraud-warnings-early-fraud-warning
+      description: REST surface for v1-radar-early_fraud_warnings-early_fraud_warning.
+      operations:
+      - method: GET
+        name: getradarearlyfraudwarningsearlyfraudwarning
+        description: <p>Retrieves the details of an early fraud warning that has previously been created. </p>
+        call: radar-radar.getradarearlyfraudwarningsearlyfraudwarning
+        with:
+          early_fraud_warning: rest.early_fraud_warning
+          expand: rest.expand
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/radar/value-list-items
+      name: v1-radar-value-list-items
+      description: REST surface for v1-radar-value_list_items.
+      operations:
+      - method: GET
+        name: getradarvaluelistitems
+        description: <p>Returns a list of <code>ValueListItem</code> objects. The objects are sorted in descending order by
+          creation date, with the most recently created object appearing first.</p>
+        call: radar-radar.getradarvaluelistitems
+        with:
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          value: rest.value
+          value_list: rest.value_list
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postradarvaluelistitems
+        description: <p>Creates a new <code>ValueListItem</code> object, which is added to the specified parent value list.</p>
+        call: radar-radar.postradarvaluelistitems
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/radar/value-list-items/{item}
+      name: v1-radar-value-list-items-item
+      description: REST surface for v1-radar-value_list_items-item.
+      operations:
+      - method: DELETE
+        name: deleteradarvaluelistitemsitem
+        description: <p>Deletes a <code>ValueListItem</code> object, removing it from its parent value list.</p>
+        call: radar-radar.deleteradarvaluelistitemsitem
+        with:
+          item: rest.item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getradarvaluelistitemsitem
+        description: <p>Retrieves a <code>ValueListItem</code> object.</p>
+        call: radar-radar.getradarvaluelistitemsitem
+        with:
+          expand: rest.expand
+          item: rest.item
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/radar/value-lists
+      name: v1-radar-value-lists
+      description: REST surface for v1-radar-value_lists.
+      operations:
+      - method: GET
+        name: getradarvaluelists
+        description: <p>Returns a list of <code>ValueList</code> objects. The objects are sorted in descending order by creation
+          date, with the most recently created object appearing first.</p>
+        call: radar-radar.getradarvaluelists
+        with:
+          alias: rest.alias
+          contains: rest.contains
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postradarvaluelists
+        description: <p>Creates a new <code>ValueList</code> object, which can then be referenced in rules.</p>
+        call: radar-radar.postradarvaluelists
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/radar/value-lists/{value-list}
+      name: v1-radar-value-lists-value-list
+      description: REST surface for v1-radar-value_lists-value_list.
+      operations:
+      - method: DELETE
+        name: deleteradarvaluelistsvaluelist
+        description: <p>Deletes a <code>ValueList</code> object, also deleting any items contained within the value list.
+          To be deleted, a value list must not be referenced in any rules.</p>
+        call: radar-radar.deleteradarvaluelistsvaluelist
+        with:
+          value_list: rest.value_list
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getradarvaluelistsvaluelist
+        description: <p>Retrieves a <code>ValueList</code> object.</p>
+        call: radar-radar.getradarvaluelistsvaluelist
+        with:
+          expand: rest.expand
+          value_list: rest.value_list
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postradarvaluelistsvaluelist
+        description: <p>Updates a <code>ValueList</code> object by setting the values of the parameters passed. Any parameters
+          not provided will be left unchanged. Note that <code>item_type</code> is immutable.</p>
+        call: radar-radar.postradarvaluelistsvaluelist
+        with:
+          value_list: rest.value_list
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: radar-radar-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Radar API — Radar. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: p-returns-list-early-fraud-warnings
+      description: <p>Returns a list of early fraud warnings.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarearlyfraudwarnings
+      with:
+        charge: tools.charge
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        payment_intent: tools.payment_intent
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-details-early-fraud-warning
+      description: <p>Retrieves the details of an early fraud warning that has previously been created. </p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarearlyfraudwarningsearlyfraudwarning
+      with:
+        early_fraud_warning: tools.early_fraud_warning
+        expand: tools.expand
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-code-valuelistitem-code-objects
+      description: <p>Returns a list of <code>ValueListItem</code> objects. The objects are sorted in descending order by
+        creation date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarvaluelistitems
+      with:
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        value: tools.value
+        value_list: tools.value_list
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-code-valuelistitem-code-object
+      description: <p>Creates a new <code>ValueListItem</code> object, which is added to the specified parent value list.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: radar-radar.postradarvaluelistitems
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-code-valuelistitem-code-object-removing
+      description: <p>Deletes a <code>ValueListItem</code> object, removing it from its parent value list.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: radar-radar.deleteradarvaluelistitemsitem
+      with:
+        item: tools.item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-code-valuelistitem-code-object-p
+      description: <p>Retrieves a <code>ValueListItem</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarvaluelistitemsitem
+      with:
+        expand: tools.expand
+        item: tools.item
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-returns-list-code-valuelist-code-objects
+      description: <p>Returns a list of <code>ValueList</code> objects. The objects are sorted in descending order by creation
+        date, with the most recently created object appearing first.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarvaluelists
+      with:
+        alias: tools.alias
+        contains: tools.contains
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-creates-new-code-valuelist-code-object
+      description: <p>Creates a new <code>ValueList</code> object, which can then be referenced in rules.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: radar-radar.postradarvaluelists
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deletes-code-valuelist-code-object-also
+      description: <p>Deletes a <code>ValueList</code> object, also deleting any items contained within the value list. To
+        be deleted, a value list must not be referenced in any rules.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: radar-radar.deleteradarvaluelistsvaluelist
+      with:
+        value_list: tools.value_list
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-code-valuelist-code-object-p
+      description: <p>Retrieves a <code>ValueList</code> object.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: radar-radar.getradarvaluelistsvaluelist
+      with:
+        expand: tools.expand
+        value_list: tools.value_list
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-code-valuelist-code-object-setting
+      description: <p>Updates a <code>ValueList</code> object by setting the values of the parameters passed. Any parameters
+        not provided will be left unchanged. Note that <code>item_type</code> is immutable.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: radar-radar.postradarvaluelistsvaluelist
+      with:
+        value_list: tools.value_list
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

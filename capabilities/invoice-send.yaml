@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Invoice API — Send
+  description: 'Stripe Invoice API — Send. 1 operations. Lead operation: Stripe Post   Invoices Invoice Send. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Send
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: invoice-send
+    baseUri: https://api.stripe.com
+    description: Stripe Invoice API — Send business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-invoices-invoice-send
+      path: /v1/invoices/{invoice}/send
+      operations:
+      - name: postinvoicesinvoicesend
+        method: POST
+        description: Stripe Post   Invoices Invoice Send
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: invoice
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: invoice-send-rest
+    port: 8080
+    description: REST adapter for Stripe Invoice API — Send. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/invoices/{invoice}/send
+      name: v1-invoices-invoice-send
+      description: REST surface for v1-invoices-invoice-send.
+      operations:
+      - method: POST
+        name: postinvoicesinvoicesend
+        description: Stripe Post   Invoices Invoice Send
+        call: invoice-send.postinvoicesinvoicesend
+        with:
+          invoice: rest.invoice
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: invoice-send-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Invoice API — Send. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-invoices-invoice-send
+      description: Stripe Post   Invoices Invoice Send
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: invoice-send.postinvoicesinvoicesend
+      with:
+        invoice: tools.invoice
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

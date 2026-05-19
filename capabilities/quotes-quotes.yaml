@@ -1,0 +1,613 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Quotes API — Quotes
+  description: 'Stripe Quotes API — Quotes. 10 operations. Lead operation: Quotes. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Quotes
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: quotes-quotes
+    baseUri: https://api.stripe.com
+    description: Stripe Quotes API — Quotes business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-quotes
+      path: /v1/quotes
+      operations:
+      - name: getquotes
+        method: GET
+        description: <p>Returns a list of your quotes.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: query
+          type: string
+          description: The ID of the customer whose quotes will be retrieved.
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: status
+          in: query
+          type: string
+          description: The status of the quote.
+        - name: test_clock
+          in: query
+          type: string
+          description: Provides a list of quotes that are associated with the specified test clock. The response will not
+            include quotes with test clocks if this and the customer para
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postquotes
+        method: POST
+        description: <p>A quote models prices and services for a customer. Default options for <code>header</code>, <code>description</code>,
+          <code>footer</code>, and <code>expires_at</code> can be set in the dashboard via the <a href="https://dashboard.stripe.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote
+      path: /v1/quotes/{quote}
+      operations:
+      - name: getquotesquote
+        method: GET
+        description: <p>Retrieves the quote with the given ID.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postquotesquote
+        method: POST
+        description: <p>A quote models prices and services for a customer.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-accept
+      path: /v1/quotes/{quote}/accept
+      operations:
+      - name: postquotesquoteaccept
+        method: POST
+        description: <p>Accepts the specified quote.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-cancel
+      path: /v1/quotes/{quote}/cancel
+      operations:
+      - name: postquotesquotecancel
+        method: POST
+        description: <p>Cancels the quote.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-computed_upfront_line_items
+      path: /v1/quotes/{quote}/computed_upfront_line_items
+      operations:
+      - name: getquotesquotecomputedupfrontlineitems
+        method: GET
+        description: '<p>When retrieving a quote, there is an includable <a href="https://stripe.com/docs/api/quotes/object#quote_object-computed-upfront-line_items"><strong>computed.upfront.line_items</strong></a>
+          property containing the first handful of those '
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-finalize
+      path: /v1/quotes/{quote}/finalize
+      operations:
+      - name: postquotesquotefinalize
+        method: POST
+        description: <p>Finalizes the quote.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-line_items
+      path: /v1/quotes/{quote}/line_items
+      operations:
+      - name: getquotesquotelineitems
+        method: GET
+        description: <p>When retrieving a quote, there is an includable <strong>line_items</strong> property containing the
+          first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-quotes-quote-pdf
+      path: /v1/quotes/{quote}/pdf
+      operations:
+      - name: getquotesquotepdf
+        method: GET
+        description: <p>Download the PDF for a finalized quote</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: quote
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: quotes-quotes-rest
+    port: 8080
+    description: REST adapter for Stripe Quotes API — Quotes. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/quotes
+      name: v1-quotes
+      description: REST surface for v1-quotes.
+      operations:
+      - method: GET
+        name: getquotes
+        description: <p>Returns a list of your quotes.</p>
+        call: quotes-quotes.getquotes
+        with:
+          customer: rest.customer
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          status: rest.status
+          test_clock: rest.test_clock
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postquotes
+        description: <p>A quote models prices and services for a customer. Default options for <code>header</code>, <code>description</code>,
+          <code>footer</code>, and <code>expires_at</code> can be set in the dashboard via the <a href="https://dashboard.stripe.
+        call: quotes-quotes.postquotes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}
+      name: v1-quotes-quote
+      description: REST surface for v1-quotes-quote.
+      operations:
+      - method: GET
+        name: getquotesquote
+        description: <p>Retrieves the quote with the given ID.</p>
+        call: quotes-quotes.getquotesquote
+        with:
+          expand: rest.expand
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postquotesquote
+        description: <p>A quote models prices and services for a customer.</p>
+        call: quotes-quotes.postquotesquote
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/accept
+      name: v1-quotes-quote-accept
+      description: REST surface for v1-quotes-quote-accept.
+      operations:
+      - method: POST
+        name: postquotesquoteaccept
+        description: <p>Accepts the specified quote.</p>
+        call: quotes-quotes.postquotesquoteaccept
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/cancel
+      name: v1-quotes-quote-cancel
+      description: REST surface for v1-quotes-quote-cancel.
+      operations:
+      - method: POST
+        name: postquotesquotecancel
+        description: <p>Cancels the quote.</p>
+        call: quotes-quotes.postquotesquotecancel
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/computed-upfront-line-items
+      name: v1-quotes-quote-computed-upfront-line-items
+      description: REST surface for v1-quotes-quote-computed_upfront_line_items.
+      operations:
+      - method: GET
+        name: getquotesquotecomputedupfrontlineitems
+        description: '<p>When retrieving a quote, there is an includable <a href="https://stripe.com/docs/api/quotes/object#quote_object-computed-upfront-line_items"><strong>computed.upfront.line_items</strong></a>
+          property containing the first handful of those '
+        call: quotes-quotes.getquotesquotecomputedupfrontlineitems
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          quote: rest.quote
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/finalize
+      name: v1-quotes-quote-finalize
+      description: REST surface for v1-quotes-quote-finalize.
+      operations:
+      - method: POST
+        name: postquotesquotefinalize
+        description: <p>Finalizes the quote.</p>
+        call: quotes-quotes.postquotesquotefinalize
+        with:
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/line-items
+      name: v1-quotes-quote-line-items
+      description: REST surface for v1-quotes-quote-line_items.
+      operations:
+      - method: GET
+        name: getquotesquotelineitems
+        description: <p>When retrieving a quote, there is an includable <strong>line_items</strong> property containing the
+          first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+        call: quotes-quotes.getquotesquotelineitems
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          quote: rest.quote
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/quotes/{quote}/pdf
+      name: v1-quotes-quote-pdf
+      description: REST surface for v1-quotes-quote-pdf.
+      operations:
+      - method: GET
+        name: getquotesquotepdf
+        description: <p>Download the PDF for a finalized quote</p>
+        call: quotes-quotes.getquotesquotepdf
+        with:
+          expand: rest.expand
+          quote: rest.quote
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: quotes-quotes-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Quotes API — Quotes. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: p-returns-list-your-quotes-p
+      description: <p>Returns a list of your quotes.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes.getquotes
+      with:
+        customer: tools.customer
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        status: tools.status
+        test_clock: tools.test_clock
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-a-quote-models-prices-and
+      description: <p>A quote models prices and services for a customer. Default options for <code>header</code>, <code>description</code>,
+        <code>footer</code>, and <code>expires_at</code> can be set in the dashboard via the <a href="https://dashboard.stripe.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes.postquotes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-quote-given-id-p
+      description: <p>Retrieves the quote with the given ID.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes.getquotesquote
+      with:
+        expand: tools.expand
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-a-quote-models-prices-and-2
+      description: <p>A quote models prices and services for a customer.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes.postquotesquote
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-accepts-specified-quote-p
+      description: <p>Accepts the specified quote.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes.postquotesquoteaccept
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-cancels-quote-p
+      description: <p>Cancels the quote.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes.postquotesquotecancel
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-when-retrieving-quote-there-is
+      description: '<p>When retrieving a quote, there is an includable <a href="https://stripe.com/docs/api/quotes/object#quote_object-computed-upfront-line_items"><strong>computed.upfront.line_items</strong></a>
+        property containing the first handful of those '
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes.getquotesquotecomputedupfrontlineitems
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        quote: tools.quote
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-finalizes-quote-p
+      description: <p>Finalizes the quote.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: quotes-quotes.postquotesquotefinalize
+      with:
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-when-retrieving-quote-there-is-2
+      description: <p>When retrieving a quote, there is an includable <strong>line_items</strong> property containing the
+        first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes.getquotesquotelineitems
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        quote: tools.quote
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-download-pdf-finalized-quote-p
+      description: <p>Download the PDF for a finalized quote</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: quotes-quotes.getquotesquotepdf
+      with:
+        expand: tools.expand
+        quote: tools.quote
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

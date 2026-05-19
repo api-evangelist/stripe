@@ -1,0 +1,141 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Revenue Recognition API — Revenue Recognition
+  description: 'Stripe Revenue Recognition API — Revenue Recognition. 2 operations. Lead operation: Stripe List Credit Notes.
+    Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Revenue Recognition
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: revenue-recognition-revenue-recognition
+    baseUri: https://api.stripe.com
+    description: Stripe Revenue Recognition API — Revenue Recognition business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-credit_notes
+      path: /v1/credit_notes
+      operations:
+      - name: getcreditnotesforrevrec
+        method: GET
+        description: Stripe List Credit Notes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: invoice
+          in: query
+          type: string
+          description: Only return credit notes for the invoice specified by this invoice ID.
+        - name: customer
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+    - name: v1-reporting-report_runs
+      path: /v1/reporting/report_runs
+      operations:
+      - name: postrevenuerecognitionreportruns
+        method: POST
+        description: Stripe Create Revenue Recognition Report
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: revenue-recognition-revenue-recognition-rest
+    port: 8080
+    description: REST adapter for Stripe Revenue Recognition API — Revenue Recognition. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/credit-notes
+      name: v1-credit-notes
+      description: REST surface for v1-credit_notes.
+      operations:
+      - method: GET
+        name: getcreditnotesforrevrec
+        description: Stripe List Credit Notes
+        call: revenue-recognition-revenue-recognition.getcreditnotesforrevrec
+        with:
+          invoice: rest.invoice
+          customer: rest.customer
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/reporting/report-runs
+      name: v1-reporting-report-runs
+      description: REST surface for v1-reporting-report_runs.
+      operations:
+      - method: POST
+        name: postrevenuerecognitionreportruns
+        description: Stripe Create Revenue Recognition Report
+        call: revenue-recognition-revenue-recognition.postrevenuerecognitionreportruns
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: revenue-recognition-revenue-recognition-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Revenue Recognition API — Revenue Recognition. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: stripe-list-credit-notes
+      description: Stripe List Credit Notes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: revenue-recognition-revenue-recognition.getcreditnotesforrevrec
+      with:
+        invoice: tools.invoice
+        customer: tools.customer
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-revenue-recognition-report
+      description: Stripe Create Revenue Recognition Report
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: revenue-recognition-revenue-recognition.postrevenuerecognitionreportruns
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

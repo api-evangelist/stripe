@@ -1,0 +1,303 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Plans API — Plans
+  description: 'Stripe Plans API — Plans. 5 operations. Lead operation: Plans. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Plans
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: plans-plans
+    baseUri: https://api.stripe.com
+    description: Stripe Plans API — Plans business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-plans
+      path: /v1/plans
+      operations:
+      - name: getplans
+        method: GET
+        description: <p>Returns a list of your plans.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: active
+          in: query
+          type: boolean
+          description: Only return plans that are active or inactive (e.g., pass `false` to list all inactive plans).
+        - name: created
+          in: query
+          type: string
+          description: 'A filter on the list, based on the object `created` field. The value can be a string with an integer
+            Unix timestamp, or it can be a dictionary with a number of '
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: product
+          in: query
+          type: string
+          description: Only return plans for the given product.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postplans
+        method: POST
+        description: <p>You can now model subscriptions more flexibly using the <a href="#prices">Prices API</a>. It replaces
+          the Plans API and is backwards compatible to simplify your migration.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-plans-plan
+      path: /v1/plans/{plan}
+      operations:
+      - name: deleteplansplan
+        method: DELETE
+        description: <p>Deleting plans means new subscribers can’t be added. Existing subscribers aren’t affected.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: plan
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getplansplan
+        method: GET
+        description: <p>Retrieves the plan with the given ID.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: plan
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: postplansplan
+        method: POST
+        description: <p>Updates the specified plan by setting the values of the parameters passed. Any parameters not provided
+          are left unchanged. By design, you cannot change a plan’s ID, amount, currency, or billing cycle.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: plan
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: plans-plans-rest
+    port: 8080
+    description: REST adapter for Stripe Plans API — Plans. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/plans
+      name: v1-plans
+      description: REST surface for v1-plans.
+      operations:
+      - method: GET
+        name: getplans
+        description: <p>Returns a list of your plans.</p>
+        call: plans-plans.getplans
+        with:
+          active: rest.active
+          created: rest.created
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          product: rest.product
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postplans
+        description: <p>You can now model subscriptions more flexibly using the <a href="#prices">Prices API</a>. It replaces
+          the Plans API and is backwards compatible to simplify your migration.</p>
+        call: plans-plans.postplans
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/plans/{plan}
+      name: v1-plans-plan
+      description: REST surface for v1-plans-plan.
+      operations:
+      - method: DELETE
+        name: deleteplansplan
+        description: <p>Deleting plans means new subscribers can’t be added. Existing subscribers aren’t affected.</p>
+        call: plans-plans.deleteplansplan
+        with:
+          plan: rest.plan
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getplansplan
+        description: <p>Retrieves the plan with the given ID.</p>
+        call: plans-plans.getplansplan
+        with:
+          expand: rest.expand
+          plan: rest.plan
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postplansplan
+        description: <p>Updates the specified plan by setting the values of the parameters passed. Any parameters not provided
+          are left unchanged. By design, you cannot change a plan’s ID, amount, currency, or billing cycle.</p>
+        call: plans-plans.postplansplan
+        with:
+          plan: rest.plan
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: plans-plans-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Plans API — Plans. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: p-returns-list-your-plans-p
+      description: <p>Returns a list of your plans.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: plans-plans.getplans
+      with:
+        active: tools.active
+        created: tools.created
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        product: tools.product
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-you-can-now-model-subscriptions
+      description: <p>You can now model subscriptions more flexibly using the <a href="#prices">Prices API</a>. It replaces
+        the Plans API and is backwards compatible to simplify your migration.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: plans-plans.postplans
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-deleting-plans-means-new-subscribers
+      description: <p>Deleting plans means new subscribers can’t be added. Existing subscribers aren’t affected.</p>
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: plans-plans.deleteplansplan
+      with:
+        plan: tools.plan
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-plan-given-id-p
+      description: <p>Retrieves the plan with the given ID.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: plans-plans.getplansplan
+      with:
+        expand: tools.expand
+        plan: tools.plan
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-updates-specified-plan-setting-values
+      description: <p>Updates the specified plan by setting the values of the parameters passed. Any parameters not provided
+        are left unchanged. By design, you cannot change a plan’s ID, amount, currency, or billing cycle.</p>
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: plans-plans.postplansplan
+      with:
+        plan: tools.plan
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

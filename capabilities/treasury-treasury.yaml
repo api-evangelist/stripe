@@ -1,0 +1,610 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Treasury API — Treasury
+  description: 'Stripe Treasury API — Treasury. 12 operations. Lead operation: Stripe List Financial Accounts. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Treasury
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: treasury-treasury
+    baseUri: https://api.stripe.com
+    description: Stripe Treasury API — Treasury business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-treasury-financial_accounts
+      path: /v1/treasury/financial_accounts
+      operations:
+      - name: gettreasuryfinancialaccounts
+        method: GET
+        description: Stripe List Financial Accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: posttreasuryfinancialaccounts
+        method: POST
+        description: Stripe Create Financial Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-treasury-financial_accounts-financial_account
+      path: /v1/treasury/financial_accounts/{financial_account}
+      operations:
+      - name: gettreasuryfinancialaccountsfinancialaccount
+        method: GET
+        description: Stripe Retrieve Financial Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+      - name: posttreasuryfinancialaccountsfinancialaccount
+        method: POST
+        description: Stripe Update Financial Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-treasury-inbound_transfers
+      path: /v1/treasury/inbound_transfers
+      operations:
+      - name: gettreasuryinboundtransfers
+        method: GET
+        description: Stripe List Inbound Transfers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+      - name: posttreasuryinboundtransfers
+        method: POST
+        description: Stripe Create Inbound Transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-treasury-outbound_payments
+      path: /v1/treasury/outbound_payments
+      operations:
+      - name: gettreasuryoutboundpayments
+        method: GET
+        description: Stripe List Outbound Payments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+      - name: posttreasuryoutboundpayments
+        method: POST
+        description: Stripe Create Outbound Payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-treasury-outbound_transfers
+      path: /v1/treasury/outbound_transfers
+      operations:
+      - name: gettreasuryoutboundtransfers
+        method: GET
+        description: Stripe List Outbound Transfers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+      - name: posttreasuryoutboundtransfers
+        method: POST
+        description: Stripe Create Outbound Transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-treasury-transactions
+      path: /v1/treasury/transactions
+      operations:
+      - name: gettreasurytransactions
+        method: GET
+        description: Stripe List Transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: financial_account
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: string
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+    - name: v1-treasury-transactions-id
+      path: /v1/treasury/transactions/{id}
+      operations:
+      - name: gettreasurytransactionsid
+        method: GET
+        description: Stripe Retrieve Transaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: treasury-treasury-rest
+    port: 8080
+    description: REST adapter for Stripe Treasury API — Treasury. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/treasury/financial-accounts
+      name: v1-treasury-financial-accounts
+      description: REST surface for v1-treasury-financial_accounts.
+      operations:
+      - method: GET
+        name: gettreasuryfinancialaccounts
+        description: Stripe List Financial Accounts
+        call: treasury-treasury.gettreasuryfinancialaccounts
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttreasuryfinancialaccounts
+        description: Stripe Create Financial Account
+        call: treasury-treasury.posttreasuryfinancialaccounts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/financial-accounts/{financial-account}
+      name: v1-treasury-financial-accounts-financial-account
+      description: REST surface for v1-treasury-financial_accounts-financial_account.
+      operations:
+      - method: GET
+        name: gettreasuryfinancialaccountsfinancialaccount
+        description: Stripe Retrieve Financial Account
+        call: treasury-treasury.gettreasuryfinancialaccountsfinancialaccount
+        with:
+          financial_account: rest.financial_account
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttreasuryfinancialaccountsfinancialaccount
+        description: Stripe Update Financial Account
+        call: treasury-treasury.posttreasuryfinancialaccountsfinancialaccount
+        with:
+          financial_account: rest.financial_account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/inbound-transfers
+      name: v1-treasury-inbound-transfers
+      description: REST surface for v1-treasury-inbound_transfers.
+      operations:
+      - method: GET
+        name: gettreasuryinboundtransfers
+        description: Stripe List Inbound Transfers
+        call: treasury-treasury.gettreasuryinboundtransfers
+        with:
+          financial_account: rest.financial_account
+          status: rest.status
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttreasuryinboundtransfers
+        description: Stripe Create Inbound Transfer
+        call: treasury-treasury.posttreasuryinboundtransfers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/outbound-payments
+      name: v1-treasury-outbound-payments
+      description: REST surface for v1-treasury-outbound_payments.
+      operations:
+      - method: GET
+        name: gettreasuryoutboundpayments
+        description: Stripe List Outbound Payments
+        call: treasury-treasury.gettreasuryoutboundpayments
+        with:
+          financial_account: rest.financial_account
+          status: rest.status
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttreasuryoutboundpayments
+        description: Stripe Create Outbound Payment
+        call: treasury-treasury.posttreasuryoutboundpayments
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/outbound-transfers
+      name: v1-treasury-outbound-transfers
+      description: REST surface for v1-treasury-outbound_transfers.
+      operations:
+      - method: GET
+        name: gettreasuryoutboundtransfers
+        description: Stripe List Outbound Transfers
+        call: treasury-treasury.gettreasuryoutboundtransfers
+        with:
+          financial_account: rest.financial_account
+          status: rest.status
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: posttreasuryoutboundtransfers
+        description: Stripe Create Outbound Transfer
+        call: treasury-treasury.posttreasuryoutboundtransfers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/transactions
+      name: v1-treasury-transactions
+      description: REST surface for v1-treasury-transactions.
+      operations:
+      - method: GET
+        name: gettreasurytransactions
+        description: Stripe List Transactions
+        call: treasury-treasury.gettreasurytransactions
+        with:
+          financial_account: rest.financial_account
+          status: rest.status
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/treasury/transactions/{id}
+      name: v1-treasury-transactions-id
+      description: REST surface for v1-treasury-transactions-id.
+      operations:
+      - method: GET
+        name: gettreasurytransactionsid
+        description: Stripe Retrieve Transaction
+        call: treasury-treasury.gettreasurytransactionsid
+        with:
+          id: rest.id
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: treasury-treasury-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Treasury API — Treasury. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-list-financial-accounts
+      description: Stripe List Financial Accounts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasuryfinancialaccounts
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-financial-account
+      description: Stripe Create Financial Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: treasury-treasury.posttreasuryfinancialaccounts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-financial-account
+      description: Stripe Retrieve Financial Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasuryfinancialaccountsfinancialaccount
+      with:
+        financial_account: tools.financial_account
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-financial-account
+      description: Stripe Update Financial Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: treasury-treasury.posttreasuryfinancialaccountsfinancialaccount
+      with:
+        financial_account: tools.financial_account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-inbound-transfers
+      description: Stripe List Inbound Transfers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasuryinboundtransfers
+      with:
+        financial_account: tools.financial_account
+        status: tools.status
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-inbound-transfer
+      description: Stripe Create Inbound Transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: treasury-treasury.posttreasuryinboundtransfers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-outbound-payments
+      description: Stripe List Outbound Payments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasuryoutboundpayments
+      with:
+        financial_account: tools.financial_account
+        status: tools.status
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-outbound-payment
+      description: Stripe Create Outbound Payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: treasury-treasury.posttreasuryoutboundpayments
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-outbound-transfers
+      description: Stripe List Outbound Transfers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasuryoutboundtransfers
+      with:
+        financial_account: tools.financial_account
+        status: tools.status
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-outbound-transfer
+      description: Stripe Create Outbound Transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: treasury-treasury.posttreasuryoutboundtransfers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-transactions
+      description: Stripe List Transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasurytransactions
+      with:
+        financial_account: tools.financial_account
+        status: tools.status
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-transaction
+      description: Stripe Retrieve Transaction
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: treasury-treasury.gettreasurytransactionsid
+      with:
+        id: tools.id
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.

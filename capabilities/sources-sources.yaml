@@ -1,0 +1,324 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Sources API — Sources
+  description: 'Stripe Sources API — Sources. 6 operations. Lead operation: Stripe Attach Source to Customer. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Sources
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sources-sources
+    baseUri: https://api.stripe.com
+    description: Stripe Sources API — Sources business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-customers-customer-sources
+      path: /v1/customers/{customer}/sources
+      operations:
+      - name: postcustomerscustomersources
+        method: POST
+        description: Stripe Attach Source to Customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-customers-customer-sources-id
+      path: /v1/customers/{customer}/sources/{id}
+      operations:
+      - name: deletecustomerscustomersourcesid
+        method: DELETE
+        description: Stripe Detach Source from Customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+    - name: v1-sources
+      path: /v1/sources
+      operations:
+      - name: postsources
+        method: POST
+        description: Stripe Create Source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source
+      path: /v1/sources/{source}
+      operations:
+      - name: getsourcessource
+        method: GET
+        description: Stripe Retrieve Source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: client_secret
+          in: query
+          type: string
+          description: The client secret of the source.
+        - name: expand
+          in: query
+          type: array
+      - name: postsourcessource
+        method: POST
+        description: Stripe Update Source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sources-source-source_transactions
+      path: /v1/sources/{source}/source_transactions
+      operations:
+      - name: getsourcessourcesourcetransactions
+        method: GET
+        description: Stripe List Source Transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: source
+          in: path
+          type: string
+          required: true
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sources-sources-rest
+    port: 8080
+    description: REST adapter for Stripe Sources API — Sources. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/customers/{customer}/sources
+      name: v1-customers-customer-sources
+      description: REST surface for v1-customers-customer-sources.
+      operations:
+      - method: POST
+        name: postcustomerscustomersources
+        description: Stripe Attach Source to Customer
+        call: sources-sources.postcustomerscustomersources
+        with:
+          customer: rest.customer
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/customers/{customer}/sources/{id}
+      name: v1-customers-customer-sources-id
+      description: REST surface for v1-customers-customer-sources-id.
+      operations:
+      - method: DELETE
+        name: deletecustomerscustomersourcesid
+        description: Stripe Detach Source from Customer
+        call: sources-sources.deletecustomerscustomersourcesid
+        with:
+          customer: rest.customer
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources
+      name: v1-sources
+      description: REST surface for v1-sources.
+      operations:
+      - method: POST
+        name: postsources
+        description: Stripe Create Source
+        call: sources-sources.postsources
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}
+      name: v1-sources-source
+      description: REST surface for v1-sources-source.
+      operations:
+      - method: GET
+        name: getsourcessource
+        description: Stripe Retrieve Source
+        call: sources-sources.getsourcessource
+        with:
+          source: rest.source
+          client_secret: rest.client_secret
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postsourcessource
+        description: Stripe Update Source
+        call: sources-sources.postsourcessource
+        with:
+          source: rest.source
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sources/{source}/source-transactions
+      name: v1-sources-source-source-transactions
+      description: REST surface for v1-sources-source-source_transactions.
+      operations:
+      - method: GET
+        name: getsourcessourcesourcetransactions
+        description: Stripe List Source Transactions
+        call: sources-sources.getsourcessourcesourcetransactions
+        with:
+          source: rest.source
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sources-sources-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Sources API — Sources. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-attach-source-customer
+      description: Stripe Attach Source to Customer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sources-sources.postcustomerscustomersources
+      with:
+        customer: tools.customer
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-detach-source-customer
+      description: Stripe Detach Source from Customer
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: sources-sources.deletecustomerscustomersourcesid
+      with:
+        customer: tools.customer
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-source
+      description: Stripe Create Source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sources-sources.postsources
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-source
+      description: Stripe Retrieve Source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sources-sources.getsourcessource
+      with:
+        source: tools.source
+        client_secret: tools.client_secret
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-source
+      description: Stripe Update Source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: sources-sources.postsourcessource
+      with:
+        source: tools.source
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-source-transactions
+      description: Stripe List Source Transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sources-sources.getsourcessourcesourcetransactions
+      with:
+        source: tools.source
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+      outputParameters:
+      - type: object
+        mapping: $.

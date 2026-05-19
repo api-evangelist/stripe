@@ -1,0 +1,353 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Accounts API — Update
+  description: 'Stripe Accounts API — Update. 6 operations. Lead operation: Stripe Update Account. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Update
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: accounts-update-2
+    baseUri: https://api.stripe.com
+    description: Stripe Accounts API — Update business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-account
+      path: /v1/accounts/{account}
+      operations:
+      - name: postaccountsaccount
+        method: POST
+        description: Stripe Update Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-bank_accounts-id
+      path: /v1/accounts/{account}/bank_accounts/{id}
+      operations:
+      - name: postaccountsaccountbankaccountsid
+        method: POST
+        description: Stripe Update Bank Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-capabilities-capability
+      path: /v1/accounts/{account}/capabilities/{capability}
+      operations:
+      - name: postaccountsaccountcapabilitiescapability
+        method: POST
+        description: Stripe Update Capability
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: capability
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-external_accounts-id
+      path: /v1/accounts/{account}/external_accounts/{id}
+      operations:
+      - name: postaccountsaccountexternalaccountsid
+        method: POST
+        description: Stripe Update External Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-people-person
+      path: /v1/accounts/{account}/people/{person}
+      operations:
+      - name: postaccountsaccountpeopleperson
+        method: POST
+        description: Stripe Update Person
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: person
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account-persons-person
+      path: /v1/accounts/{account}/persons/{person}
+      operations:
+      - name: postaccountsaccountpersonsperson
+        method: POST
+        description: Stripe Update Person
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: person
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: accounts-update-2-rest
+    port: 8080
+    description: REST adapter for Stripe Accounts API — Update. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/accounts/{account}
+      name: v1-accounts-account
+      description: REST surface for v1-accounts-account.
+      operations:
+      - method: POST
+        name: postaccountsaccount
+        description: Stripe Update Account
+        call: accounts-update-2.postaccountsaccount
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/bank-accounts/{id}
+      name: v1-accounts-account-bank-accounts-id
+      description: REST surface for v1-accounts-account-bank_accounts-id.
+      operations:
+      - method: POST
+        name: postaccountsaccountbankaccountsid
+        description: Stripe Update Bank Account
+        call: accounts-update-2.postaccountsaccountbankaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/capabilities/{capability}
+      name: v1-accounts-account-capabilities-capability
+      description: REST surface for v1-accounts-account-capabilities-capability.
+      operations:
+      - method: POST
+        name: postaccountsaccountcapabilitiescapability
+        description: Stripe Update Capability
+        call: accounts-update-2.postaccountsaccountcapabilitiescapability
+        with:
+          account: rest.account
+          capability: rest.capability
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/external-accounts/{id}
+      name: v1-accounts-account-external-accounts-id
+      description: REST surface for v1-accounts-account-external_accounts-id.
+      operations:
+      - method: POST
+        name: postaccountsaccountexternalaccountsid
+        description: Stripe Update External Account
+        call: accounts-update-2.postaccountsaccountexternalaccountsid
+        with:
+          account: rest.account
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/people/{person}
+      name: v1-accounts-account-people-person
+      description: REST surface for v1-accounts-account-people-person.
+      operations:
+      - method: POST
+        name: postaccountsaccountpeopleperson
+        description: Stripe Update Person
+        call: accounts-update-2.postaccountsaccountpeopleperson
+        with:
+          account: rest.account
+          person: rest.person
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/persons/{person}
+      name: v1-accounts-account-persons-person
+      description: REST surface for v1-accounts-account-persons-person.
+      operations:
+      - method: POST
+        name: postaccountsaccountpersonsperson
+        description: Stripe Update Person
+        call: accounts-update-2.postaccountsaccountpersonsperson
+        with:
+          account: rest.account
+          person: rest.person
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: accounts-update-2-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Accounts API — Update. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-update-account
+      description: Stripe Update Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccount
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-bank-account
+      description: Stripe Update Bank Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccountbankaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-capability
+      description: Stripe Update Capability
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccountcapabilitiescapability
+      with:
+        account: tools.account
+        capability: tools.capability
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-external-account
+      description: Stripe Update External Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccountexternalaccountsid
+      with:
+        account: tools.account
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-person
+      description: Stripe Update Person
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccountpeopleperson
+      with:
+        account: tools.account
+        person: tools.person
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-person-2
+      description: Stripe Update Person
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: accounts-update-2.postaccountsaccountpersonsperson
+      with:
+        account: tools.account
+        person: tools.person
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

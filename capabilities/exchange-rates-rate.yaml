@@ -1,0 +1,92 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Exchange Rates API — Rate
+  description: 'Stripe Exchange Rates API — Rate. 1 operations. Lead operation: Stripe Get   Exchange Rates Rate Id. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Rate
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: exchange-rates-rate
+    baseUri: https://api.stripe.com
+    description: Stripe Exchange Rates API — Rate business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-exchange_rates-rate_id
+      path: /v1/exchange_rates/{rate_id}
+      operations:
+      - name: getexchangeratesrateid
+        method: GET
+        description: Stripe Get   Exchange Rates Rate Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: rate_id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: exchange-rates-rate-rest
+    port: 8080
+    description: REST adapter for Stripe Exchange Rates API — Rate. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/exchange-rates/{rate-id}
+      name: v1-exchange-rates-rate-id
+      description: REST surface for v1-exchange_rates-rate_id.
+      operations:
+      - method: GET
+        name: getexchangeratesrateid
+        description: Stripe Get   Exchange Rates Rate Id
+        call: exchange-rates-rate.getexchangeratesrateid
+        with:
+          expand: rest.expand
+          rate_id: rest.rate_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: exchange-rates-rate-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Exchange Rates API — Rate. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-get-exchange-rates-rate
+      description: Stripe Get   Exchange Rates Rate Id
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: exchange-rates-rate.getexchangeratesrateid
+      with:
+        expand: tools.expand
+        rate_id: tools.rate_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

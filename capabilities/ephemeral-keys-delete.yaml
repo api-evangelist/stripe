@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Ephemeral Keys API — Delete
+  description: 'Stripe Ephemeral Keys API — Delete. 1 operations. Lead operation: Stripe Delete   Ephemeral Keys Key. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ephemeral-keys-delete
+    baseUri: https://api.stripe.com
+    description: Stripe Ephemeral Keys API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-ephemeral_keys-key
+      path: /v1/ephemeral_keys/{key}
+      operations:
+      - name: deleteephemeralkeyskey
+        method: DELETE
+        description: Stripe Delete   Ephemeral Keys Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: key
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ephemeral-keys-delete-rest
+    port: 8080
+    description: REST adapter for Stripe Ephemeral Keys API — Delete. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/ephemeral-keys/{key}
+      name: v1-ephemeral-keys-key
+      description: REST surface for v1-ephemeral_keys-key.
+      operations:
+      - method: DELETE
+        name: deleteephemeralkeyskey
+        description: Stripe Delete   Ephemeral Keys Key
+        call: ephemeral-keys-delete.deleteephemeralkeyskey
+        with:
+          key: rest.key
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ephemeral-keys-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Ephemeral Keys API — Delete. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-delete-ephemeral-keys-key
+      description: Stripe Delete   Ephemeral Keys Key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: ephemeral-keys-delete.deleteephemeralkeyskey
+      with:
+        key: tools.key
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

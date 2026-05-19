@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payouts API — Cancel
+  description: 'Stripe Payouts API — Cancel. 1 operations. Lead operation: Stripe Post   Payouts Cancel. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Cancel
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payouts-cancel
+    baseUri: https://api.stripe.com
+    description: Stripe Payouts API — Cancel business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payouts-payout-cancel
+      path: /v1/payouts/{payout}/cancel
+      operations:
+      - name: postpayoutspayoutcancel
+        method: POST
+        description: Stripe Post   Payouts Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payouts-cancel-rest
+    port: 8080
+    description: REST adapter for Stripe Payouts API — Cancel. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/payouts/{payout}/cancel
+      name: v1-payouts-payout-cancel
+      description: REST surface for v1-payouts-payout-cancel.
+      operations:
+      - method: POST
+        name: postpayoutspayoutcancel
+        description: Stripe Post   Payouts Cancel
+        call: payouts-cancel.postpayoutspayoutcancel
+        with:
+          payout: rest.payout
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payouts-cancel-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payouts API — Cancel. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-payouts-cancel
+      description: Stripe Post   Payouts Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payouts-cancel.postpayoutspayoutcancel
+      with:
+        payout: tools.payout
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

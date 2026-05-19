@@ -1,0 +1,224 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payouts API — Post
+  description: 'Stripe Payouts API — Post. 4 operations. Lead operation: Stripe Post   Payouts. Self-contained Naftiko capability
+    covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payouts-post
+    baseUri: https://api.stripe.com
+    description: Stripe Payouts API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payouts
+      path: /v1/payouts
+      operations:
+      - name: postpayouts
+        method: POST
+        description: Stripe Post   Payouts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-payouts-payout
+      path: /v1/payouts/{payout}
+      operations:
+      - name: postpayoutspayout
+        method: POST
+        description: Stripe Post   Payouts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payouts-payout-cancel
+      path: /v1/payouts/{payout}/cancel
+      operations:
+      - name: postpayoutspayoutcancel
+        method: POST
+        description: Stripe Post   Payouts Cancel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-payouts-payout-reverse
+      path: /v1/payouts/{payout}/reverse
+      operations:
+      - name: postpayoutspayoutreverse
+        method: POST
+        description: Stripe Post   Payouts Reverse
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: payout
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payouts-post-rest
+    port: 8080
+    description: REST adapter for Stripe Payouts API — Post. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/payouts
+      name: v1-payouts
+      description: REST surface for v1-payouts.
+      operations:
+      - method: POST
+        name: postpayouts
+        description: Stripe Post   Payouts
+        call: payouts-post.postpayouts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payouts/{payout}
+      name: v1-payouts-payout
+      description: REST surface for v1-payouts-payout.
+      operations:
+      - method: POST
+        name: postpayoutspayout
+        description: Stripe Post   Payouts
+        call: payouts-post.postpayoutspayout
+        with:
+          payout: rest.payout
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payouts/{payout}/cancel
+      name: v1-payouts-payout-cancel
+      description: REST surface for v1-payouts-payout-cancel.
+      operations:
+      - method: POST
+        name: postpayoutspayoutcancel
+        description: Stripe Post   Payouts Cancel
+        call: payouts-post.postpayoutspayoutcancel
+        with:
+          payout: rest.payout
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/payouts/{payout}/reverse
+      name: v1-payouts-payout-reverse
+      description: REST surface for v1-payouts-payout-reverse.
+      operations:
+      - method: POST
+        name: postpayoutspayoutreverse
+        description: Stripe Post   Payouts Reverse
+        call: payouts-post.postpayoutspayoutreverse
+        with:
+          payout: rest.payout
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payouts-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payouts API — Post. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-payouts
+      description: Stripe Post   Payouts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payouts-post.postpayouts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payouts-2
+      description: Stripe Post   Payouts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payouts-post.postpayoutspayout
+      with:
+        payout: tools.payout
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payouts-cancel
+      description: Stripe Post   Payouts Cancel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payouts-post.postpayoutspayoutcancel
+      with:
+        payout: tools.payout
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-payouts-reverse
+      description: Stripe Post   Payouts Reverse
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payouts-post.postpayoutspayoutreverse
+      with:
+        payout: tools.payout
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

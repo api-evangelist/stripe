@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Link API — Refresh
+  description: 'Stripe Link API — Refresh. 1 operations. Lead operation: Stripe Post   Linked Accounts Refresh. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Refresh
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: link-refresh
+    baseUri: https://api.stripe.com
+    description: Stripe Link API — Refresh business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-linked_accounts-account-refresh
+      path: /v1/linked_accounts/{account}/refresh
+      operations:
+      - name: postlinkedaccountsaccountrefresh
+        method: POST
+        description: Stripe Post   Linked Accounts Refresh
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: link-refresh-rest
+    port: 8080
+    description: REST adapter for Stripe Link API — Refresh. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/linked-accounts/{account}/refresh
+      name: v1-linked-accounts-account-refresh
+      description: REST surface for v1-linked_accounts-account-refresh.
+      operations:
+      - method: POST
+        name: postlinkedaccountsaccountrefresh
+        description: Stripe Post   Linked Accounts Refresh
+        call: link-refresh.postlinkedaccountsaccountrefresh
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: link-refresh-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Link API — Refresh. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-linked-accounts-refresh
+      description: Stripe Post   Linked Accounts Refresh
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: link-refresh.postlinkedaccountsaccountrefresh
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

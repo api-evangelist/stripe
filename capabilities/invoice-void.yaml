@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Invoice API — Void
+  description: 'Stripe Invoice API — Void. 1 operations. Lead operation: Stripe Post   Invoices Invoice Void. Self-contained
+    Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Void
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: invoice-void
+    baseUri: https://api.stripe.com
+    description: Stripe Invoice API — Void business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-invoices-invoice-void
+      path: /v1/invoices/{invoice}/void
+      operations:
+      - name: postinvoicesinvoicevoid
+        method: POST
+        description: Stripe Post   Invoices Invoice Void
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: invoice
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: invoice-void-rest
+    port: 8080
+    description: REST adapter for Stripe Invoice API — Void. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/invoices/{invoice}/void
+      name: v1-invoices-invoice-void
+      description: REST surface for v1-invoices-invoice-void.
+      operations:
+      - method: POST
+        name: postinvoicesinvoicevoid
+        description: Stripe Post   Invoices Invoice Void
+        call: invoice-void.postinvoicesinvoicevoid
+        with:
+          invoice: rest.invoice
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: invoice-void-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Invoice API — Void. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: stripe-post-invoices-invoice-void
+      description: Stripe Post   Invoices Invoice Void
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: invoice-void.postinvoicesinvoicevoid
+      with:
+        invoice: tools.invoice
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

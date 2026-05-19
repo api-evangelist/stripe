@@ -1,0 +1,463 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Connect API — Connect
+  description: 'Stripe Connect API — Connect. 10 operations. Lead operation: Stripe Create Account Link. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Connect
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: connect-connect
+    baseUri: https://api.stripe.com
+    description: Stripe Connect API — Connect business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-account_links
+      path: /v1/account_links
+      operations:
+      - name: postaccountlinks
+        method: POST
+        description: Stripe Create Account Link
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-account_sessions
+      path: /v1/account_sessions
+      operations:
+      - name: postaccountsessions
+        method: POST
+        description: Stripe Create Account Session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts
+      path: /v1/accounts
+      operations:
+      - name: getaccounts
+        method: GET
+        description: Stripe List Connected Accounts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+        - name: limit
+          in: query
+          type: integer
+        - name: starting_after
+          in: query
+          type: string
+        - name: expand
+          in: query
+          type: array
+      - name: postaccounts
+        method: POST
+        description: Stripe Create Connected Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-accounts-account
+      path: /v1/accounts/{account}
+      operations:
+      - name: getaccountsaccount
+        method: GET
+        description: Stripe Retrieve Connected Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: expand
+          in: query
+          type: array
+      - name: postaccountsaccount
+        method: POST
+        description: Stripe Update Connected Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteaccountsaccount
+        method: DELETE
+        description: Stripe Delete Connected Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+    - name: v1-accounts-account-capabilities
+      path: /v1/accounts/{account}/capabilities
+      operations:
+      - name: getaccountsaccountcapabilities
+        method: GET
+        description: Stripe List Account Capabilities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+    - name: v1-accounts-account-login_links
+      path: /v1/accounts/{account}/login_links
+      operations:
+      - name: postaccountsaccountloginlinks
+        method: POST
+        description: Stripe Create Login Link
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+    - name: v1-accounts-account-reject
+      path: /v1/accounts/{account}/reject
+      operations:
+      - name: postaccountsaccountreject
+        method: POST
+        description: Stripe Reject Connected Account
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: connect-connect-rest
+    port: 8080
+    description: REST adapter for Stripe Connect API — Connect. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/account-links
+      name: v1-account-links
+      description: REST surface for v1-account_links.
+      operations:
+      - method: POST
+        name: postaccountlinks
+        description: Stripe Create Account Link
+        call: connect-connect.postaccountlinks
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/account-sessions
+      name: v1-account-sessions
+      description: REST surface for v1-account_sessions.
+      operations:
+      - method: POST
+        name: postaccountsessions
+        description: Stripe Create Account Session
+        call: connect-connect.postaccountsessions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts
+      name: v1-accounts
+      description: REST surface for v1-accounts.
+      operations:
+      - method: GET
+        name: getaccounts
+        description: Stripe List Connected Accounts
+        call: connect-connect.getaccounts
+        with:
+          ending_before: rest.ending_before
+          limit: rest.limit
+          starting_after: rest.starting_after
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccounts
+        description: Stripe Create Connected Account
+        call: connect-connect.postaccounts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}
+      name: v1-accounts-account
+      description: REST surface for v1-accounts-account.
+      operations:
+      - method: GET
+        name: getaccountsaccount
+        description: Stripe Retrieve Connected Account
+        call: connect-connect.getaccountsaccount
+        with:
+          account: rest.account
+          expand: rest.expand
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postaccountsaccount
+        description: Stripe Update Connected Account
+        call: connect-connect.postaccountsaccount
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteaccountsaccount
+        description: Stripe Delete Connected Account
+        call: connect-connect.deleteaccountsaccount
+        with:
+          account: rest.account
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/capabilities
+      name: v1-accounts-account-capabilities
+      description: REST surface for v1-accounts-account-capabilities.
+      operations:
+      - method: GET
+        name: getaccountsaccountcapabilities
+        description: Stripe List Account Capabilities
+        call: connect-connect.getaccountsaccountcapabilities
+        with:
+          account: rest.account
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/login-links
+      name: v1-accounts-account-login-links
+      description: REST surface for v1-accounts-account-login_links.
+      operations:
+      - method: POST
+        name: postaccountsaccountloginlinks
+        description: Stripe Create Login Link
+        call: connect-connect.postaccountsaccountloginlinks
+        with:
+          account: rest.account
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{account}/reject
+      name: v1-accounts-account-reject
+      description: REST surface for v1-accounts-account-reject.
+      operations:
+      - method: POST
+        name: postaccountsaccountreject
+        description: Stripe Reject Connected Account
+        call: connect-connect.postaccountsaccountreject
+        with:
+          account: rest.account
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: connect-connect-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Connect API — Connect. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-create-account-link
+      description: Stripe Create Account Link
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccountlinks
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-account-session
+      description: Stripe Create Account Session
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccountsessions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-connected-accounts
+      description: Stripe List Connected Accounts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connect-connect.getaccounts
+      with:
+        ending_before: tools.ending_before
+        limit: tools.limit
+        starting_after: tools.starting_after
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-connected-account
+      description: Stripe Create Connected Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccounts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-retrieve-connected-account
+      description: Stripe Retrieve Connected Account
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connect-connect.getaccountsaccount
+      with:
+        account: tools.account
+        expand: tools.expand
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-update-connected-account
+      description: Stripe Update Connected Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccountsaccount
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-delete-connected-account
+      description: Stripe Delete Connected Account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: connect-connect.deleteaccountsaccount
+      with:
+        account: tools.account
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-list-account-capabilities
+      description: Stripe List Account Capabilities
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: connect-connect.getaccountsaccountcapabilities
+      with:
+        account: tools.account
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-create-login-link
+      description: Stripe Create Login Link
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccountsaccountloginlinks
+      with:
+        account: tools.account
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-reject-connected-account
+      description: Stripe Reject Connected Account
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: connect-connect.postaccountsaccountreject
+      with:
+        account: tools.account
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

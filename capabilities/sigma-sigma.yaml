@@ -1,0 +1,161 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Sigma API — Sigma
+  description: 'Stripe Sigma API — Sigma. 2 operations. Lead operation: Sigma. Self-contained Naftiko capability covering
+    one Stripe business surface.'
+  tags:
+  - Stripe
+  - Sigma
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sigma-sigma
+    baseUri: https://api.stripe.com
+    description: Stripe Sigma API — Sigma business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-sigma-scheduled_query_runs
+      path: /v1/sigma/scheduled_query_runs
+      operations:
+      - name: getsigmascheduledqueryruns
+        method: GET
+        description: <p>Returns a list of scheduled query runs.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ending_before
+          in: query
+          type: string
+          description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 ob
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: limit
+          in: query
+          type: integer
+          description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default
+            is 10.
+        - name: starting_after
+          in: query
+          type: string
+          description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 o
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-sigma-scheduled_query_runs-scheduled_query_run
+      path: /v1/sigma/scheduled_query_runs/{scheduled_query_run}
+      operations:
+      - name: getsigmascheduledqueryrunsscheduledqueryrun
+        method: GET
+        description: <p>Retrieves the details of an scheduled query run.</p>
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: expand
+          in: query
+          type: array
+          description: Specifies which fields in the response should be expanded.
+        - name: scheduled_query_run
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sigma-sigma-rest
+    port: 8080
+    description: REST adapter for Stripe Sigma API — Sigma. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/sigma/scheduled-query-runs
+      name: v1-sigma-scheduled-query-runs
+      description: REST surface for v1-sigma-scheduled_query_runs.
+      operations:
+      - method: GET
+        name: getsigmascheduledqueryruns
+        description: <p>Returns a list of scheduled query runs.</p>
+        call: sigma-sigma.getsigmascheduledqueryruns
+        with:
+          ending_before: rest.ending_before
+          expand: rest.expand
+          limit: rest.limit
+          starting_after: rest.starting_after
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/sigma/scheduled-query-runs/{scheduled-query-run}
+      name: v1-sigma-scheduled-query-runs-scheduled-query-run
+      description: REST surface for v1-sigma-scheduled_query_runs-scheduled_query_run.
+      operations:
+      - method: GET
+        name: getsigmascheduledqueryrunsscheduledqueryrun
+        description: <p>Retrieves the details of an scheduled query run.</p>
+        call: sigma-sigma.getsigmascheduledqueryrunsscheduledqueryrun
+        with:
+          expand: rest.expand
+          scheduled_query_run: rest.scheduled_query_run
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sigma-sigma-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Sigma API — Sigma. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: p-returns-list-scheduled-query-runs
+      description: <p>Returns a list of scheduled query runs.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sigma.getsigmascheduledqueryruns
+      with:
+        ending_before: tools.ending_before
+        expand: tools.expand
+        limit: tools.limit
+        starting_after: tools.starting_after
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: p-retrieves-details-scheduled-query-run
+      description: <p>Retrieves the details of an scheduled query run.</p>
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sigma-sigma.getsigmascheduledqueryrunsscheduledqueryrun
+      with:
+        expand: tools.expand
+        scheduled_query_run: tools.scheduled_query_run
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

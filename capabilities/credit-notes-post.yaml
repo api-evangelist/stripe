@@ -1,0 +1,176 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Credit Notes API — Post
+  description: 'Stripe Credit Notes API — Post. 3 operations. Lead operation: Stripe Post   Credit Notes. Self-contained Naftiko
+    capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Post
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: credit-notes-post
+    baseUri: https://api.stripe.com
+    description: Stripe Credit Notes API — Post business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-credit_notes
+      path: /v1/credit_notes
+      operations:
+      - name: postcreditnotes
+        method: POST
+        description: Stripe Post   Credit Notes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-credit_notes-id
+      path: /v1/credit_notes/{id}
+      operations:
+      - name: postcreditnotesid
+        method: POST
+        description: Stripe Post   Credit Notes Id
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v1-credit_notes-id-void
+      path: /v1/credit_notes/{id}/void
+      operations:
+      - name: postcreditnotesidvoid
+        method: POST
+        description: Stripe Post   Credit Notes Id Void
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: credit-notes-post-rest
+    port: 8080
+    description: REST adapter for Stripe Credit Notes API — Post. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/credit-notes
+      name: v1-credit-notes
+      description: REST surface for v1-credit_notes.
+      operations:
+      - method: POST
+        name: postcreditnotes
+        description: Stripe Post   Credit Notes
+        call: credit-notes-post.postcreditnotes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/credit-notes/{id}
+      name: v1-credit-notes-id
+      description: REST surface for v1-credit_notes-id.
+      operations:
+      - method: POST
+        name: postcreditnotesid
+        description: Stripe Post   Credit Notes Id
+        call: credit-notes-post.postcreditnotesid
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/credit-notes/{id}/void
+      name: v1-credit-notes-id-void
+      description: REST surface for v1-credit_notes-id-void.
+      operations:
+      - method: POST
+        name: postcreditnotesidvoid
+        description: Stripe Post   Credit Notes Id Void
+        call: credit-notes-post.postcreditnotesidvoid
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: credit-notes-post-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Credit Notes API — Post. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stripe-post-credit-notes
+      description: Stripe Post   Credit Notes
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: credit-notes-post.postcreditnotes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-credit-notes-id
+      description: Stripe Post   Credit Notes Id
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: credit-notes-post.postcreditnotesid
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: stripe-post-credit-notes-id-2
+      description: Stripe Post   Credit Notes Id Void
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: credit-notes-post.postcreditnotesidvoid
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

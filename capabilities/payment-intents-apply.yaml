@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Stripe Payment Intents API — Apply
+  description: 'Stripe Payment Intents API — Apply. 1 operations. Lead operation: Stripe Post   Payment Intents Apply Customer
+    Balance. Self-contained Naftiko capability covering one Stripe business surface.'
+  tags:
+  - Stripe
+  - Apply
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payment-intents-apply
+    baseUri: https://api.stripe.com
+    description: Stripe Payment Intents API — Apply business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-payment_intents-intent-apply_customer_balance
+      path: /v1/payment_intents/{intent}/apply_customer_balance
+      operations:
+      - name: postpaymentintentsintentapplycustomerbalance
+        method: POST
+        description: Stripe Post   Payment Intents Apply Customer Balance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: intent
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.STRIPE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payment-intents-apply-rest
+    port: 8080
+    description: REST adapter for Stripe Payment Intents API — Apply. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/payment-intents/{intent}/apply-customer-balance
+      name: v1-payment-intents-intent-apply-customer-balance
+      description: REST surface for v1-payment_intents-intent-apply_customer_balance.
+      operations:
+      - method: POST
+        name: postpaymentintentsintentapplycustomerbalance
+        description: Stripe Post   Payment Intents Apply Customer Balance
+        call: payment-intents-apply.postpaymentintentsintentapplycustomerbalance
+        with:
+          intent: rest.intent
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payment-intents-apply-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Stripe Payment Intents API — Apply. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: stripe-post-payment-intents-apply
+      description: Stripe Post   Payment Intents Apply Customer Balance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payment-intents-apply.postpaymentintentsintentapplycustomerbalance
+      with:
+        intent: tools.intent
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
