@@ -1,0 +1,85 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Reconcile Zuora invoices against Stripe payments
+  description: For each Zuora invoice, find and link the corresponding Stripe PaymentIntent and record the reconciliation status.
+  tags:
+  - Stripe
+  - Integration
+  - Subscription billing
+  - zuora
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    ZUORA_API_KEY: ZUORA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-payment-intents
+      path: /v1/payment_intents
+      operations:
+      - name: getpaymentintents
+        method: GET
+        description: List Stripe payment intents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  - type: http
+    namespace: zuora
+    baseUri: https://rest.zuora.com
+    description: Zuora REST API operations consumed by this integration.
+    resources:
+    - name: v1-invoices
+      path: /v1/invoices
+      operations:
+      - name: listinvoices
+        method: GET
+        description: 'Zuora REST API: listInvoices'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  exposes:
+  - type: mcp
+    namespace: stripe-zuora-mcp
+    description: MCP adapter for the stripe-zuora integration.
+    tools:
+    - name: stripe_zuora
+      description: Execute the stripe zuora integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-zuora-rest
+    port: 8080
+    description: REST adapter for the stripe-zuora integration.
+    resources:
+    - path: /stripe-zuora
+      name: stripe-zuora
+      description: REST surface for the stripe-zuora integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-zuora integration.
+        call: stripe_zuora
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

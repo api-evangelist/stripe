@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Enforce Stigg entitlements at Stripe checkout
+  description: Check Stigg entitlement before allowing a Stripe Checkout session to start (block over-quota purchases at point-of-sale).
+  tags:
+  - Stripe
+  - Integration
+  - Pricing / packaging
+  - stigg
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    STIGG_API_KEY: STIGG_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-checkout-sessions
+      path: /v1/checkout/sessions
+      operations:
+      - name: postcheckoutsession
+        method: POST
+        description: Create a Stripe Checkout session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: stigg
+    baseUri: https://api.stigg.io
+    description: Stigg API operations consumed by this integration.
+    resources:
+    - name: api-v1-entitlements-customer-customerid
+      path: /api/v1/entitlements/customer/{customerId}
+      operations:
+      - name: getentitlements
+        method: GET
+        description: 'Stigg API: getEntitlements'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customerId
+          in: path
+          type: string
+          description: Path parameter customerId.
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-stigg-mcp
+    description: MCP adapter for the stripe-stigg integration.
+    tools:
+    - name: stripe_stigg
+      description: Execute the stripe stigg integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-stigg-rest
+    port: 8080
+    description: REST adapter for the stripe-stigg integration.
+    resources:
+    - path: /stripe-stigg
+      name: stripe-stigg
+      description: REST surface for the stripe-stigg integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-stigg integration.
+        call: stripe_stigg
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

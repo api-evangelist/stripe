@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Send Stripe revenue events to Amplitude
+  description: For each Stripe charge succeeded event, send a corresponding revenue event to Amplitude.
+  tags:
+  - Stripe
+  - Integration
+  - Analytics
+  - amplitude
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    AMPLITUDE_API_KEY: AMPLITUDE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-charges-id
+      path: /v1/charges/{id}
+      operations:
+      - name: getcharge
+        method: GET
+        description: Retrieve a Stripe charge
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: amplitude
+    baseUri: https://api2.amplitude.com
+    description: Amplitude HTTP API v2 operations consumed by this integration.
+    resources:
+    - name: 2-httpapi
+      path: /2/httpapi
+      operations:
+      - name: trackrevenue
+        method: POST
+        description: 'Amplitude HTTP API v2: trackRevenue'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-amplitude-mcp
+    description: MCP adapter for the stripe-amplitude integration.
+    tools:
+    - name: stripe_amplitude
+      description: Execute the stripe amplitude integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-amplitude-rest
+    port: 8080
+    description: REST adapter for the stripe-amplitude integration.
+    resources:
+    - path: /stripe-amplitude
+      name: stripe-amplitude
+      description: REST surface for the stripe-amplitude integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-amplitude integration.
+        call: stripe_amplitude
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

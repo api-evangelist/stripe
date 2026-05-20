@@ -1,0 +1,742 @@
+# Curated top-50 Stripe integrations grouped by category.
+# Each entry becomes one Naftiko capability YAML in integrations/.
+# Categories reflect Stripe's actual app marketplace + commonly-paired tooling.
+
+# CRM / Sales (6)
+- partner: salesforce
+  name: Sync Stripe customers into Salesforce contacts
+  category: CRM
+  use_case: When a Stripe customer is created, create or update the matching Salesforce Contact (by email) with billing details and lifetime spend.
+  partner_baseUri: https://yourinstance.my.salesforce.com
+  partner_api: Salesforce REST API
+  stripe_ops:
+    - getCustomers
+    - getCustomer
+  partner_ops:
+    - method: POST
+      path: /services/data/v60.0/sobjects/Contact
+      name: createContact
+    - method: PATCH
+      path: /services/data/v60.0/sobjects/Contact/{id}
+      name: updateContact
+
+- partner: hubspot
+  name: Push Stripe successful charges as HubSpot deals
+  category: CRM
+  use_case: When a Stripe charge succeeds, create or update a HubSpot Deal in the Closed Won stage attached to the matching Contact.
+  partner_baseUri: https://api.hubapi.com
+  partner_api: HubSpot CRM API
+  stripe_ops:
+    - getCharges
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /crm/v3/objects/deals
+      name: createDeal
+    - method: GET
+      path: /crm/v3/objects/contacts/{contactId}
+      name: getContact
+
+- partner: pipedrive
+  name: Mirror Stripe subscription lifecycle into Pipedrive deals
+  category: CRM
+  use_case: Forward Stripe subscription created / updated / canceled events as Pipedrive Deal stage changes.
+  partner_baseUri: https://api.pipedrive.com
+  partner_api: Pipedrive API
+  stripe_ops:
+    - getSubscriptions
+    - getSubscription
+  partner_ops:
+    - method: POST
+      path: /v1/deals
+      name: createDeal
+    - method: PUT
+      path: /v1/deals/{id}
+      name: updateDeal
+
+- partner: close
+  name: Sync Stripe payments to Close opportunities
+  category: CRM
+  use_case: Map Stripe successful payments to Close Opportunities by customer email; create activity log entries.
+  partner_baseUri: https://api.close.com
+  partner_api: Close API
+  stripe_ops:
+    - getPaymentIntents
+  partner_ops:
+    - method: POST
+      path: /api/v1/opportunity/
+      name: createOpportunity
+
+- partner: zoho-crm
+  name: Sync Stripe customer billing into Zoho CRM accounts
+  category: CRM
+  use_case: Push Stripe Customer billing details into matching Zoho CRM Accounts with custom MRR field.
+  partner_baseUri: https://www.zohoapis.com
+  partner_api: Zoho CRM REST API
+  stripe_ops:
+    - getCustomer
+    - getInvoices
+  partner_ops:
+    - method: POST
+      path: /crm/v5/Accounts
+      name: upsertAccount
+
+- partner: outreach
+  name: Mark Outreach prospects who converted in Stripe
+  category: Sales engagement
+  use_case: When a Stripe Customer first converts to paid, tag the matching Outreach Prospect as Converted and pause active sequences.
+  partner_baseUri: https://api.outreach.io
+  partner_api: Outreach API
+  stripe_ops:
+    - getCustomer
+  partner_ops:
+    - method: PATCH
+      path: /api/v2/prospects/{id}
+      name: updateProspect
+
+# Email / marketing automation (6)
+- partner: mailchimp
+  name: Add Stripe Checkout completers to a Mailchimp audience
+  category: Email marketing
+  use_case: When a Stripe Checkout session completes, add the customer to a Mailchimp audience with merge tags for plan and MRR.
+  partner_baseUri: https://us1.api.mailchimp.com
+  partner_api: Mailchimp Marketing API
+  stripe_ops:
+    - getCheckoutSession
+  partner_ops:
+    - method: POST
+      path: /3.0/lists/{list_id}/members
+      name: addAudienceMember
+
+- partner: klaviyo
+  name: Forward Stripe payment events to Klaviyo as profile events
+  category: Email marketing
+  use_case: Forward Stripe payment.intent.succeeded / customer.subscription.created webhooks to Klaviyo as profile-level events.
+  partner_baseUri: https://a.klaviyo.com
+  partner_api: Klaviyo API
+  stripe_ops:
+    - getPaymentIntents
+    - getCustomer
+  partner_ops:
+    - method: POST
+      path: /api/events/
+      name: trackEvent
+
+- partner: sendgrid
+  name: Trigger SendGrid transactional template on Stripe payment success
+  category: Transactional email
+  use_case: When a Stripe payment succeeds, render and send a SendGrid Dynamic Template (receipt) to the customer email.
+  partner_baseUri: https://api.sendgrid.com
+  partner_api: SendGrid v3 API
+  stripe_ops:
+    - getPaymentIntent
+  partner_ops:
+    - method: POST
+      path: /v3/mail/send
+      name: sendDynamicTemplate
+
+- partner: customer-io
+  name: Forward Stripe subscription lifecycle to Customer.io events
+  category: Email marketing
+  use_case: Forward Stripe subscription lifecycle webhooks (created/updated/canceled/paused) to Customer.io as user-level events.
+  partner_baseUri: https://track.customer.io
+  partner_api: Customer.io Track API
+  stripe_ops:
+    - getSubscription
+  partner_ops:
+    - method: POST
+      path: /api/v1/customers/{customer_id}/events
+      name: trackEvent
+
+- partner: iterable
+  name: Sync Stripe trial-end events to Iterable
+  category: Email marketing
+  use_case: Forward Stripe customer.subscription.trial_will_end events to Iterable as user events to trigger conversion campaigns.
+  partner_baseUri: https://api.iterable.com
+  partner_api: Iterable API
+  stripe_ops:
+    - getSubscription
+  partner_ops:
+    - method: POST
+      path: /api/events/track
+      name: trackEvent
+
+- partner: braze
+  name: Forward Stripe events to Braze custom events
+  category: Email marketing
+  use_case: Map Stripe events into Braze custom user events with the customer attached by email or external_id.
+  partner_baseUri: https://rest.iad-01.braze.com
+  partner_api: Braze REST API
+  stripe_ops:
+    - getCustomer
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /users/track
+      name: trackEvent
+
+# Subscription / billing tools (5)
+- partner: chargebee
+  name: Bridge Chargebee subscriptions to Stripe payment methods
+  category: Subscription billing
+  use_case: Use Chargebee for subscription state of record while Stripe handles payment method storage and charge collection.
+  partner_baseUri: https://yoursite.chargebee.com
+  partner_api: Chargebee API v2
+  stripe_ops:
+    - getPaymentMethod
+  partner_ops:
+    - method: POST
+      path: /api/v2/subscriptions
+      name: createSubscription
+
+- partner: recurly
+  name: Mirror Recurly subscriptions in Stripe for revenue reporting
+  category: Subscription billing
+  use_case: Materialize Recurly subscriptions in Stripe as parallel Subscription objects so Stripe's reporting can be source-of-truth.
+  partner_baseUri: https://v3.recurly.com
+  partner_api: Recurly REST API
+  stripe_ops:
+    - postSubscription
+  partner_ops:
+    - method: GET
+      path: /subscriptions
+      name: listSubscriptions
+
+- partner: zuora
+  name: Reconcile Zuora invoices against Stripe payments
+  category: Subscription billing
+  use_case: For each Zuora invoice, find and link the corresponding Stripe PaymentIntent and record the reconciliation status.
+  partner_baseUri: https://rest.zuora.com
+  partner_api: Zuora REST API
+  stripe_ops:
+    - getPaymentIntents
+  partner_ops:
+    - method: GET
+      path: /v1/invoices
+      name: listInvoices
+
+- partner: maxio
+  name: Sync Maxio (Chargify) usage events into Stripe metered subscriptions
+  category: Subscription billing
+  use_case: Push Maxio metered usage events into Stripe metered subscription items so billing rolls up in Stripe.
+  partner_baseUri: https://subdomain.chargify.com
+  partner_api: Maxio API
+  stripe_ops:
+    - postSubscriptionItemUsage
+  partner_ops:
+    - method: GET
+      path: /event_based_billing/components/{component_id}/usage_events
+      name: listUsageEvents
+
+- partner: stigg
+  name: Enforce Stigg entitlements at Stripe checkout
+  category: Pricing / packaging
+  use_case: Check Stigg entitlement before allowing a Stripe Checkout session to start (block over-quota purchases at point-of-sale).
+  partner_baseUri: https://api.stigg.io
+  partner_api: Stigg API
+  stripe_ops:
+    - postCheckoutSession
+  partner_ops:
+    - method: GET
+      path: /api/v1/entitlements/customer/{customerId}
+      name: getEntitlements
+
+# Accounting / ERP (6)
+- partner: quickbooks
+  name: Sync Stripe payouts into QuickBooks Online deposits
+  category: Accounting
+  use_case: For each Stripe payout, create a matching deposit in QuickBooks Online with per-charge line items split by fee.
+  partner_baseUri: https://quickbooks.api.intuit.com
+  partner_api: QuickBooks Online API
+  stripe_ops:
+    - getPayout
+    - getBalanceTransactions
+  partner_ops:
+    - method: POST
+      path: /v3/company/{realmId}/deposit
+      name: createDeposit
+
+- partner: xero
+  name: Reconcile Stripe payouts in Xero bank transactions
+  category: Accounting
+  use_case: Match Stripe payouts to Xero bank transactions and create per-transaction reconciliation entries.
+  partner_baseUri: https://api.xero.com
+  partner_api: Xero API
+  stripe_ops:
+    - getPayouts
+    - getBalanceTransactions
+  partner_ops:
+    - method: PUT
+      path: /api.xro/2.0/BankTransactions
+      name: createBankTransaction
+
+- partner: netsuite
+  name: Sync Stripe customer + invoice to NetSuite ERP
+  category: ERP
+  use_case: Mirror Stripe Customer + Invoice as NetSuite Customer + Invoice records via the SuiteTalk REST API.
+  partner_baseUri: https://yourcompany.suitetalk.api.netsuite.com
+  partner_api: NetSuite SuiteTalk REST
+  stripe_ops:
+    - getInvoice
+    - getCustomer
+  partner_ops:
+    - method: POST
+      path: /services/rest/record/v1/invoice
+      name: createInvoice
+
+- partner: sage-intacct
+  name: Post Stripe revenue into Sage Intacct GL
+  category: Accounting
+  use_case: For each Stripe Invoice paid, write a corresponding journal entry into Sage Intacct's general ledger.
+  partner_baseUri: https://api.intacct.com
+  partner_api: Sage Intacct API
+  stripe_ops:
+    - getInvoice
+  partner_ops:
+    - method: POST
+      path: /ia/xml/xmlgw.phtml
+      name: createJournalEntry
+
+- partner: freshbooks
+  name: Generate FreshBooks invoices from Stripe Checkout sessions
+  category: Accounting
+  use_case: When a Stripe Checkout completes for an invoice product, mark the matching FreshBooks invoice as paid.
+  partner_baseUri: https://api.freshbooks.com
+  partner_api: FreshBooks API
+  stripe_ops:
+    - getCheckoutSession
+  partner_ops:
+    - method: PUT
+      path: /accounting/account/{account_id}/invoices/invoices/{invoice_id}
+      name: updateInvoice
+
+- partner: wave
+  name: Mirror Stripe sales into Wave accounting
+  category: Accounting
+  use_case: Sync Stripe payment events into Wave as income transactions in the right account category.
+  partner_baseUri: https://gql.waveapps.com
+  partner_api: Wave Accounting GraphQL
+  stripe_ops:
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /graphql/public
+      name: createMoneyTransaction
+
+# Tax (4)
+- partner: avalara
+  name: Calculate Avalara tax at Stripe Checkout
+  category: Tax
+  use_case: Call Avalara AvaTax to compute the correct tax line for a cart, then attach to the Stripe Checkout Session.
+  partner_baseUri: https://rest.avatax.com
+  partner_api: AvaTax REST API
+  stripe_ops:
+    - postCheckoutSession
+  partner_ops:
+    - method: POST
+      path: /api/v2/transactions/create
+      name: createTransaction
+
+- partner: taxjar
+  name: File Stripe sales through TaxJar
+  category: Tax
+  use_case: Sync Stripe Invoices to TaxJar as transactions for automated state filing.
+  partner_baseUri: https://api.taxjar.com
+  partner_api: TaxJar SmartCalcs API
+  stripe_ops:
+    - getInvoices
+  partner_ops:
+    - method: POST
+      path: /v2/transactions/orders
+      name: createOrderTransaction
+
+- partner: vertex
+  name: Replace Stripe Tax with Vertex for enterprise tax determination
+  category: Tax
+  use_case: Use Vertex for tax determination, then attach the Vertex-computed line to the Stripe payment.
+  partner_baseUri: https://api.vertexsmb.com
+  partner_api: Vertex Cloud API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: POST
+      path: /vertex-restapi/v1/sale
+      name: computeSaleTax
+
+- partner: anrok
+  name: Post Stripe SaaS subscriptions to Anrok for sales-tax compliance
+  category: Tax
+  use_case: For each Stripe Subscription billing event, mirror the transaction in Anrok for sales-tax exposure tracking.
+  partner_baseUri: https://api.anrok.com
+  partner_api: Anrok API
+  stripe_ops:
+    - getInvoice
+  partner_ops:
+    - method: POST
+      path: /v1/seller/transactions/createOrUpdate
+      name: createOrUpdateTransaction
+
+# Identity / auth (4)
+- partner: auth0
+  name: Provision Auth0 users from Stripe Customers
+  category: Identity
+  use_case: When a Stripe customer is created (via a paid signup), provision the matching Auth0 user with email_verified inherited from Stripe.
+  partner_baseUri: https://yourdomain.auth0.com
+  partner_api: Auth0 Management API
+  stripe_ops:
+    - getCustomer
+  partner_ops:
+    - method: POST
+      path: /api/v2/users
+      name: createUser
+
+- partner: okta
+  name: Sync Stripe subscription tier to Okta group membership
+  category: Identity
+  use_case: Map Stripe subscription plans to Okta Groups and update group membership when subscription tier changes.
+  partner_baseUri: https://yourdomain.okta.com
+  partner_api: Okta API
+  stripe_ops:
+    - getSubscription
+  partner_ops:
+    - method: PUT
+      path: /api/v1/groups/{groupId}/users/{userId}
+      name: addUserToGroup
+
+- partner: workos
+  name: Provision WorkOS organizations from Stripe Enterprise subscriptions
+  category: Identity / SSO
+  use_case: For Enterprise-tier Stripe subscriptions, create the corresponding WorkOS Organization with SSO configured.
+  partner_baseUri: https://api.workos.com
+  partner_api: WorkOS API
+  stripe_ops:
+    - getSubscription
+  partner_ops:
+    - method: POST
+      path: /organizations
+      name: createOrganization
+
+- partner: clerk
+  name: Bind Clerk Users to Stripe Customers
+  category: Identity
+  use_case: When a Clerk user signs up, create the matching Stripe Customer and store the customer ID on the Clerk user metadata.
+  partner_baseUri: https://api.clerk.com
+  partner_api: Clerk API
+  stripe_ops:
+    - postCustomer
+  partner_ops:
+    - method: PATCH
+      path: /v1/users/{user_id}/metadata
+      name: updateUserMetadata
+
+# Analytics / data warehouse (5)
+- partner: segment
+  name: Forward Stripe webhook events to Segment
+  category: Analytics
+  use_case: Stream all Stripe webhook events to Segment as track() / identify() / group() events keyed by customer.
+  partner_baseUri: https://api.segment.io
+  partner_api: Segment HTTP API
+  stripe_ops:
+    - getCharges
+  partner_ops:
+    - method: POST
+      path: /v1/track
+      name: trackEvent
+
+- partner: mixpanel
+  name: Track Stripe payment events in Mixpanel
+  category: Analytics
+  use_case: Forward Stripe charge / subscription events to Mixpanel as user-level events with revenue and plan props.
+  partner_baseUri: https://api.mixpanel.com
+  partner_api: Mixpanel HTTP API
+  stripe_ops:
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /track
+      name: trackEvent
+
+- partner: amplitude
+  name: Send Stripe revenue events to Amplitude
+  category: Analytics
+  use_case: For each Stripe charge succeeded event, send a corresponding revenue event to Amplitude.
+  partner_baseUri: https://api2.amplitude.com
+  partner_api: Amplitude HTTP API v2
+  stripe_ops:
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /2/httpapi
+      name: trackRevenue
+
+- partner: snowflake
+  name: Stream Stripe events into Snowflake
+  category: Data warehouse
+  use_case: Pipe Stripe webhook events into a Snowflake table via the Snowpipe REST API for downstream BI.
+  partner_baseUri: https://account.snowflakecomputing.com
+  partner_api: Snowflake Snowpipe REST API
+  stripe_ops:
+    - getEvents
+  partner_ops:
+    - method: POST
+      path: /v1/data/pipes/{pipe}/insertFiles
+      name: insertFiles
+
+- partner: looker
+  name: Power Looker dashboards from Stripe revenue data
+  category: BI
+  use_case: Expose a derived Stripe revenue view via the Looker API for embedded dashboards.
+  partner_baseUri: https://yourcompany.cloud.looker.com
+  partner_api: Looker API
+  stripe_ops:
+    - getCharges
+    - getInvoices
+  partner_ops:
+    - method: POST
+      path: /api/4.0/queries/run
+      name: runQuery
+
+# Customer support (4)
+- partner: zendesk
+  name: Attach Stripe customer history to Zendesk tickets
+  category: Support
+  use_case: When a Zendesk ticket opens, fetch the requester's Stripe Customer + recent charges and render them in a Zendesk app.
+  partner_baseUri: https://yoursubdomain.zendesk.com
+  partner_api: Zendesk API
+  stripe_ops:
+    - getCustomer
+    - getCharges
+  partner_ops:
+    - method: POST
+      path: /api/v2/tickets
+      name: createTicket
+
+- partner: intercom
+  name: Surface Stripe MRR + plan inside Intercom Inbox
+  category: Support
+  use_case: Push Stripe MRR + current plan + churn risk to Intercom as a custom attribute on the matching Contact.
+  partner_baseUri: https://api.intercom.io
+  partner_api: Intercom API
+  stripe_ops:
+    - getSubscription
+  partner_ops:
+    - method: PUT
+      path: /contacts/{id}
+      name: updateContact
+
+- partner: front
+  name: Tag Front conversations with Stripe spending tier
+  category: Support
+  use_case: When a Front conversation arrives, look up the contact's Stripe LTV and apply a tier tag (VIP / standard / churned).
+  partner_baseUri: https://api2.frontapp.com
+  partner_api: Front API
+  stripe_ops:
+    - getCustomer
+    - getCharges
+  partner_ops:
+    - method: POST
+      path: /conversations/{conversation_id}/tags
+      name: tagConversation
+
+- partner: gorgias
+  name: Show Stripe order context in Gorgias for e-commerce support
+  category: Support
+  use_case: When a Gorgias ticket opens, fetch the customer's Stripe Checkout sessions to show order context inline.
+  partner_baseUri: https://yourdomain.gorgias.com
+  partner_api: Gorgias REST API
+  stripe_ops:
+    - getCheckoutSessions
+  partner_ops:
+    - method: GET
+      path: /api/customers
+      name: getCustomers
+
+# E-commerce platforms (4)
+- partner: shopify
+  name: Use Stripe for Shopify checkout outside Shopify Payments
+  category: E-commerce
+  use_case: Process Shopify checkouts via Stripe (where Shopify Payments isn't available) by attaching Stripe PaymentIntents to Shopify Draft Orders.
+  partner_baseUri: https://yourshop.myshopify.com
+  partner_api: Shopify Admin REST API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: POST
+      path: /admin/api/2024-04/orders.json
+      name: createOrder
+
+- partner: bigcommerce
+  name: Sync BigCommerce orders to Stripe payments
+  category: E-commerce
+  use_case: For each BigCommerce order, materialize the corresponding Stripe PaymentIntent so financial reporting consolidates in Stripe.
+  partner_baseUri: https://api.bigcommerce.com
+  partner_api: BigCommerce v3 API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: GET
+      path: /stores/{store_hash}/v3/orders
+      name: listOrders
+
+- partner: woocommerce
+  name: Replace WooCommerce Stripe plugin with declarative integration
+  category: E-commerce
+  use_case: Move WooCommerce-to-Stripe handoff from the WP plugin to a declarative integration capability.
+  partner_baseUri: https://yourstore.com
+  partner_api: WooCommerce REST API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: GET
+      path: /wp-json/wc/v3/orders
+      name: listOrders
+
+- partner: squarespace
+  name: Process Squarespace Commerce orders through Stripe
+  category: E-commerce
+  use_case: Capture Squarespace Commerce orders, route the payment through a Stripe PaymentIntent created via this capability.
+  partner_baseUri: https://api.squarespace.com
+  partner_api: Squarespace API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: GET
+      path: /1.0/commerce/orders
+      name: listOrders
+
+# Workflow / automation (4)
+- partner: zapier
+  name: Stripe trigger spec for Zapier (declarative)
+  category: Workflow
+  use_case: Declare the Stripe events that trigger Zapier Zaps as a Naftiko capability — replaces the closed Zapier app config.
+  partner_baseUri: https://hooks.zapier.com
+  partner_api: Zapier Webhooks
+  stripe_ops:
+    - getEvents
+  partner_ops:
+    - method: POST
+      path: /hooks/catch/{hook_id}/{token}
+      name: invokeHook
+
+- partner: make
+  name: Stripe → Make scenario invocation
+  category: Workflow
+  use_case: Trigger a Make scenario from a Stripe event using a declarative integration capability.
+  partner_baseUri: https://hook.make.com
+  partner_api: Make Webhook
+  stripe_ops:
+    - getEvents
+  partner_ops:
+    - method: POST
+      path: /{hook_path}
+      name: invokeScenario
+
+- partner: n8n
+  name: Run n8n workflow on Stripe event
+  category: Workflow
+  use_case: Trigger an n8n workflow from a Stripe webhook through a declarative capability mapping.
+  partner_baseUri: https://yourdomain.app.n8n.cloud
+  partner_api: n8n Webhook
+  stripe_ops:
+    - getEvents
+  partner_ops:
+    - method: POST
+      path: /webhook/{path}
+      name: invokeWorkflow
+
+- partner: workato
+  name: Forward Stripe event to Workato recipe
+  category: Workflow
+  use_case: Forward a Stripe event into a Workato recipe via a declarative capability.
+  partner_baseUri: https://www.workato.com
+  partner_api: Workato API
+  stripe_ops:
+    - getEvents
+  partner_ops:
+    - method: POST
+      path: /webhooks/rest/{token}
+      name: invokeRecipe
+
+# Notifications / SMS / chat (3)
+- partner: twilio
+  name: SMS Stripe payment receipts via Twilio
+  category: Notifications
+  use_case: For each Stripe payment succeeded, send an SMS receipt via Twilio to the customer's phone number.
+  partner_baseUri: https://api.twilio.com
+  partner_api: Twilio Messaging API
+  stripe_ops:
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /2010-04-01/Accounts/{AccountSid}/Messages.json
+      name: sendSms
+
+- partner: slack
+  name: Post Stripe payment alerts to Slack channels
+  category: Notifications
+  use_case: Forward Stripe payment / dispute / payout events to a designated Slack channel via Incoming Webhook.
+  partner_baseUri: https://hooks.slack.com
+  partner_api: Slack Incoming Webhooks
+  stripe_ops:
+    - getCharge
+    - getDispute
+    - getPayout
+  partner_ops:
+    - method: POST
+      path: /services/{T}/{B}/{X}
+      name: postMessage
+
+- partner: messagebird
+  name: Multi-channel notify on Stripe events via MessageBird
+  category: Notifications
+  use_case: Send SMS / WhatsApp / Email via MessageBird Conversations on Stripe payment events with channel fallback.
+  partner_baseUri: https://conversations.messagebird.com
+  partner_api: MessageBird Conversations API
+  stripe_ops:
+    - getCharge
+  partner_ops:
+    - method: POST
+      path: /v1/conversations/start
+      name: startConversation
+
+# Fraud / risk (2)
+- partner: sift
+  name: Score Stripe payment intents with Sift fraud
+  category: Risk
+  use_case: Before confirming a Stripe PaymentIntent, send the order context to Sift Decisions and route based on the returned score.
+  partner_baseUri: https://api.sift.com
+  partner_api: Sift Decisions API
+  stripe_ops:
+    - postPaymentIntent
+  partner_ops:
+    - method: POST
+      path: /v205/events
+      name: postEvent
+
+- partner: riskified
+  name: Approve / decline Stripe charges via Riskified
+  category: Risk
+  use_case: For each Stripe authorize-only PaymentIntent, decide capture / void based on Riskified's order approval response.
+  partner_baseUri: https://api.riskified.com
+  partner_api: Riskified Decision API
+  stripe_ops:
+    - postPaymentIntentCapture
+  partner_ops:
+    - method: POST
+      path: /api/decide
+      name: postDecide
+
+# Analytics / dispute / chargeback / risk (1)
+- partner: chargehound
+  name: Auto-respond to Stripe disputes via Chargehound
+  category: Risk
+  use_case: When a Stripe dispute opens, build evidence in Chargehound and submit it back through the Stripe Disputes API.
+  partner_baseUri: https://api.chargehound.com
+  partner_api: Chargehound API
+  stripe_ops:
+    - getDispute
+    - postDispute
+  partner_ops:
+    - method: POST
+      path: /v1/disputes/{id}/submit
+      name: submitDispute

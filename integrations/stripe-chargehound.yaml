@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Auto-respond to Stripe disputes via Chargehound
+  description: When a Stripe dispute opens, build evidence in Chargehound and submit it back through the Stripe Disputes API.
+  tags:
+  - Stripe
+  - Integration
+  - Risk
+  - chargehound
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    CHARGEHOUND_API_KEY: CHARGEHOUND_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-disputes-id
+      path: /v1/disputes/{id}
+      operations:
+      - name: getdispute
+        method: GET
+        description: Retrieve a Stripe dispute
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+    - name: v1-disputes-id
+      path: /v1/disputes/{id}
+      operations:
+      - name: postdispute
+        method: POST
+        description: Update a Stripe dispute
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: chargehound
+    baseUri: https://api.chargehound.com
+    description: Chargehound API operations consumed by this integration.
+    resources:
+    - name: v1-disputes-id-submit
+      path: /v1/disputes/{id}/submit
+      operations:
+      - name: submitdispute
+        method: POST
+        description: 'Chargehound API: submitDispute'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-chargehound-mcp
+    description: MCP adapter for the stripe-chargehound integration.
+    tools:
+    - name: stripe_chargehound
+      description: Execute the stripe chargehound integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-chargehound-rest
+    port: 8080
+    description: REST adapter for the stripe-chargehound integration.
+    resources:
+    - path: /stripe-chargehound
+      name: stripe-chargehound
+      description: REST surface for the stripe-chargehound integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-chargehound integration.
+        call: stripe_chargehound
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

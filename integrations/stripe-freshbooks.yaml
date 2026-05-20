@@ -1,0 +1,105 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Generate FreshBooks invoices from Stripe Checkout sessions
+  description: When a Stripe Checkout completes for an invoice product, mark the matching FreshBooks invoice as paid.
+  tags:
+  - Stripe
+  - Integration
+  - Accounting
+  - freshbooks
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    FRESHBOOKS_API_KEY: FRESHBOOKS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-checkout-sessions-id
+      path: /v1/checkout/sessions/{id}
+      operations:
+      - name: getcheckoutsession
+        method: GET
+        description: Retrieve a Stripe Checkout session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: freshbooks
+    baseUri: https://api.freshbooks.com
+    description: FreshBooks API operations consumed by this integration.
+    resources:
+    - name: accounting-account-account-id-invoices-invoices-invoice-id
+      path: /accounting/account/{account_id}/invoices/invoices/{invoice_id}
+      operations:
+      - name: updateinvoice
+        method: PUT
+        description: 'FreshBooks API: updateInvoice'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: account_id
+          in: path
+          type: string
+          description: Path parameter account_id.
+          required: true
+        - name: invoice_id
+          in: path
+          type: string
+          description: Path parameter invoice_id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-freshbooks-mcp
+    description: MCP adapter for the stripe-freshbooks integration.
+    tools:
+    - name: stripe_freshbooks
+      description: Execute the stripe freshbooks integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-freshbooks-rest
+    port: 8080
+    description: REST adapter for the stripe-freshbooks integration.
+    resources:
+    - path: /stripe-freshbooks
+      name: stripe-freshbooks
+      description: REST surface for the stripe-freshbooks integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-freshbooks integration.
+        call: stripe_freshbooks
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Forward Stripe events to Braze custom events
+  description: Map Stripe events into Braze custom user events with the customer attached by email or external_id.
+  tags:
+  - Stripe
+  - Integration
+  - Email marketing
+  - braze
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    BRAZE_API_KEY: BRAZE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-customers-id
+      path: /v1/customers/{id}
+      operations:
+      - name: getcustomer
+        method: GET
+        description: Retrieve a Stripe customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+    - name: v1-charges-id
+      path: /v1/charges/{id}
+      operations:
+      - name: getcharge
+        method: GET
+        description: Retrieve a Stripe charge
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: braze
+    baseUri: https://rest.iad-01.braze.com
+    description: Braze REST API operations consumed by this integration.
+    resources:
+    - name: users-track
+      path: /users/track
+      operations:
+      - name: trackevent
+        method: POST
+        description: 'Braze REST API: trackEvent'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-braze-mcp
+    description: MCP adapter for the stripe-braze integration.
+    tools:
+    - name: stripe_braze
+      description: Execute the stripe braze integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-braze-rest
+    port: 8080
+    description: REST adapter for the stripe-braze integration.
+    resources:
+    - path: /stripe-braze
+      name: stripe-braze
+      description: REST surface for the stripe-braze integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-braze integration.
+        call: stripe_braze
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

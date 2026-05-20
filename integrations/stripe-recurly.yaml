@@ -1,0 +1,90 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Mirror Recurly subscriptions in Stripe for revenue reporting
+  description: Materialize Recurly subscriptions in Stripe as parallel Subscription objects so Stripe's reporting can be source-of-truth.
+  tags:
+  - Stripe
+  - Integration
+  - Subscription billing
+  - recurly
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    RECURLY_API_KEY: RECURLY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-subscriptions
+      path: /v1/subscriptions
+      operations:
+      - name: postsubscription
+        method: POST
+        description: Create a Stripe subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: recurly
+    baseUri: https://v3.recurly.com
+    description: Recurly REST API operations consumed by this integration.
+    resources:
+    - name: subscriptions
+      path: /subscriptions
+      operations:
+      - name: listsubscriptions
+        method: GET
+        description: 'Recurly REST API: listSubscriptions'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  exposes:
+  - type: mcp
+    namespace: stripe-recurly-mcp
+    description: MCP adapter for the stripe-recurly integration.
+    tools:
+    - name: stripe_recurly
+      description: Execute the stripe recurly integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-recurly-rest
+    port: 8080
+    description: REST adapter for the stripe-recurly integration.
+    resources:
+    - path: /stripe-recurly
+      name: stripe-recurly
+      description: REST surface for the stripe-recurly integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-recurly integration.
+        call: stripe_recurly
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
