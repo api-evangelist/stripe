@@ -1,0 +1,100 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Forward Stripe subscription lifecycle to Customer.io events
+  description: Forward Stripe subscription lifecycle webhooks (created/updated/canceled/paused) to Customer.io as user-level events.
+  tags:
+  - Stripe
+  - Integration
+  - Email marketing
+  - customer-io
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    CUSTOMER_IO_API_KEY: CUSTOMER_IO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-subscriptions-id
+      path: /v1/subscriptions/{id}
+      operations:
+      - name: getsubscription
+        method: GET
+        description: Retrieve a Stripe subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: customer-io
+    baseUri: https://track.customer.io
+    description: Customer.io Track API operations consumed by this integration.
+    resources:
+    - name: api-v1-customers-customer-id-events
+      path: /api/v1/customers/{customer_id}/events
+      operations:
+      - name: trackevent
+        method: POST
+        description: 'Customer.io Track API: trackEvent'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: customer_id
+          in: path
+          type: string
+          description: Path parameter customer_id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-customer-io-mcp
+    description: MCP adapter for the stripe-customer-io integration.
+    tools:
+    - name: stripe_customer_io
+      description: Execute the stripe customer io integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-customer-io-rest
+    port: 8080
+    description: REST adapter for the stripe-customer-io integration.
+    resources:
+    - path: /stripe-customer-io
+      name: stripe-customer-io
+      description: REST surface for the stripe-customer-io integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-customer-io integration.
+        call: stripe_customer_io
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

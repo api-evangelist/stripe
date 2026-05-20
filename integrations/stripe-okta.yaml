@@ -1,0 +1,105 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sync Stripe subscription tier to Okta group membership
+  description: Map Stripe subscription plans to Okta Groups and update group membership when subscription tier changes.
+  tags:
+  - Stripe
+  - Integration
+  - Identity
+  - okta
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    OKTA_API_KEY: OKTA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-subscriptions-id
+      path: /v1/subscriptions/{id}
+      operations:
+      - name: getsubscription
+        method: GET
+        description: Retrieve a Stripe subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: okta
+    baseUri: https://yourdomain.okta.com
+    description: Okta API operations consumed by this integration.
+    resources:
+    - name: api-v1-groups-groupid-users-userid
+      path: /api/v1/groups/{groupId}/users/{userId}
+      operations:
+      - name: addusertogroup
+        method: PUT
+        description: 'Okta API: addUserToGroup'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: groupId
+          in: path
+          type: string
+          description: Path parameter groupId.
+          required: true
+        - name: userId
+          in: path
+          type: string
+          description: Path parameter userId.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-okta-mcp
+    description: MCP adapter for the stripe-okta integration.
+    tools:
+    - name: stripe_okta
+      description: Execute the stripe okta integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-okta-rest
+    port: 8080
+    description: REST adapter for the stripe-okta integration.
+    resources:
+    - path: /stripe-okta
+      name: stripe-okta
+      description: REST surface for the stripe-okta integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-okta integration.
+        call: stripe_okta
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

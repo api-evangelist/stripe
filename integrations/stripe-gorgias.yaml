@@ -1,0 +1,85 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Show Stripe order context in Gorgias for e-commerce support
+  description: When a Gorgias ticket opens, fetch the customer's Stripe Checkout sessions to show order context inline.
+  tags:
+  - Stripe
+  - Integration
+  - Support
+  - gorgias
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    GORGIAS_API_KEY: GORGIAS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-checkout-sessions
+      path: /v1/checkout/sessions
+      operations:
+      - name: getcheckoutsessions
+        method: GET
+        description: List Stripe Checkout sessions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  - type: http
+    namespace: gorgias
+    baseUri: https://yourdomain.gorgias.com
+    description: Gorgias REST API operations consumed by this integration.
+    resources:
+    - name: api-customers
+      path: /api/customers
+      operations:
+      - name: getcustomers
+        method: GET
+        description: 'Gorgias REST API: getCustomers'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  exposes:
+  - type: mcp
+    namespace: stripe-gorgias-mcp
+    description: MCP adapter for the stripe-gorgias integration.
+    tools:
+    - name: stripe_gorgias
+      description: Execute the stripe gorgias integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-gorgias-rest
+    port: 8080
+    description: REST adapter for the stripe-gorgias integration.
+    resources:
+    - path: /stripe-gorgias
+      name: stripe-gorgias
+      description: REST surface for the stripe-gorgias integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-gorgias integration.
+        call: stripe_gorgias
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

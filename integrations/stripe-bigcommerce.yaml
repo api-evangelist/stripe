@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sync BigCommerce orders to Stripe payments
+  description: For each BigCommerce order, materialize the corresponding Stripe PaymentIntent so financial reporting consolidates in Stripe.
+  tags:
+  - Stripe
+  - Integration
+  - E-commerce
+  - bigcommerce
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    BIGCOMMERCE_API_KEY: BIGCOMMERCE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-payment-intents
+      path: /v1/payment_intents
+      operations:
+      - name: postpaymentintent
+        method: POST
+        description: Create a Stripe payment intent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: bigcommerce
+    baseUri: https://api.bigcommerce.com
+    description: BigCommerce v3 API operations consumed by this integration.
+    resources:
+    - name: stores-store-hash-v3-orders
+      path: /stores/{store_hash}/v3/orders
+      operations:
+      - name: listorders
+        method: GET
+        description: 'BigCommerce v3 API: listOrders'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: store_hash
+          in: path
+          type: string
+          description: Path parameter store_hash.
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-bigcommerce-mcp
+    description: MCP adapter for the stripe-bigcommerce integration.
+    tools:
+    - name: stripe_bigcommerce
+      description: Execute the stripe bigcommerce integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-bigcommerce-rest
+    port: 8080
+    description: REST adapter for the stripe-bigcommerce integration.
+    resources:
+    - path: /stripe-bigcommerce
+      name: stripe-bigcommerce
+      description: REST surface for the stripe-bigcommerce integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-bigcommerce integration.
+        call: stripe_bigcommerce
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

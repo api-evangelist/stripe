@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Score Stripe payment intents with Sift fraud
+  description: Before confirming a Stripe PaymentIntent, send the order context to Sift Decisions and route based on the returned score.
+  tags:
+  - Stripe
+  - Integration
+  - Risk
+  - sift
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    SIFT_API_KEY: SIFT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-payment-intents
+      path: /v1/payment_intents
+      operations:
+      - name: postpaymentintent
+        method: POST
+        description: Create a Stripe payment intent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: sift
+    baseUri: https://api.sift.com
+    description: Sift Decisions API operations consumed by this integration.
+    resources:
+    - name: v205-events
+      path: /v205/events
+      operations:
+      - name: postevent
+        method: POST
+        description: 'Sift Decisions API: postEvent'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-sift-mcp
+    description: MCP adapter for the stripe-sift integration.
+    tools:
+    - name: stripe_sift
+      description: Execute the stripe sift integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-sift-rest
+    port: 8080
+    description: REST adapter for the stripe-sift integration.
+    resources:
+    - path: /stripe-sift
+      name: stripe-sift
+      description: REST surface for the stripe-sift integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-sift integration.
+        call: stripe_sift
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

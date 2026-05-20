@@ -1,0 +1,107 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Attach Stripe customer history to Zendesk tickets
+  description: When a Zendesk ticket opens, fetch the requester's Stripe Customer + recent charges and render them in a Zendesk app.
+  tags:
+  - Stripe
+  - Integration
+  - Support
+  - zendesk
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    ZENDESK_API_KEY: ZENDESK_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-customers-id
+      path: /v1/customers/{id}
+      operations:
+      - name: getcustomer
+        method: GET
+        description: Retrieve a Stripe customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+    - name: v1-charges
+      path: /v1/charges
+      operations:
+      - name: getcharges
+        method: GET
+        description: List Stripe charges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  - type: http
+    namespace: zendesk
+    baseUri: https://yoursubdomain.zendesk.com
+    description: Zendesk API operations consumed by this integration.
+    resources:
+    - name: api-v2-tickets
+      path: /api/v2/tickets
+      operations:
+      - name: createticket
+        method: POST
+        description: 'Zendesk API: createTicket'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-zendesk-mcp
+    description: MCP adapter for the stripe-zendesk integration.
+    tools:
+    - name: stripe_zendesk
+      description: Execute the stripe zendesk integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-zendesk-rest
+    port: 8080
+    description: REST adapter for the stripe-zendesk integration.
+    resources:
+    - path: /stripe-zendesk
+      name: stripe-zendesk
+      description: REST surface for the stripe-zendesk integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-zendesk integration.
+        call: stripe_zendesk
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

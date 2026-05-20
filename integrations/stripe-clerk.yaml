@@ -1,0 +1,100 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bind Clerk Users to Stripe Customers
+  description: When a Clerk user signs up, create the matching Stripe Customer and store the customer ID on the Clerk user metadata.
+  tags:
+  - Stripe
+  - Integration
+  - Identity
+  - clerk
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    CLERK_API_KEY: CLERK_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-customers
+      path: /v1/customers
+      operations:
+      - name: postcustomer
+        method: POST
+        description: Create a Stripe customer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: clerk
+    baseUri: https://api.clerk.com
+    description: Clerk API operations consumed by this integration.
+    resources:
+    - name: v1-users-user-id-metadata
+      path: /v1/users/{user_id}/metadata
+      operations:
+      - name: updateusermetadata
+        method: PATCH
+        description: 'Clerk API: updateUserMetadata'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_id
+          in: path
+          type: string
+          description: Path parameter user_id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-clerk-mcp
+    description: MCP adapter for the stripe-clerk integration.
+    tools:
+    - name: stripe_clerk
+      description: Execute the stripe clerk integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-clerk-rest
+    port: 8080
+    description: REST adapter for the stripe-clerk integration.
+    resources:
+    - path: /stripe-clerk
+      name: stripe-clerk
+      description: REST surface for the stripe-clerk integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-clerk integration.
+        call: stripe_clerk
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

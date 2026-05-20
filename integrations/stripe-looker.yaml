@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Power Looker dashboards from Stripe revenue data
+  description: Expose a derived Stripe revenue view via the Looker API for embedded dashboards.
+  tags:
+  - Stripe
+  - Integration
+  - BI
+  - looker
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    LOOKER_API_KEY: LOOKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-charges
+      path: /v1/charges
+      operations:
+      - name: getcharges
+        method: GET
+        description: List Stripe charges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+    - name: v1-invoices
+      path: /v1/invoices
+      operations:
+      - name: getinvoices
+        method: GET
+        description: List Stripe invoices
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  - type: http
+    namespace: looker
+    baseUri: https://yourcompany.cloud.looker.com
+    description: Looker API operations consumed by this integration.
+    resources:
+    - name: api-4-0-queries-run
+      path: /api/4.0/queries/run
+      operations:
+      - name: runquery
+        method: POST
+        description: 'Looker API: runQuery'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-looker-mcp
+    description: MCP adapter for the stripe-looker integration.
+    tools:
+    - name: stripe_looker
+      description: Execute the stripe looker integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-looker-rest
+    port: 8080
+    description: REST adapter for the stripe-looker integration.
+    resources:
+    - path: /stripe-looker
+      name: stripe-looker
+      description: REST surface for the stripe-looker integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-looker integration.
+        call: stripe_looker
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

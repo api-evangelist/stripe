@@ -1,0 +1,90 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Process Squarespace Commerce orders through Stripe
+  description: Capture Squarespace Commerce orders, route the payment through a Stripe PaymentIntent created via this capability.
+  tags:
+  - Stripe
+  - Integration
+  - E-commerce
+  - squarespace
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    SQUARESPACE_API_KEY: SQUARESPACE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-payment-intents
+      path: /v1/payment_intents
+      operations:
+      - name: postpaymentintent
+        method: POST
+        description: Create a Stripe payment intent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: squarespace
+    baseUri: https://api.squarespace.com
+    description: Squarespace API operations consumed by this integration.
+    resources:
+    - name: 1-0-commerce-orders
+      path: /1.0/commerce/orders
+      operations:
+      - name: listorders
+        method: GET
+        description: 'Squarespace API: listOrders'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  exposes:
+  - type: mcp
+    namespace: stripe-squarespace-mcp
+    description: MCP adapter for the stripe-squarespace integration.
+    tools:
+    - name: stripe_squarespace
+      description: Execute the stripe squarespace integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-squarespace-rest
+    port: 8080
+    description: REST adapter for the stripe-squarespace integration.
+    resources:
+    - path: /stripe-squarespace
+      name: stripe-squarespace
+      description: REST surface for the stripe-squarespace integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-squarespace integration.
+        call: stripe_squarespace
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

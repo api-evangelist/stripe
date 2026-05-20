@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Mirror Stripe sales into Wave accounting
+  description: Sync Stripe payment events into Wave as income transactions in the right account category.
+  tags:
+  - Stripe
+  - Integration
+  - Accounting
+  - wave
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    WAVE_API_KEY: WAVE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-charges-id
+      path: /v1/charges/{id}
+      operations:
+      - name: getcharge
+        method: GET
+        description: Retrieve a Stripe charge
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  - type: http
+    namespace: wave
+    baseUri: https://gql.waveapps.com
+    description: Wave Accounting GraphQL operations consumed by this integration.
+    resources:
+    - name: graphql-public
+      path: /graphql/public
+      operations:
+      - name: createmoneytransaction
+        method: POST
+        description: 'Wave Accounting GraphQL: createMoneyTransaction'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-wave-mcp
+    description: MCP adapter for the stripe-wave integration.
+    tools:
+    - name: stripe_wave
+      description: Execute the stripe wave integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-wave-rest
+    port: 8080
+    description: REST adapter for the stripe-wave integration.
+    resources:
+    - path: /stripe-wave
+      name: stripe-wave
+      description: REST surface for the stripe-wave integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-wave integration.
+        call: stripe_wave
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

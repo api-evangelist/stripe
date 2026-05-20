@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Use Stripe for Shopify checkout outside Shopify Payments
+  description: Process Shopify checkouts via Stripe (where Shopify Payments isn't available) by attaching Stripe PaymentIntents to Shopify Draft Orders.
+  tags:
+  - Stripe
+  - Integration
+  - E-commerce
+  - shopify
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    STRIPE_API_KEY: STRIPE_API_KEY
+    SHOPIFY_API_KEY: SHOPIFY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-payment-intents
+      path: /v1/payment_intents
+      operations:
+      - name: postpaymentintent
+        method: POST
+        description: Create a Stripe payment intent
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: shopify
+    baseUri: https://yourshop.myshopify.com
+    description: Shopify Admin REST API operations consumed by this integration.
+    resources:
+    - name: admin-api-2024-04-orders-json
+      path: /admin/api/2024-04/orders.json
+      operations:
+      - name: createorder
+        method: POST
+        description: 'Shopify Admin REST API: createOrder'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: stripe-shopify-mcp
+    description: MCP adapter for the stripe-shopify integration.
+    tools:
+    - name: stripe_shopify
+      description: Execute the stripe shopify integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: The triggering event payload (Stripe event or partner event).
+        required:
+        - trigger_event
+  - type: rest
+    namespace: stripe-shopify-rest
+    port: 8080
+    description: REST adapter for the stripe-shopify integration.
+    resources:
+    - path: /stripe-shopify
+      name: stripe-shopify
+      description: REST surface for the stripe-shopify integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the stripe-shopify integration.
+        call: stripe_shopify
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
