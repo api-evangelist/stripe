@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Pause and Resume Subscription
+  summary: Retrieve a subscription, pause its billing collection, then resume it.
+  description: >-
+    The temporary-hold pattern for subscription billing, used for grace periods
+    or account holds. The workflow retrieves the subscription to confirm it
+    exists, updates it to pause collection, then resumes the subscription so
+    billing continues. Every step spells out its form-encoded request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: subscriptionApi
+  url: ../openapi/stripe-subscription-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: pause-and-resume-subscription
+  summary: Pause collection on a subscription and then resume it.
+  description: >-
+    Retrieves the subscription, updates it to pause collection with a void
+    behavior, then resumes the subscription to restart billing.
+  inputs:
+    type: object
+    required:
+    - subscription
+    properties:
+      subscription:
+        type: string
+        description: ID of the subscription to pause and resume.
+      billingCycleAnchor:
+        type: string
+        description: Billing cycle anchor on resume (e.g. now or unchanged).
+  steps:
+  - stepId: getSubscription
+    description: Retrieve the subscription to confirm it exists before pausing.
+    operationId: GetSubscriptionsSubscriptionExposedId
+    parameters:
+    - name: subscription_exposed_id
+      in: path
+      value: $inputs.subscription
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      subscriptionId: $response.body#/id
+      status: $response.body#/status
+  - stepId: pauseSubscription
+    description: Update the subscription to pause its billing collection.
+    operationId: PostSubscriptionsSubscriptionExposedId
+    parameters:
+    - name: subscription_exposed_id
+      in: path
+      value: $inputs.subscription
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        pause_collection:
+          behavior: void
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: resumeSubscription
+    description: Resume the subscription so billing continues.
+    operationId: PostSubscriptionsSubscriptionResume
+    parameters:
+    - name: subscription
+      in: path
+      value: $inputs.subscription
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        billing_cycle_anchor: $inputs.billingCycleAnchor
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    subscriptionId: $steps.getSubscription.outputs.subscriptionId
+    status: $steps.resumeSubscription.outputs.status

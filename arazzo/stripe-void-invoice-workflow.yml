@@ -1,0 +1,67 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Void Invoice
+  summary: Create and finalize an invoice, then void it to cancel the bill.
+  description: >-
+    The cancellation pattern for a finalized invoice that should not be
+    collected. The workflow creates a draft Invoice for a customer, finalizes it,
+    then voids the finalized invoice so it is permanently cancelled. Every step
+    spells out its form-encoded request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: invoiceApi
+  url: ../openapi/stripe-invoice-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: void-invoice
+  summary: Finalize an invoice and then void it to cancel collection.
+  description: >-
+    Creates a draft Invoice for the customer, finalizes it, then voids the
+    finalized invoice so no payment will be collected.
+  inputs:
+    type: object
+    required:
+    - customer
+    properties:
+      customer:
+        type: string
+        description: ID of the customer whose invoice is being created and voided.
+  steps:
+  - stepId: createDraftInvoice
+    description: Create a draft Invoice for the customer.
+    operationId: postInvoices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        auto_advance: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceId: $response.body#/id
+  - stepId: finalizeInvoice
+    description: Finalize the invoice so it can be voided.
+    operationId: postInvoicesInvoiceFinalize
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: voidInvoice
+    description: Void the finalized invoice to cancel collection.
+    operationId: postInvoicesInvoiceVoid
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    invoiceId: $steps.createDraftInvoice.outputs.invoiceId
+    status: $steps.voidInvoice.outputs.status

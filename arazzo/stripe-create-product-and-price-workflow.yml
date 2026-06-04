@@ -1,0 +1,72 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Create Product and Price
+  summary: Create a Product, then attach a reusable Price to it.
+  description: >-
+    The catalog bootstrap pattern for selling anything in Stripe. The workflow
+    creates a Product to describe what is being sold, then creates a Price that
+    references that product and defines the amount and currency. Every step
+    spells out its form-encoded request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: productsApi
+  url: ../openapi/stripe-products-api-openapi.yml
+  type: openapi
+- name: pricesApi
+  url: ../openapi/stripe-prices-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-product-and-price
+  summary: Create a product and a price that references it.
+  description: >-
+    Creates a Product, then creates a one-time Price for the supplied amount and
+    currency that points at the new product.
+  inputs:
+    type: object
+    required:
+    - name
+    - currency
+    - unitAmount
+    properties:
+      name:
+        type: string
+        description: Display name of the product.
+      description:
+        type: string
+        description: Optional product description.
+      currency:
+        type: string
+        description: Three-letter ISO currency code for the price.
+      unitAmount:
+        type: integer
+        description: Price amount in the smallest currency unit.
+  steps:
+  - stepId: createProduct
+    description: Create the Product describing what is being sold.
+    operationId: PostProducts
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        name: $inputs.name
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      productId: $response.body#/id
+  - stepId: createPrice
+    description: Create a Price for the product at the requested amount and currency.
+    operationId: postPrices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        product: $steps.createProduct.outputs.productId
+        currency: $inputs.currency
+        unit_amount: $inputs.unitAmount
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      priceId: $response.body#/id
+  outputs:
+    productId: $steps.createProduct.outputs.productId
+    priceId: $steps.createPrice.outputs.priceId

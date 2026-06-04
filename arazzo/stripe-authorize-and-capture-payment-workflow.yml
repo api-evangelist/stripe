@@ -1,0 +1,116 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Authorize and Capture Payment
+  summary: Authorize a payment with manual capture, poll until ready, then capture the funds.
+  description: >-
+    The two-phase auth-and-capture pattern used for delayed fulfillment. The
+    workflow opens a PaymentIntent with manual capture and confirms it to place
+    an authorization hold, polls the PaymentIntent until it reaches the
+    requires_capture state, then captures the held funds. Every step spells out
+    its form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: paymentIntentsApi
+  url: ../openapi/stripe-payment-intents-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: authorize-and-capture-payment
+  summary: Place an authorization hold, confirm it, wait for capture readiness, then capture.
+  description: >-
+    Creates a manual-capture PaymentIntent, confirms it to authorize the card,
+    polls the PaymentIntent status, and captures the authorized amount once the
+    intent is ready for capture.
+  inputs:
+    type: object
+    required:
+    - amount
+    - currency
+    - paymentMethod
+    properties:
+      amount:
+        type: integer
+        description: Amount to authorize in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      paymentMethod:
+        type: string
+        description: ID of the PaymentMethod to authorize.
+      amountToCapture:
+        type: integer
+        description: Optional lower amount to capture; omit to capture the full hold.
+  steps:
+  - stepId: authorizePayment
+    description: Open a PaymentIntent with manual capture so funds are only held.
+    operationId: postPaymentIntents
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        payment_method: $inputs.paymentMethod
+        capture_method: manual
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentIntentId: $response.body#/id
+  - stepId: confirmAuthorization
+    description: Confirm the PaymentIntent to place the authorization hold.
+    operationId: postPaymentIntentsIntentConfirm
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.authorizePayment.outputs.paymentIntentId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        payment_method: $inputs.paymentMethod
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: pollForCapture
+    description: >-
+      Poll the PaymentIntent until it reports requires_capture, indicating the
+      authorization succeeded and funds can be captured.
+    operationId: getPaymentIntentsIntent
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.authorizePayment.outputs.paymentIntentId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.status == "requires_capture"
+      type: jsonpath
+    outputs:
+      status: $response.body#/status
+    onSuccess:
+    - name: ready
+      type: goto
+      stepId: capturePayment
+      criteria:
+      - context: $response.body
+        condition: $.status == "requires_capture"
+        type: jsonpath
+  - stepId: capturePayment
+    description: Capture the authorized funds, optionally for a lower amount.
+    operationId: postPaymentIntentsIntentCapture
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.authorizePayment.outputs.paymentIntentId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount_to_capture: $inputs.amountToCapture
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      amountReceived: $response.body#/amount_received
+  outputs:
+    paymentIntentId: $steps.authorizePayment.outputs.paymentIntentId
+    status: $steps.capturePayment.outputs.status
+    amountReceived: $steps.capturePayment.outputs.amountReceived

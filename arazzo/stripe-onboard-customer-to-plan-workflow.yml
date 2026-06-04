@@ -1,0 +1,90 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Onboard Customer to Plan
+  summary: Create a customer, save a payment method to them, then subscribe them to a plan.
+  description: >-
+    The full new-subscriber onboarding pattern. The workflow creates a Customer,
+    attaches a PaymentMethod to that customer as the default, then subscribes the
+    customer to an existing recurring price. Every step spells out its
+    form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: customersApi
+  url: ../openapi/stripe-customers-api-openapi.yml
+  type: openapi
+- name: paymentMethodApi
+  url: ../openapi/stripe-payment-method-api-openapi.yml
+  type: openapi
+- name: subscriptionApi
+  url: ../openapi/stripe-subscription-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: onboard-customer-to-plan
+  summary: Create a customer, attach a payment method, and subscribe them.
+  description: >-
+    Creates a Customer, attaches the supplied PaymentMethod to that customer,
+    then subscribes the customer to the supplied recurring price using that
+    method as the default.
+  inputs:
+    type: object
+    required:
+    - email
+    - paymentMethod
+    - price
+    properties:
+      email:
+        type: string
+        description: Email address for the new customer.
+      paymentMethod:
+        type: string
+        description: ID of the PaymentMethod to attach and bill.
+      price:
+        type: string
+        description: ID of the recurring price to subscribe the customer to.
+  steps:
+  - stepId: createCustomer
+    description: Create the Customer that will own the subscription.
+    operationId: postCustomers
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        email: $inputs.email
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      customerId: $response.body#/id
+  - stepId: attachPaymentMethod
+    description: Attach the payment method to the new customer.
+    operationId: postPaymentMethodsPaymentMethodAttach
+    parameters:
+    - name: payment_method
+      in: path
+      value: $inputs.paymentMethod
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $steps.createCustomer.outputs.customerId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentMethodId: $response.body#/id
+  - stepId: createSubscription
+    description: Subscribe the customer to the recurring price using the attached method.
+    operationId: PostSubscriptions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $steps.createCustomer.outputs.customerId
+        default_payment_method: $steps.attachPaymentMethod.outputs.paymentMethodId
+        items:
+        - price: $inputs.price
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      subscriptionId: $response.body#/id
+      status: $response.body#/status
+  outputs:
+    customerId: $steps.createCustomer.outputs.customerId
+    subscriptionId: $steps.createSubscription.outputs.subscriptionId
+    status: $steps.createSubscription.outputs.status

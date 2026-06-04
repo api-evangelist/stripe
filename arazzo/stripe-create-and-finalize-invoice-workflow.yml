@@ -1,0 +1,84 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Create and Finalize Invoice
+  summary: Create a draft invoice, add a line item, then finalize it.
+  description: >-
+    The manual invoicing pattern for billing a customer outside of a
+    subscription. The workflow creates a draft Invoice for a customer, attaches
+    an invoice item to that invoice, then finalizes the invoice so it becomes
+    payable. Every step spells out its form-encoded request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: invoiceApi
+  url: ../openapi/stripe-invoice-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-and-finalize-invoice
+  summary: Draft an invoice, add an item, and finalize it for collection.
+  description: >-
+    Creates a draft Invoice for the customer, adds a one-off invoice item tied to
+    that invoice, then finalizes the invoice to lock it for payment.
+  inputs:
+    type: object
+    required:
+    - customer
+    - amount
+    - currency
+    properties:
+      customer:
+        type: string
+        description: ID of the customer to invoice.
+      amount:
+        type: integer
+        description: Line item amount in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      description:
+        type: string
+        description: Optional description for the invoice item.
+  steps:
+  - stepId: createDraftInvoice
+    description: Create a draft Invoice for the customer with manual advance.
+    operationId: postInvoices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        auto_advance: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceId: $response.body#/id
+  - stepId: addInvoiceItem
+    description: Attach a one-off invoice item to the draft invoice.
+    operationId: postInvoice Items
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        invoice: $steps.createDraftInvoice.outputs.invoiceId
+        amount: $inputs.amount
+        currency: $inputs.currency
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceItemId: $response.body#/id
+  - stepId: finalizeInvoice
+    description: Finalize the invoice so it is locked and ready to be paid.
+    operationId: postInvoicesInvoiceFinalize
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      total: $response.body#/total
+  outputs:
+    invoiceId: $steps.createDraftInvoice.outputs.invoiceId
+    invoiceItemId: $steps.addInvoiceItem.outputs.invoiceItemId
+    status: $steps.finalizeInvoice.outputs.status

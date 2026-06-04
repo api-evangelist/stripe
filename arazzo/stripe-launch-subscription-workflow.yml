@@ -1,0 +1,98 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Launch Subscription
+  summary: Create a recurring product and price, then subscribe a customer to it.
+  description: >-
+    The end-to-end pattern for standing up a recurring revenue plan. The workflow
+    creates a Product, creates a recurring Price referencing that product with a
+    billing interval, then opens a Subscription for the supplied customer against
+    the new price. Every step spells out its form-encoded request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: productsApi
+  url: ../openapi/stripe-products-api-openapi.yml
+  type: openapi
+- name: pricesApi
+  url: ../openapi/stripe-prices-api-openapi.yml
+  type: openapi
+- name: subscriptionApi
+  url: ../openapi/stripe-subscription-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: launch-subscription
+  summary: Create a plan (product plus recurring price) and subscribe a customer.
+  description: >-
+    Creates a Product, creates a recurring Price with the supplied interval and
+    amount, then subscribes the given customer to that price via a Subscription.
+  inputs:
+    type: object
+    required:
+    - name
+    - currency
+    - unitAmount
+    - interval
+    - customer
+    properties:
+      name:
+        type: string
+        description: Display name of the subscription product.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      unitAmount:
+        type: integer
+        description: Recurring amount per interval in the smallest currency unit.
+      interval:
+        type: string
+        description: Billing interval (day, week, month, or year).
+      customer:
+        type: string
+        description: ID of the customer to subscribe.
+  steps:
+  - stepId: createProduct
+    description: Create the Product the recurring plan is built on.
+    operationId: PostProducts
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      productId: $response.body#/id
+  - stepId: createRecurringPrice
+    description: Create a recurring Price for the product with the requested interval.
+    operationId: postPrices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        product: $steps.createProduct.outputs.productId
+        currency: $inputs.currency
+        unit_amount: $inputs.unitAmount
+        recurring:
+          interval: $inputs.interval
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      priceId: $response.body#/id
+  - stepId: createSubscription
+    description: Subscribe the customer to the newly created recurring price.
+    operationId: PostSubscriptions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        items:
+        - price: $steps.createRecurringPrice.outputs.priceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      subscriptionId: $response.body#/id
+      status: $response.body#/status
+  outputs:
+    productId: $steps.createProduct.outputs.productId
+    priceId: $steps.createRecurringPrice.outputs.priceId
+    subscriptionId: $steps.createSubscription.outputs.subscriptionId
+    status: $steps.createSubscription.outputs.status

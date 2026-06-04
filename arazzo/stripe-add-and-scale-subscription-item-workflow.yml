@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Add and Scale Subscription Item
+  summary: Add an item to a subscription, then update its quantity.
+  description: >-
+    The seat-management pattern for usage or quantity based plans. The workflow
+    adds a new subscription item for a price to an existing subscription, then
+    updates that item's quantity to scale it up or down with prorated billing.
+    Every step spells out its form-encoded request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: subscriptionApi
+  url: ../openapi/stripe-subscription-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: add-and-scale-subscription-item
+  summary: Add a subscription item and then change its quantity.
+  description: >-
+    Adds an item for the supplied price to the subscription, then updates that
+    item's quantity with proration to reflect the new seat count.
+  inputs:
+    type: object
+    required:
+    - subscription
+    - price
+    - quantity
+    properties:
+      subscription:
+        type: string
+        description: ID of the subscription to add the item to.
+      price:
+        type: string
+        description: ID of the price to add as a subscription item.
+      quantity:
+        type: integer
+        description: Initial quantity for the new subscription item.
+      newQuantity:
+        type: integer
+        description: Updated quantity to scale the subscription item to.
+  steps:
+  - stepId: addItem
+    description: Add a new item for the price to the existing subscription.
+    operationId: PostSubscriptionItems
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        subscription: $inputs.subscription
+        price: $inputs.price
+        quantity: $inputs.quantity
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      itemId: $response.body#/id
+  - stepId: scaleItem
+    description: Update the subscription item quantity with proration.
+    operationId: PostSubscriptionItemsItem
+    parameters:
+    - name: item
+      in: path
+      value: $steps.addItem.outputs.itemId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        quantity: $inputs.newQuantity
+        proration_behavior: create_prorations
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      quantity: $response.body#/quantity
+  outputs:
+    itemId: $steps.addItem.outputs.itemId
+    quantity: $steps.scaleItem.outputs.quantity

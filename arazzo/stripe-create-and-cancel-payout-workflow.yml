@@ -1,0 +1,65 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Create and Cancel Payout
+  summary: Create a payout to a bank account, then cancel it while still pending.
+  description: >-
+    The payout-then-abort pattern for funds movement that should not complete.
+    The workflow creates a Payout for the requested amount, then cancels the
+    payout while it is still in a cancellable pending state. Every step spells out
+    its form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: payoutsApi
+  url: ../openapi/stripe-payouts-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-and-cancel-payout
+  summary: Create a payout and cancel it before it is paid out.
+  description: >-
+    Creates a Payout for the supplied amount and currency, then cancels the
+    payout while it remains pending.
+  inputs:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: integer
+        description: Payout amount in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      description:
+        type: string
+        description: Optional description for the payout.
+  steps:
+  - stepId: createPayout
+    description: Create a Payout for the requested amount and currency.
+    operationId: postPayouts
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      payoutId: $response.body#/id
+      status: $response.body#/status
+  - stepId: cancelPayout
+    description: Cancel the pending payout to stop the funds movement.
+    operationId: postPayoutsPayoutCancel
+    parameters:
+    - name: payout
+      in: path
+      value: $steps.createPayout.outputs.payoutId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    payoutId: $steps.createPayout.outputs.payoutId
+    status: $steps.cancelPayout.outputs.status

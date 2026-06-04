@@ -1,0 +1,67 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Write Off Invoice
+  summary: Create and finalize an invoice, then mark it uncollectible.
+  description: >-
+    The bad-debt write-off pattern for an invoice that will not be paid. The
+    workflow creates a draft Invoice for a customer, finalizes it, then marks the
+    finalized invoice as uncollectible so it is removed from active collection.
+    Every step spells out its form-encoded request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: invoiceApi
+  url: ../openapi/stripe-invoice-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: write-off-invoice
+  summary: Finalize an invoice and mark it uncollectible.
+  description: >-
+    Creates a draft Invoice for the customer, finalizes it, then marks it
+    uncollectible to write off the bad debt.
+  inputs:
+    type: object
+    required:
+    - customer
+    properties:
+      customer:
+        type: string
+        description: ID of the customer whose invoice is being written off.
+  steps:
+  - stepId: createDraftInvoice
+    description: Create a draft Invoice for the customer.
+    operationId: postInvoices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        auto_advance: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceId: $response.body#/id
+  - stepId: finalizeInvoice
+    description: Finalize the invoice so it can be marked uncollectible.
+    operationId: postInvoicesInvoiceFinalize
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: markUncollectible
+    description: Mark the finalized invoice uncollectible to write it off.
+    operationId: postInvoicesInvoiceMarkUncollectible
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    invoiceId: $steps.createDraftInvoice.outputs.invoiceId
+    status: $steps.markUncollectible.outputs.status

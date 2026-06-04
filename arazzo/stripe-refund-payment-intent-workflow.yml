@@ -1,0 +1,90 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Refund Payment Intent
+  summary: Confirm a PaymentIntent charge, then refund it via the Refunds API.
+  description: >-
+    The modern refund pattern keyed off a PaymentIntent rather than a legacy
+    charge. The workflow opens and confirms a PaymentIntent to collect funds,
+    then issues a Refund that references the PaymentIntent. Every step spells out
+    its form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: paymentIntentsApi
+  url: ../openapi/stripe-payment-intents-api-openapi.yml
+  type: openapi
+- name: refundsApi
+  url: ../openapi/stripe-refunds-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: refund-payment-intent
+  summary: Take a payment via a PaymentIntent and then refund it.
+  description: >-
+    Creates and confirms a PaymentIntent to collect funds, then creates a Refund
+    referencing that PaymentIntent for an optional partial amount.
+  inputs:
+    type: object
+    required:
+    - amount
+    - currency
+    - paymentMethod
+    properties:
+      amount:
+        type: integer
+        description: Amount to charge in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      paymentMethod:
+        type: string
+        description: ID of the PaymentMethod to charge.
+      refundAmount:
+        type: integer
+        description: Optional amount to refund; omit to refund the full payment.
+  steps:
+  - stepId: createPaymentIntent
+    description: Open a PaymentIntent for the requested amount and payment method.
+    operationId: postPaymentIntents
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        payment_method: $inputs.paymentMethod
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentIntentId: $response.body#/id
+  - stepId: confirmPaymentIntent
+    description: Confirm the PaymentIntent to collect the funds.
+    operationId: postPaymentIntentsIntentConfirm
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.createPaymentIntent.outputs.paymentIntentId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        payment_method: $inputs.paymentMethod
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: refundPayment
+    description: Refund the collected PaymentIntent via the Refunds API.
+    operationId: PostRefunds
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        payment_intent: $steps.createPaymentIntent.outputs.paymentIntentId
+        amount: $inputs.refundAmount
+        reason: requested_by_customer
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      refundId: $response.body#/id
+      refundStatus: $response.body#/status
+  outputs:
+    paymentIntentId: $steps.createPaymentIntent.outputs.paymentIntentId
+    refundId: $steps.refundPayment.outputs.refundId
+    refundStatus: $steps.refundPayment.outputs.refundStatus

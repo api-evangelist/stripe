@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Reverse Payout
+  summary: Create a payout, retrieve it to confirm settlement, then reverse it back to the balance.
+  description: >-
+    The reverse-a-paid-payout pattern for clawing funds back into the Stripe
+    balance. The workflow creates a Payout, retrieves it to confirm its status,
+    then reverses the payout so the funds return to the available balance. Every
+    step spells out its form-encoded request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: payoutsApi
+  url: ../openapi/stripe-payouts-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: reverse-payout
+  summary: Create a payout, verify it, then reverse it back to the balance.
+  description: >-
+    Creates a Payout, retrieves it to read its current status, then reverses the
+    payout to return the funds to the Stripe balance.
+  inputs:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: integer
+        description: Payout amount in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+  steps:
+  - stepId: createPayout
+    description: Create a Payout for the requested amount and currency.
+    operationId: postPayouts
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      payoutId: $response.body#/id
+  - stepId: getPayout
+    description: Retrieve the payout to read its current status before reversing.
+    operationId: getPayoutsPayout
+    parameters:
+    - name: payout
+      in: path
+      value: $steps.createPayout.outputs.payoutId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: reversePayout
+    description: Reverse the payout to return funds to the Stripe balance.
+    operationId: postPayoutsPayoutReverse
+    parameters:
+    - name: payout
+      in: path
+      value: $steps.createPayout.outputs.payoutId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      reversedPayoutId: $response.body#/id
+      status: $response.body#/status
+  outputs:
+    payoutId: $steps.createPayout.outputs.payoutId
+    reversedPayoutId: $steps.reversePayout.outputs.reversedPayoutId
+    status: $steps.reversePayout.outputs.status

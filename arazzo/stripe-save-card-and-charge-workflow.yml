@@ -1,0 +1,105 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Save Card and Charge
+  summary: Create a payment method, attach it to a customer, then charge it via a PaymentIntent.
+  description: >-
+    The save-on-file-then-bill pattern for returning customers. The workflow
+    creates a PaymentMethod, attaches it to the customer so it is reusable, then
+    opens and confirms a PaymentIntent that charges the saved payment method off
+    session. Every step spells out its form-encoded request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: paymentMethodApi
+  url: ../openapi/stripe-payment-method-api-openapi.yml
+  type: openapi
+- name: paymentIntentsApi
+  url: ../openapi/stripe-payment-intents-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: save-card-and-charge
+  summary: Save a payment method to a customer and immediately charge it.
+  description: >-
+    Creates a PaymentMethod, attaches it to the customer, then opens a
+    PaymentIntent bound to that customer and method and confirms it off session.
+  inputs:
+    type: object
+    required:
+    - type
+    - customer
+    - amount
+    - currency
+    properties:
+      type:
+        type: string
+        description: The PaymentMethod type to create (e.g. card).
+      customer:
+        type: string
+        description: ID of the customer to save the method to and charge.
+      amount:
+        type: integer
+        description: Amount to charge in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+  steps:
+  - stepId: createPaymentMethod
+    description: Create a PaymentMethod of the requested type.
+    operationId: postPaymentMethods
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        type: $inputs.type
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentMethodId: $response.body#/id
+  - stepId: attachToCustomer
+    description: Attach the payment method to the customer for reuse.
+    operationId: postPaymentMethodsPaymentMethodAttach
+    parameters:
+    - name: payment_method
+      in: path
+      value: $steps.createPaymentMethod.outputs.paymentMethodId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      attachedCustomer: $response.body#/customer
+  - stepId: createPaymentIntent
+    description: Open a PaymentIntent bound to the customer and saved method.
+    operationId: postPaymentIntents
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        customer: $inputs.customer
+        payment_method: $steps.createPaymentMethod.outputs.paymentMethodId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentIntentId: $response.body#/id
+  - stepId: confirmPaymentIntent
+    description: Confirm the PaymentIntent off session to charge the saved method.
+    operationId: postPaymentIntentsIntentConfirm
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.createPaymentIntent.outputs.paymentIntentId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        payment_method: $steps.createPaymentMethod.outputs.paymentMethodId
+        off_session: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    paymentMethodId: $steps.createPaymentMethod.outputs.paymentMethodId
+    paymentIntentId: $steps.createPaymentIntent.outputs.paymentIntentId
+    status: $steps.confirmPaymentIntent.outputs.status

@@ -1,0 +1,81 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Attach Payment Method
+  summary: Create a payment method, attach it to a customer, then list the customer's saved methods.
+  description: >-
+    The save-a-card-on-file pattern. The workflow creates a PaymentMethod from
+    card details, attaches it to a customer so it can be reused, then lists the
+    customer's saved card payment methods to confirm the attachment. Every step
+    spells out its form-encoded request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: paymentMethodApi
+  url: ../openapi/stripe-payment-method-api-openapi.yml
+  type: openapi
+- name: customersApi
+  url: ../openapi/stripe-customers-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: attach-payment-method
+  summary: Create and attach a payment method, then verify it on the customer.
+  description: >-
+    Creates a PaymentMethod of the supplied type, attaches it to the customer,
+    then lists the customer's saved payment methods to confirm it is on file.
+  inputs:
+    type: object
+    required:
+    - type
+    - customer
+    properties:
+      type:
+        type: string
+        description: The PaymentMethod type to create (e.g. card).
+      customer:
+        type: string
+        description: ID of the customer to attach the payment method to.
+  steps:
+  - stepId: createPaymentMethod
+    description: Create a PaymentMethod of the requested type.
+    operationId: postPaymentMethods
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        type: $inputs.type
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      paymentMethodId: $response.body#/id
+  - stepId: attachToCustomer
+    description: Attach the new payment method to the customer for reuse.
+    operationId: postPaymentMethodsPaymentMethodAttach
+    parameters:
+    - name: payment_method
+      in: path
+      value: $steps.createPaymentMethod.outputs.paymentMethodId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      attachedCustomer: $response.body#/customer
+  - stepId: listCustomerMethods
+    description: List the customer's saved card payment methods to confirm the attachment.
+    operationId: getCustomersCustomerPaymentMethods
+    parameters:
+    - name: customer
+      in: path
+      value: $inputs.customer
+    - name: type
+      in: query
+      value: card
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      methods: $response.body#/data
+  outputs:
+    paymentMethodId: $steps.createPaymentMethod.outputs.paymentMethodId
+    attachedCustomer: $steps.attachToCustomer.outputs.attachedCustomer
+    methods: $steps.listCustomerMethods.outputs.methods

@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Charge and Refund
+  summary: Create a direct charge, then refund all or part of it.
+  description: >-
+    The classic charge-then-reverse pattern using the legacy Charges API. The
+    workflow creates a Charge against a source or customer, then issues a Refund
+    on that charge for the requested amount. Every step spells out its
+    form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: chargesApi
+  url: ../openapi/stripe-charges-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: charge-and-refund
+  summary: Create a charge and refund it via the charge refunds endpoint.
+  description: >-
+    Creates a Charge for the supplied amount and source, then issues a Refund on
+    that charge for an optional partial amount.
+  inputs:
+    type: object
+    required:
+    - amount
+    - currency
+    - source
+    properties:
+      amount:
+        type: integer
+        description: Charge amount in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      source:
+        type: string
+        description: A payment source or token to charge (e.g. tok_visa).
+      refundAmount:
+        type: integer
+        description: Optional amount to refund; omit to refund the full charge.
+  steps:
+  - stepId: createCharge
+    description: Create a direct charge against the supplied source.
+    operationId: postCharges
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        source: $inputs.source
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chargeId: $response.body#/id
+      paid: $response.body#/paid
+  - stepId: refundCharge
+    description: Refund the charge, optionally for a partial amount.
+    operationId: postChargesChargeRefunds
+    parameters:
+    - name: charge
+      in: path
+      value: $steps.createCharge.outputs.chargeId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.refundAmount
+        reason: requested_by_customer
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      refundId: $response.body#/id
+      refundStatus: $response.body#/status
+  outputs:
+    chargeId: $steps.createCharge.outputs.chargeId
+    refundId: $steps.refundCharge.outputs.refundId
+    refundStatus: $steps.refundCharge.outputs.refundStatus

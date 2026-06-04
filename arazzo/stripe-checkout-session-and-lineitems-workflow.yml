@@ -1,0 +1,84 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Checkout Session and Line Items
+  summary: Create a hosted Checkout Session, retrieve it, then list its line items.
+  description: >-
+    The hosted-checkout provisioning pattern. The workflow creates a Checkout
+    Session for a price, retrieves the session to obtain its hosted payment URL,
+    then lists the line items attached to the session. Every step spells out its
+    form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: checkoutApi
+  url: ../openapi/stripe-checkout-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: checkout-session-and-lineitems
+  summary: Create a Checkout Session and inspect its line items.
+  description: >-
+    Creates a hosted Checkout Session for the supplied price and quantity,
+    retrieves the session to confirm its URL, then lists the line items on the
+    session.
+  inputs:
+    type: object
+    required:
+    - price
+    - successUrl
+    properties:
+      price:
+        type: string
+        description: ID of the price to sell through checkout.
+      quantity:
+        type: integer
+        description: Quantity of the line item (defaults to 1 if omitted).
+      mode:
+        type: string
+        description: Checkout mode (payment, subscription, or setup).
+      successUrl:
+        type: string
+        description: URL to redirect to after a successful checkout.
+  steps:
+  - stepId: createSession
+    description: Create a hosted Checkout Session for the supplied price.
+    operationId: postCheckoutSessions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        mode: $inputs.mode
+        success_url: $inputs.successUrl
+        line_items:
+        - price: $inputs.price
+          quantity: $inputs.quantity
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sessionId: $response.body#/id
+      url: $response.body#/url
+  - stepId: getSession
+    description: Retrieve the session to confirm its hosted URL and status.
+    operationId: getCheckoutSessionsSession
+    parameters:
+    - name: session
+      in: path
+      value: $steps.createSession.outputs.sessionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      paymentStatus: $response.body#/payment_status
+  - stepId: listLineItems
+    description: List the line items attached to the checkout session.
+    operationId: getCheckoutSessionsSessionLineItems
+    parameters:
+    - name: session
+      in: path
+      value: $steps.createSession.outputs.sessionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      lineItems: $response.body#/data
+  outputs:
+    sessionId: $steps.createSession.outputs.sessionId
+    url: $steps.createSession.outputs.url
+    lineItems: $steps.listLineItems.outputs.lineItems

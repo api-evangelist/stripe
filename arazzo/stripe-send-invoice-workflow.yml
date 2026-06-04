@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Send Invoice
+  summary: Draft an invoice, add an item, finalize it, then email it to the customer.
+  description: >-
+    The send-to-collect invoicing pattern for customers who pay manually. The
+    workflow creates a draft Invoice configured to be sent rather than charged,
+    attaches an invoice item, finalizes it, then sends the invoice email to the
+    customer. Every step spells out its form-encoded request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: invoiceApi
+  url: ../openapi/stripe-invoice-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: send-invoice
+  summary: Create, populate, finalize, and email an invoice to the customer.
+  description: >-
+    Creates a send-invoice draft for a customer, adds a one-off invoice item,
+    finalizes the invoice, then emails it to the customer for manual payment.
+  inputs:
+    type: object
+    required:
+    - customer
+    - amount
+    - currency
+    properties:
+      customer:
+        type: string
+        description: ID of the customer to invoice.
+      amount:
+        type: integer
+        description: Line item amount in the smallest currency unit.
+      currency:
+        type: string
+        description: Three-letter ISO currency code.
+      description:
+        type: string
+        description: Optional description for the invoice item.
+  steps:
+  - stepId: createDraftInvoice
+    description: Create a draft Invoice set to be sent for manual collection.
+    operationId: postInvoices
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        collection_method: send_invoice
+        days_until_due: 30
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceId: $response.body#/id
+  - stepId: addInvoiceItem
+    description: Attach a one-off invoice item to the draft invoice.
+    operationId: postInvoice Items
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        invoice: $steps.createDraftInvoice.outputs.invoiceId
+        amount: $inputs.amount
+        currency: $inputs.currency
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceItemId: $response.body#/id
+  - stepId: finalizeInvoice
+    description: Finalize the invoice so it can be sent.
+    operationId: postInvoicesInvoiceFinalize
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  - stepId: sendInvoice
+    description: Email the finalized invoice to the customer.
+    operationId: postInvoicesInvoiceSend
+    parameters:
+    - name: invoice
+      in: path
+      value: $steps.createDraftInvoice.outputs.invoiceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      hostedInvoiceUrl: $response.body#/hosted_invoice_url
+  outputs:
+    invoiceId: $steps.createDraftInvoice.outputs.invoiceId
+    status: $steps.sendInvoice.outputs.status
+    hostedInvoiceUrl: $steps.sendInvoice.outputs.hostedInvoiceUrl
