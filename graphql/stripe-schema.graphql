@@ -1,0 +1,2812 @@
+"""
+Stripe Conceptual GraphQL Schema
+=================================
+Derived from Stripe's public REST API data model (https://docs.stripe.com/api).
+Stripe does not offer a public GraphQL endpoint. This schema is a conceptual SDL
+representation for design reference, code generation, and GraphQL gateway use cases.
+
+All types, fields, and relationships map directly to Stripe REST objects and fields
+as documented in the official API reference. Field names follow GraphQL camelCase
+conventions; REST snake_case equivalents are noted in field descriptions where helpful.
+"""
+
+scalar JSON
+scalar DateTime
+
+# ---------------------------------------------------------------------------
+# Pagination wrapper (mirrors Stripe list objects)
+# ---------------------------------------------------------------------------
+
+type PageInfo {
+  hasMore: Boolean!
+  url: String!
+}
+
+type StripeList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [StripeObject!]!
+}
+
+# Typed list wrappers
+type CustomerList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Customer!]!
+}
+
+type ChargeList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Charge!]!
+}
+
+type PaymentIntentList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [PaymentIntent!]!
+}
+
+type InvoiceList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Invoice!]!
+}
+
+type SubscriptionList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Subscription!]!
+}
+
+type ProductList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Product!]!
+}
+
+type PriceList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Price!]!
+}
+
+type RefundList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Refund!]!
+}
+
+type PayoutList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Payout!]!
+}
+
+type TransferList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Transfer!]!
+}
+
+type EventList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Event!]!
+}
+
+type WebhookEndpointList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [WebhookEndpoint!]!
+}
+
+type BalanceTransactionList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [BalanceTransaction!]!
+}
+
+type DisputeList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [Dispute!]!
+}
+
+type PaymentLinkList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [PaymentLink!]!
+}
+
+type CheckoutSessionList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [CheckoutSession!]!
+}
+
+type LineItemList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [LineItem!]!
+}
+
+type FileList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [File!]!
+}
+
+type CreditNoteList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [CreditNote!]!
+}
+
+# ---------------------------------------------------------------------------
+# Enums
+# ---------------------------------------------------------------------------
+
+enum Currency {
+  usd
+  eur
+  gbp
+  jpy
+  cad
+  aud
+  chf
+  hkd
+  sgd
+  sek
+  nok
+  dkk
+  mxn
+  inr
+  brl
+  pln
+  czk
+  ron
+  huf
+  """Any ISO 4217 currency code supported by Stripe"""
+  OTHER
+}
+
+enum PaymentIntentStatus {
+  requires_payment_method
+  requires_confirmation
+  requires_action
+  processing
+  requires_capture
+  canceled
+  succeeded
+}
+
+enum PaymentIntentCancellationReason {
+  duplicate
+  fraudulent
+  requested_by_customer
+  abandoned
+  failed_invoice
+  void_invoice
+  automatic
+}
+
+enum ChargeStatus {
+  pending
+  succeeded
+  failed
+}
+
+enum RefundStatus {
+  pending
+  succeeded
+  failed
+  canceled
+}
+
+enum RefundReason {
+  duplicate
+  fraudulent
+  requested_by_customer
+  expired_uncaptured_charge
+}
+
+enum InvoiceStatus {
+  draft
+  open
+  paid
+  uncollectible
+  void
+}
+
+enum SubscriptionStatus {
+  incomplete
+  incomplete_expired
+  trialing
+  active
+  past_due
+  canceled
+  unpaid
+  paused
+}
+
+enum PayoutStatus {
+  paid
+  pending
+  in_transit
+  canceled
+  failed
+}
+
+enum PayoutType {
+  bank_account
+  card
+}
+
+enum TransferReversalReason {
+  duplicate
+  fraudulent
+  requested_by_customer
+}
+
+enum DisputeStatus {
+  warning_needs_response
+  warning_under_review
+  warning_closed
+  needs_response
+  under_review
+  charge_refunded
+  won
+  lost
+}
+
+enum DisputeReason {
+  bank_cannot_process
+  check_returned
+  credit_not_processed
+  customer_initiated
+  debit_not_authorized
+  duplicate
+  fraudulent
+  general
+  incorrect_account_details
+  insufficient_funds
+  product_not_received
+  product_unacceptable
+  subscription_canceled
+  unrecognized
+}
+
+enum ReviewClosedReason {
+  approved
+  refunded
+  refunded_as_fraud
+  disputed
+  redacted
+}
+
+enum AccountType {
+  standard
+  express
+  custom
+}
+
+enum BusinessType {
+  individual
+  company
+  non_profit
+  government_entity
+}
+
+enum PriceType {
+  one_time
+  recurring
+}
+
+enum PriceTiersMode {
+  graduated
+  volume
+}
+
+enum BillingScheme {
+  per_unit
+  tiered
+}
+
+enum PriceRecurringInterval {
+  day
+  week
+  month
+  year
+}
+
+enum PriceRecurringUsageType {
+  metered
+  licensed
+}
+
+enum PriceRecurringAggregateUsage {
+  last_during_period
+  last_ever
+  max
+  sum
+}
+
+enum CouponDuration {
+  forever
+  once
+  repeating
+}
+
+enum SetupIntentStatus {
+  requires_payment_method
+  requires_confirmation
+  requires_action
+  processing
+  canceled
+  succeeded
+}
+
+enum SetupIntentCancellationReason {
+  abandoned
+  requested_by_customer
+  duplicate
+}
+
+enum CheckoutSessionStatus {
+  open
+  complete
+  expired
+}
+
+enum CheckoutSessionMode {
+  payment
+  setup
+  subscription
+}
+
+enum PaymentMethodType {
+  acss_debit
+  affirm
+  afterpay_clearpay
+  alipay
+  au_becs_debit
+  bacs_debit
+  bancontact
+  blik
+  boleto
+  card
+  card_present
+  cashapp
+  customer_balance
+  eps
+  fpx
+  giropay
+  grabpay
+  ideal
+  interac_present
+  klarna
+  konbini
+  link
+  mobilepay
+  multibanco
+  oxxo
+  p24
+  paynow
+  paypal
+  pix
+  promptpay
+  revolut_pay
+  sepa_debit
+  sofort
+  swish
+  twint
+  us_bank_account
+  wechat_pay
+  zip
+}
+
+enum PaymentMethodCardBrand {
+  amex
+  diners
+  discover
+  eftpos_au
+  jcb
+  mastercard
+  unionpay
+  visa
+  unknown
+}
+
+enum PaymentMethodCardFunding {
+  credit
+  debit
+  prepaid
+  unknown
+}
+
+enum TaxRateJurisdictionLevel {
+  city
+  country
+  county
+  district
+  state
+}
+
+enum BalanceTransactionType {
+  adjustment
+  advance
+  advance_funding
+  anticipation_repayment
+  application_fee
+  application_fee_refund
+  charge
+  connect_collection_transfer
+  contribution
+  issuing_authorization_hold
+  issuing_authorization_release
+  issuing_dispute
+  issuing_transaction
+  obligation_inbound
+  obligation_payout
+  obligation_payout_failure
+  obligation_reversal_inbound
+  payment
+  payment_failure_refund
+  payment_network_reserve_hold
+  payment_network_reserve_release
+  payment_refund
+  payment_reversal
+  payment_unreconciled
+  payout
+  payout_cancel
+  payout_failure
+  refund
+  refund_failure
+  reserve_transaction
+  reserved_funds
+  stripe_fee
+  stripe_fx_fee
+  tax_fee
+  topup
+  topup_reversal
+  transfer
+  transfer_cancel
+  transfer_failure
+  transfer_refund
+}
+
+enum FilePurpose {
+  account_requirement
+  additional_verification
+  business_icon
+  business_logo
+  customer_signature
+  dispute_evidence
+  document_provider_identity_document
+  finance_report_run
+  identity_document
+  identity_document_downloadable
+  pci_document
+  selfie
+  sigma_scheduled_query
+  tax_document_user_upload
+  terminal_reader_splashscreen
+}
+
+enum EventCategory {
+  account
+  application
+  balance
+  billing
+  capability
+  charge
+  checkout
+  climate
+  coupon
+  credit_note
+  customer
+  dispute
+  early_fraud_warning
+  entitlements
+  file
+  financial_connections
+  identity
+  invoice
+  invoiceitem
+  issuing
+  mandate
+  order
+  payment_intent
+  payment_link
+  payment_method
+  payout
+  person
+  plan
+  price
+  product
+  promotion_code
+  quote
+  radar
+  refund
+  review
+  setup_intent
+  sigma
+  source
+  subscription_schedule
+  tax
+  tax_rate
+  terminal
+  test_helpers
+  topup
+  transfer
+  treasury
+}
+
+# ---------------------------------------------------------------------------
+# Shared / embedded types
+# ---------------------------------------------------------------------------
+
+"""Stripe Address object used across accounts, customers, and shipping."""
+type Address {
+  city: String
+  country: String
+  line1: String
+  line2: String
+  postalCode: String
+  state: String
+}
+
+"""Shipping information attached to charges, orders, and customers."""
+type Shipping {
+  address: Address
+  carrier: String
+  name: String
+  phone: String
+  trackingNumber: String
+}
+
+"""Billing details attached to payment methods and charges."""
+type BillingDetails {
+  address: Address
+  email: String
+  name: String
+  phone: String
+}
+
+"""Period used in subscription items, invoices, and billing."""
+type Period {
+  start: DateTime!
+  end: DateTime!
+}
+
+"""Card details (subset; embedded on PaymentMethod and Charge)."""
+type CardDetails {
+  brand: PaymentMethodCardBrand!
+  country: String
+  expMonth: Int!
+  expYear: Int!
+  fingerprint: String
+  funding: PaymentMethodCardFunding!
+  last4: String!
+  network: String
+  three_d_secure_usage: ThreeDSecureUsage
+  checks: CardChecks
+}
+
+type ThreeDSecureUsage {
+  supported: Boolean!
+}
+
+type CardChecks {
+  addressLine1Check: String
+  addressPostalCodeCheck: String
+  cvcCheck: String
+}
+
+type CardNetworks {
+  available: [String!]!
+  preferred: String
+}
+
+"""Bank account details embedded on payment methods."""
+type UsBankAccountDetails {
+  accountHolderType: String
+  accountType: String
+  bankName: String
+  financialConnectionsAccount: String
+  fingerprint: String
+  last4: String
+  networks: UsBankAccountNetworks
+  routingNumber: String
+}
+
+type UsBankAccountNetworks {
+  preferred: String
+  supported: [String!]!
+}
+
+type SepaDebitDetails {
+  bankCode: String
+  branchCode: String
+  country: String
+  fingerprint: String
+  generatedFrom: SepaDebitGeneratedFrom
+  last4: String
+}
+
+type SepaDebitGeneratedFrom {
+  charge: String
+  setupAttempt: String
+}
+
+"""Automatic tax calculation result."""
+type AutomaticTax {
+  enabled: Boolean!
+  liability: AutomaticTaxLiability
+  status: String
+}
+
+type AutomaticTaxLiability {
+  account: String
+  type: String!
+}
+
+"""Error details returned by the Stripe API."""
+type StripeError {
+  charge: String
+  code: String
+  declineCode: String
+  docUrl: String
+  message: String
+  param: String
+  paymentIntent: PaymentIntent
+  paymentMethod: PaymentMethod
+  type: String!
+}
+
+"""A single tier in tiered pricing."""
+type PriceTier {
+  flatAmount: Int
+  flatAmountDecimal: String
+  unitAmount: Int
+  unitAmountDecimal: String
+  upTo: Int
+}
+
+"""Recurring settings on a Price."""
+type PriceRecurring {
+  aggregateUsage: PriceRecurringAggregateUsage
+  interval: PriceRecurringInterval!
+  intervalCount: Int!
+  meterEventName: String
+  usageType: PriceRecurringUsageType!
+}
+
+"""Transform quantity settings for unit-based pricing."""
+type TransformQuantity {
+  divideBy: Int!
+  round: String!
+}
+
+"""Tax amount detail on an invoice line."""
+type TaxAmount {
+  amount: Int!
+  inclusive: Boolean!
+  taxRate: TaxRate!
+}
+
+"""Discount applied to an invoice or subscription."""
+type Discount {
+  id: ID!
+  object: String!
+  checkoutSession: String
+  coupon: Coupon!
+  customer: Customer
+  end: DateTime
+  invoice: String
+  invoiceItem: String
+  promotionCode: PromotionCode
+  start: DateTime!
+  subscription: String
+  subscriptionItem: String
+}
+
+"""Apply-to restriction for a promotion code."""
+type PromotionCodeRestrictions {
+  currencyOptions: JSON
+  firstTimeTransaction: Boolean!
+  minimumAmount: Int
+  minimumAmountCurrency: String
+}
+
+"""Subscription billing_thresholds."""
+type SubscriptionBillingThresholds {
+  amountGte: Int
+  resetBillingCycleAnchor: Boolean
+}
+
+"""Subscription item billing_thresholds."""
+type SubscriptionItemBillingThresholds {
+  usageGte: Int
+}
+
+"""Subscription pause collection settings."""
+type SubscriptionPauseCollection {
+  behavior: String!
+  resumesAt: DateTime
+}
+
+"""Subscription payment settings."""
+type SubscriptionPaymentSettings {
+  paymentMethodOptions: JSON
+  paymentMethodTypes: [String!]
+  saveDefaultPaymentMethod: String
+}
+
+"""Invoice customer_tax_exempt status."""
+type InvoiceCustomerTaxExempt {
+  exempt: Boolean
+  reverse: Boolean
+}
+
+"""Next action on a PaymentIntent (e.g. redirect_to_url, use_stripe_sdk)."""
+type PaymentIntentNextAction {
+  type: String!
+  redirectToUrl: PaymentIntentNextActionRedirectToUrl
+  useStripeSdk: JSON
+  displayBankTransferInstructions: JSON
+  verifyWithMicrodeposits: JSON
+}
+
+type PaymentIntentNextActionRedirectToUrl {
+  returnUrl: String
+  url: String
+}
+
+"""Payment method options on a PaymentIntent."""
+type PaymentMethodOptions {
+  card: CardPaymentMethodOptions
+  usBankAccount: JSON
+  sepaDebit: JSON
+  acssDebit: JSON
+}
+
+type CardPaymentMethodOptions {
+  captureMethod: String
+  installments: JSON
+  mandateOptions: JSON
+  network: String
+  requestThreeDSecure: String
+  setupFutureUsage: String
+  statementDescriptorSuffixKanji: String
+  statementDescriptorSuffixKana: String
+}
+
+"""Early fraud warning from Stripe Radar."""
+type EarlyFraudWarning {
+  id: ID!
+  object: String!
+  actionable: Boolean!
+  charge: Charge!
+  created: DateTime!
+  fraudType: String!
+  livemode: Boolean!
+  paymentIntent: PaymentIntent
+}
+
+"""Radar review opened on a charge."""
+type Review {
+  id: ID!
+  object: String!
+  billingZip: String
+  charge: Charge
+  closedReason: ReviewClosedReason
+  created: DateTime!
+  ipAddress: String
+  ipAddressLocation: JSON
+  livemode: Boolean!
+  open: Boolean!
+  openedReason: String!
+  paymentIntent: PaymentIntent
+  reason: String!
+  session: JSON
+}
+
+"""Radar value list."""
+type RadarValueList {
+  id: ID!
+  object: String!
+  alias: String!
+  created: DateTime!
+  createdBy: String!
+  itemType: String!
+  listItems: JSON
+  livemode: Boolean!
+  metadata: JSON!
+  name: String!
+}
+
+"""Transfer reversal."""
+type TransferReversal {
+  id: ID!
+  object: String!
+  amount: Int!
+  balanceTransaction: BalanceTransaction
+  created: DateTime!
+  currency: Currency!
+  destinationPaymentRefund: String
+  metadata: JSON!
+  sourceRefund: String
+  transfer: Transfer!
+}
+
+"""External account (bank account or card) on a Stripe account."""
+type ExternalAccount {
+  id: ID!
+  object: String!
+  account: String
+  accountHolderName: String
+  accountHolderType: String
+  accountType: String
+  availablePayoutMethods: [String!]
+  bankName: String
+  brand: String
+  country: String
+  currency: Currency!
+  customer: String
+  defaultForCurrency: Boolean
+  expMonth: Int
+  expYear: Int
+  fingerprint: String
+  funding: String
+  last4: String!
+  livemode: Boolean!
+  metadata: JSON!
+  routingNumber: String
+  status: String
+}
+
+"""File link granting temporary access to a file."""
+type FileLink {
+  id: ID!
+  object: String!
+  created: DateTime!
+  expired: Boolean!
+  expiresAt: DateTime
+  file: File!
+  livemode: Boolean!
+  metadata: JSON!
+  url: String
+}
+
+# ---------------------------------------------------------------------------
+# Core objects
+# ---------------------------------------------------------------------------
+
+"""
+A PaymentIntent guides a payment through the collection process.
+REST: /v1/payment_intents
+"""
+type PaymentIntent {
+  id: ID!
+  object: String!
+  amount: Int!
+  amountCapturable: Int!
+  amountDetails: JSON
+  amountReceived: Int!
+  application: String
+  applicationFeeAmount: Int
+  automaticPaymentMethods: JSON
+  canceledAt: DateTime
+  cancellationReason: PaymentIntentCancellationReason
+  captureMethod: String!
+  clientSecret: String
+  confirmationMethod: String!
+  created: DateTime!
+  currency: Currency!
+  customer: Customer
+  description: String
+  invoice: Invoice
+  lastPaymentError: StripeError
+  latestCharge: Charge
+  livemode: Boolean!
+  metadata: JSON!
+  nextAction: PaymentIntentNextAction
+  onBehalfOf: String
+  paymentMethod: PaymentMethod
+  paymentMethodConfigurationDetails: JSON
+  paymentMethodOptions: PaymentMethodOptions
+  paymentMethodTypes: [String!]!
+  processing: JSON
+  receiptEmail: String
+  review: String
+  setupFutureUsage: String
+  shipping: Shipping
+  source: String
+  statementDescriptor: String
+  statementDescriptorSuffix: String
+  status: PaymentIntentStatus!
+  transferData: TransferData
+  transferGroup: String
+}
+
+type TransferData {
+  amount: Int
+  destination: Account!
+}
+
+"""
+A PaymentMethod stores payment instrument details.
+REST: /v1/payment_methods
+"""
+type PaymentMethod {
+  id: ID!
+  object: String!
+  acssDebit: JSON
+  affirm: JSON
+  afterpayClearpay: JSON
+  alipay: JSON
+  allowRedisplay: String
+  auBecsDebit: JSON
+  bacsBankAccount: JSON
+  billingDetails: BillingDetails!
+  blik: JSON
+  boleto: JSON
+  card: CardDetails
+  cardPresent: JSON
+  cashapp: JSON
+  created: DateTime!
+  customer: Customer
+  customerBalance: JSON
+  eps: JSON
+  fpx: JSON
+  giropay: JSON
+  grabpay: JSON
+  ideal: JSON
+  interacPresent: JSON
+  klarna: JSON
+  konbini: JSON
+  link: JSON
+  livemode: Boolean!
+  metadata: JSON!
+  mobilepay: JSON
+  multibanco: JSON
+  oxxo: JSON
+  p24: JSON
+  paynow: JSON
+  paypal: JSON
+  pix: JSON
+  promptpay: JSON
+  radarOptions: JSON
+  revolutPay: JSON
+  sepaDebit: SepaDebitDetails
+  sofort: JSON
+  swish: JSON
+  twint: JSON
+  type: PaymentMethodType!
+  usBankAccount: UsBankAccountDetails
+  wechatPay: JSON
+  zip: JSON
+}
+
+"""
+A Customer represents a buyer in your Stripe account.
+REST: /v1/customers
+"""
+type Customer {
+  id: ID!
+  object: String!
+  address: Address
+  balance: Int!
+  cashBalance: JSON
+  created: DateTime!
+  currency: Currency
+  defaultSource: String
+  delinquent: Boolean
+  description: String
+  discount: Discount
+  email: String
+  invoiceCreditBalance: JSON
+  invoicePrefix: String
+  invoiceSettings: CustomerInvoiceSettings
+  livemode: Boolean!
+  metadata: JSON!
+  name: String
+  nextInvoiceSequence: Int
+  phone: String
+  preferredLocales: [String!]
+  shipping: Shipping
+  sources: StripeList
+  subscriptions: SubscriptionList
+  taxExempt: String
+  taxIds: StripeList
+  testClock: String
+}
+
+type CustomerInvoiceSettings {
+  customFields: [CustomerInvoiceCustomField!]
+  defaultPaymentMethod: PaymentMethod
+  footer: String
+  renderingOptions: JSON
+}
+
+type CustomerInvoiceCustomField {
+  name: String!
+  value: String!
+}
+
+"""
+A Charge represents a single payment transaction.
+REST: /v1/charges
+"""
+type Charge {
+  id: ID!
+  object: String!
+  amount: Int!
+  amountCaptured: Int!
+  amountRefunded: Int!
+  application: String
+  applicationFee: String
+  applicationFeeAmount: Int
+  balanceTransaction: BalanceTransaction
+  billingDetails: BillingDetails!
+  calculatedStatementDescriptor: String
+  captured: Boolean!
+  created: DateTime!
+  currency: Currency!
+  customer: Customer
+  description: String
+  disputed: Boolean!
+  failureBalanceTransaction: String
+  failureCode: String
+  failureMessage: String
+  fraudDetails: JSON
+  invoice: Invoice
+  livemode: Boolean!
+  metadata: JSON!
+  onBehalfOf: String
+  outcome: ChargeOutcome
+  paid: Boolean!
+  paymentIntent: PaymentIntent
+  paymentMethod: String
+  paymentMethodDetails: ChargePaymentMethodDetails
+  radarOptions: JSON
+  receiptEmail: String
+  receiptNumber: String
+  receiptUrl: String
+  refunded: Boolean!
+  refunds: RefundList
+  review: String
+  shipping: Shipping
+  source: JSON
+  sourceTransfer: String
+  statementDescriptor: String
+  statementDescriptorSuffix: String
+  status: ChargeStatus!
+  transfer: String
+  transferData: TransferData
+  transferGroup: String
+}
+
+type ChargeOutcome {
+  networkStatus: String
+  reason: String
+  riskLevel: String
+  riskScore: Int
+  rule: JSON
+  sellerMessage: String
+  type: String!
+}
+
+type ChargePaymentMethodDetails {
+  card: CardDetails
+  type: String!
+}
+
+"""
+A Refund on a Charge or PaymentIntent.
+REST: /v1/refunds
+"""
+type Refund {
+  id: ID!
+  object: String!
+  amount: Int!
+  balanceTransaction: BalanceTransaction
+  charge: Charge
+  created: DateTime!
+  currency: Currency!
+  description: String
+  destinationDetails: JSON
+  failureBalanceTransaction: String
+  failureReason: String
+  instructionsEmail: String
+  metadata: JSON!
+  nextAction: JSON
+  paymentIntent: PaymentIntent
+  reason: RefundReason
+  receiptNumber: String
+  sourceTransferReversal: String
+  status: RefundStatus
+  transferReversal: String
+}
+
+"""
+A Balance represents the current funds in a Stripe account.
+REST: /v1/balance
+"""
+type Balance {
+  object: String!
+  available: [BalanceFund!]!
+  connectReserved: [BalanceFund!]
+  instantAvailable: [BalanceFund!]
+  issuing: BalanceIssuing
+  livemode: Boolean!
+  pending: [BalanceFund!]!
+}
+
+type BalanceFund {
+  amount: Int!
+  currency: Currency!
+  sourceTypes: BalanceSourceTypes
+}
+
+type BalanceSourceTypes {
+  bankAccount: Int
+  card: Int
+  fpx: Int
+}
+
+type BalanceIssuing {
+  available: [BalanceFund!]!
+}
+
+"""
+A BalanceTransaction records the effect of an activity on the account balance.
+REST: /v1/balance_transactions
+"""
+type BalanceTransaction {
+  id: ID!
+  object: String!
+  amount: Int!
+  availableOn: DateTime!
+  created: DateTime!
+  currency: Currency!
+  description: String
+  exchangeRate: Float
+  fee: Int!
+  feeDetails: [BalanceTransactionFeeDetail!]!
+  net: Int!
+  reportingCategory: String!
+  source: String
+  status: String!
+  type: BalanceTransactionType!
+}
+
+type BalanceTransactionFeeDetail {
+  amount: Int!
+  application: String
+  currency: Currency!
+  description: String
+  type: String!
+}
+
+"""
+A Payout to a bank account or debit card.
+REST: /v1/payouts
+"""
+type Payout {
+  id: ID!
+  object: String!
+  amount: Int!
+  arrivalDate: DateTime!
+  automatic: Boolean!
+  balanceTransaction: BalanceTransaction
+  created: DateTime!
+  currency: Currency!
+  description: String
+  destination: ExternalAccount
+  failureBalanceTransaction: String
+  failureCode: String
+  failureMessage: String
+  livemode: Boolean!
+  metadata: JSON!
+  method: String!
+  originalPayout: String
+  reconciledAt: DateTime
+  reversedBy: String
+  sourceType: String!
+  statementDescriptor: String
+  status: PayoutStatus!
+  type: PayoutType!
+}
+
+"""
+A Transfer of funds between Stripe accounts (Connect).
+REST: /v1/transfers
+"""
+type Transfer {
+  id: ID!
+  object: String!
+  amount: Int!
+  amountReversed: Int!
+  balanceTransaction: BalanceTransaction
+  created: DateTime!
+  currency: Currency!
+  description: String
+  destination: Account
+  destinationPayment: String
+  livemode: Boolean!
+  metadata: JSON!
+  reversals: StripeList
+  reversed: Boolean!
+  sourceTransaction: String
+  sourceType: String
+  transferGroup: String
+}
+
+"""
+An Invoice issued to a customer.
+REST: /v1/invoices
+"""
+type Invoice {
+  id: ID!
+  object: String!
+  accountCountry: String
+  accountName: String
+  accountTaxIds: [TaxId!]
+  amountDue: Int!
+  amountPaid: Int!
+  amountRemaining: Int!
+  amountShipping: Int!
+  application: String
+  applicationFeeAmount: Int
+  attemptCount: Int!
+  attempted: Boolean!
+  autoAdvance: Boolean
+  automaticTax: AutomaticTax!
+  billingReason: String
+  charge: Charge
+  collectionMethod: String!
+  created: DateTime!
+  currency: Currency!
+  customFields: [CustomerInvoiceCustomField!]
+  customer: Customer!
+  customerAddress: Address
+  customerEmail: String
+  customerName: String
+  customerPhone: String
+  customerShipping: Shipping
+  customerTaxExempt: String
+  customerTaxIds: [TaxId!]
+  defaultPaymentMethod: PaymentMethod
+  defaultSource: String
+  defaultTaxRates: [TaxRate!]!
+  description: String
+  discount: Discount
+  discounts: [Discount!]
+  dueDate: DateTime
+  effectiveAt: DateTime
+  endingBalance: Int
+  footer: String
+  fromInvoice: JSON
+  hostedInvoiceUrl: String
+  invoicePdf: String
+  issuer: JSON
+  lastFinalizationError: StripeError
+  latestRevision: String
+  lines: LineItemList!
+  livemode: Boolean!
+  metadata: JSON!
+  nextPaymentAttempt: DateTime
+  number: String
+  onBehalfOf: String
+  paid: Boolean!
+  paidOutOfBand: Boolean!
+  paymentIntent: PaymentIntent
+  paymentSettings: JSON
+  periodEnd: DateTime!
+  periodStart: DateTime!
+  postPaymentCreditNotesAmount: Int!
+  prePaymentCreditNotesAmount: Int!
+  quote: String
+  receiptNumber: String
+  rendering: JSON
+  renderingOptions: JSON
+  shippingCost: JSON
+  shippingDetails: JSON
+  startingBalance: Int!
+  statementDescriptor: String
+  status: InvoiceStatus
+  statusTransitions: JSON
+  subscription: Subscription
+  subscriptionDetails: JSON
+  subtotal: Int!
+  subtotalExcludingTax: Int
+  tax: Int
+  testClock: String
+  thresholdReason: JSON
+  total: Int!
+  totalDiscountAmounts: [JSON!]
+  totalExcludingTax: Int
+  totalTaxAmounts: [TaxAmount!]!
+  totalPretaxCreditAmounts: [JSON!]
+  transferData: TransferData
+  webhooksDeliveredAt: DateTime
+}
+
+"""A single line item on an Invoice."""
+type LineItem {
+  id: ID!
+  object: String!
+  amount: Int!
+  amountExcludingTax: Int
+  currency: Currency!
+  description: String
+  discountAmounts: [JSON!]
+  discountable: Boolean!
+  discounts: [Discount!]
+  invoiceItem: String
+  livemode: Boolean!
+  metadata: JSON!
+  period: Period!
+  plan: Plan
+  price: Price
+  proration: Boolean!
+  prorationDetails: JSON
+  quantity: Int
+  subscription: String
+  subscriptionItem: String
+  taxAmounts: [TaxAmount!]!
+  taxRates: [TaxRate!]!
+  type: String!
+  unitAmountExcludingTax: String
+}
+
+"""
+An InvoiceItem to be billed on the next invoice.
+REST: /v1/invoiceitems
+"""
+type InvoiceItem {
+  id: ID!
+  object: String!
+  amount: Int!
+  currency: Currency!
+  customer: Customer!
+  date: DateTime!
+  description: String
+  discountable: Boolean!
+  discounts: [Discount!]
+  invoice: Invoice
+  livemode: Boolean!
+  metadata: JSON!
+  period: Period!
+  plan: Plan
+  price: Price
+  proration: Boolean!
+  quantity: Int!
+  subscription: String
+  subscriptionItem: String
+  taxRates: [TaxRate!]
+  testClock: String
+  unitAmount: Int
+  unitAmountDecimal: String
+}
+
+"""
+A Subscription charges a customer on a recurring basis.
+REST: /v1/subscriptions
+"""
+type Subscription {
+  id: ID!
+  object: String!
+  application: String
+  applicationFeePercent: Float
+  automaticTax: AutomaticTax!
+  billingCycleAnchor: DateTime!
+  billingCycleAnchorConfig: JSON
+  billingThresholds: SubscriptionBillingThresholds
+  cancelAt: DateTime
+  cancelAtPeriodEnd: Boolean!
+  canceledAt: DateTime
+  cancellationDetails: JSON
+  collectionMethod: String!
+  created: DateTime!
+  currency: Currency!
+  currentPeriodEnd: DateTime!
+  currentPeriodStart: DateTime!
+  customer: Customer!
+  daysUntilDue: Int
+  defaultPaymentMethod: PaymentMethod
+  defaultSource: String
+  defaultTaxRates: [TaxRate!]
+  description: String
+  discount: Discount
+  discounts: [Discount!]
+  endedAt: DateTime
+  invoiceSettings: JSON
+  items: SubscriptionItemList!
+  latestInvoice: Invoice
+  livemode: Boolean!
+  metadata: JSON!
+  nextPendingInvoiceItemInvoice: DateTime
+  onBehalfOf: String
+  pauseCollection: SubscriptionPauseCollection
+  paymentSettings: SubscriptionPaymentSettings
+  pendingInvoiceItemInterval: JSON
+  pendingSetupIntent: SetupIntent
+  pendingUpdate: JSON
+  plan: Plan
+  quantity: Int
+  schedule: String
+  startDate: DateTime!
+  status: SubscriptionStatus!
+  testClock: String
+  transferData: TransferData
+  trialEnd: DateTime
+  trialSettings: JSON
+  trialStart: DateTime
+}
+
+type SubscriptionItemList {
+  object: String!
+  url: String
+  hasMore: Boolean!
+  data: [SubscriptionItem!]!
+}
+
+"""A single item within a Subscription."""
+type SubscriptionItem {
+  id: ID!
+  object: String!
+  billingThresholds: SubscriptionItemBillingThresholds
+  created: DateTime!
+  discounts: [Discount!]
+  metadata: JSON!
+  plan: Plan!
+  price: Price!
+  quantity: Int
+  subscription: String!
+  taxRates: [TaxRate!]
+}
+
+"""
+A Price defines the unit cost and billing frequency for a Product.
+REST: /v1/prices
+"""
+type Price {
+  id: ID!
+  object: String!
+  active: Boolean!
+  billingScheme: BillingScheme!
+  created: DateTime!
+  currency: Currency!
+  currencyOptions: JSON
+  customUnitAmount: JSON
+  livemode: Boolean!
+  lookupKey: String
+  metadata: JSON!
+  migrateTo: JSON
+  nickname: String
+  product: Product!
+  recurring: PriceRecurring
+  taxBehavior: String
+  tiers: [PriceTier!]
+  tiersMode: PriceTiersMode
+  transformQuantity: TransformQuantity
+  type: PriceType!
+  unitAmount: Int
+  unitAmountDecimal: String
+}
+
+"""
+A Product describes goods or services.
+REST: /v1/products
+"""
+type Product {
+  id: ID!
+  object: String!
+  active: Boolean!
+  created: DateTime!
+  defaultPrice: Price
+  description: String
+  features: [ProductFeature!]!
+  images: [String!]!
+  livemode: Boolean!
+  marketingFeatures: [JSON!]!
+  metadata: JSON!
+  name: String!
+  packageDimensions: JSON
+  shippable: Boolean
+  statementDescriptor: String
+  taxCode: String
+  unitLabel: String
+  updated: DateTime!
+  url: String
+}
+
+type ProductFeature {
+  name: String!
+}
+
+"""
+A Coupon for percent-off or amount-off discounts.
+REST: /v1/coupons
+"""
+type Coupon {
+  id: ID!
+  object: String!
+  amountOff: Int
+  appliesTo: CouponAppliesTo
+  created: DateTime!
+  currency: Currency
+  currencyOptions: JSON
+  duration: CouponDuration!
+  durationInMonths: Int
+  livemode: Boolean!
+  maxRedemptions: Int
+  metadata: JSON!
+  name: String
+  percentOff: Float
+  redeemBy: DateTime
+  timesRedeemed: Int!
+  valid: Boolean!
+}
+
+type CouponAppliesTo {
+  products: [String!]!
+}
+
+"""
+A PromotionCode is a customer-redeemable code for a Coupon.
+REST: /v1/promotion_codes
+"""
+type PromotionCode {
+  id: ID!
+  object: String!
+  active: Boolean!
+  code: String!
+  coupon: Coupon!
+  created: DateTime!
+  customer: Customer
+  expiresAt: DateTime
+  livemode: Boolean!
+  maxRedemptions: Int
+  metadata: JSON!
+  restrictions: PromotionCodeRestrictions!
+  timesRedeemed: Int!
+}
+
+"""
+A Plan (legacy; prefer Price for new integrations).
+REST: /v1/plans
+"""
+type Plan {
+  id: ID!
+  object: String!
+  active: Boolean!
+  aggregateUsage: String
+  amount: Int
+  amountDecimal: String
+  billingScheme: BillingScheme!
+  created: DateTime!
+  currency: Currency!
+  interval: PriceRecurringInterval!
+  intervalCount: Int!
+  livemode: Boolean!
+  metadata: JSON!
+  meter: String
+  nickname: String
+  product: Product
+  tiers: [PriceTier!]
+  tiersMode: PriceTiersMode
+  transformUsage: JSON
+  trialPeriodDays: Int
+  usageType: PriceRecurringUsageType!
+}
+
+"""
+A TaxRate applied to invoices, subscriptions, and checkout.
+REST: /v1/tax_rates
+"""
+type TaxRate {
+  id: ID!
+  object: String!
+  active: Boolean!
+  country: String
+  created: DateTime!
+  description: String
+  displayName: String!
+  effectivePercentage: Float
+  inclusive: Boolean!
+  jurisdiction: String
+  jurisdictionLevel: TaxRateJurisdictionLevel
+  livemode: Boolean!
+  metadata: JSON!
+  percentage: Float!
+  state: String
+  taxType: String
+}
+
+"""
+A TaxId on a Customer or Account.
+REST: /v1/customers/{id}/tax_ids
+"""
+type TaxId {
+  id: ID!
+  object: String!
+  country: String
+  created: DateTime!
+  customer: String
+  livemode: Boolean!
+  owner: JSON
+  type: String!
+  value: String!
+  verification: TaxIdVerification
+}
+
+type TaxIdVerification {
+  status: String!
+  verifiedAddress: String
+  verifiedName: String
+}
+
+"""
+A CreditNote adjusts a finalized Invoice.
+REST: /v1/credit_notes
+"""
+type CreditNote {
+  id: ID!
+  object: String!
+  amount: Int!
+  amountShipping: Int!
+  created: DateTime!
+  currency: Currency!
+  customer: Customer!
+  customerBalanceTransaction: String
+  discountAmount: Int!
+  discountAmounts: [JSON!]!
+  effectiveAt: DateTime
+  invoice: Invoice!
+  lines: StripeList!
+  livemode: Boolean!
+  memo: String
+  metadata: JSON!
+  number: String!
+  outOfBandAmount: Int
+  pdf: String!
+  pretaxCreditAmounts: [JSON!]!
+  reason: String
+  refund: Refund
+  shippingCost: JSON
+  status: String!
+  subtotal: Int!
+  subtotalExcludingTax: Int
+  taxAmounts: [TaxAmount!]!
+  total: Int!
+  totalExcludingTax: Int
+  type: String!
+  voidedAt: DateTime
+}
+
+"""
+A Dispute on a Charge opened by a card issuer.
+REST: /v1/disputes
+"""
+type Dispute {
+  id: ID!
+  object: String!
+  amount: Int!
+  balanceTransactions: [BalanceTransaction!]!
+  charge: Charge!
+  created: DateTime!
+  currency: Currency!
+  enhancedEligibilityTypes: [String!]!
+  evidence: DisputeEvidence!
+  evidenceDetails: DisputeEvidenceDetails!
+  isChargeRefundable: Boolean!
+  livemode: Boolean!
+  metadata: JSON!
+  networkReasonCode: String
+  paymentIntent: PaymentIntent
+  paymentMethodDetails: JSON
+  reason: DisputeReason!
+  status: DisputeStatus!
+}
+
+type DisputeEvidence {
+  accessActivityLog: String
+  billingAddress: String
+  cancellationPolicy: String
+  cancellationPolicyDisclosure: String
+  cancellationRebuttal: String
+  customerCommunication: String
+  customerEmailAddress: String
+  customerName: String
+  customerPurchaseIp: String
+  customerSignature: String
+  duplicateChargeDocumentation: String
+  duplicateChargeExplanation: String
+  duplicateChargeId: String
+  productDescription: String
+  receipt: String
+  refundPolicy: String
+  refundPolicyDisclosure: String
+  refundRefusalExplanation: String
+  serviceDate: String
+  serviceDocumentation: String
+  shippingAddress: String
+  shippingCarrier: String
+  shippingDate: String
+  shippingDocumentation: String
+  shippingTrackingNumber: String
+  uncategorizedFile: String
+  uncategorizedText: String
+}
+
+type DisputeEvidenceDetails {
+  dueBy: DateTime
+  enhancedEligibility: JSON
+  hasEvidence: Boolean!
+  pastDue: Boolean!
+  submissionCount: Int!
+}
+
+"""
+An Event fired when something changes in a Stripe account.
+REST: /v1/events
+"""
+type Event {
+  id: ID!
+  object: String!
+  account: String
+  apiVersion: String
+  created: DateTime!
+  data: EventData!
+  livemode: Boolean!
+  pendingWebhooks: Int!
+  request: EventRequest
+  type: String!
+}
+
+type EventData {
+  object: JSON!
+  previousAttributes: JSON
+}
+
+type EventRequest {
+  id: String
+  idempotencyKey: String
+}
+
+"""
+A WebhookEndpoint that receives Stripe events.
+REST: /v1/webhook_endpoints
+"""
+type WebhookEndpoint {
+  id: ID!
+  object: String!
+  apiVersion: String
+  application: String
+  created: DateTime!
+  description: String
+  enabledEvents: [String!]!
+  livemode: Boolean!
+  metadata: JSON!
+  secret: String
+  status: String!
+  url: String!
+}
+
+"""
+A Stripe Account (Connect).
+REST: /v1/accounts
+"""
+type Account {
+  id: ID!
+  object: String!
+  businessProfile: AccountBusinessProfile
+  businessType: BusinessType
+  capabilities: JSON
+  chargesEnabled: Boolean!
+  company: AccountCompany
+  controller: JSON
+  country: String
+  created: DateTime
+  defaultCurrency: Currency
+  detailsSubmitted: Boolean!
+  email: String
+  externalAccounts: StripeList
+  futureRequirements: AccountRequirements
+  individual: Person
+  metadata: JSON!
+  payoutsEnabled: Boolean!
+  requirements: AccountRequirements
+  settings: AccountSettings
+  tosAcceptance: AccountTosAcceptance
+  type: AccountType
+}
+
+type AccountBusinessProfile {
+  annualRevenue: JSON
+  estimatedWorkerCount: Int
+  mcc: String
+  monthlyEstimatedRevenue: JSON
+  name: String
+  productDescription: String
+  supportAddress: Address
+  supportEmail: String
+  supportPhone: String
+  supportUrl: String
+  url: String
+}
+
+type AccountCompany {
+  address: Address
+  addressKana: JSON
+  addressKanji: JSON
+  directorsProvided: Boolean
+  executivesProvided: Boolean
+  exportLicenseId: String
+  exportPurposeCode: String
+  name: String
+  nameKana: String
+  nameKanji: String
+  ownersProvided: Boolean
+  ownershipDeclaration: JSON
+  phone: String
+  structure: String
+  taxIdProvided: Boolean
+  taxIdRegistrarProvided: Boolean
+  vatIdProvided: Boolean
+  verification: JSON
+}
+
+type AccountRequirements {
+  alternatives: [JSON!]
+  currentDeadline: DateTime
+  currentlyDue: [String!]
+  disabledReason: String
+  errors: [JSON!]
+  eventuallyDue: [String!]
+  pastDue: [String!]
+  pendingVerification: [String!]
+}
+
+type AccountSettings {
+  bacsDebitPayments: JSON
+  branding: AccountBranding
+  cardIssuing: JSON
+  cardPayments: AccountCardPayments
+  dashboard: AccountDashboard
+  invoices: JSON
+  payments: AccountPayments
+  payouts: AccountPayouts
+  sepaDebitPayments: JSON
+  treasury: JSON
+}
+
+type AccountBranding {
+  icon: String
+  logo: String
+  primaryColor: String
+  secondaryColor: String
+}
+
+type AccountCardPayments {
+  declineOn: JSON
+  statementDescriptorPrefix: String
+  statementDescriptorPrefixKana: String
+  statementDescriptorPrefixKanji: String
+}
+
+type AccountDashboard {
+  displayName: String
+  timezone: String
+}
+
+type AccountPayments {
+  statementDescriptor: String
+  statementDescriptorKana: String
+  statementDescriptorKanji: String
+  statementDescriptorPrefixKana: String
+  statementDescriptorPrefixKanji: String
+}
+
+type AccountPayouts {
+  debitNegativeBalances: Boolean!
+  schedule: JSON
+  statementDescriptor: String
+}
+
+type AccountTosAcceptance {
+  date: DateTime
+  ip: String
+  serviceAgreement: String
+  userAgent: String
+}
+
+"""
+A Person associated with a Connect Account.
+REST: /v1/accounts/{id}/persons
+"""
+type Person {
+  id: ID!
+  object: String!
+  account: String!
+  additionalTosAcceptances: JSON
+  address: Address
+  addressKana: JSON
+  addressKanji: JSON
+  created: DateTime!
+  dateOfBirth: JSON
+  email: String
+  firstName: String
+  firstNameKana: String
+  firstNameKanji: String
+  fullNameAliases: [String!]
+  futureRequirements: JSON
+  gender: String
+  idNumberProvided: Boolean
+  idNumberSecondaryProvided: Boolean
+  lastName: String
+  lastNameKana: String
+  lastNameKanji: String
+  maidenName: String
+  metadata: JSON!
+  nationality: String
+  phone: String
+  politicalExposure: String
+  registeredAddress: Address
+  relationship: PersonRelationship
+  requirements: JSON
+  ssnLast4Provided: Boolean
+  verification: JSON
+}
+
+type PersonRelationship {
+  director: Boolean
+  executive: Boolean
+  legalGuardian: Boolean
+  owner: Boolean
+  percentOwnership: Float
+  representative: Boolean
+  title: String
+}
+
+"""
+A BankAccount attached to a Customer or Account.
+REST: /v1/customers/{id}/sources or /v1/accounts/{id}/external_accounts
+"""
+type BankAccount {
+  id: ID!
+  object: String!
+  account: String
+  accountHolderName: String
+  accountHolderType: String
+  accountType: String
+  availablePayoutMethods: [String!]
+  bankName: String
+  country: String!
+  currency: Currency!
+  customer: Customer
+  defaultForCurrency: Boolean
+  fingerprint: String
+  futureRequirements: JSON
+  last4: String!
+  metadata: JSON!
+  requirements: JSON
+  routingNumber: String
+  status: String!
+}
+
+"""
+A Card attached to a Customer (legacy source).
+REST: /v1/customers/{id}/sources
+"""
+type Card {
+  id: ID!
+  object: String!
+  account: String
+  addressCity: String
+  addressCountry: String
+  addressLine1: String
+  addressLine1Check: String
+  addressLine2: String
+  addressState: String
+  addressZip: String
+  addressZipCheck: String
+  availablePayoutMethods: [String!]
+  brand: String!
+  country: String
+  currency: Currency
+  customer: Customer
+  cvcCheck: String
+  defaultForCurrency: Boolean
+  description: String
+  dynamicLast4: String
+  expMonth: Int!
+  expYear: Int!
+  fingerprint: String
+  funding: String!
+  iin: String
+  issuer: String
+  last4: String!
+  metadata: JSON!
+  name: String
+  networks: CardNetworks
+  status: String
+  tokenizationMethod: String
+}
+
+"""
+A Source (legacy; prefer PaymentMethod).
+REST: /v1/sources
+"""
+type Source {
+  id: ID!
+  object: String!
+  achCreditTransfer: JSON
+  amount: Int
+  card: JSON
+  clientSecret: String!
+  codeVerification: JSON
+  created: DateTime!
+  currency: Currency
+  customer: String
+  flow: String!
+  livemode: Boolean!
+  metadata: JSON!
+  owner: SourceOwner
+  receiver: JSON
+  redirect: JSON
+  sourceOrder: JSON
+  statementDescriptor: String
+  status: String!
+  threeDSecure: JSON
+  type: String!
+  usage: String
+}
+
+type SourceOwner {
+  address: Address
+  email: String
+  name: String
+  phone: String
+  verifiedAddress: Address
+  verifiedEmail: String
+  verifiedName: String
+  verifiedPhone: String
+}
+
+"""
+A SetupIntent saves a PaymentMethod for future charges.
+REST: /v1/setup_intents
+"""
+type SetupIntent {
+  id: ID!
+  object: String!
+  application: String
+  attachToSelf: Boolean
+  automaticPaymentMethods: JSON
+  cancellationReason: SetupIntentCancellationReason
+  clientSecret: String
+  created: DateTime!
+  customer: Customer
+  description: String
+  flowDirections: [String!]
+  lastSetupError: StripeError
+  latestAttempt: String
+  livemode: Boolean!
+  mandate: String
+  metadata: JSON!
+  nextAction: JSON
+  onBehalfOf: String
+  paymentMethod: PaymentMethod
+  paymentMethodConfigurationDetails: JSON
+  paymentMethodOptions: JSON
+  paymentMethodTypes: [String!]!
+  singleUseMandate: String
+  status: SetupIntentStatus!
+  usage: String!
+}
+
+"""
+A PaymentLink to a hosted Stripe payment page.
+REST: /v1/payment_links
+"""
+type PaymentLink {
+  id: ID!
+  object: String!
+  active: Boolean!
+  afterCompletion: JSON
+  allowPromotionCodes: Boolean!
+  application: String
+  applicationFeeAmount: Int
+  applicationFeePercent: Float
+  automaticTax: AutomaticTax!
+  billingAddressCollection: String!
+  consentCollection: JSON
+  currency: Currency!
+  customFields: [JSON!]!
+  customText: JSON
+  customerCreation: String!
+  inactive_message: String
+  invoiceCreation: JSON
+  lineItems: LineItemList
+  livemode: Boolean!
+  metadata: JSON!
+  onBehalfOf: String
+  optionalItems: [JSON!]
+  paymentIntentData: JSON
+  paymentMethodCollection: String
+  paymentMethodTypes: [String!]
+  phoneNumberCollection: JSON
+  restrictions: JSON
+  shippingAddressCollection: JSON
+  shippingOptions: [JSON!]!
+  submitType: String!
+  subscriptionData: JSON
+  taxIdCollection: JSON
+  transferData: TransferData
+  url: String!
+}
+
+"""
+A Checkout Session (hosted payment page).
+REST: /v1/checkout/sessions
+"""
+type CheckoutSession {
+  id: ID!
+  object: String!
+  adaptivePricing: JSON
+  afterExpiration: JSON
+  allowPromotionCodes: Boolean
+  amountSubtotal: Int
+  amountTotal: Int
+  automaticTax: AutomaticTax!
+  billingAddressCollection: String
+  cancelUrl: String
+  clientReferenceId: String
+  clientSecret: String
+  collectTaxIds: Boolean
+  consent: JSON
+  consentCollection: JSON
+  created: DateTime!
+  currency: Currency
+  currencyConversion: JSON
+  customFields: [JSON!]!
+  customText: JSON
+  customer: Customer
+  customerCreation: String
+  customerDetails: JSON
+  customerEmail: String
+  expiresAt: DateTime!
+  invoice: Invoice
+  invoiceCreation: JSON
+  lineItems: LineItemList
+  livemode: Boolean!
+  locale: String
+  metadata: JSON!
+  mode: CheckoutSessionMode!
+  optionalItems: [JSON!]
+  paymentIntent: PaymentIntent
+  paymentLink: PaymentLink
+  paymentMethodCollection: String
+  paymentMethodConfigurationDetails: JSON
+  paymentMethodOptions: JSON
+  paymentMethodTypes: [String!]!
+  paymentStatus: String!
+  permissions: JSON
+  phoneNumberCollection: JSON
+  recoveredFrom: String
+  redirectOnCompletion: String
+  returnUrl: String
+  savedPaymentMethodOptions: JSON
+  setupIntent: SetupIntent
+  shippingAddressCollection: JSON
+  shippingCost: JSON
+  shippingDetails: Shipping
+  shippingOptions: [JSON!]!
+  status: CheckoutSessionStatus
+  submitType: String
+  subscription: Subscription
+  successUrl: String
+  taxIdCollection: JSON
+  totalDetails: JSON
+  uiMode: String
+  url: String
+}
+
+"""
+A File hosted on Stripe's servers.
+REST: /v1/files
+"""
+type File {
+  id: ID!
+  object: String!
+  created: DateTime!
+  expiresAt: DateTime
+  filename: String
+  links: StripeList
+  purpose: FilePurpose!
+  size: Int!
+  title: String
+  type: String
+  url: String
+}
+
+"""A generic Stripe object placeholder."""
+type StripeObject {
+  id: ID!
+  object: String!
+}
+
+# ---------------------------------------------------------------------------
+# Root Query type
+# ---------------------------------------------------------------------------
+
+type Query {
+  """Retrieve a PaymentIntent by ID."""
+  paymentIntent(id: ID!): PaymentIntent
+
+  """List PaymentIntents with optional filters."""
+  paymentIntents(
+    customer: ID
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): PaymentIntentList!
+
+  """Retrieve a PaymentMethod by ID."""
+  paymentMethod(id: ID!): PaymentMethod
+
+  """Retrieve a Customer by ID."""
+  customer(id: ID!): Customer
+
+  """List Customers."""
+  customers(
+    email: String
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): CustomerList!
+
+  """Retrieve a Charge by ID."""
+  charge(id: ID!): Charge
+
+  """List Charges."""
+  charges(
+    customer: ID
+    paymentIntent: ID
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): ChargeList!
+
+  """Retrieve a Refund by ID."""
+  refund(id: ID!): Refund
+
+  """List Refunds."""
+  refunds(
+    charge: ID
+    paymentIntent: ID
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): RefundList!
+
+  """Retrieve the Balance for the account."""
+  balance: Balance!
+
+  """Retrieve a BalanceTransaction by ID."""
+  balanceTransaction(id: ID!): BalanceTransaction
+
+  """List BalanceTransactions."""
+  balanceTransactions(
+    type: String
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): BalanceTransactionList!
+
+  """Retrieve an Invoice by ID."""
+  invoice(id: ID!): Invoice
+
+  """List Invoices."""
+  invoices(
+    customer: ID
+    subscription: ID
+    status: InvoiceStatus
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): InvoiceList!
+
+  """Retrieve a Subscription by ID."""
+  subscription(id: ID!): Subscription
+
+  """List Subscriptions."""
+  subscriptions(
+    customer: ID
+    price: ID
+    status: SubscriptionStatus
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): SubscriptionList!
+
+  """Retrieve a Product by ID."""
+  product(id: ID!): Product
+
+  """List Products."""
+  products(
+    active: Boolean
+    url: String
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): ProductList!
+
+  """Retrieve a Price by ID."""
+  price(id: ID!): Price
+
+  """List Prices."""
+  prices(
+    active: Boolean
+    product: ID
+    type: PriceType
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): PriceList!
+
+  """Retrieve a Coupon by ID."""
+  coupon(id: ID!): Coupon
+
+  """Retrieve a PromotionCode by ID."""
+  promotionCode(id: ID!): PromotionCode
+
+  """Retrieve a Plan by ID (legacy)."""
+  plan(id: ID!): Plan
+
+  """Retrieve a TaxRate by ID."""
+  taxRate(id: ID!): TaxRate
+
+  """Retrieve a Payout by ID."""
+  payout(id: ID!): Payout
+
+  """List Payouts."""
+  payouts(
+    status: PayoutStatus
+    arrivalDate: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): PayoutList!
+
+  """Retrieve a Transfer by ID."""
+  transfer(id: ID!): Transfer
+
+  """List Transfers."""
+  transfers(
+    destination: ID
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): TransferList!
+
+  """Retrieve an Event by ID."""
+  event(id: ID!): Event
+
+  """List Events."""
+  events(
+    type: String
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): EventList!
+
+  """Retrieve a WebhookEndpoint by ID."""
+  webhookEndpoint(id: ID!): WebhookEndpoint
+
+  """List WebhookEndpoints."""
+  webhookEndpoints(
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): WebhookEndpointList!
+
+  """Retrieve a Dispute by ID."""
+  dispute(id: ID!): Dispute
+
+  """List Disputes."""
+  disputes(
+    charge: ID
+    paymentIntent: ID
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): DisputeList!
+
+  """Retrieve a Checkout Session by ID."""
+  checkoutSession(id: ID!): CheckoutSession
+
+  """List Checkout Sessions."""
+  checkoutSessions(
+    customer: ID
+    paymentIntent: ID
+    subscription: ID
+    status: CheckoutSessionStatus
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): CheckoutSessionList!
+
+  """Retrieve a PaymentLink by ID."""
+  paymentLink(id: ID!): PaymentLink
+
+  """List PaymentLinks."""
+  paymentLinks(
+    active: Boolean
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): PaymentLinkList!
+
+  """Retrieve a CreditNote by ID."""
+  creditNote(id: ID!): CreditNote
+
+  """List CreditNotes."""
+  creditNotes(
+    customer: ID
+    invoice: ID
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): CreditNoteList!
+
+  """Retrieve a File by ID."""
+  file(id: ID!): File
+
+  """List Files."""
+  files(
+    purpose: FilePurpose
+    created: Int
+    limit: Int
+    startingAfter: ID
+    endingBefore: ID
+  ): FileList!
+
+  """Retrieve a connected Account by ID (Connect)."""
+  account(id: ID!): Account
+
+  """Retrieve a SetupIntent by ID."""
+  setupIntent(id: ID!): SetupIntent
+
+  """Retrieve a Source by ID (legacy)."""
+  source(id: ID!): Source
+
+  """Retrieve an EarlyFraudWarning by ID (Radar)."""
+  earlyFraudWarning(id: ID!): EarlyFraudWarning
+
+  """Retrieve a Review by ID (Radar)."""
+  review(id: ID!): Review
+}
+
+# ---------------------------------------------------------------------------
+# Root Mutation type
+# ---------------------------------------------------------------------------
+
+type Mutation {
+  """Create a PaymentIntent."""
+  createPaymentIntent(
+    amount: Int!
+    currency: Currency!
+    customer: ID
+    paymentMethodTypes: [String!]
+    description: String
+    metadata: JSON
+    receiptEmail: String
+    setupFutureUsage: String
+    statementDescriptor: String
+  ): PaymentIntent!
+
+  """Confirm a PaymentIntent."""
+  confirmPaymentIntent(
+    id: ID!
+    paymentMethod: ID
+    returnUrl: String
+  ): PaymentIntent!
+
+  """Capture a PaymentIntent."""
+  capturePaymentIntent(id: ID!, amountToCapture: Int): PaymentIntent!
+
+  """Cancel a PaymentIntent."""
+  cancelPaymentIntent(id: ID!, cancellationReason: PaymentIntentCancellationReason): PaymentIntent!
+
+  """Create a Customer."""
+  createCustomer(
+    email: String
+    name: String
+    phone: String
+    description: String
+    address: JSON
+    metadata: JSON
+    paymentMethod: ID
+  ): Customer!
+
+  """Update a Customer."""
+  updateCustomer(id: ID!, email: String, name: String, metadata: JSON): Customer!
+
+  """Delete a Customer."""
+  deleteCustomer(id: ID!): DeleteResult!
+
+  """Create a Refund."""
+  createRefund(
+    charge: ID
+    paymentIntent: ID
+    amount: Int
+    reason: RefundReason
+    metadata: JSON
+  ): Refund!
+
+  """Create a Product."""
+  createProduct(
+    name: String!
+    description: String
+    active: Boolean
+    metadata: JSON
+    images: [String!]
+    url: String
+  ): Product!
+
+  """Update a Product."""
+  updateProduct(id: ID!, name: String, description: String, active: Boolean, metadata: JSON): Product!
+
+  """Delete a Product."""
+  deleteProduct(id: ID!): DeleteResult!
+
+  """Create a Price."""
+  createPrice(
+    currency: Currency!
+    product: ID!
+    unitAmount: Int
+    recurring: JSON
+    type: PriceType
+    metadata: JSON
+    lookupKey: String
+    nickname: String
+    taxBehavior: String
+  ): Price!
+
+  """Create a Coupon."""
+  createCoupon(
+    amountOff: Int
+    percentOff: Float
+    currency: Currency
+    duration: CouponDuration!
+    durationInMonths: Int
+    maxRedemptions: Int
+    name: String
+    redeemBy: Int
+    metadata: JSON
+  ): Coupon!
+
+  """Delete a Coupon."""
+  deleteCoupon(id: ID!): DeleteResult!
+
+  """Create a PromotionCode."""
+  createPromotionCode(
+    coupon: ID!
+    code: String
+    active: Boolean
+    customer: ID
+    expiresAt: Int
+    maxRedemptions: Int
+    metadata: JSON
+  ): PromotionCode!
+
+  """Create an Invoice."""
+  createInvoice(
+    customer: ID!
+    description: String
+    footer: String
+    metadata: JSON
+    daysUntilDue: Int
+    collectionMethod: String
+    defaultPaymentMethod: ID
+    autoAdvance: Boolean
+  ): Invoice!
+
+  """Finalize an Invoice (move from draft to open)."""
+  finalizeInvoice(id: ID!, autoAdvance: Boolean): Invoice!
+
+  """Pay an Invoice immediately."""
+  payInvoice(id: ID!, paymentMethod: ID): Invoice!
+
+  """Void an Invoice."""
+  voidInvoice(id: ID!): Invoice!
+
+  """Mark an Invoice as uncollectible."""
+  markUncollectible(id: ID!): Invoice!
+
+  """Create a Subscription."""
+  createSubscription(
+    customer: ID!
+    items: [JSON!]!
+    defaultPaymentMethod: ID
+    trialEnd: Int
+    trialPeriodDays: Int
+    metadata: JSON
+    collectionMethod: String
+  ): Subscription!
+
+  """Update a Subscription."""
+  updateSubscription(
+    id: ID!
+    items: [JSON!]
+    defaultPaymentMethod: ID
+    metadata: JSON
+    cancelAtPeriodEnd: Boolean
+  ): Subscription!
+
+  """Cancel a Subscription."""
+  cancelSubscription(id: ID!, cancelAtPeriodEnd: Boolean): Subscription!
+
+  """Create a Payout."""
+  createPayout(
+    amount: Int!
+    currency: Currency!
+    description: String
+    destination: ID
+    metadata: JSON
+    method: String
+    statementDescriptor: String
+  ): Payout!
+
+  """Cancel a Payout."""
+  cancelPayout(id: ID!): Payout!
+
+  """Create a Transfer (Connect)."""
+  createTransfer(
+    amount: Int!
+    currency: Currency!
+    destination: ID!
+    description: String
+    metadata: JSON
+    transferGroup: String
+  ): Transfer!
+
+  """Create a WebhookEndpoint."""
+  createWebhookEndpoint(
+    url: String!
+    enabledEvents: [String!]!
+    description: String
+    metadata: JSON
+    apiVersion: String
+  ): WebhookEndpoint!
+
+  """Update a WebhookEndpoint."""
+  updateWebhookEndpoint(
+    id: ID!
+    url: String
+    enabledEvents: [String!]
+    disabled: Boolean
+    metadata: JSON
+  ): WebhookEndpoint!
+
+  """Delete a WebhookEndpoint."""
+  deleteWebhookEndpoint(id: ID!): DeleteResult!
+
+  """Create a Checkout Session."""
+  createCheckoutSession(
+    mode: CheckoutSessionMode!
+    lineItems: [JSON!]
+    customer: ID
+    customerEmail: String
+    successUrl: String
+    cancelUrl: String
+    currency: Currency
+    metadata: JSON
+    expiresAt: Int
+    allowPromotionCodes: Boolean
+  ): CheckoutSession!
+
+  """Expire a Checkout Session."""
+  expireCheckoutSession(id: ID!): CheckoutSession!
+
+  """Create a PaymentLink."""
+  createPaymentLink(
+    lineItems: [JSON!]!
+    metadata: JSON
+    currency: Currency
+    allowPromotionCodes: Boolean
+    afterCompletion: JSON
+  ): PaymentLink!
+
+  """Create a CreditNote."""
+  createCreditNote(
+    invoice: ID!
+    amount: Int
+    lines: [JSON!]
+    memo: String
+    reason: String
+    metadata: JSON
+  ): CreditNote!
+
+  """Create a SetupIntent."""
+  createSetupIntent(
+    customer: ID
+    paymentMethodTypes: [String!]
+    description: String
+    metadata: JSON
+    usage: String
+  ): SetupIntent!
+
+  """Confirm a SetupIntent."""
+  confirmSetupIntent(id: ID!, paymentMethod: ID, returnUrl: String): SetupIntent!
+
+  """Cancel a SetupIntent."""
+  cancelSetupIntent(id: ID!, cancellationReason: SetupIntentCancellationReason): SetupIntent!
+
+  """Upload a File."""
+  createFile(purpose: FilePurpose!, file: String!): File!
+
+  """Create a TaxRate."""
+  createTaxRate(
+    displayName: String!
+    percentage: Float!
+    inclusive: Boolean!
+    active: Boolean
+    country: String
+    description: String
+    jurisdiction: String
+    metadata: JSON
+    state: String
+    taxType: String
+  ): TaxRate!
+
+  """Close a Dispute (accept loss)."""
+  closeDispute(id: ID!): Dispute!
+
+  """Update Dispute evidence."""
+  updateDispute(id: ID!, evidence: JSON, metadata: JSON, submit: Boolean): Dispute!
+
+  """Approve a Review (Radar)."""
+  approveReview(id: ID!): Review!
+}
+
+"""Result of a delete operation."""
+type DeleteResult {
+  id: ID!
+  object: String!
+  deleted: Boolean!
+}
