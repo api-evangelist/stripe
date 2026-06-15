@@ -1,0 +1,984 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Accounts API",
+    "version": "2023-10-16"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Retrieve Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/account",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves the details of an account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Account Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/account_links",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates an AccountLink object that includes a single-use Stripe URL that the platform can redirect their user to in order to take them through the Connect Onboarding flow.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Account Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/account_sessions",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a AccountSession object that includes a single-use token that the platform can use on their front-end to grant client-side API access.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>With <a href=\"/docs/connect\">Connect</a>, you can create Stripe accounts for your users.\nTo do this, youll first need to <a href=\"https://dashboard.stripe.com/account/applications/settings\">register your platform</a>.</p>\n\n<p>If youve already collected information for your connected accounts, you <a href=\"/docs/connect/best-practices#onboarding\">can prefill that information</a> when\ncreating the account. Connect Onboarding wont ask for the prefilled information during account onboarding.\nYou "
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves the details of an account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates a <a href=\"/docs/connect/accounts\">connected account</a> by setting the values of the parameters passed. Any parameters not provided are\nleft unchanged.</p>\n\n<p>For Custom accounts, you can update any information on the account. For other accounts, you can update all information until that\naccount has started to go through Connect Onboarding. Once you create an <a href=\"/docs/api/account_links\">Account Link</a>\nfor a Standard or Express account, some parameters can no longer be change"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>With <a href=\"/docs/connect\">Connect</a>, you can delete accounts you manage.</p>\n\n<p>Accounts created using test-mode keys can be deleted at any time. Standard accounts created using live-mode keys cannot be deleted. Custom or Express accounts created using live-mode keys can only be deleted once all balances are zero.</p>\n\n<p>If you want to delete your own account, use the <a href=\"https://dashboard.stripe.com/settings/account\">account information tab in your account settings</a> instead.</"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/bank_accounts",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Create an external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/bank_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieve a specified external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/bank_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href=\"/docs/connect/custom-accounts\">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>\n\n<p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Bank Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account/bank_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Delete a specified external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create External Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/external_accounts",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Create an external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve External Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/external_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieve a specified external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update External Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/external_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href=\"/docs/connect/custom-accounts\">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>\n\n<p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete External Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account/external_accounts/:id",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Delete a specified external account for a given account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Reject Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/reject",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>With <a href=\"/docs/connect\">Connect</a>, you may flag accounts as suspicious.</p>\n\n<p>Test-mode Custom and Express accounts can be rejected at any time. Accounts created using live-mode keys may only be rejected once all balances are zero.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts",
+            "params": [
+              {
+                "name": "created",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of accounts connected to your platform via <a href=\"/docs/connect\">Connect</a>. If youre not a platform, the list is empty.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List External Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/external_accounts",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "object",
+                "value": "",
+                "type": "query",
+                "description": "Filter external accounts according to a particular object type."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>List external accounts for an account.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Capabilities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Capabilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/capabilities",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of capabilities associated with the account. The capabilities are returned sorted by creation date, with the most recent capability appearing first.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Capability",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Retrieve Capability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/capabilities/:capability",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "capability",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves information about the specified Account Capability.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Capability",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/capabilities/:capability",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "capability",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates an existing Account Capability. Request or remove a capability by updating its <code>requested</code> parameter.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Create",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Login Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/login_links",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a single-use login link for an Express account to access their Stripe dashboard.</p>\n\n<p><strong>You may only create login links for <a href=\"/docs/connect/express-accounts\">Express accounts</a> connected to your platform</strong>.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/people",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a new person.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/persons",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a new person.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Lists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Persons",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/people",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "relationship",
+                "value": "",
+                "type": "query",
+                "description": "Filters on the list of people returned based on the person's relationship to the account's company."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of people associated with the accounts legal entity. The people are returned sorted by creation date, with the most recent people appearing first.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Persons",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/persons",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "relationship",
+                "value": "",
+                "type": "query",
+                "description": "Filters on the list of people returned based on the person's relationship to the account's company."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of people associated with the accounts legal entity. The people are returned sorted by creation date, with the most recent people appearing first.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Person",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Retrieve Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/people/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves an existing person.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/people/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates an existing person.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/persons/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves an existing person.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/persons/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates an existing person.</p>"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Delete",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Delete Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account/people/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Deletes an existing persons relationship to the accounts legal entity. Any person with a relationship for an account can be deleted through the API, except if the person is the <code>account_opener</code>. If your integration is using the <code>executive</code> parameter, you cannot delete the only verified <code>executive</code> on file.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Person",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account/persons/:person",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "person",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Deletes an existing persons relationship to the accounts legal entity. Any person with a relationship for an account can be deleted through the API, except if the person is the <code>account_opener</code>. If your integration is using the <code>executive</code> parameter, you cannot delete the only verified <code>executive</code> on file.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

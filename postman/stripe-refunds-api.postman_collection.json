@@ -1,0 +1,991 @@
+{
+  "info": {
+    "_postman_id": "610606e7-7ebd-48c8-ac28-8d4fe62ba74b",
+    "name": "Stripe Refunds API",
+    "description": "Refund objects allow you to refund a previously created charge that isn't refunded yet. Funds are refunded to the credit or debit card that's initially charged.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:22:28.000Z",
+    "updatedAt": "2026-06-05T13:22:28.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-610606e7-7ebd-48c8-ac28-8d4fe62ba74b"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "refunds",
+          "item": [
+            {
+              "name": "{refund}",
+              "item": [
+                {
+                  "name": "cancel",
+                  "item": [
+                    {
+                      "name": "Stripe Cancel Refund",
+                      "id": "bd289a57-cf81-4bc2-a390-25543b018d6c",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/refunds/:refund/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "refunds",
+                            ":refund",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "id": "3ae4cabe-2f1a-48b3-9289-ad0db4cd2632",
+                              "key": "refund",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Cancels a refund with a status of requires_action.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "441fc629-6063-450a-b561-b8cf759e7832",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/refunds/:refund/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "refunds",
+                                ":refund",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "refund"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"refund\",\n  \"amount\": \"<integer>\",\n  \"created\": \"<integer>\",\n  \"currency\": \"<string>\",\n  \"metadata\": {\n    \"ullamcoe\": \"<string>\",\n    \"officiaa_0\": \"<string>\",\n    \"in96\": \"<string>\",\n    \"Excepteur_5\": \"<string>\"\n  },\n  \"balance_transaction\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"failure_balance_transaction\": \"<string,null>\",\n  \"failure_reason\": \"<string,null>\",\n  \"payment_intent\": \"<string,null>\",\n  \"reason\": \"expired_uncaptured_charge\",\n  \"receipt_number\": \"<string,null>\",\n  \"source_transfer_reversal\": \"<string,null>\",\n  \"status\": \"<string,null>\",\n  \"transfer_reversal\": \"<string,null>\"\n}",
+                          "createdAt": "2026-06-05T13:22:28.000Z",
+                          "updatedAt": "2026-06-05T13:22:28.000Z",
+                          "uid": "35240-441fc629-6063-450a-b561-b8cf759e7832"
+                        },
+                        {
+                          "id": "88e41bae-12cf-4a39-bbaa-9b0f9b2651e3",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/refunds/:refund/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "refunds",
+                                ":refund",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "refund"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:28.000Z",
+                          "updatedAt": "2026-06-05T13:22:28.000Z",
+                          "uid": "35240-88e41bae-12cf-4a39-bbaa-9b0f9b2651e3"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:28.000Z",
+                      "updatedAt": "2026-06-05T13:22:28.000Z",
+                      "uid": "35240-bd289a57-cf81-4bc2-a390-25543b018d6c"
+                    }
+                  ],
+                  "id": "61e62872-f7bf-4e11-a642-929a274c1fe2",
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-61e62872-f7bf-4e11-a642-929a274c1fe2"
+                },
+                {
+                  "name": "Stripe Retrieve Refund",
+                  "id": "356625d4-9d1e-4508-9424-8dd4794d6adf",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds/:refund?expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds",
+                        ":refund"
+                      ],
+                      "query": [
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "cfdd9bf0-a5c6-4b1e-9301-69135e982d4f",
+                          "key": "refund",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieves the details of an existing refund.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "96d3903c-a31c-4681-846e-17836fdc1447",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/refunds/:refund?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "refunds",
+                            ":refund"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "refund"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"refund\",\n  \"amount\": \"<integer>\",\n  \"created\": \"<integer>\",\n  \"currency\": \"<string>\",\n  \"metadata\": {\n    \"ullamcoe\": \"<string>\",\n    \"officiaa_0\": \"<string>\",\n    \"in96\": \"<string>\",\n    \"Excepteur_5\": \"<string>\"\n  },\n  \"balance_transaction\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"failure_balance_transaction\": \"<string,null>\",\n  \"failure_reason\": \"<string,null>\",\n  \"payment_intent\": \"<string,null>\",\n  \"reason\": \"expired_uncaptured_charge\",\n  \"receipt_number\": \"<string,null>\",\n  \"source_transfer_reversal\": \"<string,null>\",\n  \"status\": \"<string,null>\",\n  \"transfer_reversal\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:22:28.000Z",
+                      "updatedAt": "2026-06-05T13:22:28.000Z",
+                      "uid": "35240-96d3903c-a31c-4681-846e-17836fdc1447"
+                    },
+                    {
+                      "id": "08d2d41f-4c2d-47e0-9102-d30d0ff2b248",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/refunds/:refund?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "refunds",
+                            ":refund"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "refund"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:28.000Z",
+                      "updatedAt": "2026-06-05T13:22:28.000Z",
+                      "uid": "35240-08d2d41f-4c2d-47e0-9102-d30d0ff2b248"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-356625d4-9d1e-4508-9424-8dd4794d6adf"
+                },
+                {
+                  "name": "Stripe Update Refund",
+                  "id": "47e138c1-80aa-4f22-a6e4-df5c4fbb70dc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "consequat_4_",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds/:refund",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds",
+                        ":refund"
+                      ],
+                      "variable": [
+                        {
+                          "id": "84746305-b8ac-4d0c-9e08-f48a33bb620f",
+                          "key": "refund",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Updates the refund that you specify by setting the values of the parameters that you pass.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "c2c26ae6-6e89-41a9-a3c8-50863f5692e4",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "consequat_4_",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/refunds/:refund",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "refunds",
+                            ":refund"
+                          ],
+                          "variable": [
+                            {
+                              "key": "refund"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"refund\",\n  \"amount\": \"<integer>\",\n  \"created\": \"<integer>\",\n  \"currency\": \"<string>\",\n  \"metadata\": {\n    \"ullamcoe\": \"<string>\",\n    \"officiaa_0\": \"<string>\",\n    \"in96\": \"<string>\",\n    \"Excepteur_5\": \"<string>\"\n  },\n  \"balance_transaction\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"failure_balance_transaction\": \"<string,null>\",\n  \"failure_reason\": \"<string,null>\",\n  \"payment_intent\": \"<string,null>\",\n  \"reason\": \"expired_uncaptured_charge\",\n  \"receipt_number\": \"<string,null>\",\n  \"source_transfer_reversal\": \"<string,null>\",\n  \"status\": \"<string,null>\",\n  \"transfer_reversal\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:22:28.000Z",
+                      "updatedAt": "2026-06-05T13:22:28.000Z",
+                      "uid": "35240-c2c26ae6-6e89-41a9-a3c8-50863f5692e4"
+                    },
+                    {
+                      "id": "9caee301-d7eb-44f5-a94f-ec58a0ef25ee",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "consequat_4_",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/refunds/:refund",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "refunds",
+                            ":refund"
+                          ],
+                          "variable": [
+                            {
+                              "key": "refund"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:28.000Z",
+                      "updatedAt": "2026-06-05T13:22:28.000Z",
+                      "uid": "35240-9caee301-d7eb-44f5-a94f-ec58a0ef25ee"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-47e138c1-80aa-4f22-a6e4-df5c4fbb70dc"
+                }
+              ],
+              "id": "151ec2de-66a9-4367-aa2d-d902215115a2",
+              "createdAt": "2026-06-05T13:22:28.000Z",
+              "updatedAt": "2026-06-05T13:22:28.000Z",
+              "uid": "35240-151ec2de-66a9-4367-aa2d-d902215115a2"
+            },
+            {
+              "name": "Stripe List Refunds",
+              "id": "35bff99b-2ff3-4c72-b3cc-ba23a3fcac70",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/refunds?charge=<string>&payment_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "refunds"
+                  ],
+                  "query": [
+                    {
+                      "description": "Only return refunds for the charge specified by this charge ID.",
+                      "key": "charge",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Only return refunds for the PaymentIntent specified by this ID.",
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<Error: Not supported in OAS>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of all refunds you created.</p>"
+              },
+              "response": [
+                {
+                  "id": "4cc0ecb2-c31d-447e-8df4-76d667d12b3b",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds?charge=<string>&payment_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return refunds for the charge specified by this charge ID.",
+                          "key": "charge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only return refunds for the PaymentIntent specified by this ID.",
+                          "key": "payment_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"refund\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"metadata\": {\n        \"Lorem81b\": \"<string>\"\n      },\n      \"balance_transaction\": \"<string,null>\",\n      \"charge\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"failure_balance_transaction\": \"<string,null>\",\n      \"failure_reason\": \"<string,null>\",\n      \"payment_intent\": \"<string,null>\",\n      \"reason\": \"requested_by_customer\",\n      \"receipt_number\": \"<string,null>\",\n      \"source_transfer_reversal\": \"<string,null>\",\n      \"status\": \"<string,null>\",\n      \"transfer_reversal\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"refund\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"metadata\": {\n        \"Ut_e59\": \"<string>\",\n        \"nostrud4\": \"<string>\"\n      },\n      \"balance_transaction\": \"<string,null>\",\n      \"charge\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"failure_balance_transaction\": \"<string,null>\",\n      \"failure_reason\": \"<string,null>\",\n      \"payment_intent\": \"<string,null>\",\n      \"reason\": \"duplicate\",\n      \"receipt_number\": \"<string,null>\",\n      \"source_transfer_reversal\": \"<string,null>\",\n      \"status\": \"<string,null>\",\n      \"transfer_reversal\": \"<string,null>\"\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-4cc0ecb2-c31d-447e-8df4-76d667d12b3b"
+                },
+                {
+                  "id": "fe95eb27-ec4f-41c4-8acd-a965db3f9e6d",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds?charge=<string>&payment_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return refunds for the charge specified by this charge ID.",
+                          "key": "charge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only return refunds for the PaymentIntent specified by this ID.",
+                          "key": "payment_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-fe95eb27-ec4f-41c4-8acd-a965db3f9e6d"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:28.000Z",
+              "updatedAt": "2026-06-05T13:22:28.000Z",
+              "uid": "35240-35bff99b-2ff3-4c72-b3cc-ba23a3fcac70"
+            },
+            {
+              "name": "Stripe Create Refund",
+              "id": "4deada8f-f71f-46b5-864e-3cf4752e1cfc",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "description": "The identifier of the charge to refund.",
+                      "key": "charge",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "ID of the PaymentIntent to refund.",
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "A positive integer in cents representing how much to refund.",
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The reason for the refund.",
+                      "key": "reason",
+                      "value": "duplicate"
+                    },
+                    {
+                      "key": "velit72",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reverse_transfer",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "refund_application_fee",
+                      "value": "<boolean>"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/refunds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "refunds"
+                  ]
+                },
+                "description": "<p>When you create a new refund, you must specify a Charge or PaymentIntent object on which to create it.</p>"
+              },
+              "response": [
+                {
+                  "id": "b661bea7-c0e1-47e1-8d90-27d1a9078c2d",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The identifier of the charge to refund.",
+                          "key": "charge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "ID of the PaymentIntent to refund.",
+                          "key": "payment_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A positive integer in cents representing how much to refund.",
+                          "key": "amount",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The reason for the refund.",
+                          "key": "reason",
+                          "value": "duplicate"
+                        },
+                        {
+                          "key": "velit72",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "reverse_transfer",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "refund_application_fee",
+                          "value": "<boolean>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"refund\",\n  \"amount\": \"<integer>\",\n  \"created\": \"<integer>\",\n  \"currency\": \"<string>\",\n  \"metadata\": {\n    \"ullamcoe\": \"<string>\",\n    \"officiaa_0\": \"<string>\",\n    \"in96\": \"<string>\",\n    \"Excepteur_5\": \"<string>\"\n  },\n  \"balance_transaction\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"failure_balance_transaction\": \"<string,null>\",\n  \"failure_reason\": \"<string,null>\",\n  \"payment_intent\": \"<string,null>\",\n  \"reason\": \"expired_uncaptured_charge\",\n  \"receipt_number\": \"<string,null>\",\n  \"source_transfer_reversal\": \"<string,null>\",\n  \"status\": \"<string,null>\",\n  \"transfer_reversal\": \"<string,null>\"\n}",
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-b661bea7-c0e1-47e1-8d90-27d1a9078c2d"
+                },
+                {
+                  "id": "bef62fb2-8173-4c42-b754-aa37dab34d8b",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The identifier of the charge to refund.",
+                          "key": "charge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "ID of the PaymentIntent to refund.",
+                          "key": "payment_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A positive integer in cents representing how much to refund.",
+                          "key": "amount",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The reason for the refund.",
+                          "key": "reason",
+                          "value": "duplicate"
+                        },
+                        {
+                          "key": "velit72",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "reverse_transfer",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "refund_application_fee",
+                          "value": "<boolean>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/refunds",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "refunds"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:28.000Z",
+                  "updatedAt": "2026-06-05T13:22:28.000Z",
+                  "uid": "35240-bef62fb2-8173-4c42-b754-aa37dab34d8b"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:28.000Z",
+              "updatedAt": "2026-06-05T13:22:28.000Z",
+              "uid": "35240-4deada8f-f71f-46b5-864e-3cf4752e1cfc"
+            }
+          ],
+          "id": "1e7862a5-f7e1-4337-9871-eadb4617f309",
+          "createdAt": "2026-06-05T13:22:28.000Z",
+          "updatedAt": "2026-06-05T13:22:28.000Z",
+          "uid": "35240-1e7862a5-f7e1-4337-9871-eadb4617f309"
+        }
+      ],
+      "id": "0270c215-2e49-4078-803c-20c37c677bae",
+      "createdAt": "2026-06-05T13:22:28.000Z",
+      "updatedAt": "2026-06-05T13:22:28.000Z",
+      "uid": "35240-0270c215-2e49-4078-803c-20c37c677bae"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

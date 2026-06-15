@@ -1,0 +1,1594 @@
+{
+  "info": {
+    "_postman_id": "153494bf-ac22-4a03-aab0-b02b61d37033",
+    "name": "Stripe Billing Meters API",
+    "description": "Meters specify how to aggregate meter events over a billing period for usage-based pricing. Meter events represent customer actions and support up to 10,000 events per second via the V2 meter event streams API.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:24:47.000Z",
+    "updatedAt": "2026-06-05T13:24:48.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-153494bf-ac22-4a03-aab0-b02b61d37033"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "billing",
+          "item": [
+            {
+              "name": "meters",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "deactivate",
+                      "item": [
+                        {
+                          "name": "Stripe Deactivate Billing Meter",
+                          "id": "0ea1af6c-fe95-4912-89e1-f882a183e9ec",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id/deactivate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id",
+                                "deactivate"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "c87e1fb1-84b5-4889-9675-7f67a6677080",
+                                  "key": "id",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                }
+                              ]
+                            },
+                            "description": "<p>Deactivates a billing meter.</p>"
+                          },
+                          "response": [
+                            {
+                              "id": "fb059fa0-5dcd-4a15-b7e6-c34f66ffe32f",
+                              "name": "Successful response.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing.meter\",\n  \"created\": \"<integer>\",\n  \"customer_mapping\": {\n    \"event_payload_key\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"default_aggregation\": {\n    \"formula\": \"count\"\n  },\n  \"display_name\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"active\",\n  \"status_transitions\": {\n    \"deactivated_at\": \"<integer,null>\"\n  },\n  \"updated\": \"<integer>\",\n  \"event_time_window\": \"<string,null>\",\n  \"value_settings\": null\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-fb059fa0-5dcd-4a15-b7e6-c34f66ffe32f"
+                            },
+                            {
+                              "id": "12c2040f-9b9e-4166-a47f-b055e83ff7db",
+                              "name": "Error response.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/deactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "deactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-12c2040f-9b9e-4166-a47f-b055e83ff7db"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-0ea1af6c-fe95-4912-89e1-f882a183e9ec"
+                        }
+                      ],
+                      "id": "190ad681-1a7b-4a6e-a1ae-e4dab1cdd9c3",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-190ad681-1a7b-4a6e-a1ae-e4dab1cdd9c3"
+                    },
+                    {
+                      "name": "reactivate",
+                      "item": [
+                        {
+                          "name": "Stripe Reactivate Billing Meter",
+                          "id": "4ecb6ee1-4115-46fa-a8ce-65db8ba9e8e0",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id/reactivate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id",
+                                "reactivate"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "34d91b17-3be4-4ad5-a0a1-ac3aaeb58dbd",
+                                  "key": "id",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                }
+                              ]
+                            },
+                            "description": "<p>Reactivates a billing meter.</p>"
+                          },
+                          "response": [
+                            {
+                              "id": "4998f60e-a68e-4809-8e3c-a684eaeec822",
+                              "name": "Successful response.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/reactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "reactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing.meter\",\n  \"created\": \"<integer>\",\n  \"customer_mapping\": {\n    \"event_payload_key\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"default_aggregation\": {\n    \"formula\": \"count\"\n  },\n  \"display_name\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"active\",\n  \"status_transitions\": {\n    \"deactivated_at\": \"<integer,null>\"\n  },\n  \"updated\": \"<integer>\",\n  \"event_time_window\": \"<string,null>\",\n  \"value_settings\": null\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-4998f60e-a68e-4809-8e3c-a684eaeec822"
+                            },
+                            {
+                              "id": "bcec3ab3-0dd5-44d5-85c8-b1506a4a1978",
+                              "name": "Error response.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/reactivate",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "reactivate"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-bcec3ab3-0dd5-44d5-85c8-b1506a4a1978"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-4ecb6ee1-4115-46fa-a8ce-65db8ba9e8e0"
+                        }
+                      ],
+                      "id": "bf95fec8-466a-4789-b5c1-ea47e8a3e720",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-bf95fec8-466a-4789-b5c1-ea47e8a3e720"
+                    },
+                    {
+                      "name": "event_summaries",
+                      "item": [
+                        {
+                          "name": "Stripe List Meter Event Summaries",
+                          "id": "08b6c52a-aaa3-4df5-92c0-6bc1c0f78511",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id/event_summaries?customer=<string>&start_time=<integer>&end_time=<integer>&value_grouping_window=hour&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id",
+                                "event_summaries"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) ",
+                                  "key": "customer",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "(Required) ",
+                                  "key": "start_time",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "(Required) ",
+                                  "key": "end_time",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "value_grouping_window",
+                                  "value": "hour"
+                                },
+                                {
+                                  "key": "ending_before",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "starting_after",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "id": "4d27f2d5-2b2c-48d5-8f58-566a52d8b375",
+                                  "key": "id",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                }
+                              ]
+                            },
+                            "description": "<p>Retrieve a list of billing meter event summaries.</p>"
+                          },
+                          "response": [
+                            {
+                              "id": "4581c6d7-d5d3-4a48-b5a1-8a72c5f2ba14",
+                              "name": "Successful response.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/event_summaries?customer=<string>&start_time=<integer>&end_time=<integer>&value_grouping_window=hour&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "event_summaries"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "customer",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "start_time",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "end_time",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "key": "value_grouping_window",
+                                      "value": "hour"
+                                    },
+                                    {
+                                      "key": "ending_before",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "limit",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "key": "starting_after",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing.meter_event_summary\",\n      \"aggregated_value\": \"<number>\",\n      \"end_time\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"meter\": \"<string>\",\n      \"start_time\": \"<integer>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing.meter_event_summary\",\n      \"aggregated_value\": \"<number>\",\n      \"end_time\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"meter\": \"<string>\",\n      \"start_time\": \"<integer>\"\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-4581c6d7-d5d3-4a48-b5a1-8a72c5f2ba14"
+                            },
+                            {
+                              "id": "42dffc51-69df-4736-be31-185a2a1c5afc",
+                              "name": "Error response.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/billing/meters/:id/event_summaries?customer=<string>&start_time=<integer>&end_time=<integer>&value_grouping_window=hour&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "billing",
+                                    "meters",
+                                    ":id",
+                                    "event_summaries"
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "customer",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "start_time",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "description": "(Required) ",
+                                      "key": "end_time",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "key": "value_grouping_window",
+                                      "value": "hour"
+                                    },
+                                    {
+                                      "key": "ending_before",
+                                      "value": "<string>"
+                                    },
+                                    {
+                                      "key": "limit",
+                                      "value": "<integer>"
+                                    },
+                                    {
+                                      "key": "starting_after",
+                                      "value": "<string>"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-06-05T13:24:48.000Z",
+                              "updatedAt": "2026-06-05T13:24:48.000Z",
+                              "uid": "35240-42dffc51-69df-4736-be31-185a2a1c5afc"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-08b6c52a-aaa3-4df5-92c0-6bc1c0f78511"
+                        }
+                      ],
+                      "id": "5a76f361-b94e-4138-b386-64c89451acda",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-5a76f361-b94e-4138-b386-64c89451acda"
+                    },
+                    {
+                      "name": "Stripe Retrieve Billing Meter",
+                      "id": "900f137a-4ca4-4283-a789-9ec39f758325",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "id": "a46d02f1-af94-4445-b97b-4d49d4238377",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Retrieves a billing meter given an ID.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "7930b7b6-5ea5-460d-92c3-6863dbe7050c",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing.meter\",\n  \"created\": \"<integer>\",\n  \"customer_mapping\": {\n    \"event_payload_key\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"default_aggregation\": {\n    \"formula\": \"count\"\n  },\n  \"display_name\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"active\",\n  \"status_transitions\": {\n    \"deactivated_at\": \"<integer,null>\"\n  },\n  \"updated\": \"<integer>\",\n  \"event_time_window\": \"<string,null>\",\n  \"value_settings\": null\n}",
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-7930b7b6-5ea5-460d-92c3-6863dbe7050c"
+                        },
+                        {
+                          "id": "48396685-54f4-4bdf-8bbd-6d44409f141d",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-48396685-54f4-4bdf-8bbd-6d44409f141d"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-900f137a-4ca4-4283-a789-9ec39f758325"
+                    },
+                    {
+                      "name": "Stripe Update Billing Meter",
+                      "id": "988e5871-61b3-433d-84c6-5680c3faea6d",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "display_name",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "id": "822a3335-7271-4c94-be97-f879342e1e19",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Updates a billing meter.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "96196c4e-91c5-4aef-905f-6975f13eae83",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "display_name",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing.meter\",\n  \"created\": \"<integer>\",\n  \"customer_mapping\": {\n    \"event_payload_key\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"default_aggregation\": {\n    \"formula\": \"count\"\n  },\n  \"display_name\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"active\",\n  \"status_transitions\": {\n    \"deactivated_at\": \"<integer,null>\"\n  },\n  \"updated\": \"<integer>\",\n  \"event_time_window\": \"<string,null>\",\n  \"value_settings\": null\n}",
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-96196c4e-91c5-4aef-905f-6975f13eae83"
+                        },
+                        {
+                          "id": "383a2e7c-c0ab-4f42-b91e-060b84f606a2",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "display_name",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing/meters/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing",
+                                "meters",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:24:48.000Z",
+                          "updatedAt": "2026-06-05T13:24:48.000Z",
+                          "uid": "35240-383a2e7c-c0ab-4f42-b91e-060b84f606a2"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-988e5871-61b3-433d-84c6-5680c3faea6d"
+                    }
+                  ],
+                  "id": "cb4d1034-812d-4448-82de-8b94e34f29fe",
+                  "createdAt": "2026-06-05T13:24:48.000Z",
+                  "updatedAt": "2026-06-05T13:24:48.000Z",
+                  "uid": "35240-cb4d1034-812d-4448-82de-8b94e34f29fe"
+                },
+                {
+                  "name": "Stripe List Billing Meters",
+                  "id": "05b3ad6f-4fe2-487c-8e5a-c7eec25dc7ae",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing/meters?status=active&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing",
+                        "meters"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter meters by status.",
+                          "key": "status",
+                          "value": "active"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieve a list of billing meters.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "5a937650-689e-4371-ab17-8ed0ea96dac2",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters?status=active&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter meters by status.",
+                              "key": "status",
+                              "value": "active"
+                            },
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing.meter\",\n      \"created\": \"<integer>\",\n      \"customer_mapping\": {\n        \"event_payload_key\": \"<string>\",\n        \"type\": \"<string>\"\n      },\n      \"default_aggregation\": {\n        \"formula\": \"sum\"\n      },\n      \"display_name\": \"<string>\",\n      \"event_name\": \"<string>\",\n      \"livemode\": \"<boolean>\",\n      \"status\": \"active\",\n      \"status_transitions\": {\n        \"deactivated_at\": \"<integer,null>\"\n      },\n      \"updated\": \"<integer>\",\n      \"event_time_window\": \"<string,null>\",\n      \"value_settings\": {}\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing.meter\",\n      \"created\": \"<integer>\",\n      \"customer_mapping\": {\n        \"event_payload_key\": \"<string>\",\n        \"type\": \"<string>\"\n      },\n      \"default_aggregation\": {\n        \"formula\": \"sum\"\n      },\n      \"display_name\": \"<string>\",\n      \"event_name\": \"<string>\",\n      \"livemode\": \"<boolean>\",\n      \"status\": \"inactive\",\n      \"status_transitions\": {\n        \"deactivated_at\": \"<integer,null>\"\n      },\n      \"updated\": \"<integer>\",\n      \"event_time_window\": \"<string,null>\",\n      \"value_settings\": null\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-5a937650-689e-4371-ab17-8ed0ea96dac2"
+                    },
+                    {
+                      "id": "40b272c7-4091-4009-bb06-f22269d17d06",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters?status=active&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter meters by status.",
+                              "key": "status",
+                              "value": "active"
+                            },
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-40b272c7-4091-4009-bb06-f22269d17d06"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:48.000Z",
+                  "updatedAt": "2026-06-05T13:24:48.000Z",
+                  "uid": "35240-05b3ad6f-4fe2-487c-8e5a-c7eec25dc7ae"
+                },
+                {
+                  "name": "Stripe Create Billing Meter",
+                  "id": "05f78058-e618-41b9-a30a-632daa0430b7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) ",
+                          "key": "formula",
+                          "value": "count"
+                        },
+                        {
+                          "description": "(Required) The meter's name.",
+                          "key": "display_name",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The name of the meter event to record usage for.",
+                          "key": "event_name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "event_payload_key",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "type",
+                          "value": "by_id"
+                        },
+                        {
+                          "key": "event_payload_key",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing/meters",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing",
+                        "meters"
+                      ]
+                    },
+                    "description": "<p>Creates a billing meter.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "52ef5b02-e76a-4fb3-b8fc-1a2101cfe155",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) ",
+                              "key": "formula",
+                              "value": "count"
+                            },
+                            {
+                              "description": "(Required) The meter's name.",
+                              "key": "display_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The name of the meter event to record usage for.",
+                              "key": "event_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "event_payload_key",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "type",
+                              "value": "by_id"
+                            },
+                            {
+                              "key": "event_payload_key",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing.meter\",\n  \"created\": \"<integer>\",\n  \"customer_mapping\": {\n    \"event_payload_key\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"default_aggregation\": {\n    \"formula\": \"count\"\n  },\n  \"display_name\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"active\",\n  \"status_transitions\": {\n    \"deactivated_at\": \"<integer,null>\"\n  },\n  \"updated\": \"<integer>\",\n  \"event_time_window\": \"<string,null>\",\n  \"value_settings\": null\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-52ef5b02-e76a-4fb3-b8fc-1a2101cfe155"
+                    },
+                    {
+                      "id": "e687f86d-6121-4874-b0e0-f810297dff6f",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) ",
+                              "key": "formula",
+                              "value": "count"
+                            },
+                            {
+                              "description": "(Required) The meter's name.",
+                              "key": "display_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The name of the meter event to record usage for.",
+                              "key": "event_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "event_payload_key",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "type",
+                              "value": "by_id"
+                            },
+                            {
+                              "key": "event_payload_key",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meters",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meters"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-e687f86d-6121-4874-b0e0-f810297dff6f"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:48.000Z",
+                  "updatedAt": "2026-06-05T13:24:48.000Z",
+                  "uid": "35240-05f78058-e618-41b9-a30a-632daa0430b7"
+                }
+              ],
+              "id": "c8f524b9-42b7-4150-92a2-931da63c0d44",
+              "createdAt": "2026-06-05T13:24:48.000Z",
+              "updatedAt": "2026-06-05T13:24:48.000Z",
+              "uid": "35240-c8f524b9-42b7-4150-92a2-931da63c0d44"
+            },
+            {
+              "name": "meter_events",
+              "item": [
+                {
+                  "name": "Stripe Create Meter Event",
+                  "id": "2c08f8dc-7fcd-48b3-9a50-553129e7826b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The name of the meter event.",
+                          "key": "event_name",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The payload of the event.",
+                          "key": "elit_568",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The payload of the event.",
+                          "key": "laborum_e",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The time of the event. Defaults to current timestamp.",
+                          "key": "timestamp",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A unique identifier for the event.",
+                          "key": "identifier",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing/meter_events",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing",
+                        "meter_events"
+                      ]
+                    },
+                    "description": "<p>Creates a billing meter event.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "819a80e2-7f7f-47a4-9ac4-5568f1a54c63",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The name of the meter event.",
+                              "key": "event_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The payload of the event.",
+                              "key": "elit_568",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The payload of the event.",
+                              "key": "laborum_e",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The time of the event. Defaults to current timestamp.",
+                              "key": "timestamp",
+                              "value": "<integer>"
+                            },
+                            {
+                              "description": "A unique identifier for the event.",
+                              "key": "identifier",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meter_events",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meter_events"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"object\": \"billing.meter_event\",\n  \"created\": \"<integer>\",\n  \"event_name\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"payload\": {\n    \"ex01\": \"<string>\",\n    \"consectetur_a4\": \"<string>\",\n    \"officiaa1\": \"<string>\",\n    \"aliquip8\": \"<string>\"\n  },\n  \"timestamp\": \"<integer>\",\n  \"identifier\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-819a80e2-7f7f-47a4-9ac4-5568f1a54c63"
+                    },
+                    {
+                      "id": "5be4d13c-7481-4825-8904-1fe6b0311889",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The name of the meter event.",
+                              "key": "event_name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The payload of the event.",
+                              "key": "elit_568",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) The payload of the event.",
+                              "key": "laborum_e",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The time of the event. Defaults to current timestamp.",
+                              "key": "timestamp",
+                              "value": "<integer>"
+                            },
+                            {
+                              "description": "A unique identifier for the event.",
+                              "key": "identifier",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing/meter_events",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing",
+                            "meter_events"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:48.000Z",
+                      "updatedAt": "2026-06-05T13:24:48.000Z",
+                      "uid": "35240-5be4d13c-7481-4825-8904-1fe6b0311889"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:48.000Z",
+                  "updatedAt": "2026-06-05T13:24:48.000Z",
+                  "uid": "35240-2c08f8dc-7fcd-48b3-9a50-553129e7826b"
+                }
+              ],
+              "id": "ee3bb75a-ecbc-472b-8cdd-21e7100b7a45",
+              "createdAt": "2026-06-05T13:24:48.000Z",
+              "updatedAt": "2026-06-05T13:24:48.000Z",
+              "uid": "35240-ee3bb75a-ecbc-472b-8cdd-21e7100b7a45"
+            }
+          ],
+          "id": "fce7e601-de5c-4936-9dbe-ac2d21eb8b87",
+          "createdAt": "2026-06-05T13:24:48.000Z",
+          "updatedAt": "2026-06-05T13:24:48.000Z",
+          "uid": "35240-fce7e601-de5c-4936-9dbe-ac2d21eb8b87"
+        }
+      ],
+      "id": "1843d2a5-728e-452e-a637-951b04de82e0",
+      "createdAt": "2026-06-05T13:24:48.000Z",
+      "updatedAt": "2026-06-05T13:24:48.000Z",
+      "uid": "35240-1843d2a5-728e-452e-a637-951b04de82e0"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

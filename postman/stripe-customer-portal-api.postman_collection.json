@@ -1,0 +1,1189 @@
+{
+  "info": {
+    "_postman_id": "3cb9e58c-1688-4cf8-8d5d-b047989e5ab5",
+    "name": "Stripe Customer Portal API",
+    "description": "The Billing customer portal is a Stripe-hosted UI for subscription and billing management. A portal session describes the instantiation of the customer portal for a particular customer.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:24:42.000Z",
+    "updatedAt": "2026-06-05T13:24:43.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-3cb9e58c-1688-4cf8-8d5d-b047989e5ab5"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "billing_portal",
+          "item": [
+            {
+              "name": "sessions",
+              "item": [
+                {
+                  "name": "Stripe Create Portal Session",
+                  "id": "afcd44ce-d0fc-4a81-be82-443fa6f0b100",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The ID of an existing customer.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The ID of an existing portal configuration to use.",
+                          "key": "configuration",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The URL to redirect the customer to after they are done in the portal.",
+                          "key": "return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "type",
+                          "value": "payment_method_update"
+                        },
+                        {
+                          "key": "subscription_cancel",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "subscription_update",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "subscription_update_confirm",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "locale",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "on_behalf_of",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing_portal/sessions",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing_portal",
+                        "sessions"
+                      ]
+                    },
+                    "description": "<p>Creates a session of the customer portal.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "9263bc51-6af3-47cc-a846-b6ccc1ebd76d",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The ID of an existing customer.",
+                              "key": "customer",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The ID of an existing portal configuration to use.",
+                              "key": "configuration",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The URL to redirect the customer to after they are done in the portal.",
+                              "key": "return_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "type",
+                              "value": "payment_method_update"
+                            },
+                            {
+                              "key": "subscription_cancel",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "subscription_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "subscription_update_confirm",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "locale",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "on_behalf_of",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/sessions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "sessions"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing_portal.session\",\n  \"configuration\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"customer\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"url\": \"<string>\",\n  \"flow\": null,\n  \"locale\": \"<string,null>\",\n  \"on_behalf_of\": \"<string,null>\",\n  \"return_url\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-9263bc51-6af3-47cc-a846-b6ccc1ebd76d"
+                    },
+                    {
+                      "id": "0cc39ba2-34a8-4def-9165-a7188416ff23",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The ID of an existing customer.",
+                              "key": "customer",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The ID of an existing portal configuration to use.",
+                              "key": "configuration",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The URL to redirect the customer to after they are done in the portal.",
+                              "key": "return_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "type",
+                              "value": "payment_method_update"
+                            },
+                            {
+                              "key": "subscription_cancel",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "subscription_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "subscription_update_confirm",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "locale",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "on_behalf_of",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/sessions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "sessions"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-0cc39ba2-34a8-4def-9165-a7188416ff23"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:43.000Z",
+                  "updatedAt": "2026-06-05T13:24:43.000Z",
+                  "uid": "35240-afcd44ce-d0fc-4a81-be82-443fa6f0b100"
+                }
+              ],
+              "id": "f6115227-2b2e-4347-b1f1-f403e84b0781",
+              "createdAt": "2026-06-05T13:24:43.000Z",
+              "updatedAt": "2026-06-05T13:24:43.000Z",
+              "uid": "35240-f6115227-2b2e-4347-b1f1-f403e84b0781"
+            },
+            {
+              "name": "configurations",
+              "item": [
+                {
+                  "name": "{configuration}",
+                  "item": [
+                    {
+                      "name": "Stripe Retrieve Portal Configuration",
+                      "id": "b838b265-4c86-45c9-9f20-85bfb6c7caec",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "id": "e393e737-6734-4ed9-b1c1-0ef8fb4e9ed9",
+                              "key": "configuration",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Retrieves a portal configuration.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "8336c19f-6011-492d-ba83-5deee719dde6",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing_portal",
+                                "configurations",
+                                ":configuration"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "configuration"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing_portal.configuration\",\n  \"active\": \"<boolean>\",\n  \"business_profile\": {},\n  \"created\": \"<integer>\",\n  \"features\": {},\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"updated\": \"<integer>\",\n  \"application\": \"<string,null>\",\n  \"default_return_url\": \"<string,null>\",\n  \"metadata\": null\n}",
+                          "createdAt": "2026-06-05T13:24:43.000Z",
+                          "updatedAt": "2026-06-05T13:24:43.000Z",
+                          "uid": "35240-8336c19f-6011-492d-ba83-5deee719dde6"
+                        },
+                        {
+                          "id": "fa02ce2c-6120-497f-bbcf-99defb9accac",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing_portal",
+                                "configurations",
+                                ":configuration"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "configuration"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:24:43.000Z",
+                          "updatedAt": "2026-06-05T13:24:43.000Z",
+                          "uid": "35240-fa02ce2c-6120-497f-bbcf-99defb9accac"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-b838b265-4c86-45c9-9f20-85bfb6c7caec"
+                    },
+                    {
+                      "name": "Stripe Update Portal Configuration",
+                      "id": "3bca1500-22d8-4a5b-be22-31dd72aca18b",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "active",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "key": "default_return_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "temporc6",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "nulla_d",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "id": "a17659c6-b5cb-4be2-a55d-fa32d8c4d4ea",
+                              "key": "configuration",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Updates a portal configuration.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "83b5dc80-ff1e-4c62-a2c0-c828a6f76d45",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "active",
+                                  "value": "<boolean>"
+                                },
+                                {
+                                  "key": "default_return_url",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "temporc6",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "nulla_d",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing_portal",
+                                "configurations",
+                                ":configuration"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "configuration"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing_portal.configuration\",\n  \"active\": \"<boolean>\",\n  \"business_profile\": {},\n  \"created\": \"<integer>\",\n  \"features\": {},\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"updated\": \"<integer>\",\n  \"application\": \"<string,null>\",\n  \"default_return_url\": \"<string,null>\",\n  \"metadata\": null\n}",
+                          "createdAt": "2026-06-05T13:24:43.000Z",
+                          "updatedAt": "2026-06-05T13:24:43.000Z",
+                          "uid": "35240-83b5dc80-ff1e-4c62-a2c0-c828a6f76d45"
+                        },
+                        {
+                          "id": "d9cc5c59-aaae-43d6-ad1c-c3b679c8ec2d",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "active",
+                                  "value": "<boolean>"
+                                },
+                                {
+                                  "key": "default_return_url",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "temporc6",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "nulla_d",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/billing_portal/configurations/:configuration",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "billing_portal",
+                                "configurations",
+                                ":configuration"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "configuration"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:24:43.000Z",
+                          "updatedAt": "2026-06-05T13:24:43.000Z",
+                          "uid": "35240-d9cc5c59-aaae-43d6-ad1c-c3b679c8ec2d"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-3bca1500-22d8-4a5b-be22-31dd72aca18b"
+                    }
+                  ],
+                  "id": "dec6ed01-ba38-461a-9147-8ac8d704e24f",
+                  "createdAt": "2026-06-05T13:24:43.000Z",
+                  "updatedAt": "2026-06-05T13:24:43.000Z",
+                  "uid": "35240-dec6ed01-ba38-461a-9147-8ac8d704e24f"
+                },
+                {
+                  "name": "Stripe List Portal Configurations",
+                  "id": "05cf9a44-145b-4dc8-b00e-83e1c79965d7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing_portal/configurations?active=<boolean>&is_default=<boolean>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing_portal",
+                        "configurations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return configurations that are active or inactive.",
+                          "key": "active",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "description": "Only return the default or non-default configurations.",
+                          "key": "is_default",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "description": "<p>Returns a list of portal configurations.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "c3670a2c-6f6f-4dec-8b9f-fcf4176360ca",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations?active=<boolean>&is_default=<boolean>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations"
+                          ],
+                          "query": [
+                            {
+                              "description": "Only return configurations that are active or inactive.",
+                              "key": "active",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Only return the default or non-default configurations.",
+                              "key": "is_default",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing_portal.configuration\",\n      \"active\": \"<boolean>\",\n      \"business_profile\": {},\n      \"created\": \"<integer>\",\n      \"features\": {},\n      \"is_default\": \"<boolean>\",\n      \"livemode\": \"<boolean>\",\n      \"updated\": \"<integer>\",\n      \"application\": \"<string,null>\",\n      \"default_return_url\": \"<string,null>\",\n      \"metadata\": null\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"billing_portal.configuration\",\n      \"active\": \"<boolean>\",\n      \"business_profile\": {},\n      \"created\": \"<integer>\",\n      \"features\": {},\n      \"is_default\": \"<boolean>\",\n      \"livemode\": \"<boolean>\",\n      \"updated\": \"<integer>\",\n      \"application\": \"<string,null>\",\n      \"default_return_url\": \"<string,null>\",\n      \"metadata\": {\n        \"minim7\": \"<string>\"\n      }\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-c3670a2c-6f6f-4dec-8b9f-fcf4176360ca"
+                    },
+                    {
+                      "id": "05b2566b-0107-4ea2-87b6-920ee4550b1d",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations?active=<boolean>&is_default=<boolean>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations"
+                          ],
+                          "query": [
+                            {
+                              "description": "Only return configurations that are active or inactive.",
+                              "key": "active",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "description": "Only return the default or non-default configurations.",
+                              "key": "is_default",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-05b2566b-0107-4ea2-87b6-920ee4550b1d"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:43.000Z",
+                  "updatedAt": "2026-06-05T13:24:43.000Z",
+                  "uid": "35240-05cf9a44-145b-4dc8-b00e-83e1c79965d7"
+                },
+                {
+                  "name": "Stripe Create Portal Configuration",
+                  "id": "999f5c18-eeed-4d65-8c47-7f5886da64f7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) ",
+                          "key": "headline",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "privacy_policy_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "terms_of_service_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "customer_update",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "invoice_history",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "payment_method_update",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "subscription_cancel",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "(Required) ",
+                          "key": "subscription_update",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "default_return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "dolore_e",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/billing_portal/configurations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "billing_portal",
+                        "configurations"
+                      ]
+                    },
+                    "description": "<p>Creates a portal configuration.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "2275170c-6a39-4861-bce3-ed5c57f75321",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) ",
+                              "key": "headline",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "privacy_policy_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "terms_of_service_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "customer_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "invoice_history",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "payment_method_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "subscription_cancel",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "subscription_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "default_return_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "dolore_e",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"billing_portal.configuration\",\n  \"active\": \"<boolean>\",\n  \"business_profile\": {},\n  \"created\": \"<integer>\",\n  \"features\": {},\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"updated\": \"<integer>\",\n  \"application\": \"<string,null>\",\n  \"default_return_url\": \"<string,null>\",\n  \"metadata\": null\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-2275170c-6a39-4861-bce3-ed5c57f75321"
+                    },
+                    {
+                      "id": "49f5b3cb-d5cb-4831-9149-1b08d3b4b1e2",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) ",
+                              "key": "headline",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "privacy_policy_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "terms_of_service_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "customer_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "invoice_history",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "payment_method_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "subscription_cancel",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "description": "(Required) ",
+                              "key": "subscription_update",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "default_return_url",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "dolore_e",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/billing_portal/configurations",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "billing_portal",
+                            "configurations"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:43.000Z",
+                      "updatedAt": "2026-06-05T13:24:43.000Z",
+                      "uid": "35240-49f5b3cb-d5cb-4831-9149-1b08d3b4b1e2"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:43.000Z",
+                  "updatedAt": "2026-06-05T13:24:43.000Z",
+                  "uid": "35240-999f5c18-eeed-4d65-8c47-7f5886da64f7"
+                }
+              ],
+              "id": "00e4674f-6732-45b1-a8d2-9f408638ddfb",
+              "createdAt": "2026-06-05T13:24:43.000Z",
+              "updatedAt": "2026-06-05T13:24:43.000Z",
+              "uid": "35240-00e4674f-6732-45b1-a8d2-9f408638ddfb"
+            }
+          ],
+          "id": "fd9e95b8-1bb9-4c59-9a79-6d129ebdddac",
+          "createdAt": "2026-06-05T13:24:43.000Z",
+          "updatedAt": "2026-06-05T13:24:43.000Z",
+          "uid": "35240-fd9e95b8-1bb9-4c59-9a79-6d129ebdddac"
+        }
+      ],
+      "id": "fd456bef-25e6-40ee-a967-bd90ce493d4f",
+      "createdAt": "2026-06-05T13:24:43.000Z",
+      "updatedAt": "2026-06-05T13:24:43.000Z",
+      "uid": "35240-fd456bef-25e6-40ee-a967-bd90ce493d4f"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

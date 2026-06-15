@@ -1,0 +1,198 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Customer Portal API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customer Portal",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Portal Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing_portal/sessions",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "customer",
+                  "value": ""
+                },
+                {
+                  "name": "configuration",
+                  "value": ""
+                },
+                {
+                  "name": "return_url",
+                  "value": ""
+                },
+                {
+                  "name": "flow_data",
+                  "value": ""
+                },
+                {
+                  "name": "locale",
+                  "value": ""
+                },
+                {
+                  "name": "on_behalf_of",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a session of the customer portal.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Portal Configurations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/billing_portal/configurations",
+            "params": [
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Only return configurations that are active or inactive."
+              },
+              {
+                "name": "is_default",
+                "value": "",
+                "type": "query",
+                "description": "Only return the default or non-default configurations."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of portal configurations.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Portal Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing_portal/configurations",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "business_profile",
+                  "value": ""
+                },
+                {
+                  "name": "features",
+                  "value": ""
+                },
+                {
+                  "name": "default_return_url",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a portal configuration.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Portal Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/billing_portal/configurations/:configuration",
+            "params": [
+              {
+                "name": "configuration",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a portal configuration.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Portal Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing_portal/configurations/:configuration",
+            "params": [
+              {
+                "name": "configuration",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "active",
+                  "value": ""
+                },
+                {
+                  "name": "business_profile",
+                  "value": ""
+                },
+                {
+                  "name": "default_return_url",
+                  "value": ""
+                },
+                {
+                  "name": "features",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates a portal configuration.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

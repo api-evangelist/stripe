@@ -1,0 +1,339 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Radar API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Radar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Early Fraud Warnings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/early_fraud_warnings",
+            "params": [
+              {
+                "name": "charge",
+                "value": "",
+                "type": "query",
+                "description": "Only return early fraud warnings for the charge specified by this charge ID."
+              },
+              {
+                "name": "payment_intent",
+                "value": "",
+                "type": "query",
+                "description": "Only return early fraud warnings for charges that were created by the PaymentIntent specified by this PaymentIntent ID."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of early fraud warnings.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Early Fraud Warning",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/early_fraud_warnings/:early_fraud_warning",
+            "params": [
+              {
+                "name": "early_fraud_warning",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of an early fraud warning that has previously been created.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Value Lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_lists",
+            "params": [
+              {
+                "name": "alias",
+                "value": "",
+                "type": "query",
+                "description": "The alias used to reference the value list."
+              },
+              {
+                "name": "contains",
+                "value": "",
+                "type": "query",
+                "description": "A value contained within a value list."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of ValueList objects.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Value List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/radar/value_lists",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "alias",
+                  "value": ""
+                },
+                {
+                  "name": "name",
+                  "value": ""
+                },
+                {
+                  "name": "item_type",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new ValueList object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Value List",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_lists/:value_list",
+            "params": [
+              {
+                "name": "value_list",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a ValueList object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Value List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/radar/value_lists/:value_list",
+            "params": [
+              {
+                "name": "value_list",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "alias",
+                  "value": ""
+                },
+                {
+                  "name": "name",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates a ValueList object by setting the values of the parameters passed.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Value List",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/radar/value_lists/:value_list",
+            "params": [
+              {
+                "name": "value_list",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Deletes a ValueList object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Value List Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_list_items",
+            "params": [
+              {
+                "name": "value_list",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "value",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of ValueListItem objects.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Value List Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/radar/value_list_items",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "value",
+                  "value": ""
+                },
+                {
+                  "name": "value_list",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new ValueListItem object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Value List Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
+            "params": [
+              {
+                "name": "item",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a ValueListItem object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Value List Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
+            "params": [
+              {
+                "name": "item",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Deletes a ValueListItem object.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

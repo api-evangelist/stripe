@@ -1,0 +1,1379 @@
+{
+  "info": {
+    "_postman_id": "aa906384-a439-4fc2-9952-d5d6a8b4357e",
+    "name": "Stripe Sources API",
+    "description": "Source objects allow you to accept a variety of payment methods. They represent a customer's payment instrument, and can be used with the Stripe API just like a Card object once chargeable, they can be charged, or can be attached to customers.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:22:35.000Z",
+    "updatedAt": "2026-06-05T13:22:35.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-aa906384-a439-4fc2-9952-d5d6a8b4357e"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "sources",
+          "item": [
+            {
+              "name": "{source}",
+              "item": [
+                {
+                  "name": "source_transactions",
+                  "item": [
+                    {
+                      "name": "Stripe List Source Transactions",
+                      "id": "ef937cc2-7690-425d-b568-aab6adcceda5",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/sources/:source/source_transactions?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "sources",
+                            ":source",
+                            "source_transactions"
+                          ],
+                          "query": [
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "66fc4ca0-aace-4df4-9b10-33239fc53368",
+                              "key": "source",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>List source transactions for a given source.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "ad18a8ee-3c85-4e9c-b64a-2f79b0d59e31",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/sources/:source/source_transactions?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "sources",
+                                ":source",
+                                "source_transactions"
+                              ],
+                              "query": [
+                                {
+                                  "key": "ending_before",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "starting_after",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "source"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"source_transaction\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"livemode\": \"<boolean>\",\n      \"source\": \"<string>\",\n      \"status\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"source_transaction\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"livemode\": \"<boolean>\",\n      \"source\": \"<string>\",\n      \"status\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                          "createdAt": "2026-06-05T13:22:36.000Z",
+                          "updatedAt": "2026-06-05T13:22:36.000Z",
+                          "uid": "35240-ad18a8ee-3c85-4e9c-b64a-2f79b0d59e31"
+                        },
+                        {
+                          "id": "d3111294-cf9a-4cbe-8468-3e2d75fb105f",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/sources/:source/source_transactions?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "sources",
+                                ":source",
+                                "source_transactions"
+                              ],
+                              "query": [
+                                {
+                                  "key": "ending_before",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "starting_after",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "source"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:36.000Z",
+                          "updatedAt": "2026-06-05T13:22:36.000Z",
+                          "uid": "35240-d3111294-cf9a-4cbe-8468-3e2d75fb105f"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-ef937cc2-7690-425d-b568-aab6adcceda5"
+                    }
+                  ],
+                  "id": "a75421b6-edac-4dea-84a0-47617fc470da",
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-a75421b6-edac-4dea-84a0-47617fc470da"
+                },
+                {
+                  "name": "Stripe Retrieve Source",
+                  "id": "da113c06-2bed-468c-9f8c-3732165bd32d",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/sources/:source?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "sources",
+                        ":source"
+                      ],
+                      "query": [
+                        {
+                          "description": "The client secret of the source.",
+                          "key": "client_secret",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "781d4c24-1ffa-4a44-b806-c930d6454a86",
+                          "key": "source",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieves an existing source object.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "3d48a8f1-5e33-4f7a-a809-df5a3524306d",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/sources/:source?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "sources",
+                            ":source"
+                          ],
+                          "query": [
+                            {
+                              "description": "The client secret of the source.",
+                              "key": "client_secret",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "source"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"source\",\n  \"client_secret\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"flow\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"amount\": \"<integer,null>\",\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"metadata\": {\n    \"amet2\": \"<string>\",\n    \"sedca\": \"<string>\",\n    \"laboris__\": \"<string>\",\n    \"in_e\": \"<string>\"\n  },\n  \"owner\": {},\n  \"redirect\": null,\n  \"statement_descriptor\": \"<string,null>\",\n  \"usage\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-3d48a8f1-5e33-4f7a-a809-df5a3524306d"
+                    },
+                    {
+                      "id": "41732f3e-58f7-4549-8607-4494c083e883",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/sources/:source?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "sources",
+                            ":source"
+                          ],
+                          "query": [
+                            {
+                              "description": "The client secret of the source.",
+                              "key": "client_secret",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "source"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-41732f3e-58f7-4549-8607-4494c083e883"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-da113c06-2bed-468c-9f8c-3732165bd32d"
+                },
+                {
+                  "name": "Stripe Update Source",
+                  "id": "e431b40a-e6bc-4b5d-9443-5a78d93a9bcc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "amount",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "incididunt__",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "proident_51",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "address",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "phone",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/sources/:source",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "sources",
+                        ":source"
+                      ],
+                      "variable": [
+                        {
+                          "id": "86b8754b-cc83-4679-aed6-6cee99fcc481",
+                          "key": "source",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Updates the specified source by setting the values of the parameters passed.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "ea28f1f0-cd16-4377-909e-3356e7032ec7",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "amount",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "incididunt__",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "proident_51",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "address",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "email",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "phone",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/sources/:source",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "sources",
+                            ":source"
+                          ],
+                          "variable": [
+                            {
+                              "key": "source"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"source\",\n  \"client_secret\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"flow\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"amount\": \"<integer,null>\",\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"metadata\": {\n    \"amet2\": \"<string>\",\n    \"sedca\": \"<string>\",\n    \"laboris__\": \"<string>\",\n    \"in_e\": \"<string>\"\n  },\n  \"owner\": {},\n  \"redirect\": null,\n  \"statement_descriptor\": \"<string,null>\",\n  \"usage\": \"<string,null>\"\n}",
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-ea28f1f0-cd16-4377-909e-3356e7032ec7"
+                    },
+                    {
+                      "id": "f58b9f55-a780-4e0e-9dc2-03823432d9e4",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "amount",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "incididunt__",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "proident_51",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "address",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "email",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "phone",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/sources/:source",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "sources",
+                            ":source"
+                          ],
+                          "variable": [
+                            {
+                              "key": "source"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-f58b9f55-a780-4e0e-9dc2-03823432d9e4"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-e431b40a-e6bc-4b5d-9443-5a78d93a9bcc"
+                }
+              ],
+              "id": "3bd23697-e0c6-4196-a6d5-256c470b9a8d",
+              "createdAt": "2026-06-05T13:22:36.000Z",
+              "updatedAt": "2026-06-05T13:22:36.000Z",
+              "uid": "35240-3bd23697-e0c6-4196-a6d5-256c470b9a8d"
+            },
+            {
+              "name": "Stripe Create Source",
+              "id": "27d25c28-2334-4ff1-a1f3-a40141965ebd",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "description": "The type of the source to create.",
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Amount associated with the source.",
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "Three-letter ISO code for the currency associated with the source.",
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The authentication flow of the source to create.",
+                      "key": "flow",
+                      "value": "receiver"
+                    },
+                    {
+                      "key": "ut_638",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ea__d7",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "address",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "return_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statement_descriptor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "usage",
+                      "value": "single_use"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/sources",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "sources"
+                  ]
+                },
+                "description": "<p>Creates a new source object.</p>"
+              },
+              "response": [
+                {
+                  "id": "d871b1b3-1ecc-4ac2-a722-86a99cec4ca8",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The type of the source to create.",
+                          "key": "type",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Amount associated with the source.",
+                          "key": "amount",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "Three-letter ISO code for the currency associated with the source.",
+                          "key": "currency",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The authentication flow of the source to create.",
+                          "key": "flow",
+                          "value": "receiver"
+                        },
+                        {
+                          "key": "ut_638",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ea__d7",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "address",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "phone",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "statement_descriptor",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "token",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "usage",
+                          "value": "single_use"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/sources",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "sources"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"source\",\n  \"client_secret\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"flow\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"amount\": \"<integer,null>\",\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"metadata\": {\n    \"amet2\": \"<string>\",\n    \"sedca\": \"<string>\",\n    \"laboris__\": \"<string>\",\n    \"in_e\": \"<string>\"\n  },\n  \"owner\": {},\n  \"redirect\": null,\n  \"statement_descriptor\": \"<string,null>\",\n  \"usage\": \"<string,null>\"\n}",
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-d871b1b3-1ecc-4ac2-a722-86a99cec4ca8"
+                },
+                {
+                  "id": "6e282dd0-6833-4fe7-9e92-dde003eeb392",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The type of the source to create.",
+                          "key": "type",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Amount associated with the source.",
+                          "key": "amount",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "Three-letter ISO code for the currency associated with the source.",
+                          "key": "currency",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The authentication flow of the source to create.",
+                          "key": "flow",
+                          "value": "receiver"
+                        },
+                        {
+                          "key": "ut_638",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ea__d7",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "address",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "phone",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "statement_descriptor",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "token",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "usage",
+                          "value": "single_use"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/sources",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "sources"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-6e282dd0-6833-4fe7-9e92-dde003eeb392"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:36.000Z",
+              "updatedAt": "2026-06-05T13:22:36.000Z",
+              "uid": "35240-27d25c28-2334-4ff1-a1f3-a40141965ebd"
+            }
+          ],
+          "id": "b03fed2d-df25-4ead-b4e0-736d124f9e1d",
+          "createdAt": "2026-06-05T13:22:36.000Z",
+          "updatedAt": "2026-06-05T13:22:36.000Z",
+          "uid": "35240-b03fed2d-df25-4ead-b4e0-736d124f9e1d"
+        },
+        {
+          "name": "customers",
+          "item": [
+            {
+              "name": "{customer}",
+              "item": [
+                {
+                  "name": "sources",
+                  "item": [
+                    {
+                      "name": "{id}",
+                      "item": [
+                        {
+                          "name": "Stripe Detach Source from Customer",
+                          "id": "09051e70-2983-4f79-ae6c-1fda693748be",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/customers/:customer/sources/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "customers",
+                                ":customer",
+                                "sources",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "827849c0-adef-44a8-8b4d-602bdc8a266b",
+                                  "key": "customer",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                },
+                                {
+                                  "id": "ed80a3ed-58e4-4b29-97fb-5cd88930e381",
+                                  "key": "id",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                }
+                              ]
+                            },
+                            "description": "<p>Detaches a source from a customer.</p>"
+                          },
+                          "response": [
+                            {
+                              "id": "46faa3af-e364-4cc8-a296-f75141a69a83",
+                              "name": "Successful response.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/customers/:customer/sources/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "customers",
+                                    ":customer",
+                                    "sources",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "customer"
+                                    },
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"source\",\n  \"client_secret\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"flow\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"amount\": \"<integer,null>\",\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"metadata\": {\n    \"amet2\": \"<string>\",\n    \"sedca\": \"<string>\",\n    \"laboris__\": \"<string>\",\n    \"in_e\": \"<string>\"\n  },\n  \"owner\": {},\n  \"redirect\": null,\n  \"statement_descriptor\": \"<string,null>\",\n  \"usage\": \"<string,null>\"\n}",
+                              "createdAt": "2026-06-05T13:22:36.000Z",
+                              "updatedAt": "2026-06-05T13:22:36.000Z",
+                              "uid": "35240-46faa3af-e364-4cc8-a296-f75141a69a83"
+                            },
+                            {
+                              "id": "ada1febc-1942-41ee-91d3-4b42624969b8",
+                              "name": "Error response.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: basic",
+                                    "key": "Authorization",
+                                    "value": "Basic <credentials>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/customers/:customer/sources/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "customers",
+                                    ":customer",
+                                    "sources",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "customer"
+                                    },
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-06-05T13:22:36.000Z",
+                              "updatedAt": "2026-06-05T13:22:36.000Z",
+                              "uid": "35240-ada1febc-1942-41ee-91d3-4b42624969b8"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:22:36.000Z",
+                          "updatedAt": "2026-06-05T13:22:36.000Z",
+                          "uid": "35240-09051e70-2983-4f79-ae6c-1fda693748be"
+                        }
+                      ],
+                      "id": "b504854c-2bcf-4f6a-afb2-adb2a662343e",
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-b504854c-2bcf-4f6a-afb2-adb2a662343e"
+                    },
+                    {
+                      "name": "Stripe Attach Source to Customer",
+                      "id": "4bfc7de8-48c5-494c-80e9-7b6f8b9ebf9d",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The identifier of the source to be attached.",
+                              "key": "source",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/customers/:customer/sources",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "customers",
+                            ":customer",
+                            "sources"
+                          ],
+                          "variable": [
+                            {
+                              "id": "5519043a-8ad4-4d87-b5c1-cb65fddb04d5",
+                              "key": "customer",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Attaches a source to a customer.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "7238f3e5-1297-4051-98d1-0e66c2acc2cd",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "description": "(Required) The identifier of the source to be attached.",
+                                  "key": "source",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/customers/:customer/sources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "customers",
+                                ":customer",
+                                "sources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "customer"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"source\",\n  \"client_secret\": \"<string>\",\n  \"created\": \"<integer>\",\n  \"flow\": \"<string>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"amount\": \"<integer,null>\",\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"metadata\": {\n    \"amet2\": \"<string>\",\n    \"sedca\": \"<string>\",\n    \"laboris__\": \"<string>\",\n    \"in_e\": \"<string>\"\n  },\n  \"owner\": {},\n  \"redirect\": null,\n  \"statement_descriptor\": \"<string,null>\",\n  \"usage\": \"<string,null>\"\n}",
+                          "createdAt": "2026-06-05T13:22:36.000Z",
+                          "updatedAt": "2026-06-05T13:22:36.000Z",
+                          "uid": "35240-7238f3e5-1297-4051-98d1-0e66c2acc2cd"
+                        },
+                        {
+                          "id": "70e0cbcd-2556-46a1-a0e2-6912913b9fa4",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "description": "(Required) The identifier of the source to be attached.",
+                                  "key": "source",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/customers/:customer/sources",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "customers",
+                                ":customer",
+                                "sources"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "customer"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:36.000Z",
+                          "updatedAt": "2026-06-05T13:22:36.000Z",
+                          "uid": "35240-70e0cbcd-2556-46a1-a0e2-6912913b9fa4"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:36.000Z",
+                      "updatedAt": "2026-06-05T13:22:36.000Z",
+                      "uid": "35240-4bfc7de8-48c5-494c-80e9-7b6f8b9ebf9d"
+                    }
+                  ],
+                  "id": "61cd031f-b8d9-4a09-9b97-eaf278f06ffd",
+                  "createdAt": "2026-06-05T13:22:36.000Z",
+                  "updatedAt": "2026-06-05T13:22:36.000Z",
+                  "uid": "35240-61cd031f-b8d9-4a09-9b97-eaf278f06ffd"
+                }
+              ],
+              "id": "032f7a56-dc06-4662-92d7-0fe688a41f41",
+              "createdAt": "2026-06-05T13:22:36.000Z",
+              "updatedAt": "2026-06-05T13:22:36.000Z",
+              "uid": "35240-032f7a56-dc06-4662-92d7-0fe688a41f41"
+            }
+          ],
+          "id": "97d657f3-07af-44a9-ab88-bca044824447",
+          "createdAt": "2026-06-05T13:22:36.000Z",
+          "updatedAt": "2026-06-05T13:22:36.000Z",
+          "uid": "35240-97d657f3-07af-44a9-ab88-bca044824447"
+        }
+      ],
+      "id": "f3f4b4d4-ef11-4112-97c6-1b5715945e93",
+      "createdAt": "2026-06-05T13:22:36.000Z",
+      "updatedAt": "2026-06-05T13:22:36.000Z",
+      "uid": "35240-f3f4b4d4-ef11-4112-97c6-1b5715945e93"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

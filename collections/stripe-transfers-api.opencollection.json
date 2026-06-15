@@ -1,0 +1,299 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Transfers API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/transfers",
+            "params": [
+              {
+                "name": "destination",
+                "value": "",
+                "type": "query",
+                "description": "Only return transfers for the destination specified by this account ID."
+              },
+              {
+                "name": "transfer_group",
+                "value": "",
+                "type": "query",
+                "description": "Only return transfers with the specified transfer group."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of existing transfers sent to connected accounts.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/transfers",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "amount",
+                  "value": ""
+                },
+                {
+                  "name": "currency",
+                  "value": ""
+                },
+                {
+                  "name": "destination",
+                  "value": ""
+                },
+                {
+                  "name": "description",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "source_transaction",
+                  "value": ""
+                },
+                {
+                  "name": "source_type",
+                  "value": ""
+                },
+                {
+                  "name": "transfer_group",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>To send funds from your Stripe account to a connected account, create a new transfer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/transfers/:transfer",
+            "params": [
+              {
+                "name": "transfer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of an existing transfer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/transfers/:transfer",
+            "params": [
+              {
+                "name": "transfer",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "description",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates the specified transfer by setting the values of the parameters passed.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Transfer Reversals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/transfers/:id/reversals",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>You can see a list of the reversals belonging to a specific transfer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Transfer Reversal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/transfers/:id/reversals",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "amount",
+                  "value": ""
+                },
+                {
+                  "name": "description",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "refund_application_fee",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>When you create a new reversal, you must specify a transfer to create it on.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Transfer Reversal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/transfers/:transfer/reversals/:id",
+            "params": [
+              {
+                "name": "transfer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of an existing transfer reversal.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Transfer Reversal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/transfers/:transfer/reversals/:id",
+            "params": [
+              {
+                "name": "transfer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates the specified reversal by setting the values of the parameters passed.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

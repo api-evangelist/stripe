@@ -1,0 +1,341 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Connect API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connect",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Connected Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts",
+            "params": [
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of accounts connected to your platform via Connect.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Connected Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "type",
+                  "value": ""
+                },
+                {
+                  "name": "country",
+                  "value": ""
+                },
+                {
+                  "name": "email",
+                  "value": ""
+                },
+                {
+                  "name": "capabilities",
+                  "value": ""
+                },
+                {
+                  "name": "business_type",
+                  "value": ""
+                },
+                {
+                  "name": "business_profile",
+                  "value": ""
+                },
+                {
+                  "name": "company",
+                  "value": ""
+                },
+                {
+                  "name": "individual",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "tos_acceptance",
+                  "value": ""
+                },
+                {
+                  "name": "settings",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new connected account with your platform.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Connected Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of an account.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Connected Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "business_profile",
+                  "value": ""
+                },
+                {
+                  "name": "business_type",
+                  "value": ""
+                },
+                {
+                  "name": "capabilities",
+                  "value": ""
+                },
+                {
+                  "name": "company",
+                  "value": ""
+                },
+                {
+                  "name": "email",
+                  "value": ""
+                },
+                {
+                  "name": "individual",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "settings",
+                  "value": ""
+                },
+                {
+                  "name": "tos_acceptance",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates a connected account by setting the values of the parameters passed.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Connected Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/accounts/:account",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Deletes a connected account. You can only delete accounts that your platform has created using Connect.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Reject Connected Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/reject",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "reason",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Rejects a connected account and disables the ability to make charges or receive payouts.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Account Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/account_links",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "account",
+                  "value": ""
+                },
+                {
+                  "name": "refresh_url",
+                  "value": ""
+                },
+                {
+                  "name": "return_url",
+                  "value": ""
+                },
+                {
+                  "name": "type",
+                  "value": ""
+                },
+                {
+                  "name": "collect",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates an AccountLink object for Connect onboarding.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Account Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/account_sessions",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "account",
+                  "value": ""
+                },
+                {
+                  "name": "components",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates an AccountSession object for embedded Connect components.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Login Link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/accounts/:account/login_links",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Creates a single-use login link for a connected account to access their Stripe dashboard.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Account Capabilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/accounts/:account/capabilities",
+            "params": [
+              {
+                "name": "account",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of capabilities associated with the account.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

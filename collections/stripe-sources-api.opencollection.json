@@ -1,0 +1,228 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Sources API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/sources",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "type",
+                  "value": ""
+                },
+                {
+                  "name": "amount",
+                  "value": ""
+                },
+                {
+                  "name": "currency",
+                  "value": ""
+                },
+                {
+                  "name": "flow",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "owner",
+                  "value": ""
+                },
+                {
+                  "name": "redirect",
+                  "value": ""
+                },
+                {
+                  "name": "statement_descriptor",
+                  "value": ""
+                },
+                {
+                  "name": "token",
+                  "value": ""
+                },
+                {
+                  "name": "usage",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new source object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/sources/:source",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "client_secret",
+                "value": "",
+                "type": "query",
+                "description": "The client secret of the source."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves an existing source object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/sources/:source",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "amount",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "owner",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates the specified source by setting the values of the parameters passed.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Source Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/sources/:source/source_transactions",
+            "params": [
+              {
+                "name": "source",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>List source transactions for a given source.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Attach Source to Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/customers/:customer/sources",
+            "params": [
+              {
+                "name": "customer",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "source",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Attaches a source to a customer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Detach Source from Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/customers/:customer/sources/:id",
+            "params": [
+              {
+                "name": "customer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Detaches a source from a customer.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

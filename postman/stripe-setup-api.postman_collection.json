@@ -1,0 +1,1539 @@
+{
+  "info": {
+    "_postman_id": "106a23b4-9def-4de6-8dfd-be3bcf6cacd1",
+    "name": "Stripe Setup API",
+    "description": "Use the Setup Intents API to set up a payment method for future payments. It's similar to a payment, but no charge is created. Set up a payment method for future payments now.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:26:39.000Z",
+    "updatedAt": "2026-06-05T13:26:39.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-106a23b4-9def-4de6-8dfd-be3bcf6cacd1"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "setup_intents",
+          "item": [
+            {
+              "name": "{intent}",
+              "item": [
+                {
+                  "name": "confirm",
+                  "item": [
+                    {
+                      "name": "Confirm Setup Intent",
+                      "id": "c408f2a8-01ae-4d7d-9f8a-bb6d14f8fa16",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "payment_method",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "return_url",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent/confirm",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent",
+                            "confirm"
+                          ],
+                          "variable": [
+                            {
+                              "id": "0f8b00dc-3c24-4714-b2c9-514cdaafe395",
+                              "key": "intent",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Confirm that your customer intends to set up the current or provided payment method.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "37bc6831-6152-4537-95f6-4838bb1ec88f",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "payment_method",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "return_url",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/setup_intents/:intent/confirm",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "setup_intents",
+                                ":intent",
+                                "confirm"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "intent"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"setup_intent\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"metadata\": {\n    \"esse_486\": \"<string>\"\n  },\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"status\": \"processing\",\n  \"usage\": \"<string>\",\n  \"application\": \"<string,null>\",\n  \"cancellation_reason\": null,\n  \"client_secret\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"last_setup_error\": {},\n  \"latest_attempt\": \"<string,null>\",\n  \"next_action\": null,\n  \"payment_method\": \"<string,null>\",\n  \"payment_method_options\": {}\n}",
+                          "createdAt": "2026-06-05T13:26:39.000Z",
+                          "updatedAt": "2026-06-05T13:26:39.000Z",
+                          "uid": "35240-37bc6831-6152-4537-95f6-4838bb1ec88f"
+                        },
+                        {
+                          "id": "8cef896a-f3e1-43f2-bb1c-1b5336b2b034",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "payment_method",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "return_url",
+                                  "value": "<string>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/setup_intents/:intent/confirm",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "setup_intents",
+                                ":intent",
+                                "confirm"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "intent"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:26:39.000Z",
+                          "updatedAt": "2026-06-05T13:26:39.000Z",
+                          "uid": "35240-8cef896a-f3e1-43f2-bb1c-1b5336b2b034"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-c408f2a8-01ae-4d7d-9f8a-bb6d14f8fa16"
+                    }
+                  ],
+                  "id": "e8820ee8-4c14-4ab3-acc4-9ed17127888c",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-e8820ee8-4c14-4ab3-acc4-9ed17127888c"
+                },
+                {
+                  "name": "cancel",
+                  "item": [
+                    {
+                      "name": "Cancel Setup Intent",
+                      "id": "f7721a8b-7e2b-42f3-86a3-1f767ccdacdb",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "cancellation_reason",
+                              "value": "duplicate"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "id": "1cc8de88-4130-4bdb-8be0-fba29462111a",
+                              "key": "intent",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>You can cancel a SetupIntent object when it's in one of these statuses: requires_payment_method, requires_confirmation, or requires_action.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "6cf768a3-4a1e-4aa0-a98f-6259b7e64b27",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "cancellation_reason",
+                                  "value": "duplicate"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/setup_intents/:intent/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "setup_intents",
+                                ":intent",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "intent"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"setup_intent\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"metadata\": {\n    \"esse_486\": \"<string>\"\n  },\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"status\": \"processing\",\n  \"usage\": \"<string>\",\n  \"application\": \"<string,null>\",\n  \"cancellation_reason\": null,\n  \"client_secret\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"last_setup_error\": {},\n  \"latest_attempt\": \"<string,null>\",\n  \"next_action\": null,\n  \"payment_method\": \"<string,null>\",\n  \"payment_method_options\": {}\n}",
+                          "createdAt": "2026-06-05T13:26:39.000Z",
+                          "updatedAt": "2026-06-05T13:26:39.000Z",
+                          "uid": "35240-6cf768a3-4a1e-4aa0-a98f-6259b7e64b27"
+                        },
+                        {
+                          "id": "fd867ee0-4be5-4803-b831-695635216950",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "cancellation_reason",
+                                  "value": "duplicate"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/setup_intents/:intent/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "setup_intents",
+                                ":intent",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "intent"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:26:39.000Z",
+                          "updatedAt": "2026-06-05T13:26:39.000Z",
+                          "uid": "35240-fd867ee0-4be5-4803-b831-695635216950"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-f7721a8b-7e2b-42f3-86a3-1f767ccdacdb"
+                    }
+                  ],
+                  "id": "4ca5885e-07d1-4a0f-b109-eb0c118f0e60",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-4ca5885e-07d1-4a0f-b109-eb0c118f0e60"
+                },
+                {
+                  "name": "Retrieve Setup Intent",
+                  "id": "5c3c7c81-979a-47ad-93dc-d355d3b3b1c3",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents/:intent?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents",
+                        ":intent"
+                      ],
+                      "query": [
+                        {
+                          "description": "The client secret of the SetupIntent.",
+                          "key": "client_secret",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "bcb2c4af-310d-47a4-9c1b-b10a72e2531d",
+                          "key": "intent",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieves the details of a SetupIntent that has previously been created.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "ffdb6b38-c635-4cbd-a0be-e8eec9da589b",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent"
+                          ],
+                          "query": [
+                            {
+                              "description": "The client secret of the SetupIntent.",
+                              "key": "client_secret",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "intent"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"setup_intent\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"metadata\": {\n    \"esse_486\": \"<string>\"\n  },\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"status\": \"processing\",\n  \"usage\": \"<string>\",\n  \"application\": \"<string,null>\",\n  \"cancellation_reason\": null,\n  \"client_secret\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"last_setup_error\": {},\n  \"latest_attempt\": \"<string,null>\",\n  \"next_action\": null,\n  \"payment_method\": \"<string,null>\",\n  \"payment_method_options\": {}\n}",
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-ffdb6b38-c635-4cbd-a0be-e8eec9da589b"
+                    },
+                    {
+                      "id": "1e000da6-9463-447b-8cc1-879821777df5",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent?client_secret=<string>&expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent"
+                          ],
+                          "query": [
+                            {
+                              "description": "The client secret of the SetupIntent.",
+                              "key": "client_secret",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "intent"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-1e000da6-9463-447b-8cc1-879821777df5"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-5c3c7c81-979a-47ad-93dc-d355d3b3b1c3"
+                },
+                {
+                  "name": "Update Setup Intent",
+                  "id": "e9181a2b-2dd3-426e-a43d-7df3824e004b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "commodo_b",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "exercitation37_",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents/:intent",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents",
+                        ":intent"
+                      ],
+                      "variable": [
+                        {
+                          "id": "563df33b-e77f-4c0d-8363-381f2e2b4680",
+                          "key": "intent",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Updates a SetupIntent object.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "95d25a38-bcf3-485b-b7e1-39306f88508c",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "customer",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "description",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "commodo_b",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "exercitation37_",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method_types",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method_types",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent"
+                          ],
+                          "variable": [
+                            {
+                              "key": "intent"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"setup_intent\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"metadata\": {\n    \"esse_486\": \"<string>\"\n  },\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"status\": \"processing\",\n  \"usage\": \"<string>\",\n  \"application\": \"<string,null>\",\n  \"cancellation_reason\": null,\n  \"client_secret\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"last_setup_error\": {},\n  \"latest_attempt\": \"<string,null>\",\n  \"next_action\": null,\n  \"payment_method\": \"<string,null>\",\n  \"payment_method_options\": {}\n}",
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-95d25a38-bcf3-485b-b7e1-39306f88508c"
+                    },
+                    {
+                      "id": "e52c2cec-6908-4819-9b3a-93b31a39d17b",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "customer",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "description",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "commodo_b",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "exercitation37_",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method_types",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "payment_method_types",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/setup_intents/:intent",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "setup_intents",
+                            ":intent"
+                          ],
+                          "variable": [
+                            {
+                              "key": "intent"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:26:39.000Z",
+                      "updatedAt": "2026-06-05T13:26:39.000Z",
+                      "uid": "35240-e52c2cec-6908-4819-9b3a-93b31a39d17b"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-e9181a2b-2dd3-426e-a43d-7df3824e004b"
+                }
+              ],
+              "id": "7b333cc5-bdff-4449-906c-1ba4ac63b3a7",
+              "createdAt": "2026-06-05T13:26:39.000Z",
+              "updatedAt": "2026-06-05T13:26:39.000Z",
+              "uid": "35240-7b333cc5-bdff-4449-906c-1ba4ac63b3a7"
+            },
+            {
+              "name": "List Setup Intents",
+              "id": "2e34a734-bbeb-4f84-bcc4-8f73864c4386",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/setup_intents?customer=<string>&payment_method=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "setup_intents"
+                  ],
+                  "query": [
+                    {
+                      "description": "Only return SetupIntents for the customer specified by this customer ID.",
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Only return SetupIntents that associate with the specified payment method.",
+                      "key": "payment_method",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<Error: Not supported in OAS>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of SetupIntents.</p>"
+              },
+              "response": [
+                {
+                  "id": "db5de261-ca42-4ed4-903f-58304ae20721",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents?customer=<string>&payment_method=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return SetupIntents for the customer specified by this customer ID.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only return SetupIntents that associate with the specified payment method.",
+                          "key": "payment_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"setup_intent\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"metadata\": {\n        \"cupidatat_4\": \"<string>\",\n        \"Excepteur_cd\": \"<string>\"\n      },\n      \"payment_method_types\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"status\": \"canceled\",\n      \"usage\": \"<string>\",\n      \"application\": \"<string,null>\",\n      \"cancellation_reason\": \"requested_by_customer\",\n      \"client_secret\": \"<string,null>\",\n      \"customer\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"last_setup_error\": null,\n      \"latest_attempt\": \"<string,null>\",\n      \"next_action\": null,\n      \"payment_method\": \"<string,null>\",\n      \"payment_method_options\": null\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"setup_intent\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"metadata\": {\n        \"essec__\": \"<string>\"\n      },\n      \"payment_method_types\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"status\": \"requires_payment_method\",\n      \"usage\": \"<string>\",\n      \"application\": \"<string,null>\",\n      \"cancellation_reason\": null,\n      \"client_secret\": \"<string,null>\",\n      \"customer\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"last_setup_error\": {},\n      \"latest_attempt\": \"<string,null>\",\n      \"next_action\": null,\n      \"payment_method\": \"<string,null>\",\n      \"payment_method_options\": {}\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-db5de261-ca42-4ed4-903f-58304ae20721"
+                },
+                {
+                  "id": "ce3f92bc-43ee-4d52-9b00-48eca5cc5490",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents?customer=<string>&payment_method=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return SetupIntents for the customer specified by this customer ID.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Only return SetupIntents that associate with the specified payment method.",
+                          "key": "payment_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-ce3f92bc-43ee-4d52-9b00-48eca5cc5490"
+                }
+              ],
+              "createdAt": "2026-06-05T13:26:39.000Z",
+              "updatedAt": "2026-06-05T13:26:39.000Z",
+              "uid": "35240-2e34a734-bbeb-4f84-bcc4-8f73864c4386"
+            },
+            {
+              "name": "Create Setup Intent",
+              "id": "3b8119ad-a8dd-4af4-8010-0475b4aa3bf4",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "confirm",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dolor__cb",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "elit_9d_",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "nulla2",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "payment_method",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "payment_method_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "payment_method_types",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "return_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "usage",
+                      "value": "on_session"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/setup_intents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "setup_intents"
+                  ]
+                },
+                "description": "<p>Creates a SetupIntent object. After you create the SetupIntent, attach a payment method and confirm it to collect any required permissions to charge the payment method later.</p>"
+              },
+              "response": [
+                {
+                  "id": "a5e52d63-2786-4df5-a597-3964a999764f",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "confirm",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "dolor__cb",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "elit_9d_",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "nulla2",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "usage",
+                          "value": "on_session"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"setup_intent\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"metadata\": {\n    \"esse_486\": \"<string>\"\n  },\n  \"payment_method_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"status\": \"processing\",\n  \"usage\": \"<string>\",\n  \"application\": \"<string,null>\",\n  \"cancellation_reason\": null,\n  \"client_secret\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"last_setup_error\": {},\n  \"latest_attempt\": \"<string,null>\",\n  \"next_action\": null,\n  \"payment_method\": \"<string,null>\",\n  \"payment_method_options\": {}\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-a5e52d63-2786-4df5-a597-3964a999764f"
+                },
+                {
+                  "id": "b21fe344-370a-4989-81c2-5f041e411c74",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "confirm",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "dolor__cb",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "elit_9d_",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "nulla2",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "payment_method_types",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "return_url",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "usage",
+                          "value": "on_session"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_intents",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_intents"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-b21fe344-370a-4989-81c2-5f041e411c74"
+                }
+              ],
+              "createdAt": "2026-06-05T13:26:39.000Z",
+              "updatedAt": "2026-06-05T13:26:39.000Z",
+              "uid": "35240-3b8119ad-a8dd-4af4-8010-0475b4aa3bf4"
+            }
+          ],
+          "id": "09672827-c52f-4317-beff-f029c48675cd",
+          "createdAt": "2026-06-05T13:26:39.000Z",
+          "updatedAt": "2026-06-05T13:26:39.000Z",
+          "uid": "35240-09672827-c52f-4317-beff-f029c48675cd"
+        },
+        {
+          "name": "setup_attempts",
+          "item": [
+            {
+              "name": "List Setup Attempts",
+              "id": "14225be2-a838-4466-babf-c21fc20f6e1c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/setup_attempts?setup_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "setup_attempts"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) ",
+                      "key": "setup_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of SetupAttempts that associate with a provided SetupIntent.</p>"
+              },
+              "response": [
+                {
+                  "id": "658a6ba9-27c7-4ba3-be98-0998c8444337",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_attempts?setup_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_attempts"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "setup_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"setup_attempt\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"payment_method\": \"<string>\",\n      \"setup_intent\": \"<string>\",\n      \"status\": \"<string>\",\n      \"usage\": \"<string>\",\n      \"application\": \"<string,null>\",\n      \"attach_to_self\": \"<boolean>\",\n      \"customer\": \"<string,null>\",\n      \"on_behalf_of\": \"<string,null>\",\n      \"setup_error\": {}\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"setup_attempt\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"payment_method\": \"<string>\",\n      \"setup_intent\": \"<string>\",\n      \"status\": \"<string>\",\n      \"usage\": \"<string>\",\n      \"application\": \"<string,null>\",\n      \"attach_to_self\": \"<boolean>\",\n      \"customer\": \"<string,null>\",\n      \"on_behalf_of\": \"<string,null>\",\n      \"setup_error\": null\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-658a6ba9-27c7-4ba3-be98-0998c8444337"
+                },
+                {
+                  "id": "6408fb3e-b6c9-416b-9abe-e0897602f0fe",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/setup_attempts?setup_intent=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "setup_attempts"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) ",
+                          "key": "setup_intent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:26:39.000Z",
+                  "updatedAt": "2026-06-05T13:26:39.000Z",
+                  "uid": "35240-6408fb3e-b6c9-416b-9abe-e0897602f0fe"
+                }
+              ],
+              "createdAt": "2026-06-05T13:26:39.000Z",
+              "updatedAt": "2026-06-05T13:26:39.000Z",
+              "uid": "35240-14225be2-a838-4466-babf-c21fc20f6e1c"
+            }
+          ],
+          "id": "a93d534d-41e6-4575-a6ed-6fdebd5ce15c",
+          "createdAt": "2026-06-05T13:26:39.000Z",
+          "updatedAt": "2026-06-05T13:26:39.000Z",
+          "uid": "35240-a93d534d-41e6-4575-a6ed-6fdebd5ce15c"
+        }
+      ],
+      "id": "21d3c1c0-8ffe-4936-8064-968b3cb21bb1",
+      "createdAt": "2026-06-05T13:26:39.000Z",
+      "updatedAt": "2026-06-05T13:26:39.000Z",
+      "uid": "35240-21d3c1c0-8ffe-4936-8064-968b3cb21bb1"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

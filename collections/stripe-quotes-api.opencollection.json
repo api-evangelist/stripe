@@ -1,0 +1,294 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Quotes API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/quotes",
+            "params": [
+              {
+                "name": "customer",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the customer whose quotes will be retrieved."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "The status of the quotes to retrieve."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of your quotes.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/quotes",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "customer",
+                  "value": ""
+                },
+                {
+                  "name": "description",
+                  "value": ""
+                },
+                {
+                  "name": "line_items",
+                  "value": ""
+                },
+                {
+                  "name": "header",
+                  "value": ""
+                },
+                {
+                  "name": "footer",
+                  "value": ""
+                },
+                {
+                  "name": "expires_at",
+                  "value": ""
+                },
+                {
+                  "name": "collection_method",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>A quote models prices and services for a customer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/quotes/:quote",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the quote with the given ID.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/quotes/:quote",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "description",
+                  "value": ""
+                },
+                {
+                  "name": "expires_at",
+                  "value": ""
+                },
+                {
+                  "name": "line_items",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>A quote models prices and services for a customer.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Accept Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/quotes/:quote/accept",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Accepts the specified quote.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Cancel Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/quotes/:quote/cancel",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Cancels the quote.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Finalize Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/quotes/:quote/finalize",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "expires_at",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Finalizes the quote.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Quote Line Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/quotes/:quote/line_items",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>When retrieving a quote, there is an includable line_items property containing the first handful of those items.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Download Quote PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/quotes/:quote/pdf",
+            "params": [
+              {
+                "name": "quote",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Download the PDF for a finalized quote.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Crypto Onramp API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Crypto Onramp",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Onramp Sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/crypto/onramp_sessions",
+            "params": [
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of crypto onramp sessions.</p>"
+        },
+        {
+          "info": {
+            "name": "Create Onramp Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/crypto/onramp_sessions",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "wallet_addresses",
+                  "value": ""
+                },
+                {
+                  "name": "source_currency",
+                  "value": ""
+                },
+                {
+                  "name": "source_amount",
+                  "value": ""
+                },
+                {
+                  "name": "destination_currency",
+                  "value": ""
+                },
+                {
+                  "name": "destination_amount",
+                  "value": ""
+                },
+                {
+                  "name": "destination_network",
+                  "value": ""
+                },
+                {
+                  "name": "lock_wallet_address",
+                  "value": ""
+                },
+                {
+                  "name": "customer_ip_address",
+                  "value": ""
+                },
+                {
+                  "name": "customer_information",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a crypto onramp session.</p>"
+        },
+        {
+          "info": {
+            "name": "Retrieve Onramp Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/crypto/onramp_sessions/:onramp_session",
+            "params": [
+              {
+                "name": "onramp_session",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a crypto onramp session.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

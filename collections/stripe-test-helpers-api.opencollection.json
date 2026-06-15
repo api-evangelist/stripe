@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Test Helpers API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Test Helpers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Test Clocks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/test_helpers/test_clocks",
+            "params": [
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of your test clocks.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Test Clock",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/test_helpers/test_clocks",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "frozen_time",
+                  "value": ""
+                },
+                {
+                  "name": "name",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new test clock that can be attached to new customers and quotes.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Test Clock",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/test_helpers/test_clocks/:test_clock",
+            "params": [
+              {
+                "name": "test_clock",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a test clock.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Delete Test Clock",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/test_helpers/test_clocks/:test_clock",
+            "params": [
+              {
+                "name": "test_clock",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Deletes a test clock.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Advance Test Clock",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/test_helpers/test_clocks/:test_clock/advance",
+            "params": [
+              {
+                "name": "test_clock",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "frozen_time",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Starts advancing a test clock to a specified time in the future.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Expire Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/test_helpers/refunds/:refund/expire",
+            "params": [
+              {
+                "name": "refund",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Expire a refund with a status of requires_action.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Fund Customer Cash Balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/test_helpers/customers/:customer/fund_cash_balance",
+            "params": [
+              {
+                "name": "customer",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "amount",
+                  "value": ""
+                },
+                {
+                  "name": "currency",
+                  "value": ""
+                },
+                {
+                  "name": "reference",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Create an incoming testmode bank transfer.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

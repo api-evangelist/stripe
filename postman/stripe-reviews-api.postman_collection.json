@@ -1,0 +1,542 @@
+{
+  "info": {
+    "_postman_id": "4facdad0-077e-4a88-b67c-63b95529b771",
+    "name": "Stripe Reviews API",
+    "description": "Reviews can be used to supplement automated fraud detection with human expertise. Reviews are created when a payment is flagged by Radar rules or manually by your team.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:22:30.000Z",
+    "updatedAt": "2026-06-05T13:22:30.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-4facdad0-077e-4a88-b67c-63b95529b771"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "reviews",
+          "item": [
+            {
+              "name": "{review}",
+              "item": [
+                {
+                  "name": "approve",
+                  "item": [
+                    {
+                      "name": "Stripe Approve Review",
+                      "id": "bd5d5197-a406-46a1-b069-443d70b77a12",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/reviews/:review/approve",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "reviews",
+                            ":review",
+                            "approve"
+                          ],
+                          "variable": [
+                            {
+                              "id": "e964937c-72ff-4857-9aad-df5d3fcd5c05",
+                              "key": "review",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Approves a Review object, closing it and removing it from the list of reviews.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "388c80b3-19b5-412c-9b46-15166009be1c",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/reviews/:review/approve",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "reviews",
+                                ":review",
+                                "approve"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "review"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"review\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"open\": \"<boolean>\",\n  \"opened_reason\": \"manual\",\n  \"reason\": \"<string>\",\n  \"billing_zip\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"closed_reason\": \"redacted\",\n  \"ip_address\": \"<string,null>\",\n  \"ip_address_location\": {},\n  \"payment_intent\": \"<string,null>\",\n  \"session\": null\n}",
+                          "createdAt": "2026-06-05T13:22:31.000Z",
+                          "updatedAt": "2026-06-05T13:22:31.000Z",
+                          "uid": "35240-388c80b3-19b5-412c-9b46-15166009be1c"
+                        },
+                        {
+                          "id": "48931c1a-6021-483f-b993-531fd1878961",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/reviews/:review/approve",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "reviews",
+                                ":review",
+                                "approve"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "review"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:31.000Z",
+                          "updatedAt": "2026-06-05T13:22:31.000Z",
+                          "uid": "35240-48931c1a-6021-483f-b993-531fd1878961"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:31.000Z",
+                      "updatedAt": "2026-06-05T13:22:31.000Z",
+                      "uid": "35240-bd5d5197-a406-46a1-b069-443d70b77a12"
+                    }
+                  ],
+                  "id": "4e5dd82a-42fe-45e9-94b8-1ceb2dd7ab1a",
+                  "createdAt": "2026-06-05T13:22:31.000Z",
+                  "updatedAt": "2026-06-05T13:22:31.000Z",
+                  "uid": "35240-4e5dd82a-42fe-45e9-94b8-1ceb2dd7ab1a"
+                },
+                {
+                  "name": "Stripe Retrieve Review",
+                  "id": "8931635e-b99b-4218-aae0-d4b0c59d3d64",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/reviews/:review?expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "reviews",
+                        ":review"
+                      ],
+                      "query": [
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "78a18c36-c6dc-4c2a-8461-378d8ccdcc40",
+                          "key": "review",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieves a Review object.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "d8e3fecc-16a0-405c-9607-33030eec1372",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/reviews/:review?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "reviews",
+                            ":review"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "review"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"review\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"open\": \"<boolean>\",\n  \"opened_reason\": \"manual\",\n  \"reason\": \"<string>\",\n  \"billing_zip\": \"<string,null>\",\n  \"charge\": \"<string,null>\",\n  \"closed_reason\": \"redacted\",\n  \"ip_address\": \"<string,null>\",\n  \"ip_address_location\": {},\n  \"payment_intent\": \"<string,null>\",\n  \"session\": null\n}",
+                      "createdAt": "2026-06-05T13:22:31.000Z",
+                      "updatedAt": "2026-06-05T13:22:31.000Z",
+                      "uid": "35240-d8e3fecc-16a0-405c-9607-33030eec1372"
+                    },
+                    {
+                      "id": "e7ba210f-fa61-403b-9615-379a07e04a10",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/reviews/:review?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "reviews",
+                            ":review"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "review"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:31.000Z",
+                      "updatedAt": "2026-06-05T13:22:31.000Z",
+                      "uid": "35240-e7ba210f-fa61-403b-9615-379a07e04a10"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:31.000Z",
+                  "updatedAt": "2026-06-05T13:22:31.000Z",
+                  "uid": "35240-8931635e-b99b-4218-aae0-d4b0c59d3d64"
+                }
+              ],
+              "id": "feb7b294-ca7f-4838-8f6e-ecf7968b9ec2",
+              "createdAt": "2026-06-05T13:22:31.000Z",
+              "updatedAt": "2026-06-05T13:22:31.000Z",
+              "uid": "35240-feb7b294-ca7f-4838-8f6e-ecf7968b9ec2"
+            },
+            {
+              "name": "Stripe List Reviews",
+              "id": "8070d582-b75b-4705-8b20-7d807e692d91",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/reviews?ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "reviews"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<Error: Not supported in OAS>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of Review objects that have open set to true.</p>"
+              },
+              "response": [
+                {
+                  "id": "2fdd2c6b-c150-4495-87ae-9f2dd8e1d2bd",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/reviews?ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "reviews"
+                      ],
+                      "query": [
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"review\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"open\": \"<boolean>\",\n      \"opened_reason\": \"manual\",\n      \"reason\": \"<string>\",\n      \"billing_zip\": \"<string,null>\",\n      \"charge\": \"<string,null>\",\n      \"closed_reason\": null,\n      \"ip_address\": \"<string,null>\",\n      \"ip_address_location\": null,\n      \"payment_intent\": \"<string,null>\",\n      \"session\": {}\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"review\",\n      \"created\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"open\": \"<boolean>\",\n      \"opened_reason\": \"rule\",\n      \"reason\": \"<string>\",\n      \"billing_zip\": \"<string,null>\",\n      \"charge\": \"<string,null>\",\n      \"closed_reason\": \"approved\",\n      \"ip_address\": \"<string,null>\",\n      \"ip_address_location\": {},\n      \"payment_intent\": \"<string,null>\",\n      \"session\": null\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:22:31.000Z",
+                  "updatedAt": "2026-06-05T13:22:31.000Z",
+                  "uid": "35240-2fdd2c6b-c150-4495-87ae-9f2dd8e1d2bd"
+                },
+                {
+                  "id": "aa6fd9c3-f4ff-4231-847c-7141c8ea4b91",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/reviews?ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "reviews"
+                      ],
+                      "query": [
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:31.000Z",
+                  "updatedAt": "2026-06-05T13:22:31.000Z",
+                  "uid": "35240-aa6fd9c3-f4ff-4231-847c-7141c8ea4b91"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:31.000Z",
+              "updatedAt": "2026-06-05T13:22:31.000Z",
+              "uid": "35240-8070d582-b75b-4705-8b20-7d807e692d91"
+            }
+          ],
+          "id": "33c43b79-94ad-4d4b-a23d-182f437ce659",
+          "createdAt": "2026-06-05T13:22:31.000Z",
+          "updatedAt": "2026-06-05T13:22:31.000Z",
+          "uid": "35240-33c43b79-94ad-4d4b-a23d-182f437ce659"
+        }
+      ],
+      "id": "120c8633-661f-4131-9c9e-dd39446e3710",
+      "createdAt": "2026-06-05T13:22:31.000Z",
+      "updatedAt": "2026-06-05T13:22:31.000Z",
+      "uid": "35240-120c8633-661f-4131-9c9e-dd39446e3710"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

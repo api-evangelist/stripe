@@ -1,0 +1,903 @@
+{
+  "info": {
+    "_postman_id": "58d057fd-d9c2-4429-b103-1248874c1767",
+    "name": "Stripe Payment Method Configurations API",
+    "description": "Payment method configurations allow you to configure which payment methods are available to your customers during checkout. Manage payment method availability across multiple Connect accounts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:24:49.000Z",
+    "updatedAt": "2026-06-05T13:24:49.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-58d057fd-d9c2-4429-b103-1248874c1767"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "payment_method_configurations",
+          "item": [
+            {
+              "name": "{configuration}",
+              "item": [
+                {
+                  "name": "Stripe Retrieve Payment Method Configuration",
+                  "id": "6a046172-dc6f-46d6-a89a-5d27aba97ab5",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations",
+                        ":configuration"
+                      ],
+                      "variable": [
+                        {
+                          "id": "fc60739b-09a4-4d1e-bcc8-c8792cb75866",
+                          "key": "configuration",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieve payment method configuration.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "41c9ede4-1ac4-445f-af8c-b93b0735eeaf",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_method_configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "key": "configuration"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"payment_method_configuration\",\n  \"active\": \"<boolean>\",\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"application\": \"<string,null>\",\n  \"name\": \"<string,null>\",\n  \"parent\": \"<string,null>\",\n  \"acss_debit\": {},\n  \"affirm\": null,\n  \"afterpay_clearpay\": {},\n  \"apple_pay\": {},\n  \"bancontact\": {},\n  \"card\": null,\n  \"eps\": {},\n  \"google_pay\": {},\n  \"ideal\": {},\n  \"klarna\": {},\n  \"link\": {},\n  \"paypal\": null,\n  \"sepa_debit\": {},\n  \"us_bank_account\": null\n}",
+                      "createdAt": "2026-06-05T13:24:49.000Z",
+                      "updatedAt": "2026-06-05T13:24:49.000Z",
+                      "uid": "35240-41c9ede4-1ac4-445f-af8c-b93b0735eeaf"
+                    },
+                    {
+                      "id": "626008b3-43c1-4452-b77e-068714adf7d3",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_method_configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "key": "configuration"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:49.000Z",
+                      "updatedAt": "2026-06-05T13:24:49.000Z",
+                      "uid": "35240-626008b3-43c1-4452-b77e-068714adf7d3"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-6a046172-dc6f-46d6-a89a-5d27aba97ab5"
+                },
+                {
+                  "name": "Stripe Update Payment Method Configuration",
+                  "id": "3a0a5160-070f-4baf-b1df-52296a735412",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "active",
+                          "value": "<boolean>"
+                        },
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations",
+                        ":configuration"
+                      ],
+                      "variable": [
+                        {
+                          "id": "9b129b40-c8fa-4c93-b6e6-803ba6b0760d",
+                          "key": "configuration",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Update payment method configuration.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "45f50a4d-faa3-4fb9-bd5d-a438ef832ae4",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "active",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "key": "name",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_method_configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "key": "configuration"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"payment_method_configuration\",\n  \"active\": \"<boolean>\",\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"application\": \"<string,null>\",\n  \"name\": \"<string,null>\",\n  \"parent\": \"<string,null>\",\n  \"acss_debit\": {},\n  \"affirm\": null,\n  \"afterpay_clearpay\": {},\n  \"apple_pay\": {},\n  \"bancontact\": {},\n  \"card\": null,\n  \"eps\": {},\n  \"google_pay\": {},\n  \"ideal\": {},\n  \"klarna\": {},\n  \"link\": {},\n  \"paypal\": null,\n  \"sepa_debit\": {},\n  \"us_bank_account\": null\n}",
+                      "createdAt": "2026-06-05T13:24:49.000Z",
+                      "updatedAt": "2026-06-05T13:24:49.000Z",
+                      "uid": "35240-45f50a4d-faa3-4fb9-bd5d-a438ef832ae4"
+                    },
+                    {
+                      "id": "cbd50a68-ba65-4be1-ae65-f3b1657d13d7",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "active",
+                              "value": "<boolean>"
+                            },
+                            {
+                              "key": "name",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_method_configurations/:configuration",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_method_configurations",
+                            ":configuration"
+                          ],
+                          "variable": [
+                            {
+                              "key": "configuration"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:49.000Z",
+                      "updatedAt": "2026-06-05T13:24:49.000Z",
+                      "uid": "35240-cbd50a68-ba65-4be1-ae65-f3b1657d13d7"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-3a0a5160-070f-4baf-b1df-52296a735412"
+                }
+              ],
+              "id": "cdebe6b1-ab9f-400b-af75-fe0d3ac3df8b",
+              "createdAt": "2026-06-05T13:24:49.000Z",
+              "updatedAt": "2026-06-05T13:24:49.000Z",
+              "uid": "35240-cdebe6b1-ab9f-400b-af75-fe0d3ac3df8b"
+            },
+            {
+              "name": "Stripe List Payment Method Configurations",
+              "id": "80b4fcbd-bb84-42dc-85a9-b5e982ff7764",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/payment_method_configurations?application=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "payment_method_configurations"
+                  ],
+                  "query": [
+                    {
+                      "description": "The Connect application to filter by.",
+                      "key": "application",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "<p>List payment method configurations.</p>"
+              },
+              "response": [
+                {
+                  "id": "807ee21f-91d4-4d72-b0e7-2a462a09ad9c",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations?application=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations"
+                      ],
+                      "query": [
+                        {
+                          "description": "The Connect application to filter by.",
+                          "key": "application",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"payment_method_configuration\",\n      \"active\": \"<boolean>\",\n      \"is_default\": \"<boolean>\",\n      \"livemode\": \"<boolean>\",\n      \"application\": \"<string,null>\",\n      \"name\": \"<string,null>\",\n      \"parent\": \"<string,null>\",\n      \"acss_debit\": null,\n      \"affirm\": null,\n      \"afterpay_clearpay\": {},\n      \"apple_pay\": {},\n      \"bancontact\": null,\n      \"card\": {},\n      \"eps\": {},\n      \"google_pay\": {},\n      \"ideal\": null,\n      \"klarna\": null,\n      \"link\": null,\n      \"paypal\": null,\n      \"sepa_debit\": {},\n      \"us_bank_account\": null\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"payment_method_configuration\",\n      \"active\": \"<boolean>\",\n      \"is_default\": \"<boolean>\",\n      \"livemode\": \"<boolean>\",\n      \"application\": \"<string,null>\",\n      \"name\": \"<string,null>\",\n      \"parent\": \"<string,null>\",\n      \"acss_debit\": null,\n      \"affirm\": {},\n      \"afterpay_clearpay\": {},\n      \"apple_pay\": null,\n      \"bancontact\": null,\n      \"card\": null,\n      \"eps\": {},\n      \"google_pay\": {},\n      \"ideal\": {},\n      \"klarna\": {},\n      \"link\": null,\n      \"paypal\": null,\n      \"sepa_debit\": {},\n      \"us_bank_account\": {}\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-807ee21f-91d4-4d72-b0e7-2a462a09ad9c"
+                },
+                {
+                  "id": "3bb9da6f-f2b5-4730-b65a-cac76ba24022",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations?application=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations"
+                      ],
+                      "query": [
+                        {
+                          "description": "The Connect application to filter by.",
+                          "key": "application",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-3bb9da6f-f2b5-4730-b65a-cac76ba24022"
+                }
+              ],
+              "createdAt": "2026-06-05T13:24:49.000Z",
+              "updatedAt": "2026-06-05T13:24:49.000Z",
+              "uid": "35240-80b4fcbd-bb84-42dc-85a9-b5e982ff7764"
+            },
+            {
+              "name": "Stripe Create Payment Method Configuration",
+              "id": "4e21a3f8-7652-4121-ae93-9f7f560bc418",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "parent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "display_preference",
+                      "value": "[object Object]"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/payment_method_configurations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "payment_method_configurations"
+                  ]
+                },
+                "description": "<p>Creates a payment method configuration.</p>"
+              },
+              "response": [
+                {
+                  "id": "8132e23f-1099-4a62-8a13-4213ec34f284",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "parent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"payment_method_configuration\",\n  \"active\": \"<boolean>\",\n  \"is_default\": \"<boolean>\",\n  \"livemode\": \"<boolean>\",\n  \"application\": \"<string,null>\",\n  \"name\": \"<string,null>\",\n  \"parent\": \"<string,null>\",\n  \"acss_debit\": {},\n  \"affirm\": null,\n  \"afterpay_clearpay\": {},\n  \"apple_pay\": {},\n  \"bancontact\": {},\n  \"card\": null,\n  \"eps\": {},\n  \"google_pay\": {},\n  \"ideal\": {},\n  \"klarna\": {},\n  \"link\": {},\n  \"paypal\": null,\n  \"sepa_debit\": {},\n  \"us_bank_account\": null\n}",
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-8132e23f-1099-4a62-8a13-4213ec34f284"
+                },
+                {
+                  "id": "344d3ef2-0c01-4f04-8346-e1e76644cc67",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "parent",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "display_preference",
+                          "value": "[object Object]"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_method_configurations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_method_configurations"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:24:49.000Z",
+                  "updatedAt": "2026-06-05T13:24:49.000Z",
+                  "uid": "35240-344d3ef2-0c01-4f04-8346-e1e76644cc67"
+                }
+              ],
+              "createdAt": "2026-06-05T13:24:49.000Z",
+              "updatedAt": "2026-06-05T13:24:49.000Z",
+              "uid": "35240-4e21a3f8-7652-4121-ae93-9f7f560bc418"
+            }
+          ],
+          "id": "3deec1ed-6c30-499f-bddf-9f8de59591d2",
+          "createdAt": "2026-06-05T13:24:49.000Z",
+          "updatedAt": "2026-06-05T13:24:49.000Z",
+          "uid": "35240-3deec1ed-6c30-499f-bddf-9f8de59591d2"
+        }
+      ],
+      "id": "0c77f8f8-c674-4c0e-8d3a-3b3b84f4cab8",
+      "createdAt": "2026-06-05T13:24:49.000Z",
+      "updatedAt": "2026-06-05T13:24:49.000Z",
+      "uid": "35240-0c77f8f8-c674-4c0e-8d3a-3b3b84f4cab8"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

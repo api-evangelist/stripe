@@ -1,0 +1,469 @@
+{
+  "info": {
+    "_postman_id": "ceda09fb-14ab-4153-871b-2163adfae454",
+    "name": "Stripe Revenue Recognition API",
+    "description": "Automate your accrual accounting process with Stripe Revenue Recognition. Import transaction data, set up rules, and download revenue reports for compliance with accounting standards like ASC 606.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:24:46.000Z",
+    "updatedAt": "2026-06-05T13:24:46.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-ceda09fb-14ab-4153-871b-2163adfae454"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "reporting",
+          "item": [
+            {
+              "name": "report_runs",
+              "item": [
+                {
+                  "name": "Stripe Create Revenue Recognition Report",
+                  "id": "aa04e50d-4d27-488f-bdef-b07e922503d3",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The report type for revenue recognition reports. Use types like balance_change_from_activity.itemized.5 for detailed data.",
+                          "key": "report_type",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "interval_start",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "interval_end",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "columns",
+                          "value": "<string>,<string>"
+                        },
+                        {
+                          "key": "currency",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/reporting/report_runs",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "reporting",
+                        "report_runs"
+                      ]
+                    },
+                    "description": "<p>Creates a report run for revenue recognition data export.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "7aec5fc9-6b65-4a67-af10-ba992a0a7165",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The report type for revenue recognition reports. Use types like balance_change_from_activity.itemized.5 for detailed data.",
+                              "key": "report_type",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "interval_start",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "interval_end",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "columns",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "key": "currency",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/reporting/report_runs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "reporting",
+                            "report_runs"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"reporting.report_run\",\n  \"created\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"parameters\": {},\n  \"report_type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"error\": \"<string,null>\",\n  \"result\": null,\n  \"succeeded_at\": \"<integer,null>\"\n}",
+                      "createdAt": "2026-06-05T13:24:47.000Z",
+                      "updatedAt": "2026-06-05T13:24:47.000Z",
+                      "uid": "35240-7aec5fc9-6b65-4a67-af10-ba992a0a7165"
+                    },
+                    {
+                      "id": "7f605a51-706f-4b3e-9b66-26594c4581cc",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "description": "(Required) The report type for revenue recognition reports. Use types like balance_change_from_activity.itemized.5 for detailed data.",
+                              "key": "report_type",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "interval_start",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "interval_end",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "columns",
+                              "value": "<string>,<string>"
+                            },
+                            {
+                              "key": "currency",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/reporting/report_runs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "reporting",
+                            "report_runs"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:24:47.000Z",
+                      "updatedAt": "2026-06-05T13:24:47.000Z",
+                      "uid": "35240-7f605a51-706f-4b3e-9b66-26594c4581cc"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:24:47.000Z",
+                  "updatedAt": "2026-06-05T13:24:47.000Z",
+                  "uid": "35240-aa04e50d-4d27-488f-bdef-b07e922503d3"
+                }
+              ],
+              "id": "324b364c-a522-44bc-a105-8511794fdf6d",
+              "createdAt": "2026-06-05T13:24:47.000Z",
+              "updatedAt": "2026-06-05T13:24:47.000Z",
+              "uid": "35240-324b364c-a522-44bc-a105-8511794fdf6d"
+            }
+          ],
+          "id": "24dea221-b8d1-435c-8309-67281ad532ec",
+          "createdAt": "2026-06-05T13:24:47.000Z",
+          "updatedAt": "2026-06-05T13:24:47.000Z",
+          "uid": "35240-24dea221-b8d1-435c-8309-67281ad532ec"
+        },
+        {
+          "name": "credit_notes",
+          "item": [
+            {
+              "name": "Stripe List Credit Notes",
+              "id": "8edba37c-8faf-4a84-8d87-e34b9b4dc06d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/credit_notes?invoice=<string>&customer=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "credit_notes"
+                  ],
+                  "query": [
+                    {
+                      "description": "Only return credit notes for the invoice specified by this invoice ID.",
+                      "key": "invoice",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of credit notes for revenue recognition purposes.</p>"
+              },
+              "response": [
+                {
+                  "id": "c6a55083-4764-4be9-abf4-6d9084337558",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/credit_notes?invoice=<string>&customer=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "credit_notes"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return credit notes for the invoice specified by this invoice ID.",
+                          "key": "invoice",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"credit_note\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"customer\": \"<string>\",\n      \"discount_amount\": \"<integer>\",\n      \"invoice\": \"<string>\",\n      \"lines\": {},\n      \"livemode\": \"<boolean>\",\n      \"metadata\": {\n        \"laborumc\": \"<string>\"\n      },\n      \"number\": \"<string>\",\n      \"status\": \"issued\",\n      \"subtotal\": \"<integer>\",\n      \"total\": \"<integer>\",\n      \"type\": \"post_payment\",\n      \"effective_at\": \"<integer,null>\",\n      \"memo\": \"<string,null>\",\n      \"out_of_band_amount\": \"<integer,null>\",\n      \"reason\": \"order_change\",\n      \"refund\": \"<string,null>\",\n      \"subtotal_excluding_tax\": \"<integer,null>\",\n      \"total_excluding_tax\": \"<integer,null>\",\n      \"voided_at\": \"<integer,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"credit_note\",\n      \"amount\": \"<integer>\",\n      \"created\": \"<integer>\",\n      \"currency\": \"<string>\",\n      \"customer\": \"<string>\",\n      \"discount_amount\": \"<integer>\",\n      \"invoice\": \"<string>\",\n      \"lines\": {},\n      \"livemode\": \"<boolean>\",\n      \"metadata\": {\n        \"anima6\": \"<string>\",\n        \"mollit846\": \"<string>\"\n      },\n      \"number\": \"<string>\",\n      \"status\": \"issued\",\n      \"subtotal\": \"<integer>\",\n      \"total\": \"<integer>\",\n      \"type\": \"pre_payment\",\n      \"effective_at\": \"<integer,null>\",\n      \"memo\": \"<string,null>\",\n      \"out_of_band_amount\": \"<integer,null>\",\n      \"reason\": \"duplicate\",\n      \"refund\": \"<string,null>\",\n      \"subtotal_excluding_tax\": \"<integer,null>\",\n      \"total_excluding_tax\": \"<integer,null>\",\n      \"voided_at\": \"<integer,null>\"\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:24:47.000Z",
+                  "updatedAt": "2026-06-05T13:24:47.000Z",
+                  "uid": "35240-c6a55083-4764-4be9-abf4-6d9084337558"
+                },
+                {
+                  "id": "4662a179-fbd5-444d-a274-1c276ad98dc6",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/credit_notes?invoice=<string>&customer=<string>&ending_before=<string>&limit=<integer>&starting_after=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "credit_notes"
+                      ],
+                      "query": [
+                        {
+                          "description": "Only return credit notes for the invoice specified by this invoice ID.",
+                          "key": "invoice",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:24:47.000Z",
+                  "updatedAt": "2026-06-05T13:24:47.000Z",
+                  "uid": "35240-4662a179-fbd5-444d-a274-1c276ad98dc6"
+                }
+              ],
+              "createdAt": "2026-06-05T13:24:47.000Z",
+              "updatedAt": "2026-06-05T13:24:47.000Z",
+              "uid": "35240-8edba37c-8faf-4a84-8d87-e34b9b4dc06d"
+            }
+          ],
+          "id": "90c3d14b-8972-40a5-a43a-a47a5975d7f7",
+          "createdAt": "2026-06-05T13:24:47.000Z",
+          "updatedAt": "2026-06-05T13:24:47.000Z",
+          "uid": "35240-90c3d14b-8972-40a5-a43a-a47a5975d7f7"
+        }
+      ],
+      "id": "57dc5d1f-ba97-4841-9ede-bbba0f99e7b9",
+      "createdAt": "2026-06-05T13:24:47.000Z",
+      "updatedAt": "2026-06-05T13:24:47.000Z",
+      "uid": "35240-57dc5d1f-ba97-4841-9ede-bbba0f99e7b9"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}

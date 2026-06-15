@@ -79,34 +79,6 @@ paths:
                 $ref: '#/components/schemas/error'
       tags:
         - Crypto Onramp
-  /v1/crypto/onramp_sessions/{onramp_session}:
-    get:
-      summary: Retrieve Onramp Session
-      description: <p>Retrieves a crypto onramp session.</p>
-      operationId: GetCryptoOnrampSessionsOnrampSession
-      parameters:
-        - name: onramp_session
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
-      responses:
-        '200':
-          description: Successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/crypto.onramp_session'
-        default:
-          description: Error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-      tags:
-        - Crypto Onramp
-  /v1/crypto/onramp_sessions:
     get:
       summary: List Onramp Sessions
       description: <p>Returns a list of crypto onramp sessions.</p>
@@ -149,6 +121,33 @@ paths:
                     type: boolean
                   url:
                     type: string
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Crypto Onramp
+  /v1/crypto/onramp_sessions/{onramp_session}:
+    get:
+      summary: Retrieve Onramp Session
+      description: <p>Retrieves a crypto onramp session.</p>
+      operationId: GetCryptoOnrampSessionsOnrampSession
+      parameters:
+        - name: onramp_session
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 5000
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/crypto.onramp_session'
         default:
           description: Error response.
           content:

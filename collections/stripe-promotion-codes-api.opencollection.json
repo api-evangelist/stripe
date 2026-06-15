@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Promotion Codes API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Promotion Codes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Promotion Codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/promotion_codes",
+            "params": [
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Filter promotion codes by whether they are active."
+              },
+              {
+                "name": "code",
+                "value": "",
+                "type": "query",
+                "description": "Only return promotion codes that have this case-insensitive code."
+              },
+              {
+                "name": "coupon",
+                "value": "",
+                "type": "query",
+                "description": "Only return promotion codes for this coupon."
+              },
+              {
+                "name": "customer",
+                "value": "",
+                "type": "query",
+                "description": "Only return promotion codes that are restricted to this customer."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. ending_before is an object ID that defines your place in the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. starting_after is an object ID that defines your place in the list."
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of your promotion codes.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Promotion Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/promotion_codes",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "coupon",
+                  "value": ""
+                },
+                {
+                  "name": "code",
+                  "value": ""
+                },
+                {
+                  "name": "active",
+                  "value": ""
+                },
+                {
+                  "name": "customer",
+                  "value": ""
+                },
+                {
+                  "name": "expires_at",
+                  "value": ""
+                },
+                {
+                  "name": "max_redemptions",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "restrictions",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer, redemption limit, and expiration date.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Promotion Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/promotion_codes/:promotion_code",
+            "params": [
+              {
+                "name": "promotion_code",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the promotion code with the given ID.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Promotion Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/promotion_codes/:promotion_code",
+            "params": [
+              {
+                "name": "promotion_code",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "active",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                },
+                {
+                  "name": "restrictions",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates the specified promotion code by setting the values of the parameters passed.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

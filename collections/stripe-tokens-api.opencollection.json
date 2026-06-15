@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Tokens API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tokens",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "card",
+                  "value": ""
+                },
+                {
+                  "name": "bank_account",
+                  "value": ""
+                },
+                {
+                  "name": "pii",
+                  "value": ""
+                },
+                {
+                  "name": "account",
+                  "value": ""
+                },
+                {
+                  "name": "person",
+                  "value": ""
+                },
+                {
+                  "name": "customer",
+                  "value": ""
+                },
+                {
+                  "name": "cvc_update",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a single-use token that represents a credit card's details. You can use this token in place of a credit card dictionary with any API method.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/tokens/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the token with the given ID.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

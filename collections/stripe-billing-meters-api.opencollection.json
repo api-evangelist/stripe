@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Billing Meters API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Billing Meters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Billing Meters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/billing/meters",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter meters by status."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieve a list of billing meters.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Billing Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing/meters",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "default_aggregation",
+                  "value": ""
+                },
+                {
+                  "name": "display_name",
+                  "value": ""
+                },
+                {
+                  "name": "event_name",
+                  "value": ""
+                },
+                {
+                  "name": "customer_mapping",
+                  "value": ""
+                },
+                {
+                  "name": "value_settings",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a billing meter.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Billing Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/billing/meters/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a billing meter given an ID.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Billing Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing/meters/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "display_name",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates a billing meter.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Deactivate Billing Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing/meters/:id/deactivate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Deactivates a billing meter.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Reactivate Billing Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing/meters/:id/reactivate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<p>Reactivates a billing meter.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Meter Event Summaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/billing/meters/:id/event_summaries",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "customer",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "value_grouping_window",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieve a list of billing meter event summaries.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Meter Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/billing/meter_events",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "event_name",
+                  "value": ""
+                },
+                {
+                  "name": "payload",
+                  "value": ""
+                },
+                {
+                  "name": "timestamp",
+                  "value": ""
+                },
+                {
+                  "name": "identifier",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a billing meter event.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Reporting API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reporting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe List Report Runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/reporting/report_runs",
+            "params": [
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of Report Runs.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Report Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/reporting/report_runs",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "report_type",
+                  "value": ""
+                },
+                {
+                  "name": "parameters",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new object and begin running the report.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Report Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/reporting/report_runs/:report_run",
+            "params": [
+              {
+                "name": "report_run",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of an existing Report Run.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Report Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/reporting/report_types",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a full list of Report Types.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Report Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/reporting/report_types/:report_type",
+            "params": [
+              {
+                "name": "report_type",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the details of a Report Type.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

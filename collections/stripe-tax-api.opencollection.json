@@ -1,0 +1,281 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Tax API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tax",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Tax Calculation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tax/calculations",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "currency",
+                  "value": ""
+                },
+                {
+                  "name": "customer",
+                  "value": ""
+                },
+                {
+                  "name": "customer_details",
+                  "value": ""
+                },
+                {
+                  "name": "line_items",
+                  "value": ""
+                },
+                {
+                  "name": "shipping_cost",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Calculates tax based on input and returns a Tax Calculation object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Tax Calculation Line Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/tax/calculations/:calculation/line_items",
+            "params": [
+              {
+                "name": "calculation",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves the line items of a tax calculation.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Tax Transaction from Calculation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tax/transactions/create_from_calculation",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "calculation",
+                  "value": ""
+                },
+                {
+                  "name": "reference",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a Tax Transaction from a calculation.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Tax Transaction Reversal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tax/transactions/create_reversal",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "mode",
+                  "value": ""
+                },
+                {
+                  "name": "original_transaction",
+                  "value": ""
+                },
+                {
+                  "name": "reference",
+                  "value": ""
+                },
+                {
+                  "name": "line_items",
+                  "value": ""
+                },
+                {
+                  "name": "metadata",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Partially or fully reverses a previously created Transaction.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Tax Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/tax/transactions/:transaction",
+            "params": [
+              {
+                "name": "transaction",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Retrieves a Tax Transaction object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Tax Registrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/tax/registrations",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of Tax Registration objects.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Create Tax Registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tax/registrations",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "active_from",
+                  "value": ""
+                },
+                {
+                  "name": "country",
+                  "value": ""
+                },
+                {
+                  "name": "country_options",
+                  "value": ""
+                },
+                {
+                  "name": "expires_at",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a new Tax Registration object.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Retrieve Tax Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/tax/settings"
+          },
+          "docs": "<p>Retrieves Tax Settings for a merchant.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe Update Tax Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/tax/settings",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "defaults",
+                  "value": ""
+                },
+                {
+                  "name": "head_office",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Updates Tax Settings parameters used in tax calculations.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

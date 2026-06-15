@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Revenue Recognition API",
+    "version": "2024-06-20"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Revenue Recognition",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stripe Create Revenue Recognition Report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/reporting/report_runs",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "report_type",
+                  "value": ""
+                },
+                {
+                  "name": "parameters",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "<p>Creates a report run for revenue recognition data export.</p>"
+        },
+        {
+          "info": {
+            "name": "Stripe List Credit Notes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/credit_notes",
+            "params": [
+              {
+                "name": "invoice",
+                "value": "",
+                "type": "query",
+                "description": "Only return credit notes for the invoice specified by this invoice ID."
+              },
+              {
+                "name": "customer",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "<p>Returns a list of credit notes for revenue recognition purposes.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

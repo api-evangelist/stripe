@@ -1,0 +1,1775 @@
+{
+  "info": {
+    "_postman_id": "509b9824-3c5f-4521-b3ac-4fd4c3ceaed0",
+    "name": "Stripe Quotes API",
+    "description": "A Quote is a way to model prices that you'd like to provide to a customer. Once accepted, it will automatically create an invoice, subscription or subscription schedule.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:22:14.000Z",
+    "updatedAt": "2026-06-05T13:22:15.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-509b9824-3c5f-4521-b3ac-4fd4c3ceaed0"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "quotes",
+          "item": [
+            {
+              "name": "{quote}",
+              "item": [
+                {
+                  "name": "accept",
+                  "item": [
+                    {
+                      "name": "Stripe Accept Quote",
+                      "id": "799a4281-5c2b-40df-a9e0-dd613e06f457",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote/accept",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote",
+                            "accept"
+                          ],
+                          "variable": [
+                            {
+                              "id": "5b41d09a-4287-421d-bad9-3f336f2e1e89",
+                              "key": "quote",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Accepts the specified quote.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "509674c2-b121-435b-8ace-584c49919fd7",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/accept",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "accept"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-509674c2-b121-435b-8ace-584c49919fd7"
+                        },
+                        {
+                          "id": "1e54083f-b89d-47a3-932c-6f879699821d",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/accept",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "accept"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-1e54083f-b89d-47a3-932c-6f879699821d"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-799a4281-5c2b-40df-a9e0-dd613e06f457"
+                    }
+                  ],
+                  "id": "62590b4f-c20c-46eb-8402-8882429ac5a8",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-62590b4f-c20c-46eb-8402-8882429ac5a8"
+                },
+                {
+                  "name": "cancel",
+                  "item": [
+                    {
+                      "name": "Stripe Cancel Quote",
+                      "id": "77d18e9b-7676-4fed-a9ba-2cfbd5340c45",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote",
+                            "cancel"
+                          ],
+                          "variable": [
+                            {
+                              "id": "f9992379-c4d5-40f3-ba76-6486fe3e5d1e",
+                              "key": "quote",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Cancels the quote.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "cf5b3d10-c284-458c-a37e-6ea355f34f4b",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-cf5b3d10-c284-458c-a37e-6ea355f34f4b"
+                        },
+                        {
+                          "id": "250da151-6888-47c8-9496-ff2d5ca064ea",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/cancel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "cancel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-250da151-6888-47c8-9496-ff2d5ca064ea"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-77d18e9b-7676-4fed-a9ba-2cfbd5340c45"
+                    }
+                  ],
+                  "id": "3f526c79-6cc8-4103-bb6d-f341ca7871a7",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-3f526c79-6cc8-4103-bb6d-f341ca7871a7"
+                },
+                {
+                  "name": "finalize",
+                  "item": [
+                    {
+                      "name": "Stripe Finalize Quote",
+                      "id": "7c979111-3eec-4010-a71b-bab7951553d2",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "expires_at",
+                              "value": "<integer>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote/finalize",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote",
+                            "finalize"
+                          ],
+                          "variable": [
+                            {
+                              "id": "a74eb7be-fb4e-4987-822c-b954101aca1e",
+                              "key": "quote",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Finalizes the quote.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "9ae4120b-ce77-4ce3-8668-4021037b0cfb",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "expires_at",
+                                  "value": "<integer>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/finalize",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "finalize"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-9ae4120b-ce77-4ce3-8668-4021037b0cfb"
+                        },
+                        {
+                          "id": "22d2d8c9-7dbf-4599-8b0c-3242edb3f87f",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "urlencoded",
+                              "urlencoded": [
+                                {
+                                  "key": "expires_at",
+                                  "value": "<integer>"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/finalize",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "finalize"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-22d2d8c9-7dbf-4599-8b0c-3242edb3f87f"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-7c979111-3eec-4010-a71b-bab7951553d2"
+                    }
+                  ],
+                  "id": "0d2a7ef0-9fb9-437f-98cb-72fc5fef5796",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-0d2a7ef0-9fb9-437f-98cb-72fc5fef5796"
+                },
+                {
+                  "name": "line_items",
+                  "item": [
+                    {
+                      "name": "Stripe List Quote Line Items",
+                      "id": "4f34ac46-2467-4de0-9195-f14213035f47",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote/line_items?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote",
+                            "line_items"
+                          ],
+                          "query": [
+                            {
+                              "key": "ending_before",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "starting_after",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "87c810ed-ee7f-4199-9db7-f9dda7d0d860",
+                              "key": "quote",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>When retrieving a quote, there is an includable line_items property containing the first handful of those items.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "06fb3db3-70e9-4ae8-ab4f-76b824d8c4d5",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/line_items?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "line_items"
+                              ],
+                              "query": [
+                                {
+                                  "key": "ending_before",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "starting_after",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"object\": \"list\",\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-06fb3db3-70e9-4ae8-ab4f-76b824d8c4d5"
+                        },
+                        {
+                          "id": "d9a1e96f-bf5a-41cf-970c-829bb1731416",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/line_items?ending_before=<string>&limit=<integer>&starting_after=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "line_items"
+                              ],
+                              "query": [
+                                {
+                                  "key": "ending_before",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "key": "starting_after",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-d9a1e96f-bf5a-41cf-970c-829bb1731416"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-4f34ac46-2467-4de0-9195-f14213035f47"
+                    }
+                  ],
+                  "id": "b5b65a04-6f63-4b47-b5a2-45013909f842",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-b5b65a04-6f63-4b47-b5a2-45013909f842"
+                },
+                {
+                  "name": "pdf",
+                  "item": [
+                    {
+                      "name": "Stripe Download Quote PDF",
+                      "id": "6dd3ad27-090d-44f8-84e0-bb10cccc54e5",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/pdf"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote/pdf",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote",
+                            "pdf"
+                          ],
+                          "variable": [
+                            {
+                              "id": "94fae588-c7ef-4a6d-9351-8268b42a1e86",
+                              "key": "quote",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "<p>Download the PDF for a finalized quote.</p>"
+                      },
+                      "response": [
+                        {
+                          "id": "1d3c51b4-aef2-46f7-9b1c-8555e17cd79a",
+                          "name": "Successful response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/pdf"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/pdf",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "pdf"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/pdf"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "<binary>",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-1d3c51b4-aef2-46f7-9b1c-8555e17cd79a"
+                        },
+                        {
+                          "id": "078d751c-0e73-4072-aa5d-af27fece0f73",
+                          "name": "Error response.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: basic",
+                                "key": "Authorization",
+                                "value": "Basic <credentials>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/quotes/:quote/pdf",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "quotes",
+                                ":quote",
+                                "pdf"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "quote"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T13:22:15.000Z",
+                          "updatedAt": "2026-06-05T13:22:15.000Z",
+                          "uid": "35240-078d751c-0e73-4072-aa5d-af27fece0f73"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-6dd3ad27-090d-44f8-84e0-bb10cccc54e5"
+                    }
+                  ],
+                  "id": "5754836d-823d-4fb6-87e8-c8d5dbb62d27",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-5754836d-823d-4fb6-87e8-c8d5dbb62d27"
+                },
+                {
+                  "name": "Stripe Retrieve Quote",
+                  "id": "8e5d1cf3-7240-473c-9013-e4860a930aa8",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes/:quote?expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes",
+                        ":quote"
+                      ],
+                      "query": [
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "aa718ccb-b4f0-420f-9daf-22cf9b90acf8",
+                          "key": "quote",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>Retrieves the quote with the given ID.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "7593422f-1207-466c-be2d-81cf4e3cc21a",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "quote"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-7593422f-1207-466c-be2d-81cf4e3cc21a"
+                    },
+                    {
+                      "id": "c187c469-129e-4b4c-97e9-819b8d48ae74",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote?expand=<Error: Not supported in OAS>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote"
+                          ],
+                          "query": [
+                            {
+                              "key": "expand",
+                              "value": "<Error: Not supported in OAS>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "quote"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-c187c469-129e-4b4c-97e9-819b8d48ae74"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-8e5d1cf3-7240-473c-9013-e4860a930aa8"
+                },
+                {
+                  "name": "Stripe Update Quote",
+                  "id": "eec763dd-b74b-4b2a-a796-93d399756387",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expires_at",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "Excepteur0",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes/:quote",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes",
+                        ":quote"
+                      ],
+                      "variable": [
+                        {
+                          "id": "a8d46e92-6168-426b-ad7e-e1b62396460b",
+                          "key": "quote",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "description": "<p>A quote models prices and services for a customer.</p>"
+                  },
+                  "response": [
+                    {
+                      "id": "8ba14e40-6d45-4a25-a54b-f977762f61c6",
+                      "name": "Successful response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "description",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expires_at",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "line_items",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "line_items",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "Excepteur0",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote"
+                          ],
+                          "variable": [
+                            {
+                              "key": "quote"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-8ba14e40-6d45-4a25-a54b-f977762f61c6"
+                    },
+                    {
+                      "id": "edf75258-ffab-49e2-b14c-7bc13461cea3",
+                      "name": "Error response.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: basic",
+                            "key": "Authorization",
+                            "value": "Basic <credentials>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "description",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "expires_at",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "line_items",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "line_items",
+                              "value": "[object Object]"
+                            },
+                            {
+                              "key": "Excepteur0",
+                              "value": "<string>"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/quotes/:quote",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "quotes",
+                            ":quote"
+                          ],
+                          "variable": [
+                            {
+                              "key": "quote"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-06-05T13:22:15.000Z",
+                      "updatedAt": "2026-06-05T13:22:15.000Z",
+                      "uid": "35240-edf75258-ffab-49e2-b14c-7bc13461cea3"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-eec763dd-b74b-4b2a-a796-93d399756387"
+                }
+              ],
+              "id": "1262bcd6-e408-4b9b-bcd0-f55e0f858d3d",
+              "createdAt": "2026-06-05T13:22:15.000Z",
+              "updatedAt": "2026-06-05T13:22:15.000Z",
+              "uid": "35240-1262bcd6-e408-4b9b-bcd0-f55e0f858d3d"
+            },
+            {
+              "name": "Stripe List Quotes",
+              "id": "d1bdf529-f1ab-4489-8c26-23398fb002bc",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/quotes?customer=<string>&status=draft&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "quotes"
+                  ],
+                  "query": [
+                    {
+                      "description": "The ID of the customer whose quotes will be retrieved.",
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The status of the quotes to retrieve.",
+                      "key": "status",
+                      "value": "draft"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand",
+                      "value": "<Error: Not supported in OAS>"
+                    }
+                  ]
+                },
+                "description": "<p>Returns a list of your quotes.</p>"
+              },
+              "response": [
+                {
+                  "id": "439256c5-2f84-4fd6-b8ff-d6a2b68d5458",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes?customer=<string>&status=draft&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes"
+                      ],
+                      "query": [
+                        {
+                          "description": "The ID of the customer whose quotes will be retrieved.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The status of the quotes to retrieve.",
+                          "key": "status",
+                          "value": "draft"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"object\": \"quote\",\n      \"amount_subtotal\": \"<integer>\",\n      \"amount_total\": \"<integer>\",\n      \"collection_method\": \"charge_automatically\",\n      \"created\": \"<integer>\",\n      \"expires_at\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"status\": \"accepted\",\n      \"application\": \"<string,null>\",\n      \"application_fee_amount\": \"<integer,null>\",\n      \"application_fee_percent\": \"<number,null>\",\n      \"automatic_tax\": {\n        \"enabled\": \"<boolean>\",\n        \"status\": \"<string,null>\"\n      },\n      \"computed\": {},\n      \"currency\": \"<string,null>\",\n      \"customer\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"footer\": \"<string,null>\",\n      \"header\": \"<string,null>\",\n      \"invoice\": \"<string,null>\",\n      \"line_items\": {},\n      \"metadata\": {\n        \"eu9b\": \"<string>\"\n      },\n      \"number\": \"<string,null>\",\n      \"subscription\": \"<string,null>\",\n      \"subscription_schedule\": \"<string,null>\",\n      \"total_details\": {}\n    },\n    {\n      \"id\": \"<string>\",\n      \"object\": \"quote\",\n      \"amount_subtotal\": \"<integer>\",\n      \"amount_total\": \"<integer>\",\n      \"collection_method\": \"charge_automatically\",\n      \"created\": \"<integer>\",\n      \"expires_at\": \"<integer>\",\n      \"livemode\": \"<boolean>\",\n      \"status\": \"open\",\n      \"application\": \"<string,null>\",\n      \"application_fee_amount\": \"<integer,null>\",\n      \"application_fee_percent\": \"<number,null>\",\n      \"automatic_tax\": {\n        \"enabled\": \"<boolean>\",\n        \"status\": \"<string,null>\"\n      },\n      \"computed\": {},\n      \"currency\": \"<string,null>\",\n      \"customer\": \"<string,null>\",\n      \"description\": \"<string,null>\",\n      \"footer\": \"<string,null>\",\n      \"header\": \"<string,null>\",\n      \"invoice\": \"<string,null>\",\n      \"line_items\": {},\n      \"metadata\": {\n        \"proident_4\": \"<string>\",\n        \"sint_545\": \"<string>\"\n      },\n      \"number\": \"<string,null>\",\n      \"subscription\": \"<string,null>\",\n      \"subscription_schedule\": \"<string,null>\",\n      \"total_details\": {}\n    }\n  ],\n  \"has_more\": \"<boolean>\",\n  \"url\": \"<string>\"\n}",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-439256c5-2f84-4fd6-b8ff-d6a2b68d5458"
+                },
+                {
+                  "id": "fcef5cb6-9a08-4402-aa07-8e1491892886",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes?customer=<string>&status=draft&ending_before=<string>&limit=<integer>&starting_after=<string>&expand=<Error: Not supported in OAS>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes"
+                      ],
+                      "query": [
+                        {
+                          "description": "The ID of the customer whose quotes will be retrieved.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The status of the quotes to retrieve.",
+                          "key": "status",
+                          "value": "draft"
+                        },
+                        {
+                          "key": "ending_before",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "starting_after",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "expand",
+                          "value": "<Error: Not supported in OAS>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-fcef5cb6-9a08-4402-aa07-8e1491892886"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:15.000Z",
+              "updatedAt": "2026-06-05T13:22:15.000Z",
+              "uid": "35240-d1bdf529-f1ab-4489-8c26-23398fb002bc"
+            },
+            {
+              "name": "Stripe Create Quote",
+              "id": "5ff87807-1533-4ae3-b598-2c5e013dce8f",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "description": "The customer to create this quote for.",
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "A description that will be displayed on the quote.",
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "line_items",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "key": "line_items",
+                      "value": "[object Object]"
+                    },
+                    {
+                      "description": "A header that will be displayed on the quote PDF.",
+                      "key": "header",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "A footer that will be displayed on the quote PDF.",
+                      "key": "footer",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The date on which this quote will expire.",
+                      "key": "expires_at",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "collection_method",
+                      "value": "charge_automatically"
+                    },
+                    {
+                      "key": "et_6",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Lorem_7",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "qui_a6",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/quotes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "quotes"
+                  ]
+                },
+                "description": "<p>A quote models prices and services for a customer.</p>"
+              },
+              "response": [
+                {
+                  "id": "1a705a14-0647-4d28-b50c-482cb89f35f0",
+                  "name": "Successful response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The customer to create this quote for.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A description that will be displayed on the quote.",
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "A header that will be displayed on the quote PDF.",
+                          "key": "header",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A footer that will be displayed on the quote PDF.",
+                          "key": "footer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The date on which this quote will expire.",
+                          "key": "expires_at",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "collection_method",
+                          "value": "charge_automatically"
+                        },
+                        {
+                          "key": "et_6",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "Lorem_7",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "qui_a6",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"object\": \"quote\",\n  \"amount_subtotal\": \"<integer>\",\n  \"amount_total\": \"<integer>\",\n  \"collection_method\": \"charge_automatically\",\n  \"created\": \"<integer>\",\n  \"expires_at\": \"<integer>\",\n  \"livemode\": \"<boolean>\",\n  \"status\": \"accepted\",\n  \"application\": \"<string,null>\",\n  \"application_fee_amount\": \"<integer,null>\",\n  \"application_fee_percent\": \"<number,null>\",\n  \"automatic_tax\": {\n    \"enabled\": \"<boolean>\",\n    \"status\": \"<string,null>\"\n  },\n  \"computed\": {},\n  \"currency\": \"<string,null>\",\n  \"customer\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"footer\": \"<string,null>\",\n  \"header\": \"<string,null>\",\n  \"invoice\": \"<string,null>\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"minim6\": \"<string>\"\n  },\n  \"number\": \"<string,null>\",\n  \"subscription\": \"<string,null>\",\n  \"subscription_schedule\": \"<string,null>\",\n  \"total_details\": {}\n}",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-1a705a14-0647-4d28-b50c-482cb89f35f0"
+                },
+                {
+                  "id": "f5862bdd-092e-41b3-956e-96d71a90006f",
+                  "name": "Error response.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: basic",
+                        "key": "Authorization",
+                        "value": "Basic <credentials>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "The customer to create this quote for.",
+                          "key": "customer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A description that will be displayed on the quote.",
+                          "key": "description",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "key": "line_items",
+                          "value": "[object Object]"
+                        },
+                        {
+                          "description": "A header that will be displayed on the quote PDF.",
+                          "key": "header",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "A footer that will be displayed on the quote PDF.",
+                          "key": "footer",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The date on which this quote will expire.",
+                          "key": "expires_at",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "collection_method",
+                          "value": "charge_automatically"
+                        },
+                        {
+                          "key": "et_6",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "Lorem_7",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "qui_a6",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/quotes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "quotes"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"type\": \"<string>\",\n    \"message\": \"<string>\",\n    \"code\": \"<string>\",\n    \"param\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-06-05T13:22:15.000Z",
+                  "updatedAt": "2026-06-05T13:22:15.000Z",
+                  "uid": "35240-f5862bdd-092e-41b3-956e-96d71a90006f"
+                }
+              ],
+              "createdAt": "2026-06-05T13:22:15.000Z",
+              "updatedAt": "2026-06-05T13:22:15.000Z",
+              "uid": "35240-5ff87807-1533-4ae3-b598-2c5e013dce8f"
+            }
+          ],
+          "id": "0277937a-9ea7-46bd-a4ef-b951c4e994e0",
+          "createdAt": "2026-06-05T13:22:15.000Z",
+          "updatedAt": "2026-06-05T13:22:15.000Z",
+          "uid": "35240-0277937a-9ea7-46bd-a4ef-b951c4e994e0"
+        }
+      ],
+      "id": "72093db7-e0a1-4b3e-b4fb-cde316cfb90e",
+      "createdAt": "2026-06-05T13:22:15.000Z",
+      "updatedAt": "2026-06-05T13:22:15.000Z",
+      "uid": "35240-72093db7-e0a1-4b3e-b4fb-cde316cfb90e"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.stripe.com/"
+    }
+  ]
+}
