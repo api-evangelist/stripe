@@ -1,0 +1,64 @@
+generated: '2026-06-20'
+method: derived
+format: stripe-error-object
+source: >-
+  Derived from the shared `error` response schema (components.schemas.api_errors)
+  referenced by 4xx/5xx responses across openapi/*.yml, enriched from the Stripe
+  error reference at https://docs.stripe.com/api/errors. Stripe does NOT use
+  RFC 9457 application/problem+json; every error is returned as
+  {"error": {"type", "code", "message", ...}}.
+envelope:
+  media_type: application/json
+  shape: '{ "error": { "type": string, "code": string, "message": string, "param": string, "decline_code": string } }'
+error_types:
+  - api_error: API errors cover any other type of problem (e.g. a temporary problem with Stripe's servers).
+  - card_error: Card errors are the most common type of error and result when a user enters a card that can't be charged for some reason.
+  - idempotency_error: Idempotency errors occur when an Idempotency-Key is reused on a request that does not match the original request's API endpoint and parameters.
+  - invalid_request_error: Invalid request errors arise when your request has invalid parameters.
+problems:
+  - status: 400
+    title: Bad Request
+    meaning: The request was unacceptable, often due to missing a required parameter.
+    error_type: invalid_request_error
+  - status: 401
+    title: Unauthorized
+    meaning: No valid API key provided.
+    error_type: invalid_request_error
+  - status: 402
+    title: Request Failed
+    meaning: The parameters were valid but the request failed (e.g. a card was declined).
+    error_type: card_error
+    remediation: Inspect error.code and error.decline_code; surface a user-facing message and request a different payment method.
+  - status: 403
+    title: Forbidden
+    meaning: The API key doesn't have permissions to perform the request.
+    error_type: invalid_request_error
+  - status: 404
+    title: Not Found
+    meaning: The requested resource doesn't exist.
+    error_type: invalid_request_error
+  - status: 409
+    title: Conflict
+    meaning: The request conflicts with another request (perhaps due to using the same idempotent key).
+    error_type: idempotency_error
+  - status: 429
+    title: Too Many Requests
+    meaning: Too many requests hit the API too quickly. We recommend an exponential backoff of your requests.
+    error_type: api_error
+    remediation: Honor rate limits (docs.stripe.com/rate-limits); retry with exponential backoff and jitter.
+  - status: 500
+    title: Server Error
+    meaning: Something went wrong on Stripe's end.
+    error_type: api_error
+  - status: 502
+    title: Bad Gateway
+    meaning: Something went wrong on Stripe's end (rare).
+    error_type: api_error
+  - status: 503
+    title: Service Unavailable
+    meaning: Something went wrong on Stripe's end (rare).
+    error_type: api_error
+  - status: 504
+    title: Gateway Timeout
+    meaning: Something went wrong on Stripe's end (rare).
+    error_type: api_error

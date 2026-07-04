@@ -1,0 +1,45 @@
+generated: '2026-06-20'
+method: searched
+source: >-
+  https://docs.stripe.com/upgrades, https://docs.stripe.com/changelog,
+  https://docs.stripe.com/api/versioning, https://status.stripe.com; deprecated
+  products derived from apis.yml descriptions (Plans replaced by Prices, Sources
+  legacy) and openapi deprecated flags.
+versioning:
+  scheme: date-based
+  mechanism: Stripe-Version request header (per-account default pinned in Dashboard)
+  example: '2023-10-16'
+  docs: https://docs.stripe.com/api/versioning
+  upgrades: https://docs.stripe.com/upgrades
+  notes: >-
+    Stripe versions the API by date. A new version is released for
+    backwards-incompatible changes; requests use the account's pinned version
+    unless overridden per request with the Stripe-Version header. Stripe also
+    ships a v2 API surface (docs.stripe.com/api/v2) for select products such as
+    Billing Meters event streams.
+deprecation:
+  policy_url: https://docs.stripe.com/upgrades
+  changelog: https://docs.stripe.com/changelog
+  sunset_header: false
+  notes: >-
+    Stripe favors long-lived versioned APIs over hard removals; deprecations are
+    announced in the changelog and old behavior is preserved for accounts pinned
+    to an older version rather than via RFC 8594 Sunset/Deprecation headers.
+sla:
+  url: https://stripe.com/legal/ssa
+  public_uptime_target: null
+  notes: Stripe does not publish a numeric uptime SLA for standard accounts; availability commitments are handled via enterprise agreements.
+status_page: https://status.stripe.com/
+rate_limits: https://docs.stripe.com/rate-limits
+deprecated_products:
+  - name: Plans API
+    aid: stripe:stripe-plans-api
+    superseded_by: Prices API (stripe:stripe-prices-api)
+    evidence: apis.yml description — "It replaces the Plans API and is backwards compatible."
+  - name: Sources API
+    aid: stripe:stripe-sources-api
+    superseded_by: Payment Methods API (stripe:stripe-payment-method-api)
+    evidence: Legacy payment-instrument object; new integrations should use PaymentMethods.
+deprecated_operations:
+  - source: openapi/stripe-customers-api-openapi.yml
+    note: Contains one or more operations/parameters flagged deprecated:true (legacy customer.sources handling).

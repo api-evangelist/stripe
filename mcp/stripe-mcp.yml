@@ -1,0 +1,47 @@
+generated: '2026-06-20'
+method: searched
+status: published
+source: https://docs.stripe.com/mcp
+description: >-
+  Stripe operates an official remote MCP server at https://mcp.stripe.com,
+  authenticated with OAuth (RFC 9728 protected resource; authorization server
+  https://access.stripe.com/mcp) or a restricted API key. A local stdio server
+  ships as npx @stripe/mcp (github.com/stripe/agent-toolkit). Tool list captured
+  verbatim from the Stripe MCP documentation.
+server:
+  name: stripe
+  transport: http
+  url: https://mcp.stripe.com
+  auth: oauth2
+  protected_resource: well-known/stripe-mcp-oauth-protected-resource.json
+  authorization_server: https://access.stripe.com/mcp
+local:
+  name: "@stripe/mcp"
+  transport: stdio
+  install: npx -y @stripe/mcp
+  source: https://github.com/stripe/agent-toolkit
+tools:
+  - name: stripe_api_search
+    description: Search for Stripe API methods by keyword.
+  - name: stripe_api_details
+    description: Get detailed parameter information for a specific Stripe API method.
+  - name: stripe_api_read
+    description: Read data with any Stripe API GET method.
+  - name: stripe_api_write
+    description: Write data with any Stripe API POST, PATCH, PUT and DELETE method.
+  - name: get_stripe_account_info
+    description: Retrieve account.
+  - name: create_refund
+    description: Create refund.
+  - name: search_stripe_resources
+    description: Search Stripe resources.
+  - name: fetch_stripe_resources
+    description: Fetch Stripe object.
+  - name: search_stripe_documentation
+    description: Search the Stripe documentation for the given question and language.
+  - name: stripe_implementation_planner
+    description: Guides the user through Stripe products to accept payments, sell products, set up billing, or build any Stripe integration.
+  - name: send_stripe_mcp_feedback
+    description: Submit feedback from user or agent about Stripe's MCP server tools.
+  - name: stripe_report
+    description: Search, retrieve and create reports and report runs.

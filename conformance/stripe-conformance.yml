@@ -1,0 +1,62 @@
+generated: '2026-06-20'
+method: derived
+source: >-
+  Derived from openapi/*.yml (securitySchemes, error schema, pagination and
+  idempotency parameters) and Stripe compliance/documentation claims
+  (docs.stripe.com/security, /api/authentication, /api/pagination,
+  /api/idempotent_requests, /api/errors, /webhooks).
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      Stripe Connect uses OAuth 2.0 for connected-account authorization
+      (docs.stripe.com/connect/oauth-reference); the hosted MCP server is an
+      OAuth 2.0 protected resource.
+  - id: http-basic-bearer-auth
+    conforms: true
+    evidence: openapi securitySchemes define basicAuth and bearerAuth (secret API keys).
+  - id: oidc
+    conforms: false
+    evidence: No /.well-known/openid-configuration on the API host; no OIDC discovery.
+  - id: pci-dss
+    conforms: true
+    evidence: >-
+      Stripe is certified PCI DSS Level 1 Service Provider
+      (docs.stripe.com/security).
+  - id: psd2-sca
+    conforms: true
+    evidence: >-
+      Payment Intents / Setup Intents implement Strong Customer Authentication
+      and 3D Secure for PSD2 (docs.stripe.com/strong-customer-authentication).
+  - id: idempotency
+    conforms: true
+    evidence: >-
+      Idempotency-Key header supported on all POST requests
+      (docs.stripe.com/api/idempotent_requests).
+  - id: pagination
+    conforms: true
+    evidence: >-
+      Cursor-based list pagination via limit / starting_after / ending_before
+      (docs.stripe.com/api/pagination).
+  - id: webhook-signing
+    conforms: true
+    evidence: >-
+      Signed webhook payloads via the Stripe-Signature header
+      (docs.stripe.com/webhooks/signatures).
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use Stripe's own {"error": {...}} envelope with type/code/message,
+      not application/problem+json.
+  - id: fapi
+    conforms: false
+    evidence: No published Financial-grade API (FAPI) profile conformance claim.
+  - id: scim
+    conforms: false
+    evidence: No SCIM 2.0 provisioning surface in the payments API.
+  - id: fhir-r4
+    conforms: false
+  - id: odata
+    conforms: false
+  - id: json-api
+    conforms: false
