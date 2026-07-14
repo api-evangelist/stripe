@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Sync Stripe customers into Salesforce contacts
+  summary: Create or update a Salesforce Contact from a Stripe customer, matched by email.
+  description: >-
+    When a Stripe customer is created, this workflow looks up that customer in
+    Stripe by email and then creates the matching Salesforce Contact with the
+    customer's billing details. It keeps Stripe as the source of truth for
+    customer identity and mirrors that identity into the Salesforce CRM.
+  version: 1.0.0
+sourceDescriptions:
+- name: stripe
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/customers-openapi-original.yml
+  type: openapi
+- name: salesforce
+  url: https://raw.githubusercontent.com/api-evangelist/salesforce/refs/heads/main/openapi/salesforce-rest-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-salesforce-sync-customer
+  summary: Fetch a Stripe customer by email and create the matching Salesforce Contact.
+  description: >-
+    Lists the Stripe customer matching the supplied email, then creates a
+    Salesforce Contact record carrying the Stripe customer id, name, and email.
+  inputs:
+    type: object
+    required:
+    - email
+    properties:
+      email:
+        type: string
+        description: Email address of the Stripe customer to sync into Salesforce.
+      last_name:
+        type: string
+        description: Contact last name to set on the Salesforce Contact (required by Salesforce).
+      first_name:
+        type: string
+        description: Contact first name to set on the Salesforce Contact.
+  steps:
+  - stepId: find-stripe-customer
+    description: List Stripe customers filtered by email and select the first match.
+    operationId: $sourceDescriptions.stripe.GetCustomers
+    parameters:
+    - name: email
+      in: query
+      value: $inputs.email
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      stripe_customer_id: $response.body#/data/0/id
+      stripe_customer_email: $response.body#/data/0/email
+      stripe_customer_name: $response.body#/data/0/name
+  - stepId: create-salesforce-contact
+    description: Create a Salesforce Contact from the resolved Stripe customer.
+    operationId: $sourceDescriptions.salesforce.createRecord
+    parameters:
+    - name: sobjectType
+      in: path
+      value: Contact
+    requestBody:
+      contentType: application/json
+      payload:
+        LastName: $inputs.last_name
+        FirstName: $inputs.first_name
+        Email: $steps.find-stripe-customer.outputs.stripe_customer_email
+        Description: $steps.find-stripe-customer.outputs.stripe_customer_id
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      salesforce_contact_id: $response.body#/id
+      salesforce_success: $response.body#/success
+  outputs:
+    stripe_customer_id: $steps.find-stripe-customer.outputs.stripe_customer_id
+    salesforce_contact_id: $steps.create-salesforce-contact.outputs.salesforce_contact_id

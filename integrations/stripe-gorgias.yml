@@ -1,0 +1,63 @@
+arazzo: 1.0.1
+info:
+  title: Show Stripe order context in Gorgias for e-commerce support
+  summary: Surface a Gorgias customer's Stripe Checkout sessions inline for support agents.
+  description: >-
+    When a Gorgias support ticket is opened, this workflow looks up the requesting
+    customer in Gorgias by email, then retrieves that customer's Stripe Checkout
+    sessions so the agent sees recent order context inline. It replicates the legacy
+    Naftiko integration that joined Gorgias support tickets with Stripe order history.
+  version: 1.0.0
+sourceDescriptions:
+  - name: gorgias
+    url: https://raw.githubusercontent.com/api-evangelist/gorgias/refs/heads/main/openapi/gorgias-openapi.yml
+    type: openapi
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-checkout-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-gorgias-order-context
+    summary: Look up a Gorgias customer and fetch their Stripe Checkout sessions.
+    description: >-
+      Given the email address on an opened Gorgias ticket, find the matching Gorgias
+      customer and list their Stripe Checkout sessions to display order context.
+    inputs:
+      type: object
+      required:
+        - customer_email
+      properties:
+        customer_email:
+          type: string
+          format: email
+          description: Email address of the customer on the opened Gorgias ticket.
+    steps:
+      - stepId: find-gorgias-customer
+        description: Find the Gorgias customer record by email.
+        operationId: $sourceDescriptions.gorgias.listCustomers
+        parameters:
+          - name: email
+            in: query
+            value: $inputs.customer_email
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customer_id: $response.body#/data/0/id
+          customer_email: $response.body#/data/0/email
+      - stepId: fetch-stripe-checkout-sessions
+        description: List the customer's Stripe Checkout sessions for order context.
+        operationId: $sourceDescriptions.stripe.getCheckoutSessions
+        parameters:
+          - name: customer_details
+            in: query
+            value:
+              email: $steps.find-gorgias-customer.outputs.customer_email
+          - name: limit
+            in: query
+            value: 10
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          checkout_sessions: $response.body#/data
+    outputs:
+      gorgias_customer_id: $steps.find-gorgias-customer.outputs.customer_id
+      checkout_sessions: $steps.fetch-stripe-checkout-sessions.outputs.checkout_sessions

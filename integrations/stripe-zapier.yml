@@ -1,0 +1,82 @@
+arazzo: 1.0.1
+info:
+  title: Stripe to Zapier Event Automation
+  summary: Fire Zapier action runs from Stripe events.
+  description: >-
+    Replicates the legacy Naftiko "Stripe trigger spec for Zapier" capability as
+    a forkable Arazzo workflow. It lists recent Stripe events, then runs a Zapier
+    action for the most recent event so that Stripe activity declaratively drives
+    a Zap without the closed Zapier app configuration.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/events-openapi-original.yml
+    type: openapi
+  - name: zapier
+    url: https://raw.githubusercontent.com/api-evangelist/zapier/refs/heads/main/openapi/zapier-partner-api.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-zapier-trigger
+    summary: List Stripe events and run a Zapier action for the latest one.
+    description: >-
+      Retrieves recent Stripe events, then invokes a Zapier action run using the
+      most recent event as the payload, wiring the Zapier action, authentication,
+      and inputs from the workflow inputs.
+    inputs:
+      type: object
+      required:
+        - action
+        - authentication
+      properties:
+        event_type:
+          type: string
+          description: Optional Stripe event name (or wildcard) to filter on, e.g. charge.succeeded.
+        limit:
+          type: integer
+          description: Maximum number of Stripe events to return (1-100).
+          default: 1
+        action:
+          type: string
+          description: The Zapier action (step) identifier to run, e.g. example_core:Vn7xbE60.
+        authentication:
+          type: string
+          description: The Zapier authentication identifier to run the action with.
+        inputs:
+          type: object
+          description: Field inputs passed to the Zapier action run.
+    steps:
+      - stepId: list-stripe-events
+        description: List recent Stripe events, optionally filtered by type.
+        operationId: $sourceDescriptions.stripe.GetEvents
+        parameters:
+          - name: type
+            in: query
+            value: $inputs.event_type
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          events: $response.body#/data
+          latest_event_id: $response.body#/data/0/id
+          latest_event_type: $response.body#/data/0/type
+      - stepId: run-zapier-action
+        description: Run a Zapier action for the latest Stripe event.
+        operationId: $sourceDescriptions.zapier.create-action-run
+        requestBody:
+          contentType: application/json
+          payload:
+            data:
+              action: $inputs.action
+              authentication: $inputs.authentication
+              inputs: $inputs.inputs
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          action_run_id: $response.body#/data/id
+          action_run_type: $response.body#/data/type
+    outputs:
+      latest_event_id: $steps.list-stripe-events.outputs.latest_event_id
+      latest_event_type: $steps.list-stripe-events.outputs.latest_event_type
+      action_run_id: $steps.run-zapier-action.outputs.action_run_id

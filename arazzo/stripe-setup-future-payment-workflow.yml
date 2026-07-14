@@ -1,0 +1,85 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Set Up Future Payment
+  summary: Create a SetupIntent to save a payment method for future off-session use, then confirm it.
+  description: >-
+    The canonical Stripe pattern for collecting permission to charge a payment
+    method later without the customer present. The workflow first creates a
+    SetupIntent flagged for off-session usage and bound to a customer and payment
+    method, then confirms it so any required SCA/3DS authorization is triggered
+    and the payment method is saved for future charges. Each step spells out its
+    form-encoded request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: setupIntentsApi
+  url: ../openapi/stripe-setup-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: setup-future-payment
+  summary: Save a payment method for future off-session charges via a confirmed SetupIntent.
+  description: >-
+    Creates a SetupIntent for off-session usage attached to the supplied customer
+    and payment method, then confirms the SetupIntent to complete any required
+    SCA/3DS authorization and persist the payment method for later charges.
+  inputs:
+    type: object
+    required:
+    - customer
+    - paymentMethod
+    properties:
+      customer:
+        type: string
+        description: ID of the Customer the payment method is being saved for (e.g. cus_...).
+      paymentMethod:
+        type: string
+        description: ID of the PaymentMethod to save for future use (e.g. pm_card_visa).
+      returnUrl:
+        type: string
+        description: URL to redirect the customer to after any required authentication (e.g. https://example.com/setup/complete).
+      description:
+        type: string
+        description: Optional description for the SetupIntent.
+  steps:
+  - stepId: createSetupIntent
+    description: >-
+      Create a SetupIntent flagged for off-session usage, bound to the customer
+      and payment method that will be saved.
+    operationId: PostSetupIntents
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        payment_method: $inputs.paymentMethod
+        usage: off_session
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      setupIntentId: $response.body#/id
+      status: $response.body#/status
+      clientSecret: $response.body#/client_secret
+  - stepId: confirmSetupIntent
+    description: >-
+      Confirm the SetupIntent to trigger any required SCA/3DS authorization and
+      save the payment method for future off-session charges.
+    operationId: PostSetupIntentsIntentConfirm
+    parameters:
+    - name: intent
+      in: path
+      value: $steps.createSetupIntent.outputs.setupIntentId
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        payment_method: $inputs.paymentMethod
+        return_url: $inputs.returnUrl
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+      paymentMethod: $response.body#/payment_method
+      nextAction: $response.body#/next_action
+  outputs:
+    setupIntentId: $steps.createSetupIntent.outputs.setupIntentId
+    status: $steps.confirmSetupIntent.outputs.status
+    paymentMethod: $steps.confirmSetupIntent.outputs.paymentMethod

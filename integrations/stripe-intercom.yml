@@ -1,0 +1,50 @@
+arazzo: 1.0.1
+info:
+  title: Surface Stripe MRR + Plan for Intercom Inbox
+  summary: Retrieve a Stripe subscription so its MRR, plan, and churn-risk signals can be surfaced on a matching Intercom Contact.
+  description: >-
+    This workflow reproduces the legacy Naftiko "Surface Stripe MRR + plan inside
+    Intercom Inbox" integration. It retrieves a Stripe subscription by id and rolls up
+    the plan, status, and billing-period signals that would be pushed onto the matching
+    Intercom Contact as custom attributes. The Intercom write step is not modeled here
+    because the published Intercom OpenAPI exposes only listContacts, createContact, and
+    getContact — it has no update-contact / custom-attribute write operation to target.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-intercom-surface-mrr
+    summary: Retrieve a Stripe subscription and expose its MRR/plan/status signals.
+    description: >-
+      Fetches a single Stripe subscription by id and surfaces the plan, status, and
+      current billing period so a downstream Intercom Contact update could be composed.
+    inputs:
+      type: object
+      required:
+        - subscription_id
+      properties:
+        subscription_id:
+          type: string
+          description: The Stripe subscription id to retrieve (sub_...).
+    steps:
+      - stepId: get-subscription
+        description: Retrieve the Stripe subscription by id.
+        operationId: $sourceDescriptions.stripe.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          id: $response.body#/id
+          status: $response.body#/status
+          current_period_end: $response.body#/current_period_end
+          items: $response.body#/items
+    outputs:
+      subscription_id: $steps.get-subscription.outputs.id
+      subscription_status: $steps.get-subscription.outputs.status
+      current_period_end: $steps.get-subscription.outputs.current_period_end
+      items: $steps.get-subscription.outputs.items

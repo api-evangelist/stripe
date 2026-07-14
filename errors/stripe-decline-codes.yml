@@ -1,0 +1,64 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/declines/codes
+description: >-
+  Stripe's card decline_code taxonomy — the issuer-level reasons a card charge
+  is declined. Distinct from the API error codes captured in
+  errors/stripe-problem-types.yml: decline codes are the value of the
+  error.decline_code field on a card_error (error.code = card_declined), and
+  describe why the issuer/processor rejected the authorization. Some codes are
+  masked to the buyer as generic_decline for fraud reasons.
+docs: https://docs.stripe.com/declines/codes
+envelope_field: error.decline_code   # present when error.code == card_declined
+mask_as_generic: [fraudulent, lost_card, stolen_card, merchant_blacklist]
+decline_codes:
+  - {code: authentication_required, meaning: Requires 3D Secure authentication, action: Trigger authentication and retry.}
+  - {code: authentication_not_handled, meaning: Authentication not performed as required, action: Run SCA/3DS on-session first.}
+  - {code: approve_with_id, meaning: Payment cannot be authorized, action: Retry; contact issuer if it persists.}
+  - {code: call_issuer, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: card_not_supported, meaning: Card does not support this purchase type, action: Customer contacts issuer.}
+  - {code: card_velocity_exceeded, meaning: Balance/credit/transaction limit exceeded, action: Customer contacts issuer.}
+  - {code: currency_not_supported, meaning: Card does not support the currency, action: Verify currency support.}
+  - {code: do_not_honor, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: do_not_try_again, meaning: Declined for unknown reason (deprecated), action: Customer contacts issuer.}
+  - {code: duplicate_transaction, meaning: Identical transaction submitted recently, action: Check for an existing recent payment.}
+  - {code: expired_card, meaning: Card has expired, action: Customer uses another card.}
+  - {code: fraudulent, meaning: Suspected fraud, action: Present as generic_decline; do not reveal details.}
+  - {code: generic_decline, meaning: Unknown reason or blocked by Stripe Radar, action: Customer contacts issuer.}
+  - {code: incorrect_address, meaning: Address is incorrect, action: Retry with correct address.}
+  - {code: incorrect_cvc, meaning: CVC is incorrect, action: Retry with correct CVC.}
+  - {code: incorrect_number, meaning: Card number is incorrect, action: Retry with correct number.}
+  - {code: incorrect_pin, meaning: PIN is incorrect (card reader only), action: Retry with correct PIN.}
+  - {code: incorrect_zip, meaning: Postal code is incorrect, action: Retry with correct postal code.}
+  - {code: insufficient_funds, meaning: Card has insufficient funds, action: Use an alternative method.}
+  - {code: invalid_account, meaning: Card/account is invalid, action: Contact issuer to verify.}
+  - {code: invalid_amount, meaning: Amount is invalid or exceeds a limit, action: Check amount with issuer.}
+  - {code: invalid_cvc, meaning: CVC is incorrect, action: Retry with correct CVC.}
+  - {code: invalid_expiry_month, meaning: Expiration month is invalid, action: Retry with correct expiry.}
+  - {code: invalid_expiry_year, meaning: Expiration year is invalid, action: Retry with correct expiry.}
+  - {code: invalid_number, meaning: Card number is incorrect, action: Retry with correct number.}
+  - {code: invalid_pin, meaning: PIN is incorrect, action: Retry with correct PIN.}
+  - {code: issuer_not_available, meaning: Issuer unreachable, action: Retry; contact issuer if it persists.}
+  - {code: lost_card, meaning: Card reported lost, action: Present as generic_decline; do not reveal details.}
+  - {code: merchant_blacklist, meaning: Matches a Radar block list, action: Present as generic_decline; do not reveal details.}
+  - {code: new_account_information_available, meaning: Card/account is invalid, action: Customer contacts issuer.}
+  - {code: no_action_taken, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: not_permitted, meaning: Payment not permitted, action: Customer contacts issuer.}
+  - {code: offline_pin_required, meaning: Card requires PIN, action: Insert card and enter PIN.}
+  - {code: online_or_offline_pin_required, meaning: Card requires PIN, action: Prompt for PIN or insert card.}
+  - {code: pickup_card, meaning: Card cannot be used (lost/stolen), action: Customer contacts issuer.}
+  - {code: pin_try_exceeded, meaning: PIN attempts exceeded, action: Use another card.}
+  - {code: processing_error, meaning: Error during processing, action: Retry; try later if it persists.}
+  - {code: reenter_transaction, meaning: Issuer could not process, action: Retry; contact issuer if it persists.}
+  - {code: restricted_card, meaning: Card cannot be used (lost/stolen), action: Customer contacts issuer.}
+  - {code: revocation_of_all_authorizations, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: revocation_of_authorization, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: security_violation, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: service_not_allowed, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: stolen_card, meaning: Card reported stolen, action: Present as generic_decline; do not reveal details.}
+  - {code: stop_payment_order, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: testmode_decline, meaning: A test card number was used, action: Use a genuine card.}
+  - {code: transaction_not_allowed, meaning: Declined for unknown reason, action: Customer contacts issuer.}
+  - {code: try_again_later, meaning: Declined for unknown reason (deprecated), action: Retry; contact issuer if it persists.}
+  - {code: withdrawal_count_limit_exceeded, meaning: Balance/credit limit exceeded, action: Use an alternative method.}
+  - {code: mobile_device_authentication_required, meaning: Requires authentication, action: Retry by tapping the mobile device again.}

@@ -1,0 +1,104 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Issue Card to Cardholder
+  summary: Create an Issuing cardholder, then issue a virtual card to that cardholder.
+  description: >-
+    The core Stripe Issuing provisioning pattern. The workflow first creates an
+    Issuing Cardholder with the required billing address and name, then issues a
+    virtual card bound to that cardholder in the requested currency. Every step
+    spells out its form-encoded request inline so the flow can be read and
+    executed against Stripe test mode without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: issuingApi
+  url: ../openapi/stripe-issuing-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: issue-card-to-cardholder
+  summary: Create an Issuing cardholder and issue a virtual card to them.
+  description: >-
+    Creates an Issuing Cardholder with the required billing address and display
+    name, then issues a virtual card associated with that cardholder in the
+    supplied currency.
+  inputs:
+    type: object
+    required:
+    - name
+    - email
+    - line1
+    - city
+    - state
+    - postalCode
+    - country
+    - currency
+    properties:
+      name:
+        type: string
+        description: Display name of the cardholder (e.g. Jenny Rosen).
+      email:
+        type: string
+        description: Email address for the cardholder.
+      line1:
+        type: string
+        description: Billing address street line 1 (e.g. 123 Main Street).
+      city:
+        type: string
+        description: Billing address city (e.g. San Francisco).
+      state:
+        type: string
+        description: Billing address state or region (e.g. CA).
+      postalCode:
+        type: string
+        description: Billing address postal code (e.g. 94111).
+      country:
+        type: string
+        description: Two-letter ISO country code for the billing address (e.g. US).
+      currency:
+        type: string
+        description: Three-letter ISO currency code for the card (e.g. usd).
+  steps:
+  - stepId: createCardholder
+    description: >-
+      Create the Issuing Cardholder, supplying the required billing address and
+      name, that the card will be issued to.
+    operationId: postIssuingCardholders
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        name: $inputs.name
+        email: $inputs.email
+        type: individual
+        billing:
+          address:
+            line1: $inputs.line1
+            city: $inputs.city
+            state: $inputs.state
+            postal_code: $inputs.postalCode
+            country: $inputs.country
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      cardholderId: $response.body#/id
+      cardholderStatus: $response.body#/status
+  - stepId: issueVirtualCard
+    description: >-
+      Issue a virtual card associated with the new cardholder in the requested
+      currency.
+    operationId: postIssuingCards
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        cardholder: $steps.createCardholder.outputs.cardholderId
+        currency: $inputs.currency
+        type: virtual
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      cardId: $response.body#/id
+      cardStatus: $response.body#/status
+      last4: $response.body#/last4
+  outputs:
+    cardholderId: $steps.createCardholder.outputs.cardholderId
+    cardId: $steps.issueVirtualCard.outputs.cardId
+    cardStatus: $steps.issueVirtualCard.outputs.cardStatus

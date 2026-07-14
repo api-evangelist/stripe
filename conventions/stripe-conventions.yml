@@ -1,0 +1,109 @@
+generated: '2026-07-14'
+method: searched
+source: >-
+  https://docs.stripe.com/api — the cross-cutting request/response conventions
+  that apply to every Stripe endpoint (not any single operation). Stripe
+  pioneered several of these (idempotency keys, cursor pagination, field
+  expansion), so this profile is the reference shape for the artifact type.
+description: >-
+  How Stripe's REST API behaves across every operation: authentication style,
+  idempotency, pagination, field expansion, metadata, request tracing,
+  versioning, error envelope, and rate-limit signaling. These are the
+  "developer-experience / runtime-semantics" conventions that OpenAPI does not
+  fully express.
+
+base_url: https://api.stripe.com
+api_style: REST over HTTPS, form-encoded requests, JSON responses
+
+authentication:
+  scheme: HTTP Basic (secret key as username, empty password) or Bearer token
+  key_types: [secret (sk_), restricted (rk_), publishable (pk_, client-side only)]
+  docs: https://docs.stripe.com/api/authentication
+  detail: authentication/stripe-authentication.yml
+
+idempotency:
+  supported: true
+  mechanism: Idempotency-Key request header
+  applies_to: All POST requests (and DELETE); GET/HEAD are inherently idempotent.
+  key_format: Client-generated unique value (e.g. a UUID v4)
+  retention: Idempotency results are stored for 24 hours.
+  conflict_behavior: >-
+    Reusing a key with different request parameters returns an idempotency_error.
+    Replaying the same request returns the original response (and an
+    Idempotency-Replayed indicator).
+  docs: https://docs.stripe.com/api/idempotent_requests
+
+pagination:
+  style: cursor
+  request_params:
+    limit: 1-100, default 10
+    starting_after: object id — fetch the page after this object
+    ending_before: object id — fetch the page before this object
+  response_fields:
+    object: list
+    data: array of results
+    has_more: boolean — whether more results exist
+    url: the list endpoint
+  auto_pagination: SDKs expose auto-pagination helpers that follow has_more.
+  docs: https://docs.stripe.com/api/pagination
+
+field_expansion:
+  supported: true
+  mechanism: expand[] request parameter with dot-paths (e.g. expand[]=customer, expand[]=data.customer)
+  description: >-
+    Responses return related objects as ids by default; expand[] inlines the
+    full sub-object. Multiple and nested expansions supported; list responses
+    expand under data.<field>.
+  docs: https://docs.stripe.com/api/expanding_objects
+
+metadata:
+  supported: true
+  mechanism: metadata[key]=value on most objects
+  limits: Up to 50 keys; key <= 40 chars; value <= 500 chars.
+  description: Arbitrary key-value store attached to objects, returned in API responses and webhook payloads. Not used by Stripe's own logic.
+  docs: https://docs.stripe.com/api/metadata
+
+request_tracing:
+  request_id_header: Request-Id
+  description: Every response carries a unique Request-Id (req_...) used for support and log lookup; visible in the Dashboard logs and CLI (stripe logs tail).
+
+versioning:
+  scheme: date-based with named release trains
+  mechanism: Stripe-Version request header; each account has a default pinned version.
+  current: 2026-06-24.dahlia
+  example: '2026-06-24.dahlia'
+  detail: lifecycle/stripe-lifecycle.yml
+  changelog: changelog/stripe-changelog.yml
+  docs: https://docs.stripe.com/api/versioning
+
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "error": { "type", "code", "message", "param", "decline_code", "request_log_url" } }'
+  types: [api_error, card_error, idempotency_error, invalid_request_error]
+  detail: errors/stripe-problem-types.yml
+  decline_codes: errors/stripe-decline-codes.yml
+  docs: https://docs.stripe.com/api/errors
+
+rate_limits:
+  signal_status: 429
+  request_id_header: Request-Id
+  detail: rate-limits/stripe-rate-limits.yml
+  docs: https://docs.stripe.com/rate-limits
+
+webhooks:
+  signing_header: Stripe-Signature
+  verification: HMAC-SHA256 over payload + timestamp using the endpoint signing secret (whsec_)
+  thin_events: Supported (v2 event delivery) alongside snapshot events.
+  detail: asyncapi/stripe-webhooks-asyncapi.yml
+  docs: https://docs.stripe.com/webhooks
+
+other_conventions:
+  - name: Test vs live mode
+    detail: Separated by API key prefix; see sandbox/stripe-sandbox.yml.
+  - name: Connect account impersonation
+    mechanism: Stripe-Account request header (act on behalf of a connected account).
+  - name: Amounts
+    detail: Integer minor units (e.g. cents); zero-decimal currencies excepted.
+  - name: Timestamps
+    detail: Unix epoch seconds (UTC).

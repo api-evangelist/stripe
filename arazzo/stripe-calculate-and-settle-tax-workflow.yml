@@ -1,0 +1,81 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Calculate and Settle Tax
+  summary: Calculate tax for a set of line items, then record a Tax transaction from that calculation.
+  description: >-
+    The canonical Stripe Tax settlement pattern. The workflow first calculates
+    tax for a set of line items in a given currency, producing a Tax Calculation
+    object, then records a Tax Transaction from that calculation so the amounts
+    are captured for reporting and filing. Each step spells out its form-encoded
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: taxApi
+  url: ../openapi/stripe-tax-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: calculate-and-settle-tax
+  summary: Calculate tax for line items, then record a Tax transaction from the calculation.
+  description: >-
+    Creates a Tax Calculation for the supplied currency and line items, then
+    creates a Tax Transaction from that calculation using a supplied reference
+    so the tax is recorded for reporting and filing.
+  inputs:
+    type: object
+    required:
+    - currency
+    - lineItems
+    - reference
+    properties:
+      currency:
+        type: string
+        description: Three-letter ISO currency code for the calculation (e.g. usd).
+      lineItems:
+        type: array
+        description: >-
+          Line items to calculate tax for. Each entry accepts amount (in the
+          smallest currency unit), reference, quantity, tax_code, and
+          tax_behavior. Example: a single item with amount 1000 and reference
+          "L1".
+        items:
+          type: object
+      reference:
+        type: string
+        description: >-
+          Unique reference for the resulting Tax Transaction, typically your
+          order or invoice id (e.g. myOrder_123).
+  steps:
+  - stepId: createTaxCalculation
+    description: Calculate tax for the supplied currency and line items.
+    operationId: PostTaxCalculations
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        currency: $inputs.currency
+        line_items: $inputs.lineItems
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      calculationId: $response.body#/id
+      amountTotal: $response.body#/amount_total
+      taxAmountExclusive: $response.body#/tax_amount_exclusive
+  - stepId: createTaxTransaction
+    description: >-
+      Record a Tax Transaction from the calculation so the tax is captured for
+      reporting and filing.
+    operationId: PostTaxTransactionsCreateFromCalculation
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        calculation: $steps.createTaxCalculation.outputs.calculationId
+        reference: $inputs.reference
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      transactionId: $response.body#/id
+      status: $response.body#/status
+  outputs:
+    calculationId: $steps.createTaxCalculation.outputs.calculationId
+    transactionId: $steps.createTaxTransaction.outputs.transactionId
+    status: $steps.createTaxTransaction.outputs.status

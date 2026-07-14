@@ -1,0 +1,79 @@
+arazzo: 1.0.1
+info:
+  title: Mirror Stripe subscription lifecycle into Pipedrive deals
+  summary: Forward a Stripe subscription into Pipedrive as a CRM deal.
+  description: >-
+    Retrieve a Stripe subscription and mirror its lifecycle into Pipedrive by
+    creating a corresponding Deal in your CRM pipeline. The subscription's
+    currency is carried onto the new deal so revenue and stage tracking stay in
+    sync. Replaces a legacy Naftiko integration with a forkable, self-resolving
+    Arazzo workflow.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripeSubscription
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+  - name: pipedrive
+    url: https://raw.githubusercontent.com/api-evangelist/pipedrive/refs/heads/main/openapi/pipedrive-v2-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-pipedrive-mirror-subscription
+    summary: Retrieve a Stripe subscription and create a matching Pipedrive deal.
+    description: >-
+      Look up a Stripe subscription by id, then create a Pipedrive deal that
+      mirrors it, inheriting the subscription's currency.
+    inputs:
+      type: object
+      required:
+        - subscription_id
+        - deal_title
+      properties:
+        subscription_id:
+          type: string
+          description: The Stripe subscription id to mirror (e.g. sub_123).
+        deal_title:
+          type: string
+          description: Title for the Pipedrive deal to create.
+        deal_value:
+          type: number
+          description: Monetary value to assign to the Pipedrive deal.
+        pipeline_id:
+          type: integer
+          description: Optional Pipedrive pipeline id to place the deal in.
+        stage_id:
+          type: integer
+          description: Optional Pipedrive stage id for the deal.
+    steps:
+      - stepId: retrieve-subscription
+        description: Retrieve the Stripe subscription to mirror.
+        operationId: $sourceDescriptions.stripeSubscription.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/id
+          status: $response.body#/status
+          currency: $response.body#/currency
+      - stepId: create-deal
+        description: Create a Pipedrive deal mirroring the Stripe subscription.
+        operationId: $sourceDescriptions.pipedrive.addDeal
+        requestBody:
+          contentType: application/json
+          payload:
+            title: $inputs.deal_title
+            value: $inputs.deal_value
+            currency: $steps.retrieve-subscription.outputs.currency
+            pipeline_id: $inputs.pipeline_id
+            stage_id: $inputs.stage_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          deal_id: $response.body#/data/id
+          deal_title: $response.body#/data/title
+    outputs:
+      subscription_id: $steps.retrieve-subscription.outputs.subscription_id
+      subscription_status: $steps.retrieve-subscription.outputs.status
+      deal_id: $steps.create-deal.outputs.deal_id

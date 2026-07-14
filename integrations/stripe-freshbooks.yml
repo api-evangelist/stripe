@@ -1,0 +1,81 @@
+arazzo: 1.0.1
+info:
+  title: Generate FreshBooks invoices from Stripe Checkout sessions
+  summary: When a Stripe Checkout completes for an invoice product, mark the matching FreshBooks invoice as paid.
+  description: >-
+    This workflow retrieves a completed Stripe Checkout session and uses its
+    payment status to reconcile accounts receivable in FreshBooks. It reads the
+    Checkout session by id from Stripe, then updates the corresponding FreshBooks
+    invoice so its status reflects the collected payment, keeping billing in sync
+    across the two systems.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-checkout-api-openapi.yml
+    type: openapi
+  - name: freshbooks
+    url: https://raw.githubusercontent.com/api-evangelist/freshbooks/refs/heads/main/openapi/freshbooks-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-freshbooks-reconcile
+    summary: Reconcile a paid Stripe Checkout session against a FreshBooks invoice.
+    description: >-
+      Retrieve a Stripe Checkout session, then update the matching FreshBooks
+      invoice to reflect the payment collected during checkout.
+    inputs:
+      type: object
+      required:
+        - session_id
+        - freshbooks_account_id
+        - freshbooks_invoice_id
+      properties:
+        session_id:
+          type: string
+          description: The Stripe Checkout Session id to retrieve.
+        freshbooks_account_id:
+          type: string
+          description: The FreshBooks account (business) id that owns the invoice.
+        freshbooks_invoice_id:
+          type: string
+          description: The FreshBooks invoice id to mark as paid.
+        invoice_payload:
+          type: object
+          description: >-
+            The FreshBooks invoice update body (e.g. status/payment_status
+            fields) wrapped as the API expects.
+    steps:
+      - stepId: get-checkout-session
+        description: Retrieve the completed Stripe Checkout session by id.
+        operationId: $sourceDescriptions.stripe.getCheckoutSessionsSession
+        parameters:
+          - name: session
+            in: path
+            value: $inputs.session_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          session_id: $response.body#/id
+          payment_status: $response.body#/payment_status
+          amount_total: $response.body#/amount_total
+          currency: $response.body#/currency
+      - stepId: update-freshbooks-invoice
+        description: Update the matching FreshBooks invoice to reflect the collected payment.
+        operationId: $sourceDescriptions.freshbooks.updateInvoice
+        parameters:
+          - name: accountId
+            in: path
+            value: $inputs.freshbooks_account_id
+          - name: invoiceId
+            in: path
+            value: $inputs.freshbooks_invoice_id
+        requestBody:
+          contentType: application/json
+          payload: $inputs.invoice_payload
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          invoice: $response.body#/response
+    outputs:
+      stripe_session_id: $steps.get-checkout-session.outputs.session_id
+      stripe_payment_status: $steps.get-checkout-session.outputs.payment_status
+      freshbooks_invoice: $steps.update-freshbooks-invoice.outputs.invoice

@@ -1,0 +1,81 @@
+arazzo: 1.0.1
+info:
+  title: Post Stripe Payment Alerts to Slack Channels
+  summary: Retrieve a Stripe charge and post a payment alert to a Slack channel.
+  description: >-
+    Forward Stripe payment activity into a designated Slack channel so teams see
+    money movement where they already work. This workflow retrieves a Stripe charge
+    by id and posts a formatted alert message to a Slack channel via chat.postMessage.
+    Fork it, wire your Stripe and Slack credentials, and trigger it from a charge,
+    dispute, or payout event to keep your team notified in real time.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+    type: openapi
+  - name: slack
+    url: https://raw.githubusercontent.com/api-evangelist/slack/refs/heads/main/openapi/slack-chat-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-slack-notify
+    summary: Retrieve a Stripe charge and post an alert to Slack.
+    description: >-
+      Fetch a Stripe charge by id, then post a payment alert containing the charge
+      details to the target Slack channel.
+    inputs:
+      type: object
+      required:
+        - charge
+        - slack_token
+        - channel
+      properties:
+        charge:
+          type: string
+          description: The id of the Stripe charge to retrieve (e.g. from a charge/dispute/payout event).
+        slack_token:
+          type: string
+          description: Slack authentication token with the chat:write scope.
+        channel:
+          type: string
+          description: Slack channel id or name to post the alert to.
+    steps:
+      - stepId: get-charge
+        description: Retrieve the Stripe charge by id.
+        operationId: $sourceDescriptions.stripe.getChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.charge
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          id: $response.body#/id
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          status: $response.body#/status
+      - stepId: post-slack-alert
+        description: Post the charge alert to the Slack channel.
+        operationId: $sourceDescriptions.slack.postChatPostmessage
+        parameters:
+          - name: token
+            in: header
+            value: $inputs.slack_token
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: $inputs.channel
+            text: >-
+              Stripe charge $steps.get-charge.outputs.id for
+              $steps.get-charge.outputs.amount $steps.get-charge.outputs.currency
+              is $steps.get-charge.outputs.status.
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          ok: $response.body#/ok
+          ts: $response.body#/ts
+          channel: $response.body#/channel
+    outputs:
+      charge_id: $steps.get-charge.outputs.id
+      charge_status: $steps.get-charge.outputs.status
+      slack_ts: $steps.post-slack-alert.outputs.ts
+      slack_channel: $steps.post-slack-alert.outputs.channel

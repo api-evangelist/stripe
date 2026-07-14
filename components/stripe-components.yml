@@ -1,0 +1,54 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/payments/elements
+description: >-
+  Stripe's embeddable, client-side UI components — the drop-in and low-level
+  interface layer that renders payment and account UX in the browser/mobile,
+  distinct from the server-side SDK client libraries in
+  packages/stripe-packages.yml. Grouped by family: Elements (composable inputs),
+  hosted/prebuilt surfaces (Checkout, Payment Links, Pricing Table, Buy Button),
+  and Connect embedded components (platform dashboards). Loaded via the
+  @stripe/stripe-js and @stripe/connect-js libraries.
+docs:
+  - https://docs.stripe.com/payments/elements
+  - https://docs.stripe.com/checkout
+  - https://docs.stripe.com/connect/get-started-connect-embedded-components
+libraries:
+  - {name: "@stripe/stripe-js", purpose: Loads Stripe.js and mounts Elements; catalogued in packages/}
+  - {name: "@stripe/react-stripe-js", purpose: React bindings for Elements}
+  - {name: "@stripe/connect-js", purpose: Loads Connect embedded components}
+  - {name: "@stripe/react-connect-js", purpose: React bindings for Connect embedded components}
+
+families:
+  elements:
+    description: Composable, customizable UI input components mounted client-side and tokenized directly to Stripe (card data never touches your server → PCI SAQ A scope).
+    components:
+      - {name: Payment Element, id: payment, description: Single embeddable component that dynamically renders 40+ payment methods for a PaymentIntent/SetupIntent.}
+      - {name: Express Checkout Element, id: expressCheckout, description: One-click wallets (Apple Pay, Google Pay, Link, PayPal) in a single button row.}
+      - {name: Card Element, id: card, description: Legacy single-line combined card input (superseded by Payment Element).}
+      - {name: Card Number / Expiry / CVC Elements, id: [cardNumber, cardExpiry, cardCvc], description: Split card fields for custom layouts.}
+      - {name: Link Authentication Element, id: linkAuthentication, description: Email input that authenticates returning Link customers.}
+      - {name: Address Element, id: address, description: Autocomplete billing/shipping address collection.}
+      - {name: Payment Method Messaging Element, id: paymentMethodMessaging, description: Promotional messaging for BNPL methods (Klarna, Affirm, Afterpay).}
+    mobile:
+      - {name: Mobile Payment Element, platforms: [iOS, Android, React Native], description: Native equivalent shipped in the Stripe mobile SDKs.}
+
+  hosted_prebuilt:
+    description: Prebuilt, Stripe-hosted or single-embed surfaces requiring minimal code.
+    components:
+      - {name: Checkout (Embedded), id: embedded-checkout, description: Prebuilt payment page embedded via a Checkout Session; also available as a full hosted redirect page.}
+      - {name: Checkout (Hosted), description: Stripe-hosted payment page you redirect customers to.}
+      - {name: Payment Links, description: No-code shareable URL that opens a hosted checkout; also a first-class API object.}
+      - {name: Pricing Table, description: Embeddable no-code table of subscription prices (<stripe-pricing-table> web component).}
+      - {name: Buy Button, description: Embeddable no-code single-product purchase button (<stripe-buy-button> web component).}
+
+  connect_embedded:
+    description: Prebuilt dashboard UIs for Connect platforms to embed onboarding, payouts, and management for connected accounts.
+    components:
+      - {name: Account Onboarding, id: account-onboarding, description: Embedded KYC/onboarding flow for connected accounts.}
+      - {name: Account Management, id: account-management, description: Let connected accounts update their business/profile settings.}
+      - {name: Payouts, id: payouts, description: Embedded payouts management for connected accounts.}
+      - {name: Payments / Payment Details, id: [payments, payment-details], description: Embedded list and detail views of a connected account's payments.}
+      - {name: Balances, id: balances, description: Embedded balance summary and top-ups.}
+      - {name: Notification Banner, id: notification-banner, description: Surfaces outstanding requirements/risk actions to connected accounts.}
+      - {name: Documents, id: documents, description: Tax and compliance documents for connected accounts.}

@@ -1,0 +1,69 @@
+arazzo: 1.0.1
+info:
+  title: Forward Stripe events to Braze custom events
+  summary: Assemble the Stripe-side customer and charge context needed to emit a Braze custom user event.
+  description: >-
+    This workflow replicates the Stripe half of forwarding Stripe events into
+    Braze custom user events. It retrieves a Stripe charge and then retrieves the
+    Stripe customer referenced on that charge, producing the email/external_id and
+    event context that a downstream Braze /users/track call would consume. The
+    Braze side is not modeled as a step because the Braze OpenAPI on disk defines
+    no operationId to reference verbatim.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripeCharges
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml
+    type: openapi
+  - name: stripeCustomers
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/customers-openapi-original.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-braze-forward-event
+    summary: Retrieve a Stripe charge and its customer to build Braze custom-event context.
+    description: >-
+      Given a Stripe charge id from a triggering event, retrieve the charge, then
+      retrieve the customer attached to that charge so the customer email and
+      external id are available for a Braze custom user event.
+    inputs:
+      type: object
+      required:
+        - charge
+      properties:
+        charge:
+          type: string
+          description: The Stripe charge id from the triggering Stripe event.
+    steps:
+      - stepId: get-charge
+        description: Retrieve the Stripe charge referenced by the triggering event.
+        operationId: $sourceDescriptions.stripeCharges.GetChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.charge
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          chargeId: $response.body#/id
+          customer: $response.body#/customer
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          status: $response.body#/status
+      - stepId: get-customer
+        description: Retrieve the Stripe customer attached to the charge.
+        operationId: $sourceDescriptions.stripeCustomers.GetCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $steps.get-charge.outputs.customer
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customerId: $response.body#/id
+          email: $response.body#/email
+          name: $response.body#/name
+    outputs:
+      chargeId: $steps.get-charge.outputs.chargeId
+      customerId: $steps.get-customer.outputs.customerId
+      email: $steps.get-customer.outputs.email
+      amount: $steps.get-charge.outputs.amount
+      currency: $steps.get-charge.outputs.currency

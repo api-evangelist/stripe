@@ -1,0 +1,63 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/changelog
+description: >-
+  Structured capture of Stripe's dated API changelog. Stripe versions the API by
+  date within named "release trains" (e.g. Dahlia); a new dated version is cut
+  for backwards-incompatible changes and clients pin via the Stripe-Version
+  header. `.preview` versions carry breaking changes before they GA in the dated
+  train. This artifact records the recent version entries; the live changelog is
+  the source of truth.
+docs: https://docs.stripe.com/changelog
+versioning:
+  scheme: date-based with named release trains
+  header: Stripe-Version
+  current: 2026-06-24.dahlia
+  current_train: dahlia
+  detail: lifecycle/stripe-lifecycle.yml
+entries:
+  - version: '2026-06-24.dahlia'
+    train: dahlia
+    latest: true
+    highlights:
+      - Checkout billing cycle anchor configuration and WeChat Pay options
+      - Payments — Bizum/BLIK buyer IDs, Sunbit manual capture, Pix fingerprint, Mastercard transaction link ID, Sui network crypto, Satispay recurring
+      - Connect top-ups payment method support (US bank accounts)
+      - Billing — invoice description, footer, custom fields
+  - version: '2026-06-24.preview'
+    train: preview
+    breaking:
+      - SWIFT code replaced with BIC in Financial Addresses
+      - Status filter replaced with statuses on List Financial Accounts
+      - Batch Job v2 rate limit parameter removed
+    additions:
+      - Express connected accounts v1/v2 with Stripe-owned pricing
+      - Financial Account capability error codes
+  - version: '2026-05-27.dahlia'
+    train: dahlia
+    highlights:
+      - Billing schedules for prebilling on subscriptions; discount eligibility on add-on invoice items
+      - Recurring payments with Twint; Scalapay support; card brand restrictions for Payment Links
+      - Terminal — image printing on embedded printers, Verifone third-party device types
+  - version: '2026-05-27.preview'
+    train: preview
+    breaking:
+      - Billed until property on subscription items no longer included by default
+      - Mastercard support added to Issuing Settlement API
+    additions:
+      - Subscription pause endpoint
+      - 20 new bank account types for cross-border payouts; CHAPS support in Financial Addresses
+  - version: '2026-04-22.dahlia'
+    train: dahlia
+    highlights:
+      - Agentic Commerce — Shared Payment Granted Token, Orchestrated Commerce Agreements API
+      - Managed Payments (merchant of record); Workflows API programmatic invocation; Profiles API
+      - Accounts v2 expanded to all Stripe users; Global Payouts Japan/China
+  - version: '2026-03-25.dahlia'
+    train: dahlia
+    breaking:
+      - Checkout UI mode enum values updated
+      - 'Elements/Stripe.js: elements.update() returns a Promise; legacy Payment/Setup Intents & Sources methods removed; initCheckout renamed initCheckoutElements'
+    highlights:
+      - Payments — UPI and crypto payment method support with Checkout Sessions
+      - Issuing — card lifecycle controls limiting payment count

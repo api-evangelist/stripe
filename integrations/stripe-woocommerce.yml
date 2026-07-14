@@ -1,0 +1,82 @@
+arazzo: 1.0.1
+info:
+  title: Stripe and WooCommerce Order-to-Payment Integration
+  summary: Read WooCommerce store orders and create Stripe payment intents for them.
+  description: >-
+    Replaces the WooCommerce Stripe plugin with a declarative, forkable
+    integration. This workflow lists orders from a WooCommerce store, then
+    creates a Stripe payment intent sized to a selected order's total and
+    currency so the WooCommerce-to-Stripe handoff runs as an explicit, portable
+    workflow instead of WordPress plugin glue.
+  version: 1.0.0
+sourceDescriptions:
+- name: woocommerce
+  url: https://raw.githubusercontent.com/api-evangelist/woocommerce/refs/heads/main/openapi/woocommerce-rest-api-openapi.yml
+  type: openapi
+- name: stripe
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-woocommerce-order-to-payment
+  summary: List WooCommerce orders and create a Stripe payment intent for one.
+  description: >-
+    Fetch a page of WooCommerce orders filtered by status, then create a Stripe
+    payment intent whose amount and currency mirror the order total.
+  inputs:
+    type: object
+    properties:
+      order_status:
+        type: string
+        description: WooCommerce order status filter (e.g. processing, pending, completed).
+        default: processing
+      per_page:
+        type: integer
+        description: Number of WooCommerce orders to return.
+        default: 10
+      amount:
+        type: integer
+        description: Payment amount in the smallest currency unit (e.g. cents).
+      currency:
+        type: string
+        description: Three-letter ISO currency code for the Stripe payment intent.
+        default: usd
+    required:
+    - amount
+  steps:
+  - stepId: list-woocommerce-orders
+    description: Retrieve WooCommerce orders matching the requested status.
+    operationId: $sourceDescriptions.woocommerce.listOrders
+    parameters:
+    - name: status
+      in: query
+      value: $inputs.order_status
+    - name: per_page
+      in: query
+      value: $inputs.per_page
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      order_id: $response.body#/0/id
+      order_total: $response.body#/0/total
+      order_currency: $response.body#/0/currency
+  - stepId: create-stripe-payment-intent
+    description: Create a Stripe payment intent sized to the selected order.
+    operationId: $sourceDescriptions.stripe.postPaymentIntents
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        amount: $inputs.amount
+        currency: $inputs.currency
+        description: WooCommerce order payment
+        metadata[woocommerce_order_id]: $steps.list-woocommerce-orders.outputs.order_id
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      payment_intent_id: $response.body#/id
+      client_secret: $response.body#/client_secret
+      status: $response.body#/status
+  outputs:
+    order_id: $steps.list-woocommerce-orders.outputs.order_id
+    payment_intent_id: $steps.create-stripe-payment-intent.outputs.payment_intent_id
+    client_secret: $steps.create-stripe-payment-intent.outputs.client_secret
+    payment_status: $steps.create-stripe-payment-intent.outputs.status

@@ -1,0 +1,88 @@
+arazzo: 1.0.1
+info:
+  title: Push Stripe successful charges as HubSpot deals
+  summary: Sync a successful Stripe charge into HubSpot as a Closed Won deal.
+  description: >-
+    When a Stripe charge succeeds, retrieve the charge, look up the matching
+    HubSpot Contact, and create a HubSpot Deal in the Closed Won stage using the
+    charge amount and currency. This replicates the legacy Naftiko integration
+    that pushed successful Stripe payments into HubSpot CRM as won revenue.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+    type: openapi
+  - name: hubspot
+    url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-crm-deals-api-openapi.yml
+    type: openapi
+  - name: hubspotContacts
+    url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-crm-contacts-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-hubspot-sync-charge-to-deal
+    summary: Create a HubSpot Closed Won deal from a successful Stripe charge.
+    description: >-
+      Retrieve a Stripe charge by ID, fetch the associated HubSpot Contact, and
+      create a Closed Won HubSpot Deal carrying the charge amount and currency.
+    inputs:
+      type: object
+      required:
+        - chargeId
+        - contactId
+      properties:
+        chargeId:
+          type: string
+          description: The Stripe charge ID that succeeded (e.g. ch_123).
+        contactId:
+          type: string
+          description: The HubSpot Contact ID to attach the deal to.
+        dealName:
+          type: string
+          description: Name to give the created HubSpot deal.
+          default: Stripe Charge
+    steps:
+      - stepId: retrieve-stripe-charge
+        description: Retrieve the successful Stripe charge to sync.
+        operationId: $sourceDescriptions.stripe.getChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.chargeId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          chargeId: $response.body#/id
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          status: $response.body#/status
+      - stepId: get-hubspot-contact
+        description: Look up the matching HubSpot contact for this charge.
+        operationId: $sourceDescriptions.hubspotContacts.getContact
+        parameters:
+          - name: contactId
+            in: path
+            value: $inputs.contactId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          contactId: $response.body#/id
+      - stepId: create-hubspot-deal
+        description: Create a Closed Won HubSpot deal from the Stripe charge.
+        operationId: $sourceDescriptions.hubspot.createDeal
+        requestBody:
+          contentType: application/json
+          payload:
+            properties:
+              dealname: $inputs.dealName
+              amount: $steps.retrieve-stripe-charge.outputs.amount
+              dealstage: closedwon
+              deal_currency_code: $steps.retrieve-stripe-charge.outputs.currency
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          dealId: $response.body#/id
+          createdAt: $response.body#/createdAt
+    outputs:
+      chargeId: $steps.retrieve-stripe-charge.outputs.chargeId
+      contactId: $steps.get-hubspot-contact.outputs.contactId
+      dealId: $steps.create-hubspot-deal.outputs.dealId

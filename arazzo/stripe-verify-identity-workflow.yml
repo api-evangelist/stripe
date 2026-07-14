@@ -1,0 +1,78 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Verify Identity
+  summary: Create an Identity VerificationSession, then retrieve it to read the verification outcome.
+  description: >-
+    The canonical Stripe Identity pattern for verifying a user. The workflow
+    first creates a VerificationSession for the requested verification type,
+    capturing the client secret and hosted verification URL used to collect the
+    user's identity documents. It then retrieves the same VerificationSession to
+    read back its current status and the ID of the most recent VerificationReport
+    once checks have run. Every step spells out its form-encoded request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: identityApi
+  url: ../openapi/stripe-identity-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: verify-identity
+  summary: Create an Identity VerificationSession and retrieve its verification outcome.
+  description: >-
+    Creates an Identity VerificationSession of the requested type, then retrieves
+    that same session to read its status and most recent VerificationReport so the
+    verification outcome can be evaluated.
+  inputs:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        description: >-
+          The verification check to perform, either document or id_number
+          (e.g. document).
+      metadataOrderId:
+        type: string
+        description: >-
+          Optional application reference stored in session metadata to correlate
+          the verification with your own records (e.g. order_12345).
+  steps:
+  - stepId: createVerificationSession
+    description: >-
+      Create an Identity VerificationSession for the requested verification type.
+    operationId: postIdentityVerificationSessions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        type: $inputs.type
+        metadata[order_id]: $inputs.metadataOrderId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sessionId: $response.body#/id
+      clientSecret: $response.body#/client_secret
+      verificationUrl: $response.body#/url
+      status: $response.body#/status
+  - stepId: retrieveVerificationSession
+    description: >-
+      Retrieve the VerificationSession to read its status and verification
+      outcome.
+    operationId: getIdentityVerificationSessionsSession
+    parameters:
+    - name: session
+      in: path
+      value: $steps.createVerificationSession.outputs.sessionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sessionId: $response.body#/id
+      status: $response.body#/status
+      lastVerificationReport: $response.body#/last_verification_report
+  outputs:
+    sessionId: $steps.createVerificationSession.outputs.sessionId
+    clientSecret: $steps.createVerificationSession.outputs.clientSecret
+    verificationUrl: $steps.createVerificationSession.outputs.verificationUrl
+    status: $steps.retrieveVerificationSession.outputs.status
+    lastVerificationReport: $steps.retrieveVerificationSession.outputs.lastVerificationReport

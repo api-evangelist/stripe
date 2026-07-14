@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Track Stripe payment events in Mixpanel
+  summary: Forward a Stripe charge to Mixpanel as a user-level analytics event with revenue and plan properties.
+  description: >-
+    This workflow retrieves a Stripe charge by id and forwards it to Mixpanel as
+    a real-time user-level event via the Mixpanel /track ingestion API. The event
+    carries the charge amount and currency as revenue properties and is attributed
+    to the paying customer, letting product analytics see payment activity alongside
+    other behavioral events.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml
+    type: openapi
+  - name: mixpanel
+    url: https://raw.githubusercontent.com/api-evangelist/mixpanel/refs/heads/main/openapi/mixpanel-ingestion-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-mixpanel-track
+    summary: Retrieve a Stripe charge and track it as a Mixpanel event.
+    description: >-
+      Fetch a Stripe charge by id, then send a Mixpanel track event named
+      "Stripe Charge" attributed to the charge's customer with amount and
+      currency as event properties.
+    inputs:
+      type: object
+      required:
+        - charge
+        - mixpanel_token
+      properties:
+        charge:
+          type: string
+          description: The id of the Stripe charge to retrieve and forward.
+        mixpanel_token:
+          type: string
+          description: The Mixpanel project token used to attribute the event.
+        event_name:
+          type: string
+          description: The Mixpanel event name to record.
+          default: Stripe Charge
+    steps:
+      - stepId: get-charge
+        description: Retrieve the Stripe charge to forward.
+        operationId: $sourceDescriptions.stripe.GetChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.charge
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          charge_id: $response.body#/id
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          customer: $response.body#/customer
+      - stepId: track-event
+        description: Send the charge to Mixpanel as a user-level track event.
+        operationId: $sourceDescriptions.mixpanel.trackEvent
+        requestBody:
+          contentType: application/json
+          payload:
+            data:
+              event: $inputs.event_name
+              properties:
+                distinct_id: $steps.get-charge.outputs.customer
+                token: $inputs.mixpanel_token
+                $insert_id: $steps.get-charge.outputs.charge_id
+                amount: $steps.get-charge.outputs.amount
+                currency: $steps.get-charge.outputs.currency
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          track_status: $response.body#/status
+    outputs:
+      charge_id: $steps.get-charge.outputs.charge_id
+      amount: $steps.get-charge.outputs.amount
+      currency: $steps.get-charge.outputs.currency
+      customer: $steps.get-charge.outputs.customer
+      track_status: $steps.track-event.outputs.track_status

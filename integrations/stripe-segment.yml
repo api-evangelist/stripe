@@ -1,0 +1,74 @@
+arazzo: 1.0.1
+info:
+  title: Stripe to Segment Charge Analytics
+  summary: Stream Stripe charges into Segment as track events keyed by customer.
+  description: >-
+    This workflow lists recent charges from Stripe and forwards each charge into
+    Segment's HTTP Tracking API as a track() event keyed by the Stripe customer.
+    It replicates the legacy integration that pipes Stripe payment activity into
+    Segment so downstream analytics and destinations receive revenue events.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml
+    type: openapi
+  - name: segment
+    url: https://raw.githubusercontent.com/api-evangelist/segment/refs/heads/main/openapi/segment-http-tracking-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-segment-track-charges
+    summary: List Stripe charges and forward them to Segment as track events.
+    description: >-
+      Fetches a page of charges from Stripe, then emits a Segment track event
+      named "Charge Created" using the first charge's customer as the userId.
+    inputs:
+      type: object
+      properties:
+        customer:
+          type: string
+          description: Optional Stripe customer ID to filter charges by.
+        limit:
+          type: integer
+          description: Number of charges to list (1-100).
+        event_name:
+          type: string
+          description: Segment track event name to emit.
+    steps:
+      - stepId: list-charges
+        description: List recent charges from Stripe.
+        operationId: $sourceDescriptions.stripe.GetCharges
+        parameters:
+          - name: customer
+            in: query
+            value: $inputs.customer
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          charges: $response.body#/data
+          charge_id: $response.body#/data/0/id
+          customer_id: $response.body#/data/0/customer
+          amount: $response.body#/data/0/amount
+          currency: $response.body#/data/0/currency
+      - stepId: track-charge
+        description: Forward the charge to Segment as a track event.
+        operationId: $sourceDescriptions.segment.track
+        requestBody:
+          contentType: application/json
+          payload:
+            userId: $steps.list-charges.outputs.customer_id
+            event: $inputs.event_name
+            properties:
+              charge_id: $steps.list-charges.outputs.charge_id
+              amount: $steps.list-charges.outputs.amount
+              currency: $steps.list-charges.outputs.currency
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          result: $response.body
+    outputs:
+      charges: $steps.list-charges.outputs.charges
+      tracked_charge_id: $steps.list-charges.outputs.charge_id
+      segment_result: $steps.track-charge.outputs.result

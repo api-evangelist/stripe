@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Bridge Chargebee Subscriptions to Stripe Payment Methods
+  summary: Retrieve a stored Stripe payment method and create a matching Chargebee subscription.
+  description: >-
+    Use Chargebee as the subscription system of record while Stripe stores the
+    payment method and collects charges. This workflow retrieves a Stripe
+    PaymentMethod by id, then creates a Chargebee subscription for the customer
+    so recurring billing state lives in Chargebee against the Stripe-held
+    payment instrument.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-method-api-openapi.yml
+    type: openapi
+  - name: chargebee
+    url: https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/openapi/chargebee-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-chargebee-bridge-subscription
+    summary: Retrieve a Stripe payment method and create a Chargebee subscription.
+    description: >-
+      Fetches a Stripe PaymentMethod by id, then creates a Chargebee
+      subscription for the given customer and plan so subscription state is
+      maintained in Chargebee against the Stripe payment method.
+    inputs:
+      type: object
+      required:
+        - payment_method
+        - customer_id
+        - plan_id
+      properties:
+        payment_method:
+          type: string
+          description: The Stripe PaymentMethod id to retrieve (e.g. pm_123).
+        customer_id:
+          type: string
+          description: The Chargebee customer id to create the subscription for.
+        plan_id:
+          type: string
+          description: The Chargebee plan id for the new subscription.
+    steps:
+      - stepId: retrieve-stripe-payment-method
+        description: Retrieve the Stripe payment method that will back the subscription.
+        operationId: $sourceDescriptions.stripe.getPaymentMethodsPaymentMethod
+        parameters:
+          - name: payment_method
+            in: path
+            value: $inputs.payment_method
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payment_method_id: $response.body#/id
+          payment_method_type: $response.body#/type
+          stripe_customer: $response.body#/customer
+      - stepId: create-chargebee-subscription
+        description: Create a Chargebee subscription for the customer using the retrieved payment method.
+        operationId: $sourceDescriptions.chargebee.createSubscription
+        requestBody:
+          contentType: application/json
+          payload:
+            customer_id: $inputs.customer_id
+            plan_id: $inputs.plan_id
+            payment_method_id: $steps.retrieve-stripe-payment-method.outputs.payment_method_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/subscription/id
+          subscription_status: $response.body#/subscription/status
+    outputs:
+      payment_method_id: $steps.retrieve-stripe-payment-method.outputs.payment_method_id
+      subscription_id: $steps.create-chargebee-subscription.outputs.subscription_id
+      subscription_status: $steps.create-chargebee-subscription.outputs.subscription_status

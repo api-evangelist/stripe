@@ -1,0 +1,77 @@
+arazzo: 1.0.1
+info:
+  title: Reconcile Zuora Invoices Against Stripe Payments
+  summary: Match a Zuora invoice to its corresponding Stripe PaymentIntent for reconciliation.
+  description: >-
+    For a given Zuora invoice, this workflow retrieves the invoice from the Zuora
+    Billing REST API and then lists the Stripe PaymentIntents for the paying customer so
+    the two can be reconciled. It surfaces the invoice amount, balance, and status alongside
+    the customer's PaymentIntents so a caller can find and link the payment that settled the
+    invoice and record the reconciliation status.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: zuora
+    url: https://raw.githubusercontent.com/api-evangelist/zuora/refs/heads/main/openapi/zuora-v1-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-zuora-reconcile
+    summary: Retrieve a Zuora invoice and list the paying customer's Stripe PaymentIntents.
+    description: >-
+      Fetches a single Zuora invoice by its ID or number, then lists the Stripe PaymentIntents
+      for the corresponding Stripe customer so the invoice can be reconciled against the payment.
+    inputs:
+      type: object
+      properties:
+        invoiceKey:
+          type: string
+          description: The Zuora invoice ID or number to reconcile (e.g. INV-0000001).
+        stripeCustomerId:
+          type: string
+          description: The Stripe customer ID whose PaymentIntents should be matched against the invoice.
+        limit:
+          type: integer
+          description: Maximum number of PaymentIntents to return (1-100).
+      required:
+        - invoiceKey
+    steps:
+      - stepId: retrieve-zuora-invoice
+        description: Retrieve the Zuora invoice to reconcile.
+        operationId: $sourceDescriptions.zuora.Get_GetInvoice
+        parameters:
+          - name: invoiceKey
+            in: path
+            value: $inputs.invoiceKey
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          invoiceId: $response.body#/id
+          invoiceNumber: $response.body#/invoiceNumber
+          amount: $response.body#/amount
+          balance: $response.body#/balance
+          currency: $response.body#/currency
+          status: $response.body#/status
+      - stepId: find-stripe-payment-intents
+        description: List the Stripe PaymentIntents for the paying customer to match against the invoice.
+        operationId: $sourceDescriptions.stripe.getPaymentIntents
+        parameters:
+          - name: customer
+            in: query
+            value: $inputs.stripeCustomerId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentIntents: $response.body#/data
+          hasMore: $response.body#/has_more
+    outputs:
+      invoiceId: $steps.retrieve-zuora-invoice.outputs.invoiceId
+      invoiceNumber: $steps.retrieve-zuora-invoice.outputs.invoiceNumber
+      invoiceAmount: $steps.retrieve-zuora-invoice.outputs.amount
+      invoiceBalance: $steps.retrieve-zuora-invoice.outputs.balance
+      invoiceStatus: $steps.retrieve-zuora-invoice.outputs.status
+      paymentIntents: $steps.find-stripe-payment-intents.outputs.paymentIntents

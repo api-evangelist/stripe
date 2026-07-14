@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: File Stripe sales through TaxJar
+  summary: Sync Stripe invoices to TaxJar as order transactions for automated sales tax filing.
+  description: >-
+    This workflow lists paid Stripe invoices and records each sale in TaxJar as an
+    order transaction for sales tax reporting and AutoFile. It fetches the most recent
+    matching Stripe invoice, then creates a corresponding TaxJar order transaction using
+    the invoice total and destination address, closing the loop between billing and
+    automated state tax filing.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/invoice-openapi-original.yml
+    type: openapi
+  - name: taxjar
+    url: https://raw.githubusercontent.com/api-evangelist/taxjar/refs/heads/main/openapi/taxjar-sales-tax-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-taxjar-file-sales
+    summary: List a paid Stripe invoice and file it as a TaxJar order transaction.
+    description: >-
+      Retrieves paid Stripe invoices, selects the first result, and creates a TaxJar
+      order transaction carrying the invoice amount and destination tax jurisdiction.
+    inputs:
+      type: object
+      properties:
+        customer:
+          type: string
+          description: Only return Stripe invoices for this customer ID.
+        limit:
+          type: integer
+          description: Number of Stripe invoices to return (1-100).
+        transaction_date:
+          type: string
+          description: Date of the transaction (YYYY-MM-DD or ISO 8601) for TaxJar.
+        to_country:
+          type: string
+          description: Two-letter ISO destination country code for TaxJar.
+        to_zip:
+          type: string
+          description: Destination postal code for TaxJar.
+        to_state:
+          type: string
+          description: Two-letter destination state code for TaxJar.
+        shipping:
+          type: number
+          description: Shipping amount for the TaxJar order transaction.
+        sales_tax:
+          type: number
+          description: Sales tax amount collected for the TaxJar order transaction.
+      required:
+        - transaction_date
+        - to_country
+        - to_zip
+        - to_state
+    steps:
+      - stepId: list-stripe-invoices
+        description: List paid Stripe invoices.
+        operationId: $sourceDescriptions.stripe.GetInvoices
+        parameters:
+          - name: customer
+            in: query
+            value: $inputs.customer
+          - name: limit
+            in: query
+            value: $inputs.limit
+          - name: status
+            in: query
+            value: paid
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          invoice_id: $response.body#/data/0/id
+          amount: $response.body#/data/0/total
+      - stepId: create-taxjar-order
+        description: Record the Stripe invoice as a TaxJar order transaction.
+        operationId: $sourceDescriptions.taxjar.createOrder
+        requestBody:
+          contentType: application/json
+          payload:
+            transaction_id: $steps.list-stripe-invoices.outputs.invoice_id
+            transaction_date: $inputs.transaction_date
+            to_country: $inputs.to_country
+            to_zip: $inputs.to_zip
+            to_state: $inputs.to_state
+            amount: $steps.list-stripe-invoices.outputs.amount
+            shipping: $inputs.shipping
+            sales_tax: $inputs.sales_tax
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          transaction_id: $response.body#/order/transaction_id
+    outputs:
+      invoice_id: $steps.list-stripe-invoices.outputs.invoice_id
+      transaction_id: $steps.create-taxjar-order.outputs.transaction_id

@@ -1,0 +1,82 @@
+arazzo: 1.0.1
+info:
+  title: Post Stripe SaaS subscriptions to Anrok for sales-tax compliance
+  summary: Mirror each Stripe invoice into Anrok as a sales-tax transaction.
+  description: >-
+    For each Stripe subscription billing event, retrieve the finalized Stripe
+    invoice and mirror the transaction in Anrok so sales-tax exposure is tracked
+    and returns can be filed. The workflow pulls the invoice from Stripe, then
+    creates or updates the matching Anrok seller transaction using the invoice
+    total and currency.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-invoice-api-openapi.yml
+    type: openapi
+  - name: anrok
+    url: https://raw.githubusercontent.com/api-evangelist/anrok/refs/heads/main/openapi/anrok-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-anrok-mirror-invoice
+    summary: Retrieve a Stripe invoice and post it to Anrok for sales-tax tracking.
+    description: >-
+      Fetch a Stripe invoice by id, then create or update the corresponding
+      Anrok seller transaction so the sale is captured for sales-tax compliance.
+    inputs:
+      type: object
+      required:
+        - invoice
+        - accountingTime
+        - accountingTimeZone
+        - productExternalId
+      properties:
+        invoice:
+          type: string
+          description: The Stripe invoice id to retrieve and mirror (e.g. in_1JSW342eZvKYlo2C).
+        accountingTime:
+          type: string
+          description: ISO-8601 timestamp used by Anrok as the transaction accounting time.
+        accountingTimeZone:
+          type: string
+          description: IANA/UTC timezone used by Anrok for the accounting time.
+        productExternalId:
+          type: string
+          description: The Anrok product external id mapped to the invoiced SaaS product.
+    steps:
+      - stepId: get-stripe-invoice
+        description: Retrieve the finalized Stripe invoice to mirror into Anrok.
+        operationId: $sourceDescriptions.stripe.getInvoicesInvoice
+        parameters:
+          - name: invoice
+            in: path
+            value: $inputs.invoice
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          invoiceId: $response.body#/id
+          amount: $response.body#/total
+          currency: $response.body#/currency
+      - stepId: post-anrok-transaction
+        description: Create or update the Anrok seller transaction for the invoice.
+        operationId: $sourceDescriptions.anrok.transactionsCreateOrUpdate
+        requestBody:
+          contentType: application/json
+          payload:
+            id: $steps.get-stripe-invoice.outputs.invoiceId
+            currencyCode: $steps.get-stripe-invoice.outputs.currency
+            accountingTime: $inputs.accountingTime
+            accountingTimeZone: $inputs.accountingTimeZone
+            lineItems:
+              - id: line-1
+                productExternalId: $inputs.productExternalId
+                amount: $steps.get-stripe-invoice.outputs.amount
+                isTaxIncludedInAmount: false
+                quantity: '1'
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          taxAmountToCollect: $response.body#/taxAmountToCollect
+          preTaxAmount: $response.body#/preTaxAmount
+    outputs:
+      invoiceId: $steps.get-stripe-invoice.outputs.invoiceId
+      taxAmountToCollect: $steps.post-anrok-transaction.outputs.taxAmountToCollect

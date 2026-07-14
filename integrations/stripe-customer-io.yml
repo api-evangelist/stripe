@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Forward Stripe subscription lifecycle to Customer.io events
+  summary: Forward Stripe subscription lifecycle changes to Customer.io as user-level events.
+  description: >-
+    Retrieves a Stripe subscription and forwards its lifecycle state to
+    Customer.io as a user-level event keyed on the subscription's customer.
+    When a subscription is created, updated, canceled, or paused, this workflow
+    reads the current subscription from Stripe and records a tracked event on the
+    matching Customer.io profile so campaigns and segments can react to billing
+    changes.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+  - name: customer-io
+    url: https://raw.githubusercontent.com/api-evangelist/customer-io/refs/heads/main/openapi/customer-io-track-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-customer-io-forward-subscription-event
+    summary: Read a Stripe subscription and track it as a Customer.io event.
+    description: >-
+      Fetch a Stripe subscription by id, then track a customer-level event in
+      Customer.io using the subscription's customer as the profile identifier.
+    inputs:
+      type: object
+      required:
+        - subscription_id
+        - event_name
+      properties:
+        subscription_id:
+          type: string
+          description: The Stripe subscription id to retrieve (e.g. sub_123).
+        event_name:
+          type: string
+          description: The Customer.io event name to record (e.g. subscription_updated).
+    steps:
+      - stepId: retrieve-subscription
+        description: Retrieve the Stripe subscription that changed.
+        operationId: $sourceDescriptions.stripe.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/id
+          customer_id: $response.body#/customer
+          status: $response.body#/status
+      - stepId: track-customer-event
+        description: Record the subscription lifecycle change as a Customer.io event.
+        operationId: $sourceDescriptions.customer-io.trackCustomerEvent
+        parameters:
+          - name: identifier
+            in: path
+            value: $steps.retrieve-subscription.outputs.customer_id
+        requestBody:
+          contentType: application/json
+          payload:
+            name: $inputs.event_name
+            data:
+              subscription_id: $steps.retrieve-subscription.outputs.subscription_id
+              status: $steps.retrieve-subscription.outputs.status
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          tracked: $statusCode
+    outputs:
+      customer_id: $steps.retrieve-subscription.outputs.customer_id
+      subscription_status: $steps.retrieve-subscription.outputs.status
+      event_tracked: $steps.track-customer-event.outputs.tracked

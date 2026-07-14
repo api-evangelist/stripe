@@ -1,0 +1,97 @@
+arazzo: 1.0.1
+info:
+  title: Use Stripe for Shopify Checkout Outside Shopify Payments
+  summary: Process Shopify checkouts via Stripe by attaching a Stripe PaymentIntent to a new Shopify order.
+  description: >-
+    Replicates the legacy Naftiko integration that lets a merchant collect
+    payment through Stripe in regions where Shopify Payments is unavailable.
+    The workflow first creates a Stripe PaymentIntent for the checkout amount
+    and currency, then records the resulting sale as a Shopify Admin order,
+    stamping the Stripe PaymentIntent id onto the order so the two systems stay
+    reconciled. This gives Shopify stores a Stripe-backed checkout path without
+    relying on native Shopify Payments.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: shopify
+    url: https://raw.githubusercontent.com/api-evangelist/shopify/refs/heads/main/openapi/shopify-admin-rest-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-shopify-checkout
+    summary: Create a Stripe PaymentIntent and record the sale as a Shopify order.
+    description: >-
+      Charges the checkout total through Stripe and then creates a Shopify
+      order that references the PaymentIntent, enabling Stripe-backed checkout
+      outside of Shopify Payments.
+    inputs:
+      type: object
+      required:
+        - amount
+        - currency
+        - line_item_title
+        - line_item_price
+      properties:
+        amount:
+          type: integer
+          description: Charge amount in the smallest currency unit (e.g. cents).
+        currency:
+          type: string
+          description: Three-letter ISO currency code (e.g. usd).
+        customer_email:
+          type: string
+          description: Customer email to attach to the Shopify order.
+        line_item_title:
+          type: string
+          description: Title of the line item for the Shopify order.
+        line_item_price:
+          type: string
+          description: Unit price of the Shopify line item as a decimal string.
+        line_item_quantity:
+          type: integer
+          description: Quantity of the line item.
+          default: 1
+    steps:
+      - stepId: create-payment-intent
+        description: Create a Stripe PaymentIntent for the checkout total.
+        operationId: $sourceDescriptions.stripe.postPaymentIntents
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            amount: $inputs.amount
+            currency: $inputs.currency
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payment_intent_id: $response.body#/id
+          client_secret: $response.body#/client_secret
+          payment_status: $response.body#/status
+      - stepId: create-shopify-order
+        description: Record the sale as a Shopify order referencing the Stripe PaymentIntent.
+        operationId: $sourceDescriptions.shopify.createOrder
+        requestBody:
+          contentType: application/json
+          payload:
+            order:
+              email: $inputs.customer_email
+              financial_status: paid
+              currency: $inputs.currency
+              line_items:
+                - title: $inputs.line_item_title
+                  price: $inputs.line_item_price
+                  quantity: $inputs.line_item_quantity
+              note_attributes:
+                - name: stripe_payment_intent_id
+                  value: $steps.create-payment-intent.outputs.payment_intent_id
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          order_id: $response.body#/order/id
+          order_name: $response.body#/order/name
+          order_status: $response.body#/order/financial_status
+    outputs:
+      payment_intent_id: $steps.create-payment-intent.outputs.payment_intent_id
+      payment_status: $steps.create-payment-intent.outputs.payment_status
+      order_id: $steps.create-shopify-order.outputs.order_id
+      order_name: $steps.create-shopify-order.outputs.order_name

@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Process Squarespace Commerce orders through Stripe
+  summary: Capture Squarespace Commerce orders and route payment through a Stripe PaymentIntent.
+  description: >-
+    This workflow retrieves recent orders from a Squarespace merchant site and
+    creates a Stripe PaymentIntent to collect payment for the most recent order.
+    It reads the order grand total and currency from Squarespace and wires them
+    into a Stripe PaymentIntent so commerce revenue is routed through Stripe.
+  version: 1.0.0
+sourceDescriptions:
+  - name: squarespace
+    url: https://raw.githubusercontent.com/api-evangelist/squarespace/refs/heads/main/openapi/squarespace-orders-api-openapi.yml
+    type: openapi
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-squarespace-collect
+    summary: Retrieve Squarespace orders and collect payment via a Stripe PaymentIntent.
+    description: >-
+      Lists orders from the Squarespace Orders API, then creates a Stripe
+      PaymentIntent using the grand total and currency of the most recent order.
+    inputs:
+      type: object
+      properties:
+        modifiedAfter:
+          type: string
+          format: date-time
+          description: Only return orders modified after this ISO 8601 UTC date-time.
+        fulfillmentStatus:
+          type: string
+          enum:
+            - PENDING
+            - FULFILLED
+            - CANCELED
+          description: Filter orders by fulfillment status.
+    steps:
+      - stepId: list-orders
+        description: Retrieve recent orders from the Squarespace merchant site.
+        operationId: $sourceDescriptions.squarespace.listOrders
+        parameters:
+          - name: modifiedAfter
+            in: query
+            value: $inputs.modifiedAfter
+          - name: fulfillmentStatus
+            in: query
+            value: $inputs.fulfillmentStatus
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          orderId: $response.body#/result/0/id
+          customerEmail: $response.body#/result/0/customerEmail
+          amount: $response.body#/result/0/totals/grandTotal/value
+          currency: $response.body#/result/0/totals/grandTotal/currency
+      - stepId: create-payment-intent
+        description: Create a Stripe PaymentIntent to collect payment for the order.
+        operationId: $sourceDescriptions.stripe.postPaymentIntents
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            amount: $steps.list-orders.outputs.amount
+            currency: $steps.list-orders.outputs.currency
+            description: $steps.list-orders.outputs.orderId
+            receipt_email: $steps.list-orders.outputs.customerEmail
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentIntentId: $response.body#/id
+          clientSecret: $response.body#/client_secret
+          status: $response.body#/status
+    outputs:
+      orderId: $steps.list-orders.outputs.orderId
+      paymentIntentId: $steps.create-payment-intent.outputs.paymentIntentId
+      clientSecret: $steps.create-payment-intent.outputs.clientSecret
+      status: $steps.create-payment-intent.outputs.status

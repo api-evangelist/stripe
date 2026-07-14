@@ -1,0 +1,71 @@
+arazzo: 1.0.1
+info:
+  title: Sync Stripe subscription tier to Okta group membership
+  summary: Map a Stripe subscription plan to an Okta Group and update membership when the tier changes.
+  description: >-
+    This workflow retrieves a Stripe subscription to read its current plan tier
+    and status, then assigns the corresponding user to the mapped Okta Group so
+    entitlements track billing. Run it whenever a subscription is created or its
+    tier changes to keep Okta group membership aligned with the Stripe plan.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+  - name: okta
+    url: https://raw.githubusercontent.com/api-evangelist/okta/refs/heads/main/openapi/okta-openapi-original.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-okta-sync-subscription-tier
+    summary: Read a Stripe subscription tier and assign the user to the mapped Okta group.
+    description: >-
+      Fetches a Stripe subscription by id, then adds the specified user to the
+      Okta group that maps to that subscription tier.
+    inputs:
+      type: object
+      required:
+        - subscription_id
+        - group_id
+        - user_id
+      properties:
+        subscription_id:
+          type: string
+          description: The Stripe subscription id to retrieve (e.g. sub_123).
+        group_id:
+          type: string
+          description: The Okta Group id that maps to the subscription tier.
+        user_id:
+          type: string
+          description: The Okta user id to add to the group.
+    steps:
+      - stepId: get-subscription
+        description: Retrieve the Stripe subscription to read its plan tier and status.
+        operationId: $sourceDescriptions.stripe.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/id
+          status: $response.body#/status
+          customer: $response.body#/customer
+      - stepId: add-user-to-group
+        description: Add the user to the Okta group mapped to the subscription tier.
+        operationId: $sourceDescriptions.okta.addUserToGroup
+        parameters:
+          - name: groupId
+            in: path
+            value: $inputs.group_id
+          - name: userId
+            in: path
+            value: $inputs.user_id
+        successCriteria:
+          - condition: $statusCode == 204
+        outputs:
+          assigned_status_code: $statusCode
+    outputs:
+      subscription_id: $steps.get-subscription.outputs.subscription_id
+      subscription_status: $steps.get-subscription.outputs.status
+      assigned_status_code: $steps.add-user-to-group.outputs.assigned_status_code

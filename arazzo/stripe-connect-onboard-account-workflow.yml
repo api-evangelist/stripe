@@ -1,0 +1,90 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Connect Onboard Account
+  summary: Create a Connect connected account, then mint an account link to start Stripe-hosted onboarding.
+  description: >-
+    The canonical Stripe Connect onboarding pattern. The workflow first creates a
+    connected account under the platform, then creates an AccountLink for that
+    account with a single-use, hosted onboarding URL. The returned URL is where the
+    connected account owner is redirected to complete Stripe-hosted onboarding.
+    Every step spells out its form-encoded request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: accountsApi
+  url: ../openapi/stripe-accounts-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: connect-onboard-account
+  summary: Create a connected account and generate a hosted onboarding account link.
+  description: >-
+    Creates a Stripe Connect connected account, then creates an AccountLink bound
+    to that account so the account owner can be redirected to Stripe-hosted
+    onboarding. Outputs the connected account id and the single-use onboarding URL.
+  inputs:
+    type: object
+    required:
+    - type
+    - refreshUrl
+    - returnUrl
+    properties:
+      type:
+        type: string
+        description: >-
+          Type of connected account to create (e.g. express, standard, or custom).
+      country:
+        type: string
+        description: Two-letter ISO country code for the connected account (e.g. US).
+      email:
+        type: string
+        description: Email address of the connected account owner.
+      refreshUrl:
+        type: string
+        description: >-
+          URL the account owner is sent to if the account link expires or is
+          revisited (e.g. https://example.com/reauth).
+      returnUrl:
+        type: string
+        description: >-
+          URL the account owner is redirected to after completing onboarding
+          (e.g. https://example.com/return).
+      linkType:
+        type: string
+        description: >-
+          Type of account link to create; use account_onboarding to collect the
+          information Stripe needs to enable the account.
+  steps:
+  - stepId: createAccount
+    description: Create the Connect connected account under the platform.
+    operationId: PostAccounts
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        type: $inputs.type
+        country: $inputs.country
+        email: $inputs.email
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      accountId: $response.body#/id
+  - stepId: createAccountLink
+    description: >-
+      Create a single-use AccountLink for the connected account to start
+      Stripe-hosted onboarding.
+    operationId: PostAccountLinks
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        account: $steps.createAccount.outputs.accountId
+        refresh_url: $inputs.refreshUrl
+        return_url: $inputs.returnUrl
+        type: $inputs.linkType
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      onboardingUrl: $response.body#/url
+      expiresAt: $response.body#/expires_at
+  outputs:
+    accountId: $steps.createAccount.outputs.accountId
+    onboardingUrl: $steps.createAccountLink.outputs.onboardingUrl
+    expiresAt: $steps.createAccountLink.outputs.expiresAt

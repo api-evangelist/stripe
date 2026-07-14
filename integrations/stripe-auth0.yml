@@ -1,0 +1,71 @@
+arazzo: 1.0.1
+info:
+  title: Provision Auth0 Users from Stripe Customers
+  summary: Retrieve a Stripe customer and provision the matching Auth0 user.
+  description: >-
+    When a Stripe customer is created via a paid signup, this workflow retrieves
+    the Stripe customer record and provisions a matching user in Auth0's Management
+    API. The new Auth0 user inherits the customer's email address and is created in
+    a specified database connection so identity and billing stay in sync.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/customers-openapi-original.yml
+    type: openapi
+  - name: auth0
+    url: https://raw.githubusercontent.com/api-evangelist/auth0/refs/heads/main/openapi/auth0-management-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-auth0-provision-user
+    summary: Retrieve a Stripe customer and create the matching Auth0 user.
+    description: >-
+      Fetches a Stripe customer by id, then creates an Auth0 user in the given
+      connection using the customer's email address.
+    inputs:
+      type: object
+      required:
+        - customer
+        - connection
+      properties:
+        customer:
+          type: string
+          description: The id of the Stripe customer to provision from.
+        connection:
+          type: string
+          description: The name of the Auth0 database connection to create the user in.
+        email_verified:
+          type: boolean
+          description: Whether the new Auth0 user's email should be marked as verified.
+          default: true
+    steps:
+      - stepId: get-stripe-customer
+        description: Retrieve the Stripe customer record by id.
+        operationId: $sourceDescriptions.stripe.GetCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $inputs.customer
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customer_id: $response.body#/id
+          email: $response.body#/email
+          name: $response.body#/name
+      - stepId: create-auth0-user
+        description: Create the matching Auth0 user from the Stripe customer email.
+        operationId: $sourceDescriptions.auth0.post_users
+        requestBody:
+          contentType: application/json
+          payload:
+            email: $steps.get-stripe-customer.outputs.email
+            name: $steps.get-stripe-customer.outputs.name
+            connection: $inputs.connection
+            email_verified: $inputs.email_verified
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          user_id: $response.body#/user_id
+          user_email: $response.body#/email
+    outputs:
+      stripe_customer_id: $steps.get-stripe-customer.outputs.customer_id
+      auth0_user_id: $steps.create-auth0-user.outputs.user_id

@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Add Stripe Checkout completers to a Mailchimp audience
+  summary: When a Stripe Checkout session completes, subscribe the customer to a Mailchimp audience with plan and MRR merge tags.
+  description: >-
+    This workflow retrieves a completed Stripe Checkout session, reads the
+    buyer's email from the session, and adds that person as a subscribed member
+    of a Mailchimp audience. Plan and MRR are written into Mailchimp merge
+    fields so the audience is segmentable by subscription tier and revenue.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-checkout-api-openapi.yml
+    type: openapi
+  - name: mailchimp
+    url: https://raw.githubusercontent.com/api-evangelist/mailchimp/refs/heads/main/openapi/mailchimp-marketing-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-mailchimp-subscribe
+    summary: Retrieve a completed Stripe Checkout session and add the buyer to a Mailchimp audience.
+    description: >-
+      Fetches the Stripe Checkout session by id to obtain the customer email,
+      then creates a subscribed member in the target Mailchimp audience with
+      plan and MRR merge tags.
+    inputs:
+      type: object
+      required:
+        - session
+        - list_id
+      properties:
+        session:
+          type: string
+          description: The Stripe Checkout Session id to retrieve.
+        list_id:
+          type: string
+          description: The Mailchimp audience (list) id to add the member to.
+        plan:
+          type: string
+          description: Subscription plan name to store in the Mailchimp PLAN merge field.
+        mrr:
+          type: string
+          description: Monthly recurring revenue to store in the Mailchimp MRR merge field.
+    steps:
+      - stepId: get-checkout-session
+        description: Retrieve the completed Stripe Checkout session.
+        operationId: $sourceDescriptions.stripe.getCheckoutSessionsSession
+        parameters:
+          - name: session
+            in: path
+            value: $inputs.session
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customer_email: $response.body#/customer_details/email
+          customer_id: $response.body#/customer
+          amount_total: $response.body#/amount_total
+      - stepId: add-audience-member
+        description: Add the checkout customer to the Mailchimp audience.
+        operationId: $sourceDescriptions.mailchimp.postListsIdMembers
+        parameters:
+          - name: list_id
+            in: path
+            value: $inputs.list_id
+        requestBody:
+          contentType: application/json
+          payload:
+            email_address: $steps.get-checkout-session.outputs.customer_email
+            status: subscribed
+            merge_fields:
+              PLAN: $inputs.plan
+              MRR: $inputs.mrr
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          member_id: $response.body#/id
+          member_status: $response.body#/status
+    outputs:
+      customer_email: $steps.get-checkout-session.outputs.customer_email
+      member_id: $steps.add-audience-member.outputs.member_id
+      member_status: $steps.add-audience-member.outputs.member_status

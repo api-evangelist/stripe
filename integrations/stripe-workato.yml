@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Forward Stripe Event to Workato
+  summary: Forward a Stripe event into a Workato Event Streams topic that a recipe consumes.
+  description: >-
+    This workflow replicates the legacy Stripe-to-Workato integration as a
+    portable, forkable Arazzo document. It first lists recent Stripe events via
+    the Events API, then forwards the most recent event payload into a Workato
+    Event Streams topic using publishMessage, so a downstream Workato recipe
+    subscribed to that topic can act on the Stripe event.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-events-api-openapi.yml
+    type: openapi
+  - name: workato
+    url: https://raw.githubusercontent.com/api-evangelist/workato/refs/heads/main/openapi/workato-event-streams-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-workato-forward-event
+    summary: List a Stripe event and publish it to a Workato topic.
+    description: >-
+      Fetches the latest Stripe events, selects the most recent one, and
+      publishes its payload to a Workato Event Streams topic for a recipe to
+      consume.
+    inputs:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Optional Stripe event type filter (e.g. charge.succeeded).
+        limit:
+          type: integer
+          description: Maximum number of Stripe events to return (1-100).
+        topic_id:
+          type: integer
+          description: Workato Event Streams topic id to publish the event to.
+      required:
+        - topic_id
+    steps:
+      - stepId: list-stripe-events
+        description: List recent Stripe events.
+        operationId: $sourceDescriptions.stripe.getEvents
+        parameters:
+          - name: type
+            in: query
+            value: $inputs.type
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          latest_event: $response.body#/data/0
+          latest_event_id: $response.body#/data/0/id
+          latest_event_type: $response.body#/data/0/type
+      - stepId: publish-to-workato
+        description: Publish the latest Stripe event to a Workato Event Streams topic.
+        operationId: $sourceDescriptions.workato.publishMessage
+        parameters:
+          - name: topic_id
+            in: path
+            value: $inputs.topic_id
+        requestBody:
+          contentType: application/json
+          payload:
+            stripe_event_id: $steps.list-stripe-events.outputs.latest_event_id
+            stripe_event_type: $steps.list-stripe-events.outputs.latest_event_type
+            stripe_event: $steps.list-stripe-events.outputs.latest_event
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          message_id: $response.body#/message_id
+    outputs:
+      stripe_event_id: $steps.list-stripe-events.outputs.latest_event_id
+      workato_message_id: $steps.publish-to-workato.outputs.message_id

@@ -1,0 +1,97 @@
+arazzo: 1.0.1
+info:
+  title: Power Looker dashboards from Stripe revenue data
+  summary: Pull Stripe charges and run a Looker query to feed embedded revenue dashboards.
+  description: >-
+    This workflow lists recent Stripe charges to surface raw revenue activity, then runs
+    an inline Looker query against the corresponding LookML model to return dashboard-ready
+    results. It reproduces the legacy Naftiko integration that exposed a derived Stripe
+    revenue view through the Looker API for embedded business-intelligence dashboards.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+    type: openapi
+  - name: looker
+    url: https://raw.githubusercontent.com/api-evangelist/looker/refs/heads/main/openapi/looker-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-looker-sync
+    summary: Fetch Stripe charges and run a Looker query for dashboards.
+    description: >-
+      Retrieves a page of Stripe charges representing recent revenue, then executes an inline
+      Looker query defined by a LookML model and view to return results for embedded dashboards.
+    inputs:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of Stripe charges to return (1-100).
+          default: 100
+        result_format:
+          type: string
+          description: Format for the Looker query results.
+          default: json
+        model:
+          type: string
+          description: LookML model name to query.
+        view:
+          type: string
+          description: LookML explore (view) name to query.
+        fields:
+          type: array
+          description: List of LookML field names to include in the query.
+          items:
+            type: string
+        filters:
+          type: object
+          description: Filter expressions keyed by field name.
+          additionalProperties:
+            type: string
+        sorts:
+          type: array
+          description: Sort order for the query results.
+          items:
+            type: string
+      required:
+        - model
+        - view
+    steps:
+      - stepId: list-stripe-charges
+        description: List recent Stripe charges representing revenue activity.
+        operationId: $sourceDescriptions.stripe.getCharges
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          charges: $response.body#/data
+          has_more: $response.body#/has_more
+      - stepId: run-looker-query
+        description: Run an inline Looker query against the LookML model to power the dashboard.
+        operationId: $sourceDescriptions.looker.runInlineQuery
+        parameters:
+          - name: result_format
+            in: path
+            value: $inputs.result_format
+          - name: limit
+            in: query
+            value: $inputs.limit
+        requestBody:
+          contentType: application/json
+          payload:
+            model: $inputs.model
+            view: $inputs.view
+            fields: $inputs.fields
+            filters: $inputs.filters
+            sorts: $inputs.sorts
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          query_results: $response.body
+    outputs:
+      charges: $steps.list-stripe-charges.outputs.charges
+      has_more: $steps.list-stripe-charges.outputs.has_more
+      query_results: $steps.run-looker-query.outputs.query_results

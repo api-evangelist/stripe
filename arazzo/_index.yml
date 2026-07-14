@@ -1,0 +1,129 @@
+# Catalog of Stripe native Arazzo workflows in this directory.
+# Each is a runnable, forkable multi-step workflow over Stripe's own OpenAPI (../openapi/).
+# Example inputs use Stripe test values (e.g. pm_card_visa) so a fork runs in test mode;
+# see ../sandbox/stripe-sandbox.yml and ../conventions/stripe-conventions.yml.
+- file: stripe-add-and-scale-subscription-item-workflow.yml
+  workflowId: add-and-scale-subscription-item
+  title: Stripe Add and Scale Subscription Item
+  summary: Add an item to a subscription, then update its quantity.
+- file: stripe-attach-payment-method-workflow.yml
+  workflowId: attach-payment-method
+  title: Stripe Attach Payment Method
+  summary: Create a payment method, attach it to a customer, then list the customer's saved methods.
+- file: stripe-authorize-and-capture-payment-workflow.yml
+  workflowId: authorize-and-capture-payment
+  title: Stripe Authorize and Capture Payment
+  summary: Authorize a payment with manual capture, poll until ready, then capture the funds.
+- file: stripe-calculate-and-settle-tax-workflow.yml
+  workflowId: calculate-and-settle-tax
+  title: Stripe Calculate and Settle Tax
+  summary: Calculate tax for a set of line items, then record a Tax transaction from that calculation.
+- file: stripe-cancel-subscription-workflow.yml
+  workflowId: cancel-subscription
+  title: Stripe Cancel Subscription
+  summary: Retrieve a subscription to confirm it is active, then cancel it.
+- file: stripe-cancel-uncaptured-payment-workflow.yml
+  workflowId: cancel-uncaptured-payment
+  title: Stripe Cancel Uncaptured Payment
+  summary: Open a manual-capture PaymentIntent and cancel it to release the authorization.
+- file: stripe-capture-and-partial-refund-workflow.yml
+  workflowId: capture-and-partial-refund
+  title: Stripe Capture and Partial Refund
+  summary: Create an uncaptured charge, capture it, then partially refund the captured amount.
+- file: stripe-charge-and-refund-workflow.yml
+  workflowId: charge-and-refund
+  title: Stripe Charge and Refund
+  summary: Create a direct charge, then refund all or part of it.
+- file: stripe-checkout-session-and-lineitems-workflow.yml
+  workflowId: checkout-session-and-lineitems
+  title: Stripe Checkout Session and Line Items
+  summary: Create a hosted Checkout Session, retrieve it, then list its line items.
+- file: stripe-connect-onboard-account-workflow.yml
+  workflowId: connect-onboard-account
+  title: Stripe Connect Onboard Account
+  summary: Create a Connect connected account, then mint an account link to start Stripe-hosted onboarding.
+- file: stripe-create-and-cancel-payout-workflow.yml
+  workflowId: create-and-cancel-payout
+  title: Stripe Create and Cancel Payout
+  summary: Create a payout to a bank account, then cancel it while still pending.
+- file: stripe-create-and-finalize-invoice-workflow.yml
+  workflowId: create-and-finalize-invoice
+  title: Stripe Create and Finalize Invoice
+  summary: Create a draft invoice, add a line item, then finalize it.
+- file: stripe-create-customer-and-pay-workflow.yml
+  workflowId: create-customer-and-pay
+  title: Stripe Create Customer and Pay
+  summary: Create a customer, open a PaymentIntent for them, then confirm it to take payment.
+- file: stripe-create-product-and-price-workflow.yml
+  workflowId: create-product-and-price
+  title: Stripe Create Product and Price
+  summary: Create a Product, then attach a reusable Price to it.
+- file: stripe-expire-checkout-session-workflow.yml
+  workflowId: expire-checkout-session
+  title: Stripe Expire Checkout Session
+  summary: Create a Checkout Session and then expire it to prevent further use.
+- file: stripe-invoice-and-collect-workflow.yml
+  workflowId: invoice-and-collect
+  title: Stripe Invoice and Collect
+  summary: Draft an invoice, add an item, finalize it, then charge it immediately.
+- file: stripe-issue-card-to-cardholder-workflow.yml
+  workflowId: issue-card-to-cardholder
+  title: Stripe Issue Card to Cardholder
+  summary: Create an Issuing cardholder, then issue a virtual card to that cardholder.
+- file: stripe-launch-subscription-workflow.yml
+  workflowId: launch-subscription
+  title: Stripe Launch Subscription
+  summary: Create a recurring product and price, then subscribe a customer to it.
+- file: stripe-link-financial-account-workflow.yml
+  workflowId: link-financial-account
+  title: Stripe Link Financial Account
+  summary: Create a Financial Connections session for an account holder, then list the accounts linked
+    through it.
+- file: stripe-onboard-customer-to-plan-workflow.yml
+  workflowId: onboard-customer-to-plan
+  title: Stripe Onboard Customer to Plan
+  summary: Create a customer, save a payment method to them, then subscribe them to a plan.
+- file: stripe-pause-and-resume-subscription-workflow.yml
+  workflowId: pause-and-resume-subscription
+  title: Stripe Pause and Resume Subscription
+  summary: Retrieve a subscription, pause its billing collection, then resume it.
+- file: stripe-quote-to-paid-invoice-workflow.yml
+  workflowId: quote-to-paid-invoice
+  title: Stripe Quote to Paid Invoice
+  summary: Create a quote for a customer, finalize it, then accept it to generate the resulting invoice.
+- file: stripe-refund-payment-intent-workflow.yml
+  workflowId: refund-payment-intent
+  title: Stripe Refund Payment Intent
+  summary: Confirm a PaymentIntent charge, then refund it via the Refunds API.
+- file: stripe-reverse-payout-workflow.yml
+  workflowId: reverse-payout
+  title: Stripe Reverse Payout
+  summary: Create a payout, retrieve it to confirm settlement, then reverse it back to the balance.
+- file: stripe-save-card-and-charge-workflow.yml
+  workflowId: save-card-and-charge
+  title: Stripe Save Card and Charge
+  summary: Create a payment method, attach it to a customer, then charge it via a PaymentIntent.
+- file: stripe-send-invoice-workflow.yml
+  workflowId: send-invoice
+  title: Stripe Send Invoice
+  summary: Draft an invoice, add an item, finalize it, then email it to the customer.
+- file: stripe-setup-future-payment-workflow.yml
+  workflowId: setup-future-payment
+  title: Stripe Set Up Future Payment
+  summary: Create a SetupIntent to save a payment method for future off-session use, then confirm it.
+- file: stripe-subscribe-existing-customer-workflow.yml
+  workflowId: subscribe-existing-customer
+  title: Stripe Subscribe Existing Customer
+  summary: Confirm a customer exists, then subscribe them to an existing price.
+- file: stripe-verify-identity-workflow.yml
+  workflowId: verify-identity
+  title: Stripe Verify Identity
+  summary: Create an Identity VerificationSession, then retrieve it to read the verification outcome.
+- file: stripe-void-invoice-workflow.yml
+  workflowId: void-invoice
+  title: Stripe Void Invoice
+  summary: Create and finalize an invoice, then void it to cancel the bill.
+- file: stripe-write-off-invoice-workflow.yml
+  workflowId: write-off-invoice
+  title: Stripe Write Off Invoice
+  summary: Create and finalize an invoice, then mark it uncollectible.

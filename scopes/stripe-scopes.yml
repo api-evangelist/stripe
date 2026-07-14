@@ -1,0 +1,37 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/connect/oauth-reference
+docs: https://docs.stripe.com/connect/oauth-reference
+description: >-
+  Stripe's OAuth scopes. The core Stripe API authenticates with secret/restricted
+  API keys, not OAuth, so the OpenAPI securitySchemes carry no oauth2 scopes and
+  the derive pass finds none. OAuth is used by Stripe Connect for platforms to
+  authorize access to connected accounts, and by the hosted MCP server. This is
+  the searched fill capturing the Connect OAuth scope surface.
+schemes:
+  - name: Stripe Connect OAuth
+    type: oauth2
+    grant_types: [authorization_code, refresh_token]
+    authorizationUrl: https://connect.stripe.com/oauth/authorize
+    tokenUrl: https://connect.stripe.com/oauth/token
+    docs: https://docs.stripe.com/connect/oauth-reference
+    notes: >-
+      Standard accounts default to read_only when scope is omitted. Platforms
+      requesting read_write cannot connect to accounts controlled by another
+      platform.
+  - name: Stripe MCP Server OAuth
+    type: oauth2
+    protected_resource: well-known/stripe-mcp-oauth-protected-resource.json
+    authorization_server: https://access.stripe.com/mcp
+    docs: https://docs.stripe.com/mcp
+    notes: RFC 9728 OAuth 2.0 protected resource fronting the hosted MCP server (mcp/stripe-mcp.yml).
+scopes:
+  - scope: read_write
+    description: Full read and write access to the connected account.
+    account_types: [standard]
+    schemes: [Stripe Connect OAuth]
+  - scope: read_only
+    description: Read-only access to the connected account.
+    account_types: [extensions]
+    schemes: [Stripe Connect OAuth]
+    default: true

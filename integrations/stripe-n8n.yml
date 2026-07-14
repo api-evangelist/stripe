@@ -1,0 +1,91 @@
+arazzo: 1.0.1
+info:
+  title: Run an n8n workflow on Stripe events
+  summary: Read recent Stripe events and stand up an n8n automation workflow to process them.
+  description: >-
+    This workflow replicates the legacy Stripe-to-n8n automation integration as a
+    forkable, two-source Arazzo artifact. It first lists recent Stripe account events
+    (optionally filtered by event type), then creates an n8n workflow so those events
+    can drive downstream automation. n8n's public API exposes workflow management rather
+    than direct webhook invocation, so workflow creation is used as the real, resolvable
+    automation entry point.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-events-api-openapi.yml
+    type: openapi
+  - name: n8n
+    url: https://raw.githubusercontent.com/api-evangelist/n8n/refs/heads/main/openapi/n8n-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-n8n-run-workflow
+    summary: List Stripe events and create an n8n workflow to automate against them.
+    description: >-
+      Fetches recent Stripe events (optionally filtered by type) and then creates an
+      n8n workflow, returning the new workflow identifier so the automation can be
+      activated and wired to the Stripe event stream.
+    inputs:
+      type: object
+      properties:
+        event_type:
+          type: string
+          description: >-
+            Optional Stripe event name (supports the * wildcard) used to filter which
+            events are returned, e.g. charge.succeeded or customer.*.
+        limit:
+          type: integer
+          description: Maximum number of Stripe events to return (1-100).
+          default: 10
+        workflow_name:
+          type: string
+          description: Name for the n8n workflow that will process the Stripe events.
+        workflow_nodes:
+          type: array
+          description: n8n node definitions that make up the workflow graph.
+          items:
+            type: object
+        workflow_connections:
+          type: object
+          description: n8n connection map wiring the workflow nodes together.
+        workflow_settings:
+          type: object
+          description: n8n workflow settings object.
+      required:
+        - workflow_name
+        - workflow_nodes
+        - workflow_connections
+    steps:
+      - stepId: list-stripe-events
+        description: List recent Stripe events, optionally filtered by event type.
+        operationId: $sourceDescriptions.stripe.getEvents
+        parameters:
+          - name: type
+            in: query
+            value: $inputs.event_type
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          events: $response.body#/data
+          has_more: $response.body#/has_more
+      - stepId: create-n8n-workflow
+        description: Create an n8n workflow to automate processing of the Stripe events.
+        operationId: $sourceDescriptions.n8n.createWorkflow
+        requestBody:
+          contentType: application/json
+          payload:
+            name: $inputs.workflow_name
+            nodes: $inputs.workflow_nodes
+            connections: $inputs.workflow_connections
+            settings: $inputs.workflow_settings
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          workflow_id: $response.body#/id
+          workflow_active: $response.body#/active
+    outputs:
+      stripe_events: $steps.list-stripe-events.outputs.events
+      n8n_workflow_id: $steps.create-n8n-workflow.outputs.workflow_id
+      n8n_workflow_active: $steps.create-n8n-workflow.outputs.workflow_active

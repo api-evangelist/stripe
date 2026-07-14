@@ -1,0 +1,83 @@
+arazzo: 1.0.1
+info:
+  title: Stripe to SendGrid Transactional Receipt
+  summary: Trigger a SendGrid transactional Dynamic Template when a Stripe payment succeeds.
+  description: >-
+    When a Stripe payment succeeds, retrieve the PaymentIntent to obtain the customer
+    email and payment details, then render and send a SendGrid Dynamic Template (receipt)
+    to that customer. This replicates the legacy Naftiko integration that binds Stripe
+    payment events to SendGrid transactional email delivery.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: sendgrid
+    url: https://raw.githubusercontent.com/api-evangelist/sendgrid/refs/heads/main/openapi/tsg_mail_v3.yaml
+    type: openapi
+workflows:
+  - workflowId: stripe-sendgrid-send-receipt
+    summary: Retrieve a succeeded Stripe PaymentIntent and send a SendGrid receipt email.
+    description: >-
+      Fetch the Stripe PaymentIntent by id to obtain the paying customer's email and
+      amount, then send a SendGrid Dynamic Template receipt to that email address.
+    inputs:
+      type: object
+      required:
+        - payment_intent_id
+        - from_email
+        - template_id
+      properties:
+        payment_intent_id:
+          type: string
+          description: The id of the succeeded Stripe PaymentIntent to build the receipt from.
+        from_email:
+          type: string
+          format: email
+          description: Verified SendGrid sender address the receipt is sent from.
+        from_name:
+          type: string
+          description: Display name for the sender.
+        template_id:
+          type: string
+          description: SendGrid Dynamic Template id to render as the receipt.
+    steps:
+      - stepId: get-payment-intent
+        description: Retrieve the Stripe PaymentIntent to obtain the customer email and amount.
+        operationId: $sourceDescriptions.stripe.getPaymentIntentsIntent
+        parameters:
+          - name: intent
+            in: path
+            value: $inputs.payment_intent_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payment_intent_id: $response.body#/id
+          receipt_email: $response.body#/receipt_email
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+      - stepId: send-receipt-email
+        description: Send the SendGrid Dynamic Template receipt to the customer email.
+        operationId: $sourceDescriptions.sendgrid.SendMail
+        requestBody:
+          contentType: application/json
+          payload:
+            from:
+              email: $inputs.from_email
+              name: $inputs.from_name
+            personalizations:
+              - to:
+                  - email: $steps.get-payment-intent.outputs.receipt_email
+                dynamic_template_data:
+                  payment_intent_id: $steps.get-payment-intent.outputs.payment_intent_id
+                  amount: $steps.get-payment-intent.outputs.amount
+                  currency: $steps.get-payment-intent.outputs.currency
+            template_id: $inputs.template_id
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          status: $statusCode
+    outputs:
+      payment_intent_id: $steps.get-payment-intent.outputs.payment_intent_id
+      receipt_email: $steps.get-payment-intent.outputs.receipt_email
+      send_status: $steps.send-receipt-email.outputs.status

@@ -1,0 +1,84 @@
+arazzo: 1.0.1
+info:
+  title: Sync Stripe Payments to Close Opportunities
+  summary: Map Stripe successful payments to Close CRM opportunities.
+  description: >-
+    Fetches successful payment intents from Stripe and creates a corresponding
+    Close CRM opportunity so revenue captured in Stripe is reflected against a
+    lead in the sales pipeline. This replicates the legacy Naftiko integration
+    that mapped Stripe payments to Close opportunities and logged the activity.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripePaymentIntents
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: closeApi
+    url: https://raw.githubusercontent.com/api-evangelist/close/refs/heads/main/openapi/close-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-close-sync-payment-to-opportunity
+    summary: List Stripe payment intents and create a matching Close opportunity.
+    description: >-
+      Retrieves recent Stripe payment intents for a customer, then creates a
+      Close opportunity valued from the payment amount and tied to a lead.
+    inputs:
+      type: object
+      properties:
+        customer:
+          type: string
+          description: Stripe customer ID to filter payment intents by.
+        limit:
+          type: integer
+          description: Maximum number of payment intents to return (1-100).
+        closeAuthorization:
+          type: string
+          description: Close API key credential for the Authorization header.
+        leadId:
+          type: string
+          description: Close lead ID the opportunity should belong to.
+        note:
+          type: string
+          description: Note text describing the opportunity.
+      required:
+        - closeAuthorization
+        - leadId
+    steps:
+      - stepId: list-payment-intents
+        description: List successful Stripe payment intents for the customer.
+        operationId: $sourceDescriptions.stripePaymentIntents.getPaymentIntents
+        parameters:
+          - name: customer
+            in: query
+            value: $inputs.customer
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentIntents: $response.body#/data
+          firstAmount: $response.body#/data/0/amount
+          firstCurrency: $response.body#/data/0/currency
+          firstCustomer: $response.body#/data/0/customer
+      - stepId: create-opportunity
+        description: Create a Close opportunity from the Stripe payment amount.
+        operationId: $sourceDescriptions.closeApi.create
+        parameters:
+          - name: Authorization
+            in: header
+            value: $inputs.closeAuthorization
+        requestBody:
+          contentType: application/json
+          payload:
+            lead_id: $inputs.leadId
+            note: $inputs.note
+            value: $steps.list-payment-intents.outputs.firstAmount
+            confidence: 100
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          opportunityId: $response.body#/id
+          opportunityStatus: $response.body#/status_type
+    outputs:
+      paymentIntents: $steps.list-payment-intents.outputs.paymentIntents
+      opportunityId: $steps.create-opportunity.outputs.opportunityId

@@ -1,0 +1,79 @@
+arazzo: 1.0.1
+info:
+  title: Multi-channel notify on Stripe events via MessageBird
+  summary: Notify a customer over SMS / WhatsApp / Email when a Stripe charge occurs.
+  description: >-
+    Retrieves a Stripe charge and then starts a MessageBird Conversations
+    thread to notify the customer about that payment across a channel such as
+    SMS, WhatsApp, or Email. The charge amount and metadata drive the outbound
+    message so a single Stripe payment event fans out to a multi-channel
+    notification with channel fallback handled by MessageBird.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml
+    type: openapi
+  - name: messagebird
+    url: https://raw.githubusercontent.com/api-evangelist/messagebird/refs/heads/main/openapi/messagebird-conversations-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-messagebird-notify
+    summary: Retrieve a Stripe charge and start a MessageBird conversation about it.
+    description: >-
+      Look up a Stripe charge by id, then open a MessageBird conversation to
+      notify the recipient over their preferred channel.
+    inputs:
+      type: object
+      required:
+        - charge
+        - to
+        - channelId
+      properties:
+        charge:
+          type: string
+          description: The id of the Stripe charge to retrieve.
+        to:
+          type: string
+          description: Recipient identifier (phone number or platform-specific id).
+        channelId:
+          type: string
+          description: MessageBird channel id to send the notification through.
+        message:
+          type: string
+          description: Text body for the notification message.
+    steps:
+      - stepId: get-charge
+        description: Retrieve the Stripe charge that triggered the notification.
+        operationId: $sourceDescriptions.stripe.GetChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.charge
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          chargeId: $response.body#/id
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          status: $response.body#/status
+      - stepId: start-conversation
+        description: Start a MessageBird conversation to notify the recipient.
+        operationId: $sourceDescriptions.messagebird.startConversation
+        requestBody:
+          contentType: application/json
+          payload:
+            to: $inputs.to
+            type: text
+            channelId: $inputs.channelId
+            content:
+              text: $inputs.message
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          conversationId: $response.body#/id
+          conversationStatus: $response.body#/status
+    outputs:
+      chargeId: $steps.get-charge.outputs.chargeId
+      amount: $steps.get-charge.outputs.amount
+      conversationId: $steps.start-conversation.outputs.conversationId
+      conversationStatus: $steps.start-conversation.outputs.conversationStatus

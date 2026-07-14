@@ -1,0 +1,87 @@
+arazzo: 1.0.1
+info:
+  title: Tag Front conversations with Stripe spending tier
+  summary: Look up a Stripe customer's lifetime spend and apply a tier tag to a Front conversation.
+  description: >-
+    When a Front conversation arrives, this workflow retrieves the matching Stripe
+    customer, lists that customer's charges to gauge lifetime value, and then applies
+    a spending-tier tag (VIP / standard / churned) to the Front conversation so support
+    agents can immediately see how valuable the contact is. It stitches Stripe billing
+    context directly onto the Front conversation via tags.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripeCustomers
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/customers-openapi-original.yml
+    type: openapi
+  - name: stripeCharges
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml
+    type: openapi
+  - name: front
+    url: https://raw.githubusercontent.com/api-evangelist/front/refs/heads/main/openapi/front-core-api-openapi.json
+    type: openapi
+workflows:
+  - workflowId: stripe-front-tag-conversation
+    summary: Retrieve a Stripe customer, list their charges, and tag a Front conversation with a spending tier.
+    description: >-
+      Fetches a Stripe customer and their charge history, then applies a tier tag to
+      the corresponding Front conversation.
+    inputs:
+      type: object
+      required:
+        - customer
+        - conversation_id
+        - tag_id
+      properties:
+        customer:
+          type: string
+          description: The Stripe customer ID to look up (e.g. cus_123).
+        conversation_id:
+          type: string
+          description: The Front conversation ID to tag (e.g. cnv_123).
+        tag_id:
+          type: string
+          description: The Front tag ID representing the computed spending tier (VIP / standard / churned).
+    steps:
+      - stepId: get-stripe-customer
+        description: Retrieve the Stripe customer record.
+        operationId: $sourceDescriptions.stripeCustomers.GetCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $inputs.customer
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customer_id: $response.body#/id
+          email: $response.body#/email
+      - stepId: list-stripe-charges
+        description: List the customer's Stripe charges to gauge lifetime spend.
+        operationId: $sourceDescriptions.stripeCharges.GetCharges
+        parameters:
+          - name: customer
+            in: query
+            value: $steps.get-stripe-customer.outputs.customer_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          charges: $response.body#/data
+      - stepId: tag-front-conversation
+        description: Apply the spending-tier tag to the Front conversation.
+        operationId: $sourceDescriptions.front.add-conversation-tag
+        parameters:
+          - name: conversation_id
+            in: path
+            value: $inputs.conversation_id
+        requestBody:
+          contentType: application/json
+          payload:
+            tag_ids:
+              - $inputs.tag_id
+        successCriteria:
+          - condition: $statusCode == 204
+        outputs:
+          tagged_conversation_id: $inputs.conversation_id
+    outputs:
+      customer_id: $steps.get-stripe-customer.outputs.customer_id
+      charges: $steps.list-stripe-charges.outputs.charges
+      tagged_conversation_id: $steps.tag-front-conversation.outputs.tagged_conversation_id

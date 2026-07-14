@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Stripe to Make scenario invocation
+  summary: Trigger a Make scenario from a recent Stripe event.
+  description: >-
+    This workflow lists recent Stripe events and then runs a Make automation
+    scenario, forwarding the triggering event as the scenario execution payload.
+    It replicates a declarative Stripe-to-Make integration that fires a Make
+    scenario whenever something interesting happens in a Stripe account. Use it
+    to bridge Stripe activity into any downstream automation built in Make.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-events-api-openapi.yml
+    type: openapi
+  - name: make
+    url: https://raw.githubusercontent.com/api-evangelist/make/refs/heads/main/openapi/make-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-make-trigger-scenario
+    summary: List a recent Stripe event and run a Make scenario with it.
+    description: >-
+      Fetches the most recent Stripe events, then invokes a Make scenario
+      execution, passing the latest event as the scenario input payload.
+    inputs:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Number of Stripe events to retrieve (1-100).
+          default: 1
+        type:
+          type: string
+          description: Optional Stripe event type filter (supports wildcards).
+        scenarioId:
+          type: string
+          description: The Make scenario ID to execute.
+      required:
+        - scenarioId
+    steps:
+      - stepId: list-stripe-events
+        description: List recent Stripe events.
+        operationId: $sourceDescriptions.stripe.getEvents
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+          - name: type
+            in: query
+            value: $inputs.type
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          events: $response.body#/data
+          latestEventId: $response.body#/data/0/id
+          latestEventType: $response.body#/data/0/type
+      - stepId: run-make-scenario
+        description: Run the Make scenario using the latest Stripe event as payload.
+        operationId: $sourceDescriptions.make.runScenario
+        parameters:
+          - name: scenarioId
+            in: path
+            value: $inputs.scenarioId
+        requestBody:
+          contentType: application/json
+          payload:
+            eventId: $steps.list-stripe-events.outputs.latestEventId
+            eventType: $steps.list-stripe-events.outputs.latestEventType
+            event: $steps.list-stripe-events.outputs.events
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          execution: $response.body
+    outputs:
+      triggeredEventId: $steps.list-stripe-events.outputs.latestEventId
+      scenarioExecution: $steps.run-make-scenario.outputs.execution

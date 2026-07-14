@@ -1,0 +1,78 @@
+arazzo: 1.0.1
+info:
+  title: Sync Stripe trial-end events to Iterable
+  summary: Forward Stripe subscription trial-end signals to Iterable as user events to trigger conversion campaigns.
+  description: >-
+    Retrieves a Stripe subscription (typically in response to a
+    customer.subscription.trial_will_end event) and forwards it to Iterable as a
+    tracked custom event. The tracked event carries the subscriber's email plus
+    subscription context so marketers can trigger conversion and win-back
+    campaigns before the trial ends.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+  - name: iterable
+    url: https://raw.githubusercontent.com/api-evangelist/iterable/refs/heads/main/openapi/iterable-rest-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-iterable-sync-trial-end
+    summary: Retrieve a Stripe subscription and track its trial-end event in Iterable.
+    description: >-
+      Fetches the Stripe subscription by id, then tracks a custom event for the
+      subscriber in Iterable to power conversion campaigns.
+    inputs:
+      type: object
+      required:
+        - subscription_id
+        - email
+        - event_name
+      properties:
+        subscription_id:
+          type: string
+          description: The Stripe subscription id (e.g. from the trial_will_end event).
+        email:
+          type: string
+          format: email
+          description: Email address of the subscriber to track in Iterable.
+        event_name:
+          type: string
+          description: Name of the Iterable event to track.
+          default: stripe_trial_will_end
+    steps:
+      - stepId: get-stripe-subscription
+        description: Retrieve the Stripe subscription that is nearing trial end.
+        operationId: $sourceDescriptions.stripe.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/id
+          customer: $response.body#/customer
+          status: $response.body#/status
+          trial_end: $response.body#/trial_end
+      - stepId: track-iterable-event
+        description: Track the trial-end event for the subscriber in Iterable.
+        operationId: $sourceDescriptions.iterable.trackEvent
+        requestBody:
+          contentType: application/json
+          payload:
+            email: $inputs.email
+            eventName: $inputs.event_name
+            dataFields:
+              stripeSubscriptionId: $steps.get-stripe-subscription.outputs.subscription_id
+              stripeCustomerId: $steps.get-stripe-subscription.outputs.customer
+              subscriptionStatus: $steps.get-stripe-subscription.outputs.status
+              trialEnd: $steps.get-stripe-subscription.outputs.trial_end
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          result: $response.body
+    outputs:
+      subscription_id: $steps.get-stripe-subscription.outputs.subscription_id
+      customer: $steps.get-stripe-subscription.outputs.customer
+      track_result: $steps.track-iterable-event.outputs.result

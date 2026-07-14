@@ -1,0 +1,105 @@
+arazzo: 1.0.1
+info:
+  title: Score Stripe payment intents with Sift fraud
+  summary: Send Stripe order context to Sift for a fraud score, then create the PaymentIntent.
+  description: >-
+    Before charging a customer, this workflow sends the order context to the Sift
+    Decisions API as an event and requests an inline Sift Score for payment abuse.
+    The returned risk score is then attached to a newly created Stripe PaymentIntent
+    so downstream confirmation and routing decisions can be made on real-time fraud
+    signal. This replicates the legacy Naftiko stripe-sift integration as a forkable
+    Arazzo workflow spanning both providers.
+  version: 1.0.0
+sourceDescriptions:
+  - name: sift
+    url: https://raw.githubusercontent.com/api-evangelist/sift/refs/heads/main/openapi/sift-openapi.yml
+    type: openapi
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-sift-score
+    summary: Score an order with Sift, then create a Stripe PaymentIntent carrying the score.
+    description: >-
+      Posts a Sift event with return_score enabled to obtain a payment-abuse Sift
+      Score for the order, then creates a Stripe PaymentIntent for the same order
+      and stamps the Sift Score into the PaymentIntent metadata.
+    inputs:
+      type: object
+      required:
+        - sift_api_key
+        - user_id
+        - order_id
+        - amount
+        - currency
+      properties:
+        sift_api_key:
+          type: string
+          description: Sift REST API key supplied in the event body as $api_key.
+        user_id:
+          type: string
+          description: Stable identifier for the acting user, sent to Sift as $user_id.
+        order_id:
+          type: string
+          description: Merchant order identifier, sent to Sift as $order_id.
+        amount:
+          type: integer
+          description: Order/charge amount in the smallest currency unit (e.g. cents).
+        currency:
+          type: string
+          description: Three-letter ISO currency code (e.g. usd).
+        customer:
+          type: string
+          description: Optional Stripe customer id to attach to the PaymentIntent.
+        abuse_types:
+          type: string
+          description: Comma-separated Sift abuse types to score against.
+          default: payment_abuse
+    steps:
+      - stepId: score-order-with-sift
+        description: Send a Sift transaction event and request an inline payment-abuse score.
+        operationId: $sourceDescriptions.sift.postEvent
+        parameters:
+          - name: return_score
+            in: query
+            value: true
+          - name: abuse_types
+            in: query
+            value: $inputs.abuse_types
+        requestBody:
+          contentType: application/json
+          payload:
+            $type: $transaction
+            $api_key: $inputs.sift_api_key
+            $user_id: $inputs.user_id
+            $order_id: $inputs.order_id
+            $amount: $inputs.amount
+            $currency_code: $inputs.currency
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+          user_id: $response.body#/score_response/user_id
+          scores: $response.body#/score_response/scores
+      - stepId: create-payment-intent
+        description: Create a Stripe PaymentIntent for the scored order, tagging the Sift user.
+        operationId: $sourceDescriptions.stripe.postPaymentIntents
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            amount: $inputs.amount
+            currency: $inputs.currency
+            customer: $inputs.customer
+            metadata[sift_user_id]: $steps.score-order-with-sift.outputs.user_id
+            metadata[order_id]: $inputs.order_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payment_intent_id: $response.body#/id
+          payment_intent_status: $response.body#/status
+          client_secret: $response.body#/client_secret
+    outputs:
+      sift_user_id: $steps.score-order-with-sift.outputs.user_id
+      sift_scores: $steps.score-order-with-sift.outputs.scores
+      payment_intent_id: $steps.create-payment-intent.outputs.payment_intent_id
+      payment_intent_status: $steps.create-payment-intent.outputs.payment_intent_status

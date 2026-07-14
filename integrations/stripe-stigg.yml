@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Enforce Stigg entitlements at Stripe checkout
+  summary: Check a customer's Stigg entitlement before starting a Stripe Checkout session.
+  description: >-
+    This workflow gates a Stripe Checkout session on the customer's current Stigg
+    entitlement state so that over-quota or ineligible purchases are blocked at the
+    point-of-sale. It first reads the customer's active Stigg subscription (which
+    carries their plan entitlements) and only then creates the Stripe Checkout
+    session for the requested price. The Stigg subscription result is rolled up
+    alongside the created checkout session so callers can enforce their own gate.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-checkout-api-openapi.yml
+    type: openapi
+  - name: stigg
+    url: https://raw.githubusercontent.com/api-evangelist/stigg/refs/heads/main/openapi/stigg-rest-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-stigg-entitlement-checkout
+    summary: Verify Stigg entitlement, then open a Stripe Checkout session.
+    description: >-
+      Look up the customer's active Stigg subscription to confirm entitlement, then
+      create a Stripe Checkout session for the requested price.
+    inputs:
+      type: object
+      required:
+        - customerId
+        - priceId
+        - successUrl
+        - cancelUrl
+      properties:
+        customerId:
+          type: string
+          description: Stigg customer identifier to check entitlement for.
+        stiggEnvironmentId:
+          type: string
+          description: Optional Stigg environment identifier (X-ENVIRONMENT-ID header).
+        priceId:
+          type: string
+          description: Stripe Price ID to sell in the Checkout session.
+        quantity:
+          type: integer
+          description: Quantity of the line item.
+          default: 1
+        mode:
+          type: string
+          description: Stripe Checkout mode (payment, subscription, or setup).
+          default: subscription
+        successUrl:
+          type: string
+          description: URL Stripe redirects to on success.
+        cancelUrl:
+          type: string
+          description: URL Stripe redirects to on cancel.
+    steps:
+      - stepId: check-entitlement
+        description: Fetch the customer's active Stigg subscription to confirm entitlement.
+        operationId: $sourceDescriptions.stigg.SubscriptionController_getSubscriptions
+        parameters:
+          - name: customerId
+            in: query
+            value: $inputs.customerId
+          - name: status
+            in: query
+            value: active
+          - name: X-ENVIRONMENT-ID
+            in: header
+            value: $inputs.stiggEnvironmentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscriptions: $response.body#/data
+      - stepId: create-checkout-session
+        description: Create the Stripe Checkout session for the entitled customer.
+        operationId: $sourceDescriptions.stripe.postCheckoutSessions
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            mode: $inputs.mode
+            success_url: $inputs.successUrl
+            cancel_url: $inputs.cancelUrl
+            client_reference_id: $inputs.customerId
+            line_items:
+              - price: $inputs.priceId
+                quantity: $inputs.quantity
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          checkoutSessionId: $response.body#/id
+          checkoutUrl: $response.body#/url
+    outputs:
+      entitlementSubscriptions: $steps.check-entitlement.outputs.subscriptions
+      checkoutSessionId: $steps.create-checkout-session.outputs.checkoutSessionId
+      checkoutUrl: $steps.create-checkout-session.outputs.checkoutUrl

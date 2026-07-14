@@ -1,0 +1,65 @@
+arazzo: 1.0.1
+info:
+  title: Sync BigCommerce orders to Stripe payments
+  summary: Materialize a Stripe PaymentIntent for a BigCommerce storefront order.
+  description: >-
+    For a given BigCommerce storefront order, this workflow fetches the order
+    data (amount and currency) and materializes the corresponding Stripe
+    PaymentIntent. Running it per order consolidates BigCommerce commerce into
+    Stripe so that financial reporting lives in one place.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripePaymentIntents
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: bigcommerceOrders
+    url: https://raw.githubusercontent.com/api-evangelist/bigcommerce/refs/heads/main/openapi/storefront-orders-openapi-original.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-bigcommerce-sync-order-payment
+    summary: Fetch a BigCommerce order and create a matching Stripe PaymentIntent.
+    description: >-
+      Retrieves a single BigCommerce storefront order, then creates a Stripe
+      PaymentIntent using the order's amount and currency, tagging it with the
+      originating BigCommerce order id for reconciliation.
+    inputs:
+      type: object
+      required:
+        - bigcommerce_order_id
+      properties:
+        bigcommerce_order_id:
+          type: integer
+          description: The ID of the BigCommerce storefront order to sync.
+    steps:
+      - stepId: fetch-order
+        description: Retrieve the BigCommerce storefront order and its totals.
+        operationId: $sourceDescriptions.bigcommerceOrders.getOrder
+        parameters:
+          - name: orderId
+            in: path
+            value: $inputs.bigcommerce_order_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          order_id: $response.body#/orderId
+          order_amount: $response.body#/orderAmount
+          currency_code: $response.body#/currency/code
+      - stepId: create-payment-intent
+        description: Create the Stripe PaymentIntent matching the BigCommerce order.
+        operationId: $sourceDescriptions.stripePaymentIntents.postPaymentIntents
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            amount: $steps.fetch-order.outputs.order_amount
+            currency: $steps.fetch-order.outputs.currency_code
+            description: BigCommerce order sync
+            metadata[bigcommerce_order_id]: $steps.fetch-order.outputs.order_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payment_intent_id: $response.body#/id
+          payment_intent_status: $response.body#/status
+    outputs:
+      bigcommerce_order_id: $steps.fetch-order.outputs.order_id
+      stripe_payment_intent_id: $steps.create-payment-intent.outputs.payment_intent_id
+      stripe_payment_intent_status: $steps.create-payment-intent.outputs.payment_intent_status

@@ -1,0 +1,56 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/cli
+description: >-
+  The Stripe CLI command surface — the developer-tooling layer that sits over
+  the API. Captured verbatim from docs.stripe.com/cli. The CLI package itself is
+  catalogued in packages/stripe-packages.yml; this artifact enumerates its
+  command/resource surface (webhook forwarding, event triggering, direct API
+  calls, fixtures, logs).
+docs: https://docs.stripe.com/cli
+repo: https://github.com/stripe/stripe-cli
+install:
+  homebrew: brew install stripe/stripe-cli/stripe
+  npm: npm install -g @stripe/cli
+  docker: docker run stripe/stripe-cli [command]
+  scoop: scoop install stripe
+commands:
+  auth_config:
+    - {name: login, description: Connect the CLI to your Stripe account and persist your API key locally.}
+    - {name: logout, description: Remove credentials connecting the CLI to your Stripe account.}
+    - {name: config, description: Set, unset, or list CLI configuration options.}
+    - {name: sandbox, description: Provision a temporary test environment with working API keys (expires in 7 days).}
+  webhooks_events:
+    - {name: listen, description: Receive webhook events from Stripe and forward them to a local application; auto-generates a signing secret.}
+    - {name: trigger, description: Trigger example webhook events for local testing (e.g. charge.succeeded). See sandbox/stripe-sandbox.yml.}
+    - {name: events resend, description: Resend an existing event to a webhook endpoint.}
+  api:
+    - {name: get, description: Make GET requests to retrieve API objects.}
+    - {name: post, description: Make POST requests to create or update API objects.}
+    - {name: delete, description: Make DELETE requests to remove API objects.}
+    - {name: resources, description: Interact with all Stripe API resources (customers, charges, subscriptions, etc.).}
+    - {name: fixtures, description: Execute a series of API requests from a JSON fixture file.}
+  logs_monitoring:
+    - {name: logs tail, description: Tail test-mode API request logs in real time with filtering.}
+  docs_help:
+    - {name: docs, description: Browse docs.stripe.com from the terminal.}
+    - {name: docs api, description: Look up API reference by resource, method, or event type.}
+    - {name: docs search, description: Search docs.stripe.com by keyword.}
+    - {name: open, description: Open Stripe docs or Dashboard pages in your browser.}
+    - {name: help, description: Get help for any CLI command.}
+    - {name: version, description: Check the CLI version and available updates.}
+    - {name: completion, description: Set up shell autocompletion for Bash and ZSH.}
+  terminal:
+    - {name: terminal quickstart, description: Get started with Stripe Terminal and Verifone readers.}
+  projects_preview:
+    - {name: projects init, description: Initialize a new Stripe Projects workspace (developer preview).}
+    - {name: projects add, description: Provision services (databases, hosting, AI providers).}
+    - {name: projects list, description: List all Stripe projects on your account.}
+    - {name: projects env, description: Manage environment variables and named environments.}
+key_flows:
+  webhook_forwarding:
+    command: stripe listen --forward-to http://localhost:4242
+    description: Direct tunnel from Stripe to localhost without configuring a Dashboard endpoint; prints a whsec_ signing secret. Add --thin-events for v2 events, --live for live mode.
+  event_triggering:
+    command: stripe trigger invoice.payment_succeeded
+    description: Fires a real test-mode API sequence that produces the event (and cascading related events); supports --override/--add/--remove/--edit on fixture data.

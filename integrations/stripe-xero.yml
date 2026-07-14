@@ -1,0 +1,99 @@
+arazzo: 1.0.1
+info:
+  title: Reconcile Stripe Payouts in Xero Bank Transactions
+  summary: Match Stripe payouts to Xero bank transactions and create reconciliation entries.
+  description: >-
+    This workflow lists payouts from Stripe and creates corresponding bank
+    transactions in Xero so that money moving out of Stripe can be reconciled
+    against the Xero bank account. It fetches the most recent Stripe payouts,
+    then writes a received/spent-money bank transaction into Xero for
+    reconciliation. Fork it and point the source descriptions at your own
+    OpenAPI copies to run it against your Stripe and Xero accounts.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payouts-api-openapi.yml
+    type: openapi
+  - name: xero
+    url: https://raw.githubusercontent.com/api-evangelist/xero/refs/heads/main/openapi/xero-accounting-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-xero-reconcile-payouts
+    summary: List Stripe payouts and create a matching Xero bank transaction.
+    description: >-
+      Retrieves recent Stripe payouts and creates a bank transaction in Xero
+      that represents the payout for reconciliation against the bank account.
+    inputs:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of Stripe payouts to return.
+          default: 10
+        status:
+          type: string
+          description: Filter Stripe payouts by status (e.g. paid, pending).
+        bankTransactionType:
+          type: string
+          description: Xero bank transaction type (RECEIVE or SPEND).
+          default: RECEIVE
+        contactID:
+          type: string
+          description: Xero Contact ID to associate with the bank transaction.
+        accountID:
+          type: string
+          description: Xero bank Account ID the transaction posts against.
+        lineDescription:
+          type: string
+          description: Description for the Xero bank transaction line item.
+          default: Stripe payout reconciliation
+        unitAmount:
+          type: number
+          description: Amount for the Xero bank transaction line item.
+        accountCode:
+          type: string
+          description: Xero account code for the line item.
+      required:
+        - contactID
+        - accountID
+        - unitAmount
+        - accountCode
+    steps:
+      - stepId: list-stripe-payouts
+        description: List recent Stripe payouts to reconcile.
+        operationId: $sourceDescriptions.stripe.getPayouts
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+          - name: status
+            in: query
+            value: $inputs.status
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          payouts: $response.body#/data
+      - stepId: create-xero-bank-transaction
+        description: Create a Xero bank transaction to reconcile the payout.
+        operationId: $sourceDescriptions.xero.createBankTransactions
+        requestBody:
+          contentType: application/json
+          payload:
+            bankTransactions:
+              - type: $inputs.bankTransactionType
+                contact:
+                  contactID: $inputs.contactID
+                bankAccount:
+                  accountID: $inputs.accountID
+                lineItems:
+                  - description: $inputs.lineDescription
+                    quantity: 1.0
+                    unitAmount: $inputs.unitAmount
+                    accountCode: $inputs.accountCode
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          bankTransactions: $response.body#/BankTransactions
+    outputs:
+      payouts: $steps.list-stripe-payouts.outputs.payouts
+      bankTransactions: $steps.create-xero-bank-transaction.outputs.bankTransactions

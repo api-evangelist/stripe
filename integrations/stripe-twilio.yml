@@ -1,0 +1,85 @@
+arazzo: 1.0.1
+info:
+  title: SMS Stripe payment receipts via Twilio
+  summary: For each succeeded Stripe charge, send an SMS receipt via Twilio to the customer's phone number.
+  description: >-
+    This workflow retrieves a succeeded Stripe charge and then sends the paying
+    customer an SMS receipt through the Twilio Messaging API. It pulls the charge
+    amount, currency, receipt URL, and the customer's phone number from Stripe,
+    then composes and delivers a text message confirming the payment.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+    type: openapi
+  - name: twilio
+    url: https://raw.githubusercontent.com/api-evangelist/twilio/refs/heads/main/openapi/twilio-messaging-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-twilio-send-receipt
+    summary: Retrieve a Stripe charge and send an SMS receipt via Twilio.
+    description: >-
+      Fetches a Stripe charge by id, then creates a Twilio SMS message to the
+      customer's phone number containing a payment receipt.
+    inputs:
+      type: object
+      required:
+        - charge
+        - AccountSid
+        - From
+      properties:
+        charge:
+          type: string
+          description: The id of the Stripe charge that succeeded.
+        AccountSid:
+          type: string
+          description: The Twilio Account SID used to send the message.
+        From:
+          type: string
+          description: The Twilio phone number, short code, or sender ID to send from.
+        To:
+          type: string
+          description: >-
+            Optional override recipient phone number in E.164 format. If omitted,
+            the charge's billing phone number is used.
+    steps:
+      - stepId: get-charge
+        description: Retrieve the succeeded Stripe charge.
+        operationId: $sourceDescriptions.stripe.getChargesCharge
+        parameters:
+          - name: charge
+            in: path
+            value: $inputs.charge
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          chargeId: $response.body#/id
+          amount: $response.body#/amount
+          currency: $response.body#/currency
+          receiptUrl: $response.body#/receipt_url
+          phone: $response.body#/billing_details/phone
+      - stepId: send-sms
+        description: Send the SMS receipt to the customer via Twilio.
+        operationId: $sourceDescriptions.twilio.createMessage
+        parameters:
+          - name: AccountSid
+            in: path
+            value: $inputs.AccountSid
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            To: $steps.get-charge.outputs.phone
+            From: $inputs.From
+            Body: >-
+              Payment received. Thank you! Your receipt is available here:
+              $steps.get-charge.outputs.receiptUrl
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          messageSid: $response.body#/sid
+          status: $response.body#/status
+    outputs:
+      chargeId: $steps.get-charge.outputs.chargeId
+      receiptUrl: $steps.get-charge.outputs.receiptUrl
+      messageSid: $steps.send-sms.outputs.messageSid
+      status: $steps.send-sms.outputs.status

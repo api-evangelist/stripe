@@ -1,0 +1,83 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Link Financial Account
+  summary: Create a Financial Connections session for an account holder, then list the accounts linked through it.
+  description: >-
+    The canonical Stripe Financial Connections linking pattern. The workflow
+    first creates a Financial Connections Session for a given account holder,
+    requesting the desired data permissions, which yields the client_secret used
+    to launch the authorization flow in Stripe.js. Once the holder links their
+    financial accounts, the workflow lists the Account objects collected as part
+    of that session. Every step spells out its form-encoded request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: financialConnectionsApi
+  url: ../openapi/stripe-financial-connections-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: link-financial-account
+  summary: Create a Financial Connections session and list the accounts linked through it.
+  description: >-
+    Creates a Financial Connections Session bound to an account holder and the
+    requested data permissions, then lists the Financial Connections Account
+    objects that were collected as part of that session.
+  inputs:
+    type: object
+    required:
+    - accountHolderType
+    - customer
+    - permissions
+    properties:
+      accountHolderType:
+        type: string
+        description: The type of account holder to link accounts for (e.g. customer).
+      customer:
+        type: string
+        description: >-
+          ID of the Customer to link accounts for when accountHolderType is
+          customer (e.g. cus_00000000000000).
+      permissions:
+        type: array
+        description: >-
+          Data features to request access to. Possible values are balances,
+          transactions, ownership, and payment_method (e.g. balances).
+        items:
+          type: string
+  steps:
+  - stepId: createSession
+    description: >-
+      Create the Financial Connections Session that launches the authorization
+      flow for the account holder.
+    operationId: postFinancialConnectionsSessions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        account_holder:
+          type: $inputs.accountHolderType
+          customer: $inputs.customer
+        permissions: $inputs.permissions
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sessionId: $response.body#/id
+      clientSecret: $response.body#/client_secret
+  - stepId: listLinkedAccounts
+    description: >-
+      List the Financial Connections Account objects that were collected as part
+      of the created session.
+    operationId: getFinancialConnectionsAccounts
+    parameters:
+    - name: session
+      in: query
+      value: $steps.createSession.outputs.sessionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      accounts: $response.body#/data
+      hasMore: $response.body#/has_more
+  outputs:
+    sessionId: $steps.createSession.outputs.sessionId
+    clientSecret: $steps.createSession.outputs.clientSecret
+    accounts: $steps.listLinkedAccounts.outputs.accounts

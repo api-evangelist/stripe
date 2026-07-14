@@ -1,0 +1,88 @@
+arazzo: 1.0.1
+info:
+  title: Stripe Quote to Paid Invoice
+  summary: Create a quote for a customer, finalize it, then accept it to generate the resulting invoice.
+  description: >-
+    The native Stripe Quotes lifecycle for turning a proposal into billable
+    revenue. The workflow first drafts a Quote for a customer and a priced line
+    item, then finalizes that draft so it becomes an immutable open quote, and
+    finally accepts the finalized quote which materializes the underlying
+    invoice. Every step spells out its form-encoded request inline so the flow
+    can be read and executed against Stripe test mode without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: quotesApi
+  url: ../openapi/stripe-quotes-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: quote-to-paid-invoice
+  summary: Draft a quote, finalize it, then accept it to generate the invoice.
+  description: >-
+    Creates a draft Quote for the supplied customer and price, finalizes the
+    draft into an open quote, then accepts the quote so Stripe generates the
+    resulting invoice. The accepted quote's invoice id is surfaced as the
+    workflow output.
+  inputs:
+    type: object
+    required:
+    - customer
+    - price
+    properties:
+      customer:
+        type: string
+        description: ID of an existing Customer to create the quote for (e.g. cus_ from your test data).
+      price:
+        type: string
+        description: ID of an existing Price to quote (e.g. price_ from your test catalog).
+      quantity:
+        type: integer
+        description: Quantity of the priced line item to quote.
+      description:
+        type: string
+        description: A description that will be displayed on the quote.
+  steps:
+  - stepId: createQuote
+    description: Draft a Quote for the customer with a single priced line item.
+    operationId: PostQuotes
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        customer: $inputs.customer
+        description: $inputs.description
+        line_items[0][price]: $inputs.price
+        line_items[0][quantity]: $inputs.quantity
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      quoteId: $response.body#/id
+      status: $response.body#/status
+  - stepId: finalizeQuote
+    description: Finalize the draft quote so it becomes an immutable open quote.
+    operationId: PostQuotesQuoteFinalize
+    parameters:
+    - name: quote
+      in: path
+      value: $steps.createQuote.outputs.quoteId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      quoteId: $response.body#/id
+      status: $response.body#/status
+  - stepId: acceptQuote
+    description: Accept the finalized quote, which generates the resulting invoice.
+    operationId: PostQuotesQuoteAccept
+    parameters:
+    - name: quote
+      in: path
+      value: $steps.finalizeQuote.outputs.quoteId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      quoteId: $response.body#/id
+      status: $response.body#/status
+      invoiceId: $response.body#/invoice
+  outputs:
+    quoteId: $steps.acceptQuote.outputs.quoteId
+    status: $steps.acceptQuote.outputs.status
+    invoiceId: $steps.acceptQuote.outputs.invoiceId

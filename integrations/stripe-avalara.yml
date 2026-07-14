@@ -1,0 +1,107 @@
+arazzo: 1.0.1
+info:
+  title: Calculate Avalara tax at Stripe Checkout
+  summary: Compute sales tax with Avalara AvaTax, then create a Stripe Checkout Session.
+  description: >-
+    This workflow replicates the legacy integration that calls Avalara AvaTax to
+    compute the correct tax line for a cart, then attaches the result to a Stripe
+    Checkout Session. It first creates an AvaTax transaction from the cart's
+    line items and address, reads the calculated total tax, and then opens a
+    Stripe Checkout Session so the customer can pay the tax-inclusive amount.
+  version: 1.0.0
+sourceDescriptions:
+- name: stripe
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/checkout-openapi-original.yml
+  type: openapi
+- name: avalara
+  url: https://raw.githubusercontent.com/api-evangelist/avalara/refs/heads/main/openapi/avalara-avatax-rest-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-avalara-checkout-tax
+  summary: Calculate Avalara tax for a cart and create a Stripe Checkout Session.
+  description: >-
+    Creates an AvaTax transaction to calculate tax for the cart, then creates a
+    Stripe Checkout Session that reflects the taxed amount.
+  inputs:
+    type: object
+    properties:
+      companyCode:
+        type: string
+        description: Avalara company code that owns the transaction.
+      customerCode:
+        type: string
+        description: Customer identifier used by AvaTax for tax determination.
+      transactionDate:
+        type: string
+        description: Date of the taxable event (YYYY-MM-DD).
+      lines:
+        type: array
+        description: AvaTax line items for the cart (amount, quantity, item code, tax code).
+        items:
+          type: object
+      shippingAddress:
+        type: object
+        description: Ship-to / ship-from addresses for tax sourcing (AvaTax addresses model).
+      success_url:
+        type: string
+        description: Stripe Checkout success redirect URL.
+      cancel_url:
+        type: string
+        description: Stripe Checkout cancel redirect URL.
+      mode:
+        type: string
+        description: Stripe Checkout mode (e.g. payment).
+      line_items:
+        type: array
+        description: Stripe Checkout line items for the cart.
+        items:
+          type: object
+    required:
+    - companyCode
+    - customerCode
+    - lines
+    - success_url
+    - cancel_url
+  steps:
+  - stepId: calculate-avalara-tax
+    description: Create an AvaTax transaction to calculate tax for the cart.
+    operationId: $sourceDescriptions.avalara.createTransaction
+    requestBody:
+      contentType: application/json
+      payload:
+        type: SalesInvoice
+        companyCode: $inputs.companyCode
+        customerCode: $inputs.customerCode
+        date: $inputs.transactionDate
+        lines: $inputs.lines
+        addresses: $inputs.shippingAddress
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      transactionCode: $response.body#/code
+      totalTax: $response.body#/totalTax
+      totalAmount: $response.body#/totalAmount
+  - stepId: create-checkout-session
+    description: Create a Stripe Checkout Session reflecting the calculated tax.
+    operationId: $sourceDescriptions.stripe.PostCheckoutSessions
+    requestBody:
+      contentType: application/x-www-form-urlencoded
+      payload:
+        mode: $inputs.mode
+        success_url: $inputs.success_url
+        cancel_url: $inputs.cancel_url
+        client_reference_id: $steps.calculate-avalara-tax.outputs.transactionCode
+        line_items: $inputs.line_items
+        metadata[avalara_transaction_code]: $steps.calculate-avalara-tax.outputs.transactionCode
+        metadata[avalara_total_tax]: $steps.calculate-avalara-tax.outputs.totalTax
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sessionId: $response.body#/id
+      checkoutUrl: $response.body#/url
+      paymentStatus: $response.body#/payment_status
+  outputs:
+    avalaraTransactionCode: $steps.calculate-avalara-tax.outputs.transactionCode
+    avalaraTotalTax: $steps.calculate-avalara-tax.outputs.totalTax
+    checkoutSessionId: $steps.create-checkout-session.outputs.sessionId
+    checkoutUrl: $steps.create-checkout-session.outputs.checkoutUrl

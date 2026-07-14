@@ -1,0 +1,89 @@
+arazzo: 1.0.1
+info:
+  title: Sync Stripe customer billing into Zoho CRM accounts
+  summary: Push Stripe Customer billing details into matching Zoho CRM Accounts with a custom MRR field.
+  description: >-
+    Retrieve a Stripe Customer and their invoices, then create a matching record
+    in the Zoho CRM Accounts module carrying the customer's billing details and a
+    computed monthly recurring revenue (MRR) field. This replicates the legacy
+    integration that keeps Zoho CRM Accounts current with Stripe billing data.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripeCustomers
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-customers-api-openapi.yml
+    type: openapi
+  - name: stripeInvoice
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-invoice-api-openapi.yml
+    type: openapi
+  - name: zohoCrm
+    url: https://raw.githubusercontent.com/api-evangelist/zoho-crm/refs/heads/main/openapi/zoho-crm-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-zoho-crm-sync
+    summary: Sync a Stripe customer's billing details into a Zoho CRM Account.
+    description: >-
+      Fetch a Stripe customer and their invoices, then insert an Account record
+      into Zoho CRM with the billing details and MRR.
+    inputs:
+      type: object
+      required:
+        - customer_id
+      properties:
+        customer_id:
+          type: string
+          description: The Stripe Customer ID to sync into Zoho CRM.
+        mrr:
+          type: number
+          description: Monthly recurring revenue to store on the Zoho CRM Account.
+    steps:
+      - stepId: get-customer
+        description: Retrieve the Stripe customer to sync.
+        operationId: $sourceDescriptions.stripeCustomers.getCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $inputs.customer_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customer_id: $response.body#/id
+          email: $response.body#/email
+          name: $response.body#/name
+          description: $response.body#/description
+          currency: $response.body#/currency
+      - stepId: list-invoices
+        description: List the Stripe invoices for this customer.
+        operationId: $sourceDescriptions.stripeInvoice.getInvoices
+        parameters:
+          - name: customer
+            in: query
+            value: $steps.get-customer.outputs.customer_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          invoices: $response.body#/data
+      - stepId: upsert-account
+        description: Insert a matching Account record into Zoho CRM with billing details and MRR.
+        operationId: $sourceDescriptions.zohoCrm.insertRecords
+        parameters:
+          - name: module_api_name
+            in: path
+            value: Accounts
+        requestBody:
+          contentType: application/json
+          payload:
+            data:
+              - Account_Name: $steps.get-customer.outputs.name
+                Description: $steps.get-customer.outputs.description
+                Stripe_Customer_Id: $steps.get-customer.outputs.customer_id
+                Email: $steps.get-customer.outputs.email
+                Currency: $steps.get-customer.outputs.currency
+                MRR: $inputs.mrr
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          account: $response.body#/data
+    outputs:
+      customer_id: $steps.get-customer.outputs.customer_id
+      invoices: $steps.list-invoices.outputs.invoices
+      account: $steps.upsert-account.outputs.account

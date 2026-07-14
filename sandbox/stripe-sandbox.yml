@@ -1,0 +1,162 @@
+generated: '2026-07-14'
+method: searched
+source: https://docs.stripe.com/testing
+description: >-
+  Stripe's sandbox / test-data surface — the credentials, magic values, and
+  fixtures a developer needs to exercise the API end-to-end without moving real
+  money. Captured verbatim from docs.stripe.com/testing, the decline-codes
+  reference, and the Stripe CLI. Stripe separates test and live mode by key
+  prefix; test transactions settle instantly and no real cards are ever charged.
+docs:
+  - https://docs.stripe.com/testing
+  - https://docs.stripe.com/keys
+  - https://docs.stripe.com/billing/testing/test-clocks
+  - https://docs.stripe.com/stripe-cli/triggers
+
+modes:
+  - name: test
+    key_prefixes: [sk_test_, pk_test_, rk_test_, whsec_]
+    notes: >-
+      Isolated from live data. Transactions settle instantly to the available
+      balance. Stricter rate limits than live mode.
+  - name: live
+    key_prefixes: [sk_live_, pk_live_, rk_live_]
+  - name: sandbox
+    notes: >-
+      Named, isolatable test environments provisioned via the Dashboard or
+      `stripe sandbox` (CLI temporary sandboxes expire in 7 days).
+
+key_formats:
+  publishable: {test: pk_test_..., live: pk_live_...}
+  secret: {test: sk_test_..., live: sk_live_...}
+  restricted: {test: rk_test_..., live: rk_live_...}
+  webhook_signing_secret: whsec_...
+
+# Preferred over raw PANs in API calls — Stripe-hosted PaymentMethod test tokens.
+payment_method_tokens:
+  success:
+    - {token: pm_card_visa, brand: visa}
+    - {token: pm_card_mastercard, brand: mastercard}
+    - {token: pm_card_amex, brand: amex}
+    - {token: pm_card_discover, brand: discover}
+  declined:
+    - {token: pm_card_visa_chargeDeclined, decline_code: generic_decline}
+    - {token: pm_card_visa_chargeDeclinedInsufficientFunds, decline_code: insufficient_funds}
+    - {token: pm_card_visa_chargeDeclinedLostCard, decline_code: lost_card}
+    - {token: pm_card_visa_chargeDeclinedStolenCard, decline_code: stolen_card}
+  three_d_secure:
+    - {token: pm_card_threeDSecure2Required, behavior: authentication required, succeeds after auth}
+    - {token: pm_card_threeDSecureRequiredChargeDeclined, behavior: authentication required then declined}
+    - {token: pm_card_threeDSecureOptional, behavior: 3DS optional}
+  disputes:
+    - {token: pm_card_createDispute, dispute: fraudulent}
+    - {token: pm_card_createDisputeProductNotReceived, dispute: product_not_received}
+  us_bank_account:
+    - {token: pm_usBankAccount_success, behavior: succeeds}
+    - {token: pm_usBankAccount_accountClosed, behavior: account_closed}
+    - {token: pm_usBankAccount_insufficientFunds, behavior: insufficient_funds}
+    - {token: pm_usBankAccount_noAccount, behavior: no_account}
+  sepa_debit:
+    - {token: pm_sepaDebit_success_de, iban: DE89370400440532013000}
+    - {token: pm_sepaDebit_failed_de, iban: DE62370400440532013001}
+    - {token: pm_sepaDebit_disputed_de, iban: DE35370400440532013002}
+
+test_cards:
+  conventions:
+    cvc: Any 3 digits (4 for Amex)
+    expiry: Any future date (e.g. 12/34)
+    address: Any value accepted
+    note: 3D Secure redirect flows only work via API/frontend, not the Dashboard.
+  success:
+    - {brand: visa, number: '4242424242424242'}
+    - {brand: visa_debit, number: '4000056655665556'}
+    - {brand: mastercard, number: '5555555555554444'}
+    - {brand: mastercard_debit, number: '5200828282828210'}
+    - {brand: amex, number: '378282246310005', cvc_digits: 4}
+    - {brand: discover, number: '6011111111111117'}
+    - {brand: diners, number: '3056930009020004'}
+    - {brand: jcb, number: '3566002020360505'}
+  declines:
+    - {number: '4000000000000002', error_code: card_declined, decline_code: generic_decline}
+    - {number: '4000000000009995', error_code: card_declined, decline_code: insufficient_funds}
+    - {number: '4000000000009987', error_code: card_declined, decline_code: lost_card}
+    - {number: '4000000000009979', error_code: card_declined, decline_code: stolen_card}
+    - {number: '4000000000000069', error_code: expired_card}
+    - {number: '4000000000000127', error_code: incorrect_cvc}
+    - {number: '4000000000000119', error_code: processing_error}
+    - {number: '4000000000006975', error_code: card_declined, decline_code: card_velocity_exceeded}
+  three_d_secure:
+    - {number: '4000002500003155', behavior: authenticate unless set up for off-session}
+    - {number: '4000002760003184', behavior: always authenticate}
+    - {number: '4000003800000446', behavior: already set up, off-session succeeds without auth}
+    - {number: '4000000000003220', behavior: 3DS required, succeeds}
+    - {number: '4000008400001629', behavior: 3DS required, declines after auth}
+    - {number: '4000000000003055', behavior: 3DS supported but optional}
+  fraud_radar:
+    - {number: '4100000000000019', risk: highest, behavior: Radar always blocks}
+    - {number: '4000000000004954', risk: highest}
+    - {number: '4000000000009235', risk: elevated}
+    - {number: '4000000000000101', behavior: CVC check fails if provided}
+    - {number: '4000000000000036', behavior: postal code check fails if provided}
+  disputes:
+    - {number: '4000000000000259', dispute: fraudulent}
+    - {number: '4000000000002685', dispute: product_not_received}
+    - {number: '4000000000001976', dispute: inquiry}
+    - {number: '4000000000005423', dispute: early_fraud_warning}
+    - {number: '4000000404000079', dispute: multiple_chargebacks}
+  async_refunds:
+    - {number: '4000000000007726', behavior: refund pending then succeeded}
+    - {number: '4000000000005126', behavior: refund succeeded then failed}
+  invalid_input:
+    - {field: exp_month, value: '13', error: invalid_expiry_month}
+    - {field: exp_year, value: '95', error: invalid_expiry_year}
+    - {field: cvc, value: '99', error: invalid_cvc}
+    - {number: '4242424242424241', error: incorrect_number, note: fails Luhn}
+
+test_bank_accounts:
+  us_ach:
+    routing: '110000000'
+    accounts:
+      - {number: '000123456789', behavior: succeeds}
+      - {number: '000111111113', behavior: account_closed}
+      - {number: '000222222227', behavior: insufficient_funds}
+      - {number: '000111111116', behavior: no_account}
+      - {number: '000333333335', behavior: debit_not_authorized}
+    microdeposits:
+      - {values: [32, 45], descriptor_code: SM11AA, outcome: verified}
+      - {values: [10, 11], descriptor_code: SM33CC, outcome: exceeds_attempts}
+      - {values: [40, 41], descriptor_code: SM44DD, outcome: timeout}
+
+test_clocks:
+  docs: https://docs.stripe.com/billing/testing/test-clocks
+  description: >-
+    Simulate the passage of time in test mode to exercise subscription billing
+    cycles, trials, and invoice generation without waiting real days. Objects
+    (customers, subscriptions) are attached to a Test Clock and advanced with
+    the clock.
+  api: /v1/test_helpers/test_clocks
+
+dispute_test_evidence:
+  note: For disputes created with test cards, set uncategorized_text to control the outcome.
+  values:
+    - {value: winning_evidence, outcome: dispute won}
+    - {value: losing_evidence, outcome: dispute lost}
+    - {value: escalate_inquiry_evidence, outcome: inquiry escalated to chargeback}
+
+triggers:
+  tool: stripe CLI
+  command: stripe trigger <event>
+  docs: https://docs.stripe.com/stripe-cli/triggers
+  description: >-
+    Fires example webhook events for local testing by making real test-mode API
+    calls that create objects as side effects. 100+ event types supported; a
+    trigger may cascade related events.
+  examples:
+    - stripe trigger charge.succeeded
+    - stripe trigger payment_intent.succeeded
+    - stripe trigger invoice.payment_succeeded
+    - stripe trigger customer.subscription.created
+
+rate_limits:
+  note: Test mode is rate-limited more strictly than live mode; use the load-testing endpoint (not the sandbox) for load tests.
+  docs: https://docs.stripe.com/rate-limits

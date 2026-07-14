@@ -1,0 +1,112 @@
+arazzo: 1.0.1
+info:
+  title: Forward Stripe payment events to Klaviyo as profile events
+  summary: Forward Stripe payment intents to Klaviyo as profile-level events.
+  description: >-
+    Replicates the legacy Naftiko integration that forwards Stripe payment
+    activity into Klaviyo. It lists a recent Stripe payment intent, retrieves
+    the associated Stripe customer to resolve their email, then records a
+    profile-level event in Klaviyo so downstream email-marketing flows can react
+    to the payment.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripePaymentIntents
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+    type: openapi
+  - name: stripeCustomers
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-customers-api-openapi.yml
+    type: openapi
+  - name: klaviyo
+    url: https://raw.githubusercontent.com/api-evangelist/klaviyo/refs/heads/main/openapi/klaviyo-openapi.json
+    type: openapi
+workflows:
+  - workflowId: stripe-klaviyo-forward-payment-event
+    summary: Forward a Stripe payment intent to Klaviyo as a profile event.
+    description: >-
+      Lists Stripe payment intents (optionally filtered to one customer),
+      retrieves the customer to resolve their email, then tracks a Klaviyo event
+      on that profile carrying the payment amount and currency.
+    inputs:
+      type: object
+      properties:
+        customer:
+          type: string
+          description: Optional Stripe customer id to filter payment intents by.
+        limit:
+          type: integer
+          description: Number of payment intents to list.
+          default: 1
+        klaviyoRevision:
+          type: string
+          description: Klaviyo API revision header value.
+          default: "2024-10-15"
+        metricName:
+          type: string
+          description: The Klaviyo metric name to record for this event.
+          default: "Stripe Payment Succeeded"
+    steps:
+      - stepId: listPaymentIntents
+        description: List recent Stripe payment intents.
+        operationId: $sourceDescriptions.stripePaymentIntents.getPaymentIntents
+        parameters:
+          - name: customer
+            in: query
+            value: $inputs.customer
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentIntentId: $response.body#/data/0/id
+          customerId: $response.body#/data/0/customer
+          amount: $response.body#/data/0/amount
+          currency: $response.body#/data/0/currency
+      - stepId: getCustomer
+        description: Retrieve the Stripe customer to resolve their email.
+        operationId: $sourceDescriptions.stripeCustomers.getCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $steps.listPaymentIntents.outputs.customerId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          email: $response.body#/email
+          customerName: $response.body#/name
+      - stepId: trackKlaviyoEvent
+        description: Record a profile-level event in Klaviyo for the payment.
+        operationId: $sourceDescriptions.klaviyo.create_event
+        parameters:
+          - name: revision
+            in: header
+            value: $inputs.klaviyoRevision
+        requestBody:
+          contentType: application/vnd.api+json
+          payload:
+            data:
+              type: event
+              attributes:
+                properties:
+                  payment_intent_id: $steps.listPaymentIntents.outputs.paymentIntentId
+                  stripe_customer_id: $steps.listPaymentIntents.outputs.customerId
+                  currency: $steps.listPaymentIntents.outputs.currency
+                value: $steps.listPaymentIntents.outputs.amount
+                metric:
+                  data:
+                    type: metric
+                    attributes:
+                      name: $inputs.metricName
+                profile:
+                  data:
+                    type: profile
+                    attributes:
+                      email: $steps.getCustomer.outputs.email
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          statusCode: $statusCode
+    outputs:
+      paymentIntentId: $steps.listPaymentIntents.outputs.paymentIntentId
+      customerEmail: $steps.getCustomer.outputs.email
+      klaviyoStatus: $steps.trackKlaviyoEvent.outputs.statusCode

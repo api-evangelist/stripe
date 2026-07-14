@@ -1,0 +1,75 @@
+arazzo: 1.0.1
+info:
+  title: Provision WorkOS organizations from Stripe Enterprise subscriptions
+  summary: For Enterprise-tier Stripe subscriptions, create the corresponding WorkOS Organization with SSO configured.
+  description: >-
+    This workflow retrieves a Stripe subscription and provisions a matching
+    WorkOS Organization so that Enterprise-tier customers can be set up with
+    single sign-on. It reads the subscription (and its customer + metadata) from
+    Stripe, then creates a WorkOS Organization stamped with the Stripe customer
+    id so identity and billing stay linked.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml
+    type: openapi
+  - name: workos
+    url: https://raw.githubusercontent.com/api-evangelist/workos/refs/heads/main/openapi/workos-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-workos-provision
+    summary: Provision a WorkOS Organization from a Stripe Enterprise subscription.
+    description: >-
+      Retrieve a Stripe subscription by id, then create a WorkOS Organization
+      named for the account and tagged with the Stripe customer id.
+    inputs:
+      type: object
+      required:
+        - subscription_exposed_id
+        - organization_name
+      properties:
+        subscription_exposed_id:
+          type: string
+          description: The id of the Stripe subscription to provision from.
+        organization_name:
+          type: string
+          description: The name to assign to the new WorkOS Organization.
+        domains:
+          type: array
+          items:
+            type: string
+          description: Optional domains to associate with the WorkOS Organization.
+    steps:
+      - stepId: get-subscription
+        description: Retrieve the Stripe subscription to provision from.
+        operationId: $sourceDescriptions.stripe.GetSubscriptionsSubscriptionExposedId
+        parameters:
+          - name: subscription_exposed_id
+            in: path
+            value: $inputs.subscription_exposed_id
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscription_id: $response.body#/id
+          customer_id: $response.body#/customer
+          status: $response.body#/status
+      - stepId: create-organization
+        description: Create the WorkOS Organization for the subscribed account.
+        operationId: $sourceDescriptions.workos.OrganizationsController_create
+        requestBody:
+          contentType: application/json
+          payload:
+            name: $inputs.organization_name
+            domains: $inputs.domains
+            stripe_customer_id: $steps.get-subscription.outputs.customer_id
+            metadata:
+              stripe_subscription_id: $steps.get-subscription.outputs.subscription_id
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          organization_id: $response.body#/id
+          organization_name: $response.body#/name
+    outputs:
+      subscription_id: $steps.get-subscription.outputs.subscription_id
+      customer_id: $steps.get-subscription.outputs.customer_id
+      organization_id: $steps.create-organization.outputs.organization_id

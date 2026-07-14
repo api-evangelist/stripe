@@ -1,270 +1,383 @@
-- slug: stripe-salesforce
-  label: Sync Stripe customers into Salesforce contacts
-  partner: salesforce
-  category: CRM
-  use_case: When a Stripe customer is created, create or update the matching Salesforce Contact (by email) with billing details and lifetime spend.
-- slug: stripe-hubspot
-  label: Push Stripe successful charges as HubSpot deals
-  partner: hubspot
-  category: CRM
-  use_case: When a Stripe charge succeeds, create or update a HubSpot Deal in the Closed Won stage attached to the matching Contact.
-- slug: stripe-pipedrive
-  label: Mirror Stripe subscription lifecycle into Pipedrive deals
-  partner: pipedrive
-  category: CRM
-  use_case: Forward Stripe subscription created / updated / canceled events as Pipedrive Deal stage changes.
-- slug: stripe-close
-  label: Sync Stripe payments to Close opportunities
-  partner: close
-  category: CRM
-  use_case: Map Stripe successful payments to Close Opportunities by customer email; create activity log entries.
-- slug: stripe-zoho-crm
-  label: Sync Stripe customer billing into Zoho CRM accounts
-  partner: zoho-crm
-  category: CRM
-  use_case: Push Stripe Customer billing details into matching Zoho CRM Accounts with custom MRR field.
-- slug: stripe-outreach
-  label: Mark Outreach prospects who converted in Stripe
-  partner: outreach
-  category: Sales engagement
-  use_case: When a Stripe Customer first converts to paid, tag the matching Outreach Prospect as Converted and pause active sequences.
-- slug: stripe-mailchimp
-  label: Add Stripe Checkout completers to a Mailchimp audience
-  partner: mailchimp
-  category: Email marketing
-  use_case: When a Stripe Checkout session completes, add the customer to a Mailchimp audience with merge tags for plan and MRR.
-- slug: stripe-klaviyo
-  label: Forward Stripe payment events to Klaviyo as profile events
-  partner: klaviyo
-  category: Email marketing
-  use_case: Forward Stripe payment.intent.succeeded / customer.subscription.created webhooks to Klaviyo as profile-level events.
-- slug: stripe-sendgrid
-  label: Trigger SendGrid transactional template on Stripe payment success
-  partner: sendgrid
-  category: Transactional email
-  use_case: When a Stripe payment succeeds, render and send a SendGrid Dynamic Template (receipt) to the customer email.
-- slug: stripe-customer-io
-  label: Forward Stripe subscription lifecycle to Customer.io events
-  partner: customer-io
-  category: Email marketing
-  use_case: Forward Stripe subscription lifecycle webhooks (created/updated/canceled/paused) to Customer.io as user-level events.
-- slug: stripe-iterable
-  label: Sync Stripe trial-end events to Iterable
-  partner: iterable
-  category: Email marketing
-  use_case: Forward Stripe customer.subscription.trial_will_end events to Iterable as user events to trigger conversion campaigns.
-- slug: stripe-braze
-  label: Forward Stripe events to Braze custom events
-  partner: braze
-  category: Email marketing
-  use_case: Map Stripe events into Braze custom user events with the customer attached by email or external_id.
-- slug: stripe-chargebee
-  label: Bridge Chargebee subscriptions to Stripe payment methods
-  partner: chargebee
-  category: Subscription billing
-  use_case: Use Chargebee for subscription state of record while Stripe handles payment method storage and charge collection.
-- slug: stripe-recurly
-  label: Mirror Recurly subscriptions in Stripe for revenue reporting
-  partner: recurly
-  category: Subscription billing
-  use_case: Materialize Recurly subscriptions in Stripe as parallel Subscription objects so Stripe's reporting can be source-of-truth.
-- slug: stripe-zuora
-  label: Reconcile Zuora invoices against Stripe payments
-  partner: zuora
-  category: Subscription billing
-  use_case: For each Zuora invoice, find and link the corresponding Stripe PaymentIntent and record the reconciliation status.
-- slug: stripe-maxio
-  label: Sync Maxio (Chargify) usage events into Stripe metered subscriptions
-  partner: maxio
-  category: Subscription billing
-  use_case: Push Maxio metered usage events into Stripe metered subscription items so billing rolls up in Stripe.
-- slug: stripe-stigg
-  label: Enforce Stigg entitlements at Stripe checkout
-  partner: stigg
-  category: Pricing / packaging
-  use_case: Check Stigg entitlement before allowing a Stripe Checkout session to start (block over-quota purchases at point-of-sale).
-- slug: stripe-quickbooks
-  label: Sync Stripe payouts into QuickBooks Online deposits
-  partner: quickbooks
-  category: Accounting
-  use_case: For each Stripe payout, create a matching deposit in QuickBooks Online with per-charge line items split by fee.
-- slug: stripe-xero
-  label: Reconcile Stripe payouts in Xero bank transactions
-  partner: xero
-  category: Accounting
-  use_case: Match Stripe payouts to Xero bank transactions and create per-transaction reconciliation entries.
-- slug: stripe-netsuite
-  label: Sync Stripe customer + invoice to NetSuite ERP
-  partner: netsuite
-  category: ERP
-  use_case: Mirror Stripe Customer + Invoice as NetSuite Customer + Invoice records via the SuiteTalk REST API.
-- slug: stripe-sage-intacct
-  label: Post Stripe revenue into Sage Intacct GL
-  partner: sage-intacct
-  category: Accounting
-  use_case: For each Stripe Invoice paid, write a corresponding journal entry into Sage Intacct's general ledger.
-- slug: stripe-freshbooks
-  label: Generate FreshBooks invoices from Stripe Checkout sessions
-  partner: freshbooks
-  category: Accounting
-  use_case: When a Stripe Checkout completes for an invoice product, mark the matching FreshBooks invoice as paid.
-- slug: stripe-wave
-  label: Mirror Stripe sales into Wave accounting
-  partner: wave
-  category: Accounting
-  use_case: Sync Stripe payment events into Wave as income transactions in the right account category.
+# Stripe integrations, expressed as forkable Arazzo workflows.
+# Each entry maps a real Stripe integration to a 2-source Arazzo artifact whose steps
+# call verified operationIds in the real OpenAPI for BOTH ends (see the arazzo file).
+# Entries with arazzo: null are known integrations whose partner has no OpenAPI in the
+# catalog yet, so a faithful workflow cannot be authored without fabrication (pending).
+# Converted from the retired Naftiko capability format 2026-07-14.
+- slug: stripe-amplitude
+  label: Send Stripe revenue events to Amplitude
+  partner: amplitude
+  category: Analytics
+  use_case: For each succeeded Stripe charge, send a corresponding revenue event to Amplitude.
+  arazzo: stripe-amplitude.yml
+- slug: stripe-anrok
+  label: Post Stripe SaaS subscriptions to Anrok for sales-tax compliance
+  partner: anrok
+  category: Tax
+  use_case: Retrieve a Stripe invoice and mirror it into Anrok as a seller transaction for sales-tax exposure
+    tracking.
+  arazzo: stripe-anrok.yml
+- slug: stripe-auth0
+  label: Provision Auth0 Users from Stripe Customers
+  partner: auth0
+  category: Auth
+  use_case: When a Stripe customer is created via paid signup, retrieve it and provision a matching Auth0
+    user inheriting the email.
+  arazzo: stripe-auth0.yml
 - slug: stripe-avalara
   label: Calculate Avalara tax at Stripe Checkout
   partner: avalara
   category: Tax
-  use_case: Call Avalara AvaTax to compute the correct tax line for a cart, then attach to the Stripe Checkout Session.
+  use_case: Compute cart tax with Avalara AvaTax, then attach it to a Stripe Checkout Session.
+  arazzo: stripe-avalara.yml
+- slug: stripe-bigcommerce
+  label: Sync BigCommerce orders to Stripe payments
+  partner: bigcommerce
+  category: E-commerce
+  use_case: For a BigCommerce storefront order, materialize the matching Stripe PaymentIntent so financial
+    reporting consolidates in Stripe.
+  arazzo: stripe-bigcommerce.yml
+- slug: stripe-braze
+  label: Forward Stripe events to Braze custom events
+  partner: braze
+  category: Email marketing
+  use_case: Map Stripe charge/customer events into Braze custom user events, matching the customer by
+    email or external_id.
+  arazzo: stripe-braze.yml
+  scope: stripe-only
+- slug: stripe-chargebee
+  label: Bridge Chargebee subscriptions to Stripe payment methods
+  partner: chargebee
+  category: Subscription billing
+  use_case: Retrieve a stored Stripe payment method, then create a Chargebee subscription so subscription
+    state lives in Chargebee against the Stripe-held payment instrument.
+  arazzo: stripe-chargebee.yml
+- slug: stripe-clerk
+  label: Bind Clerk Users to Stripe Customers
+  partner: clerk
+  category: Auth
+  use_case: On Clerk user signup, create the matching Stripe Customer and store its ID on the Clerk user's
+    public metadata.
+  arazzo: stripe-clerk.yml
+- slug: stripe-close
+  label: Sync Stripe payments to Close opportunities
+  partner: close
+  category: CRM
+  use_case: Fetch successful Stripe payment intents and create a matching Close CRM opportunity tied to
+    a lead.
+  arazzo: stripe-close.yml
+- slug: stripe-customer-io
+  label: Forward Stripe subscription lifecycle to Customer.io events
+  partner: customer-io
+  category: Email marketing
+  use_case: Forward Stripe subscription lifecycle changes (created/updated/canceled/paused) to Customer.io
+    as user-level events.
+  arazzo: stripe-customer-io.yml
+- slug: stripe-freshbooks
+  label: Generate FreshBooks invoices from Stripe Checkout sessions
+  partner: freshbooks
+  category: Accounting
+  use_case: Retrieve a completed Stripe Checkout session and update the matching FreshBooks invoice to
+    reflect the collected payment.
+  arazzo: stripe-freshbooks.yml
+- slug: stripe-front
+  label: Tag Front conversations with Stripe spending tier
+  partner: front
+  category: Support
+  use_case: When a Front conversation arrives, look up the contact's Stripe customer + charges and apply
+    a spending-tier tag (VIP / standard / churned).
+  arazzo: stripe-front.yml
+- slug: stripe-gorgias
+  label: Show Stripe order context in Gorgias for e-commerce support
+  partner: gorgias
+  category: Support
+  use_case: When a Gorgias ticket opens, look up the customer by email and fetch their Stripe Checkout
+    sessions to show order context inline.
+  arazzo: stripe-gorgias.yml
+- slug: stripe-hubspot
+  label: Push Stripe successful charges as HubSpot deals
+  partner: hubspot
+  category: CRM
+  use_case: When a Stripe charge succeeds, look up the matching HubSpot Contact and create a Closed Won
+    HubSpot Deal with the charge amount and currency.
+  arazzo: stripe-hubspot.yml
+- slug: stripe-intercom
+  label: Surface Stripe MRR + Plan inside Intercom Inbox
+  partner: intercom
+  category: Support
+  use_case: Push Stripe MRR, current plan, and churn risk onto the matching Intercom Contact as custom
+    attributes.
+  arazzo: stripe-intercom.yml
+  scope: stripe-only
+- slug: stripe-iterable
+  label: Sync Stripe trial-end events to Iterable
+  partner: iterable
+  category: Email marketing
+  use_case: Retrieve a Stripe subscription nearing trial end and track it as a custom user event in Iterable
+    to trigger conversion campaigns.
+  arazzo: stripe-iterable.yml
+- slug: stripe-klaviyo
+  label: Forward Stripe payment events to Klaviyo as profile events
+  partner: klaviyo
+  category: Email marketing
+  use_case: List a Stripe payment intent, resolve the customer's email, and record a profile-level payment
+    event in Klaviyo.
+  arazzo: stripe-klaviyo.yml
+- slug: stripe-looker
+  label: Power Looker dashboards from Stripe revenue data
+  partner: looker
+  category: Analytics
+  use_case: List Stripe charges (revenue) and run an inline Looker query to feed embedded BI dashboards.
+  arazzo: stripe-looker.yml
+- slug: stripe-mailchimp
+  label: Add Stripe Checkout completers to a Mailchimp audience
+  partner: mailchimp
+  category: Email marketing
+  use_case: When a Stripe Checkout session completes, subscribe the buyer to a Mailchimp audience with
+    plan and MRR merge tags.
+  arazzo: stripe-mailchimp.yml
+- slug: stripe-make
+  label: Stripe to Make scenario invocation
+  partner: make
+  category: Automation
+  use_case: List a recent Stripe event and run a Make automation scenario with it as the payload.
+  arazzo: stripe-make.yml
+- slug: stripe-messagebird
+  label: Multi-channel notify on Stripe events via MessageBird
+  partner: messagebird
+  category: Notifications
+  use_case: Retrieve a Stripe charge and start a MessageBird conversation to notify the customer over
+    SMS/WhatsApp/Email.
+  arazzo: stripe-messagebird.yml
+- slug: stripe-mixpanel
+  label: Track Stripe payment events in Mixpanel
+  partner: mixpanel
+  category: Analytics
+  use_case: Retrieve a Stripe charge and forward it to Mixpanel as a user-level event with revenue (amount/currency)
+    attributed to the customer.
+  arazzo: stripe-mixpanel.yml
+- slug: stripe-n8n
+  label: Run n8n workflow on Stripe event
+  partner: n8n
+  category: Automation
+  use_case: List recent Stripe events and create an n8n workflow to automate downstream processing of
+    them.
+  arazzo: stripe-n8n.yml
+- slug: stripe-okta
+  label: Sync Stripe subscription tier to Okta group membership
+  partner: okta
+  category: Auth
+  use_case: Map a Stripe subscription plan to an Okta Group and update user group membership when the
+    subscription tier changes.
+  arazzo: stripe-okta.yml
+- slug: stripe-pipedrive
+  label: Mirror Stripe subscription lifecycle into Pipedrive deals
+  partner: pipedrive
+  category: CRM
+  use_case: Retrieve a Stripe subscription and create a matching Pipedrive deal that inherits its currency.
+  arazzo: stripe-pipedrive.yml
+- slug: stripe-salesforce
+  label: Sync Stripe customers into Salesforce contacts
+  partner: salesforce
+  category: CRM
+  use_case: When a Stripe customer is created, look them up by email and create the matching Salesforce
+    Contact with billing details.
+  arazzo: stripe-salesforce.yml
+- slug: stripe-segment
+  label: Forward Stripe webhook events to Segment
+  partner: segment
+  category: Analytics
+  use_case: List Stripe charges and forward each into Segment as a track() event keyed by customer.
+  arazzo: stripe-segment.yml
+- slug: stripe-sendgrid
+  label: Trigger SendGrid transactional template on Stripe payment success
+  partner: sendgrid
+  category: Transactional email
+  use_case: When a Stripe payment succeeds, retrieve the PaymentIntent and send a SendGrid Dynamic Template
+    receipt to the customer email.
+  arazzo: stripe-sendgrid.yml
+- slug: stripe-shopify
+  label: Use Stripe for Shopify checkout outside Shopify Payments
+  partner: shopify
+  category: E-commerce
+  use_case: Process Shopify checkouts via Stripe (where Shopify Payments isn't available) by creating
+    a Stripe PaymentIntent and recording the sale as a Shopify order.
+  arazzo: stripe-shopify.yml
+- slug: stripe-sift
+  label: Score Stripe payment intents with Sift fraud
+  partner: sift
+  category: Fraud / Risk
+  use_case: Send Stripe order context to Sift for an inline payment-abuse score, then create the PaymentIntent
+    tagged with the Sift user/score.
+  arazzo: stripe-sift.yml
+- slug: stripe-slack
+  label: Post Stripe payment alerts to Slack channels
+  partner: slack
+  category: Notifications
+  use_case: Retrieve a Stripe charge and post a payment alert to a designated Slack channel.
+  arazzo: stripe-slack.yml
+- slug: stripe-snowflake
+  label: Stream Stripe events into Snowflake
+  partner: snowflake
+  category: Data warehouse
+  use_case: Pull recent Stripe events and trigger a Snowflake pipe to ingest them into a table for downstream
+    BI.
+  arazzo: stripe-snowflake.yml
+- slug: stripe-squarespace
+  label: Process Squarespace Commerce orders through Stripe
+  partner: squarespace
+  category: E-commerce
+  use_case: Capture Squarespace Commerce orders and route payment through a Stripe PaymentIntent.
+  arazzo: stripe-squarespace.yml
+- slug: stripe-stigg
+  label: Enforce Stigg entitlements at Stripe checkout
+  partner: stigg
+  category: Pricing / packaging (entitlements)
+  use_case: Check a customer's Stigg entitlement/active subscription before creating a Stripe Checkout
+    session to block over-quota purchases at point-of-sale.
+  arazzo: stripe-stigg.yml
 - slug: stripe-taxjar
   label: File Stripe sales through TaxJar
   partner: taxjar
   category: Tax
-  use_case: Sync Stripe Invoices to TaxJar as transactions for automated state filing.
+  use_case: Sync paid Stripe invoices to TaxJar as order transactions for automated sales tax filing.
+  arazzo: stripe-taxjar.yml
+- slug: stripe-twilio
+  label: SMS Stripe payment receipts via Twilio
+  partner: twilio
+  category: Notifications
+  use_case: For each succeeded Stripe charge, send the customer an SMS payment receipt via Twilio.
+  arazzo: stripe-twilio.yml
+- slug: stripe-woocommerce
+  label: Replace WooCommerce Stripe plugin with declarative integration
+  partner: woocommerce
+  category: E-commerce
+  use_case: List WooCommerce store orders and create a matching Stripe payment intent for a selected order's
+    total and currency.
+  arazzo: stripe-woocommerce.yml
+- slug: stripe-workato
+  label: Forward Stripe Event to Workato
+  partner: workato
+  category: Automation
+  use_case: List a recent Stripe event and forward its payload into a Workato Event Streams topic for
+    a recipe to consume.
+  arazzo: stripe-workato.yml
+- slug: stripe-workos
+  label: Provision WorkOS organizations from Stripe Enterprise subscriptions
+  partner: workos
+  category: Auth
+  use_case: For Enterprise-tier Stripe subscriptions, create the corresponding WorkOS Organization with
+    SSO configured.
+  arazzo: stripe-workos.yml
+- slug: stripe-xero
+  label: Reconcile Stripe payouts in Xero bank transactions
+  partner: xero
+  category: Accounting
+  use_case: List Stripe payouts and create matching Xero bank transactions for reconciliation.
+  arazzo: stripe-xero.yml
+- slug: stripe-zapier
+  label: Stripe trigger spec for Zapier (declarative)
+  partner: zapier
+  category: Automation
+  use_case: List recent Stripe events and run a Zapier action for the latest event, replacing the closed
+    Zapier app config.
+  arazzo: stripe-zapier.yml
+- slug: stripe-zendesk
+  label: Attach Stripe customer history to Zendesk tickets
+  partner: zendesk
+  category: Support
+  use_case: On ticket open, fetch the requester's Stripe customer and recent charges and open a Zendesk
+    ticket enriched with that billing history.
+  arazzo: stripe-zendesk.yml
+- slug: stripe-zoho-crm
+  label: Sync Stripe customer billing into Zoho CRM accounts
+  partner: zoho-crm
+  category: CRM
+  use_case: Retrieve a Stripe customer and their invoices, then insert a matching Zoho CRM Account record
+    carrying billing details and an MRR field.
+  arazzo: stripe-zoho-crm.yml
+- slug: stripe-zuora
+  label: Reconcile Zuora invoices against Stripe payments
+  partner: zuora
+  category: Accounting
+  use_case: For a Zuora invoice, retrieve it and list the customer's Stripe PaymentIntents to match and
+    reconcile the payment.
+  arazzo: stripe-zuora.yml
+- slug: stripe-chargehound
+  label: Auto-respond to Stripe disputes via Chargehound
+  partner: chargehound
+  category: Risk
+  use_case: When a Stripe dispute opens, build evidence in Chargehound and submit it back through the
+    Stripe Disputes API.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-maxio
+  label: Sync Maxio (Chargify) usage events into Stripe metered subscriptions
+  partner: maxio
+  category: Subscription billing
+  use_case: Push Maxio metered usage events into Stripe metered subscription items so billing rolls up
+    in Stripe.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-netsuite
+  label: Sync Stripe customer + invoice to NetSuite ERP
+  partner: netsuite
+  category: ERP
+  use_case: Mirror Stripe Customer + Invoice as NetSuite Customer + Invoice records via the SuiteTalk
+    REST API.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-outreach
+  label: Mark Outreach prospects who converted in Stripe
+  partner: outreach
+  category: Sales engagement
+  use_case: When a Stripe Customer first converts to paid, tag the matching Outreach Prospect as Converted
+    and pause active sequences.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-quickbooks
+  label: Sync Stripe payouts into QuickBooks Online deposits
+  partner: quickbooks
+  category: Accounting
+  use_case: For each Stripe payout, create a matching deposit in QuickBooks Online with per-charge line
+    items split by fee.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-recurly
+  label: Mirror Recurly subscriptions in Stripe for revenue reporting
+  partner: recurly
+  category: Subscription billing
+  use_case: Materialize Recurly subscriptions in Stripe as parallel Subscription objects so Stripe's reporting
+    can be source-of-truth.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-riskified
+  label: Approve / decline Stripe charges via Riskified
+  partner: riskified
+  category: Risk
+  use_case: For each Stripe authorize-only PaymentIntent, decide capture / void based on Riskified's order
+    approval response.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-sage-intacct
+  label: Post Stripe revenue into Sage Intacct GL
+  partner: sage-intacct
+  category: Accounting
+  use_case: For each Stripe Invoice paid, write a corresponding journal entry into Sage Intacct's general
+    ledger.
+  arazzo: null
+  status: pending-partner-spec
 - slug: stripe-vertex
   label: Replace Stripe Tax with Vertex for enterprise tax determination
   partner: vertex
   category: Tax
   use_case: Use Vertex for tax determination, then attach the Vertex-computed line to the Stripe payment.
-- slug: stripe-anrok
-  label: Post Stripe SaaS subscriptions to Anrok for sales-tax compliance
-  partner: anrok
-  category: Tax
-  use_case: For each Stripe Subscription billing event, mirror the transaction in Anrok for sales-tax exposure tracking.
-- slug: stripe-auth0
-  label: Provision Auth0 users from Stripe Customers
-  partner: auth0
-  category: Identity
-  use_case: When a Stripe customer is created (via a paid signup), provision the matching Auth0 user with email_verified inherited from Stripe.
-- slug: stripe-okta
-  label: Sync Stripe subscription tier to Okta group membership
-  partner: okta
-  category: Identity
-  use_case: Map Stripe subscription plans to Okta Groups and update group membership when subscription tier changes.
-- slug: stripe-workos
-  label: Provision WorkOS organizations from Stripe Enterprise subscriptions
-  partner: workos
-  category: Identity / SSO
-  use_case: For Enterprise-tier Stripe subscriptions, create the corresponding WorkOS Organization with SSO configured.
-- slug: stripe-clerk
-  label: Bind Clerk Users to Stripe Customers
-  partner: clerk
-  category: Identity
-  use_case: When a Clerk user signs up, create the matching Stripe Customer and store the customer ID on the Clerk user metadata.
-- slug: stripe-segment
-  label: Forward Stripe webhook events to Segment
-  partner: segment
-  category: Analytics
-  use_case: Stream all Stripe webhook events to Segment as track() / identify() / group() events keyed by customer.
-- slug: stripe-mixpanel
-  label: Track Stripe payment events in Mixpanel
-  partner: mixpanel
-  category: Analytics
-  use_case: Forward Stripe charge / subscription events to Mixpanel as user-level events with revenue and plan props.
-- slug: stripe-amplitude
-  label: Send Stripe revenue events to Amplitude
-  partner: amplitude
-  category: Analytics
-  use_case: For each Stripe charge succeeded event, send a corresponding revenue event to Amplitude.
-- slug: stripe-snowflake
-  label: Stream Stripe events into Snowflake
-  partner: snowflake
-  category: Data warehouse
-  use_case: Pipe Stripe webhook events into a Snowflake table via the Snowpipe REST API for downstream BI.
-- slug: stripe-looker
-  label: Power Looker dashboards from Stripe revenue data
-  partner: looker
-  category: BI
-  use_case: Expose a derived Stripe revenue view via the Looker API for embedded dashboards.
-- slug: stripe-zendesk
-  label: Attach Stripe customer history to Zendesk tickets
-  partner: zendesk
-  category: Support
-  use_case: When a Zendesk ticket opens, fetch the requester's Stripe Customer + recent charges and render them in a Zendesk app.
-- slug: stripe-intercom
-  label: Surface Stripe MRR + plan inside Intercom Inbox
-  partner: intercom
-  category: Support
-  use_case: Push Stripe MRR + current plan + churn risk to Intercom as a custom attribute on the matching Contact.
-- slug: stripe-front
-  label: Tag Front conversations with Stripe spending tier
-  partner: front
-  category: Support
-  use_case: When a Front conversation arrives, look up the contact's Stripe LTV and apply a tier tag (VIP / standard / churned).
-- slug: stripe-gorgias
-  label: Show Stripe order context in Gorgias for e-commerce support
-  partner: gorgias
-  category: Support
-  use_case: When a Gorgias ticket opens, fetch the customer's Stripe Checkout sessions to show order context inline.
-- slug: stripe-shopify
-  label: Use Stripe for Shopify checkout outside Shopify Payments
-  partner: shopify
-  category: E-commerce
-  use_case: Process Shopify checkouts via Stripe (where Shopify Payments isn't available) by attaching Stripe PaymentIntents to Shopify Draft Orders.
-- slug: stripe-bigcommerce
-  label: Sync BigCommerce orders to Stripe payments
-  partner: bigcommerce
-  category: E-commerce
-  use_case: For each BigCommerce order, materialize the corresponding Stripe PaymentIntent so financial reporting consolidates in Stripe.
-- slug: stripe-woocommerce
-  label: Replace WooCommerce Stripe plugin with declarative integration
-  partner: woocommerce
-  category: E-commerce
-  use_case: Move WooCommerce-to-Stripe handoff from the WP plugin to a declarative integration capability.
-- slug: stripe-squarespace
-  label: Process Squarespace Commerce orders through Stripe
-  partner: squarespace
-  category: E-commerce
-  use_case: Capture Squarespace Commerce orders, route the payment through a Stripe PaymentIntent created via this capability.
-- slug: stripe-zapier
-  label: Stripe trigger spec for Zapier (declarative)
-  partner: zapier
-  category: Workflow
-  use_case: Declare the Stripe events that trigger Zapier Zaps as a Naftiko capability — replaces the closed Zapier app config.
-- slug: stripe-make
-  label: Stripe → Make scenario invocation
-  partner: make
-  category: Workflow
-  use_case: Trigger a Make scenario from a Stripe event using a declarative integration capability.
-- slug: stripe-n8n
-  label: Run n8n workflow on Stripe event
-  partner: n8n
-  category: Workflow
-  use_case: Trigger an n8n workflow from a Stripe webhook through a declarative capability mapping.
-- slug: stripe-workato
-  label: Forward Stripe event to Workato recipe
-  partner: workato
-  category: Workflow
-  use_case: Forward a Stripe event into a Workato recipe via a declarative capability.
-- slug: stripe-twilio
-  label: SMS Stripe payment receipts via Twilio
-  partner: twilio
-  category: Notifications
-  use_case: For each Stripe payment succeeded, send an SMS receipt via Twilio to the customer's phone number.
-- slug: stripe-slack
-  label: Post Stripe payment alerts to Slack channels
-  partner: slack
-  category: Notifications
-  use_case: Forward Stripe payment / dispute / payout events to a designated Slack channel via Incoming Webhook.
-- slug: stripe-messagebird
-  label: Multi-channel notify on Stripe events via MessageBird
-  partner: messagebird
-  category: Notifications
-  use_case: Send SMS / WhatsApp / Email via MessageBird Conversations on Stripe payment events with channel fallback.
-- slug: stripe-sift
-  label: Score Stripe payment intents with Sift fraud
-  partner: sift
-  category: Risk
-  use_case: Before confirming a Stripe PaymentIntent, send the order context to Sift Decisions and route based on the returned score.
-- slug: stripe-riskified
-  label: Approve / decline Stripe charges via Riskified
-  partner: riskified
-  category: Risk
-  use_case: For each Stripe authorize-only PaymentIntent, decide capture / void based on Riskified's order approval response.
-- slug: stripe-chargehound
-  label: Auto-respond to Stripe disputes via Chargehound
-  partner: chargehound
-  category: Risk
-  use_case: When a Stripe dispute opens, build evidence in Chargehound and submit it back through the Stripe Disputes API.
+  arazzo: null
+  status: pending-partner-spec
+- slug: stripe-wave
+  label: Mirror Stripe sales into Wave accounting
+  partner: wave
+  category: Accounting
+  use_case: Sync Stripe payment events into Wave as income transactions in the right account category.
+  arazzo: null
+  status: pending-partner-spec

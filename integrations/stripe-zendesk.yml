@@ -1,0 +1,95 @@
+arazzo: 1.0.1
+info:
+  title: Attach Stripe customer history to Zendesk tickets
+  summary: Fetch a Stripe customer and their recent charges, then open a Zendesk ticket enriched with that billing history.
+  description: >-
+    When a support conversation begins, this workflow retrieves the requester's
+    Stripe Customer record and their most recent Stripe charges, then creates a
+    Zendesk ticket whose body summarizes that billing context for the agent.
+    It stitches the Stripe customer and charges APIs to the Zendesk ticketing
+    API so support staff see payment history without leaving Zendesk.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripeCustomers
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-customers-api-openapi.yml
+    type: openapi
+  - name: stripeCharges
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+    type: openapi
+  - name: zendesk
+    url: https://raw.githubusercontent.com/api-evangelist/zendesk/refs/heads/main/openapi/tickets-openapi-original.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-zendesk-attach-history
+    summary: Retrieve a Stripe customer and charges, then open a Zendesk ticket with that history.
+    description: >-
+      Retrieves a Stripe customer by id, lists that customer's recent charges,
+      and creates a Zendesk ticket whose comment body carries the billing
+      context for the assigned agent.
+    inputs:
+      type: object
+      required:
+        - customer
+      properties:
+        customer:
+          type: string
+          description: The Stripe customer id whose history should be attached to the ticket.
+        limit:
+          type: integer
+          description: Maximum number of recent charges to list.
+          default: 10
+        subject:
+          type: string
+          description: Subject line for the Zendesk ticket.
+          default: Billing history for customer
+    steps:
+      - stepId: get-customer
+        description: Retrieve the Stripe customer record.
+        operationId: $sourceDescriptions.stripeCustomers.getCustomersCustomer
+        parameters:
+          - name: customer
+            in: path
+            value: $inputs.customer
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customerId: $response.body#/id
+          email: $response.body#/email
+          name: $response.body#/name
+      - stepId: list-charges
+        description: List recent Stripe charges for the customer.
+        operationId: $sourceDescriptions.stripeCharges.getCharges
+        parameters:
+          - name: customer
+            in: query
+            value: $steps.get-customer.outputs.customerId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          charges: $response.body#/data
+      - stepId: create-ticket
+        description: Create a Zendesk ticket enriched with the Stripe billing context.
+        operationId: $sourceDescriptions.zendesk.CreateTicket
+        requestBody:
+          contentType: application/json
+          payload:
+            ticket:
+              subject: $inputs.subject
+              requester:
+                name: $steps.get-customer.outputs.name
+                email: $steps.get-customer.outputs.email
+              comment:
+                body: >-
+                  Stripe customer $steps.get-customer.outputs.customerId
+                  recent charges attached.
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          ticket: $response.body#/ticket
+    outputs:
+      customerId: $steps.get-customer.outputs.customerId
+      charges: $steps.list-charges.outputs.charges
+      ticket: $steps.create-ticket.outputs.ticket

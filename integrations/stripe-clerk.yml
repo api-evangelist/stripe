@@ -1,0 +1,71 @@
+arazzo: 1.0.1
+info:
+  title: Bind Clerk Users to Stripe Customers
+  summary: Provision a Stripe Customer for a new Clerk user and store the customer ID on the Clerk user metadata.
+  description: >-
+    When a Clerk user signs up, this workflow creates the matching Stripe
+    Customer using the user's email, then writes the resulting Stripe customer
+    ID back onto the Clerk user's public metadata. This keeps identity in Clerk
+    and billing in Stripe linked so downstream billing and subscription flows
+    can resolve the Stripe customer directly from the authenticated Clerk user.
+  version: 1.0.0
+sourceDescriptions:
+  - name: stripe
+    url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/customers-openapi-original.yml
+    type: openapi
+  - name: clerk
+    url: https://raw.githubusercontent.com/api-evangelist/clerk/refs/heads/main/openapi/clerk-openapi.yml
+    type: openapi
+workflows:
+  - workflowId: stripe-clerk-bind-user
+    summary: Create a Stripe Customer for a Clerk user and store the customer ID on the Clerk user metadata.
+    description: >-
+      Creates a Stripe Customer from a newly signed-up Clerk user's email, then
+      patches the Clerk user's public metadata with the new Stripe customer ID.
+    inputs:
+      type: object
+      required:
+        - user_id
+        - email
+      properties:
+        user_id:
+          type: string
+          description: The Clerk user ID of the newly signed-up user.
+        email:
+          type: string
+          description: The email address to attach to the Stripe Customer.
+        name:
+          type: string
+          description: Optional display name for the Stripe Customer.
+    steps:
+      - stepId: create-stripe-customer
+        description: Create the matching Stripe Customer for the Clerk user.
+        operationId: $sourceDescriptions.stripe.PostCustomers
+        requestBody:
+          contentType: application/x-www-form-urlencoded
+          payload:
+            email: $inputs.email
+            name: $inputs.name
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          customerId: $response.body#/id
+      - stepId: bind-clerk-user
+        description: Store the new Stripe customer ID on the Clerk user public metadata.
+        operationId: $sourceDescriptions.clerk.updateUser
+        parameters:
+          - name: user_id
+            in: path
+            value: $inputs.user_id
+        requestBody:
+          contentType: application/json
+          payload:
+            public_metadata:
+              stripe_customer_id: $steps.create-stripe-customer.outputs.customerId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          clerkUserId: $response.body#/id
+    outputs:
+      stripeCustomerId: $steps.create-stripe-customer.outputs.customerId
+      clerkUserId: $steps.bind-clerk-user.outputs.clerkUserId
