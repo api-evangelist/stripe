@@ -1,0 +1,32 @@
+generated: '2026-07-17'
+method: generated
+source: >-
+  Packaged Agent Skills generated from Stripe's OpenAPI + the native Arazzo
+  workflows in ../arazzo/. Every step is grounded in an operationId verified
+  verbatim in ../openapi/*.yml; cross-cutting rules cite ../conventions/,
+  ../errors/, ../authentication/ and ../sandbox/.
+skills:
+  - file: stripe-create-customer-and-charge.md
+    name: Create a customer and charge them
+    api: openapi/stripe-payment-intents-api-openapi.yml
+    operations: [postCustomers, postPaymentIntents, postPaymentIntentsIntentConfirm]
+  - file: stripe-refund-payment.md
+    name: Refund a payment
+    api: openapi/stripe-refunds-api-openapi.yml
+    operations: [postPaymentIntents, postPaymentIntentsIntentConfirm, PostRefunds]
+  - file: stripe-launch-subscription.md
+    name: Launch a recurring subscription
+    api: openapi/stripe-subscription-api-openapi.yml
+    operations: [PostProducts, postPrices, postCustomers, PostSubscriptions]
+  - file: stripe-connect-onboard-account.md
+    name: Onboard a Connect account
+    api: openapi/stripe-connect-api-openapi.yml
+    operations: [PostAccounts, PostAccountLinks]
+  - file: stripe-calculate-and-settle-tax.md
+    name: Calculate and settle tax
+    api: openapi/stripe-tax-api-openapi.yml
+    operations: [PostTaxCalculations, PostTaxTransactionsCreateFromCalculation]
+  - file: stripe-verify-identity.md
+    name: Verify a user's identity
+    api: openapi/stripe-identity-api-openapi.yml
+    operations: [postIdentityVerificationSessions, getIdentityVerificationSessionsSession]
