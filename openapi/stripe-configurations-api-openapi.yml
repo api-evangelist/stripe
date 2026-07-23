@@ -1,0 +1,2416 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Configurations API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Configurations
+paths:
+  /v1/billing_portal/configurations:
+    get:
+      description: <p>Returns a list of configurations that describe the functionality of the customer portal.</p>
+      operationId: getBillingPortalConfigurations
+      parameters:
+      - description: Only return configurations that are active or inactive (e.g., pass `true` to only list active configurations).
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: Only return the default or non-default configurations (e.g., pass `true` to only list the default configuration).
+        in: query
+        name: is_default
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetBillingPortalConfigurationsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/PortalPublicResourceConfigurationList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Billing Portal Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+    post:
+      description: <p>Creates a configuration that describes the functionality and behavior of a PortalSession</p>
+      operationId: postBillingPortalConfigurations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              business_profile:
+                explode: true
+                style: deepObject
+              default_return_url:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              features:
+                explode: true
+                style: deepObject
+              login_page:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostBillingPortalConfigurationsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Billing Portal Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+  /v1/billing_portal/configurations/{configuration}:
+    get:
+      description: <p>Retrieves a configuration that describes the functionality of the customer portal.</p>
+      operationId: getBillingPortalConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetBillingPortalConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Billing Portal Configurations Configuration
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+    post:
+      description: <p>Updates a configuration that describes the functionality of the customer portal.</p>
+      operationId: postBillingPortalConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              business_profile:
+                explode: true
+                style: deepObject
+              default_return_url:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              features:
+                explode: true
+                style: deepObject
+              login_page:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostBillingPortalConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/billing_portal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Billing Portal Configurations Configuration
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+  /v1/payment_method_configurations:
+    get:
+      description: <p>List payment method configurations</p>
+      operationId: getPaymentMethodConfigurations
+      parameters:
+      - description: The Connect application to filter by.
+        explode: true
+        in: query
+        name: application
+        required: false
+        schema:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - enum:
+            - ''
+            type: string
+        style: deepObject
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetPaymentMethodConfigurationsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/PaymentMethodConfigResourcePaymentMethodConfigurationsList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Payment Method Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+    post:
+      description: <p>Creates a payment method configuration</p>
+      operationId: postPaymentMethodConfigurations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              acss_debit:
+                explode: true
+                style: deepObject
+              affirm:
+                explode: true
+                style: deepObject
+              afterpay_clearpay:
+                explode: true
+                style: deepObject
+              alipay:
+                explode: true
+                style: deepObject
+              apple_pay:
+                explode: true
+                style: deepObject
+              apple_pay_later:
+                explode: true
+                style: deepObject
+              au_becs_debit:
+                explode: true
+                style: deepObject
+              bacs_debit:
+                explode: true
+                style: deepObject
+              bancontact:
+                explode: true
+                style: deepObject
+              blik:
+                explode: true
+                style: deepObject
+              boleto:
+                explode: true
+                style: deepObject
+              card:
+                explode: true
+                style: deepObject
+              cartes_bancaires:
+                explode: true
+                style: deepObject
+              cashapp:
+                explode: true
+                style: deepObject
+              eps:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              fpx:
+                explode: true
+                style: deepObject
+              giropay:
+                explode: true
+                style: deepObject
+              google_pay:
+                explode: true
+                style: deepObject
+              grabpay:
+                explode: true
+                style: deepObject
+              ideal:
+                explode: true
+                style: deepObject
+              jcb:
+                explode: true
+                style: deepObject
+              klarna:
+                explode: true
+                style: deepObject
+              konbini:
+                explode: true
+                style: deepObject
+              link:
+                explode: true
+                style: deepObject
+              oxxo:
+                explode: true
+                style: deepObject
+              p24:
+                explode: true
+                style: deepObject
+              paynow:
+                explode: true
+                style: deepObject
+              paypal:
+                explode: true
+                style: deepObject
+              promptpay:
+                explode: true
+                style: deepObject
+              revolut_pay:
+                explode: true
+                style: deepObject
+              sepa_debit:
+                explode: true
+                style: deepObject
+              sofort:
+                explode: true
+                style: deepObject
+              us_bank_account:
+                explode: true
+                style: deepObject
+              wechat_pay:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostPaymentMethodConfigurationsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Payment Method Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+  /v1/payment_method_configurations/{configuration}:
+    get:
+      description: <p>Retrieve payment method configuration</p>
+      operationId: getPaymentMethodConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetPaymentMethodConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Payment Method Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+    post:
+      description: <p>Update payment method configuration</p>
+      operationId: postPaymentMethodConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              acss_debit:
+                explode: true
+                style: deepObject
+              affirm:
+                explode: true
+                style: deepObject
+              afterpay_clearpay:
+                explode: true
+                style: deepObject
+              alipay:
+                explode: true
+                style: deepObject
+              apple_pay:
+                explode: true
+                style: deepObject
+              apple_pay_later:
+                explode: true
+                style: deepObject
+              au_becs_debit:
+                explode: true
+                style: deepObject
+              bacs_debit:
+                explode: true
+                style: deepObject
+              bancontact:
+                explode: true
+                style: deepObject
+              blik:
+                explode: true
+                style: deepObject
+              boleto:
+                explode: true
+                style: deepObject
+              card:
+                explode: true
+                style: deepObject
+              cartes_bancaires:
+                explode: true
+                style: deepObject
+              cashapp:
+                explode: true
+                style: deepObject
+              eps:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              fpx:
+                explode: true
+                style: deepObject
+              giropay:
+                explode: true
+                style: deepObject
+              google_pay:
+                explode: true
+                style: deepObject
+              grabpay:
+                explode: true
+                style: deepObject
+              ideal:
+                explode: true
+                style: deepObject
+              jcb:
+                explode: true
+                style: deepObject
+              klarna:
+                explode: true
+                style: deepObject
+              konbini:
+                explode: true
+                style: deepObject
+              link:
+                explode: true
+                style: deepObject
+              oxxo:
+                explode: true
+                style: deepObject
+              p24:
+                explode: true
+                style: deepObject
+              paynow:
+                explode: true
+                style: deepObject
+              paypal:
+                explode: true
+                style: deepObject
+              promptpay:
+                explode: true
+                style: deepObject
+              revolut_pay:
+                explode: true
+                style: deepObject
+              sepa_debit:
+                explode: true
+                style: deepObject
+              sofort:
+                explode: true
+                style: deepObject
+              us_bank_account:
+                explode: true
+                style: deepObject
+              wechat_pay:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostPaymentMethodConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method_configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Payment Method Configurations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Configurations
+components:
+  schemas:
+    PortalPublicResourceConfigurationList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/billing_portal.configuration'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/billing_portal/configurations
+          type: string
+    payment_method_configuration:
+      description: 'PaymentMethodConfigurations control which payment methods are displayed to your customers when you don''t explicitly specify payment method types. You can have multiple configurations with different sets of payment methods for different scenarios.
+
+
+        There are two types of PaymentMethodConfigurations. Which is used depends on the [charge type](https://stripe.com/docs/connect/charges):
+
+
+        **Direct** configurations apply to payments created on your account, including Connect destination charges, Connect separate charges and transfers, and payments not involving Connect.
+
+
+        **Child** configurations apply to payments created on your connected accounts using direct charges, and charges with the on_behalf_of parameter.
+
+
+        Child configurations have a `parent` that sets default values and controls which settings connected accounts may override. You can specify a parent ID at payment time, and Stripe will automatically resolve the connected account’s associated child configuration. Parent configurations are [managed in the dashboard](https://dashboard.stripe.com/settings/payment_methods/connected_accounts) and are not available in this API.
+
+
+        Related guides:
+
+        - [Payment Method Configurations API](https://stripe.com/docs/connect/payment-method-configurations)
+
+        - [Multiple configurations on dynamic payment methods](https://stripe.com/docs/payments/multiple-payment-method-configs)
+
+        - [Multiple configurations for your Connect accounts](https://stripe.com/docs/connect/multiple-payment-method-configurations)'
+      properties:
+        acss_debit:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        active:
+          description: Whether the configuration can be used for new payments.
+          type: boolean
+        affirm:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        afterpay_clearpay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        alipay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        apple_pay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        application:
+          description: For child configs, the Connect application associated with the configuration.
+          maxLength: 5000
+          nullable: true
+          type: string
+        au_becs_debit:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        bacs_debit:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        bancontact:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        blik:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        boleto:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        card:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        cartes_bancaires:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        cashapp:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        eps:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        fpx:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        giropay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        google_pay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        grabpay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        ideal:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        is_default:
+          description: The default configuration is used whenever a payment method configuration is not specified.
+          type: boolean
+        jcb:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        klarna:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        konbini:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        link:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        name:
+          description: The configuration's name.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - payment_method_configuration
+          type: string
+        oxxo:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        p24:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        parent:
+          description: For child configs, the configuration's parent configuration.
+          maxLength: 5000
+          nullable: true
+          type: string
+        paynow:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        paypal:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        promptpay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        revolut_pay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        sepa_debit:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        sofort:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        us_bank_account:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+        wechat_pay:
+          $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
+      required:
+      - active
+      - id
+      - is_default
+      - livemode
+      - name
+      - object
+      title: PaymentMethodConfigResourcePaymentMethodConfiguration
+      type: object
+      x-expandableFields:
+      - acss_debit
+      - affirm
+      - afterpay_clearpay
+      - alipay
+      - apple_pay
+      - au_becs_debit
+      - bacs_debit
+      - bancontact
+      - blik
+      - boleto
+      - card
+      - cartes_bancaires
+      - cashapp
+      - eps
+      - fpx
+      - giropay
+      - google_pay
+      - grabpay
+      - ideal
+      - jcb
+      - klarna
+      - konbini
+      - link
+      - oxxo
+      - p24
+      - paynow
+      - paypal
+      - promptpay
+      - revolut_pay
+      - sepa_debit
+      - sofort
+      - us_bank_account
+      - wechat_pay
+      x-resourceId: payment_method_configuration
+    GetBillingPortalConfigurationsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetPaymentMethodConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
+    PostBillingPortalConfigurationsRequest:
+      type: object
+      required:
+      - business_profile
+      - features
+      properties:
+        business_profile:
+          description: The business information shown to customers in the portal.
+          properties:
+            headline:
+              anyOf:
+              - maxLength: 60
+                type: string
+              - enum:
+                - ''
+                type: string
+            privacy_policy_url:
+              type: string
+            terms_of_service_url:
+              type: string
+          title: business_profile_create_param
+          type: object
+        default_return_url:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: The default URL to redirect customers to when they click on the portal's link to return to your website. This can be [overriden](https://stripe.com/docs/api/customer_portal/sessions/create#create_portal_session-return_url) when creating the session.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        features:
+          description: Information about the features available in the portal.
+          properties:
+            customer_update:
+              properties:
+                allowed_updates:
+                  anyOf:
+                  - items:
+                      enum:
+                      - address
+                      - email
+                      - name
+                      - phone
+                      - shipping
+                      - tax_id
+                      type: string
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              title: customer_update_creation_param
+              type: object
+            invoice_history:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              title: invoice_list_param
+              type: object
+            payment_method_update:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              title: payment_method_update_param
+              type: object
+            subscription_cancel:
+              properties:
+                cancellation_reason:
+                  properties:
+                    enabled:
+                      type: boolean
+                    options:
+                      anyOf:
+                      - items:
+                          enum:
+                          - customer_service
+                          - low_quality
+                          - missing_features
+                          - other
+                          - switched_service
+                          - too_complex
+                          - too_expensive
+                          - unused
+                          type: string
+                        type: array
+                      - enum:
+                        - ''
+                        type: string
+                  required:
+                  - enabled
+                  - options
+                  title: subscription_cancellation_reason_creation_param
+                  type: object
+                enabled:
+                  type: boolean
+                mode:
+                  enum:
+                  - at_period_end
+                  - immediately
+                  type: string
+                proration_behavior:
+                  enum:
+                  - always_invoice
+                  - create_prorations
+                  - none
+                  type: string
+              required:
+              - enabled
+              title: subscription_cancel_creation_param
+              type: object
+            subscription_pause:
+              properties:
+                enabled:
+                  type: boolean
+              title: subscription_pause_param
+              type: object
+            subscription_update:
+              properties:
+                default_allowed_updates:
+                  anyOf:
+                  - items:
+                      enum:
+                      - price
+                      - promotion_code
+                      - quantity
+                      type: string
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                enabled:
+                  type: boolean
+                products:
+                  anyOf:
+                  - items:
+                      properties:
+                        prices:
+                          items:
+                            maxLength: 5000
+                            type: string
+                          type: array
+                        product:
+                          maxLength: 5000
+                          type: string
+                      required:
+                      - prices
+                      - product
+                      title: subscription_update_product_param
+                      type: object
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                proration_behavior:
+                  enum:
+                  - always_invoice
+                  - create_prorations
+                  - none
+                  type: string
+              required:
+              - default_allowed_updates
+              - enabled
+              - products
+              title: subscription_update_creation_param
+              type: object
+          title: features_creation_param
+          type: object
+        login_page:
+          description: The hosted login page for this configuration. Learn more about the portal login page in our [integration docs](https://stripe.com/docs/billing/subscriptions/integrating-customer-portal#share).
+          properties:
+            enabled:
+              type: boolean
+          required:
+          - enabled
+          title: login_page_create_param
+          type: object
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+    PaymentMethodConfigResourcePaymentMethodConfigurationsList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/payment_method_configuration'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetPaymentMethodConfigurationsRequest:
+      type: object
+      properties: {}
+    PostPaymentMethodConfigurationsRequest:
+      type: object
+      properties:
+        acss_debit:
+          description: Canadian pre-authorized debit payments, check this [page](https://stripe.com/docs/payments/acss-debit) for more details like country availability.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        affirm:
+          description: '[Affirm](https://www.affirm.com/) gives your customers a way to split purchases over a series of payments. Depending on the purchase, they can pay with four interest-free payments (Split Pay) or pay over a longer term (Installments), which might include interest. Check this [page](https://stripe.com/docs/payments/affirm) for more details like country availability.'
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        afterpay_clearpay:
+          description: Afterpay gives your customers a way to pay for purchases in installments, check this [page](https://stripe.com/docs/payments/afterpay-clearpay) for more details like country availability. Afterpay is particularly popular among businesses selling fashion, beauty, and sports products.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        alipay:
+          description: Alipay is a digital wallet in China that has more than a billion active users worldwide. Alipay users can pay on the web or on a mobile device using login credentials or their Alipay app. Alipay has a low dispute rate and reduces fraud by authenticating payments using the customer's login credentials. Check this [page](https://stripe.com/docs/payments/alipay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        apple_pay:
+          description: Stripe users can accept [Apple Pay](/payments/apple-pay) in iOS applications in iOS 9 and later, and on the web in Safari starting with iOS 10 or macOS Sierra. There are no additional fees to process Apple Pay payments, and the [pricing](/pricing) is the same as other card transactions. Check this [page](https://stripe.com/docs/apple-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        apple_pay_later:
+          description: Apple Pay Later, a payment method for customers to buy now and pay later, gives your customers a way to split purchases into four installments across six weeks.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        au_becs_debit:
+          description: Stripe users in Australia can accept Bulk Electronic Clearing System (BECS) direct debit payments from customers with an Australian bank account. Check this [page](https://stripe.com/docs/payments/au-becs-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        bacs_debit:
+          description: Stripe users in the UK can accept Bacs Direct Debit payments from customers with a UK bank account, check this [page](https://stripe.com/docs/payments/payment-methods/bacs-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        bancontact:
+          description: Bancontact is the most popular online payment method in Belgium, with over 15 million cards in circulation. [Customers](https://stripe.com/docs/api/customers) use a Bancontact card or mobile app linked to a Belgian bank account to make online payments that are secure, guaranteed, and confirmed immediately. Check this [page](https://stripe.com/docs/payments/bancontact) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        blik:
+          description: BLIK is a [single use](https://stripe.com/docs/payments/payment-methods#usage) payment method that requires customers to authenticate their payments. When customers want to pay online using BLIK, they request a six-digit code from their banking application and enter it into the payment collection form. Check this [page](https://stripe.com/docs/payments/blik) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        boleto:
+          description: Boleto is an official (regulated by the Central Bank of Brazil) payment method in Brazil. Check this [page](https://stripe.com/docs/payments/boleto) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        card:
+          description: Cards are a popular way for consumers and businesses to pay online or in person. Stripe supports global and local card networks.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        cartes_bancaires:
+          description: Cartes Bancaires is France's local card network. More than 95% of these cards are co-branded with either Visa or Mastercard, meaning you can process these cards over either Cartes Bancaires or the Visa or Mastercard networks. Check this [page](https://stripe.com/docs/payments/cartes-bancaires) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        cashapp:
+          description: Cash App is a popular consumer app in the US that allows customers to bank, invest, send, and receive money using their digital wallet. Check this [page](https://stripe.com/docs/payments/cash-app-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        eps:
+          description: EPS is an Austria-based payment method that allows customers to complete transactions online using their bank credentials. EPS is supported by all Austrian banks and is accepted by over 80% of Austrian online retailers. Check this [page](https://stripe.com/docs/payments/eps) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        fpx:
+          description: Financial Process Exchange (FPX) is a Malaysia-based payment method that allows customers to complete transactions online using their bank credentials. Bank Negara Malaysia (BNM), the Central Bank of Malaysia, and eleven other major Malaysian financial institutions are members of the PayNet Group, which owns and operates FPX. It is one of the most popular online payment methods in Malaysia, with nearly 90 million transactions in 2018 according to BNM. Check this [page](https://stripe.com/docs/payments/fpx) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        giropay:
+          description: giropay is a German payment method based on online banking, introduced in 2006. It allows customers to complete transactions online using their online banking environment, with funds debited from their bank account. Depending on their bank, customers confirm payments on giropay using a second factor of authentication or a PIN. giropay accounts for 10% of online checkouts in Germany. Check this [page](https://stripe.com/docs/payments/giropay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        google_pay:
+          description: Google Pay allows customers to make payments in your app or website using any credit or debit card saved to their Google Account, including those from Google Play, YouTube, Chrome, or an Android device. Use the Google Pay API to request any credit or debit card stored in your customer's Google account. Check this [page](https://stripe.com/docs/google-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        grabpay:
+          description: GrabPay is a payment method developed by [Grab](https://www.grab.com/sg/consumer/finance/pay/). GrabPay is a digital wallet - customers maintain a balance in their wallets that they pay out with. Check this [page](https://stripe.com/docs/payments/grabpay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        ideal:
+          description: iDEAL is a Netherlands-based payment method that allows customers to complete transactions online using their bank credentials. All major Dutch banks are members of Currence, the scheme that operates iDEAL, making it the most popular online payment method in the Netherlands with a share of online transactions close to 55%. Check this [page](https://stripe.com/docs/payments/ideal) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        jcb:
+          description: JCB is a credit card company based in Japan. JCB is currently available in Japan to businesses approved by JCB, and available to all businesses in Australia, Canada, Hong Kong, Japan, New Zealand, Singapore, Switzerland, United Kingdom, United States, and all countries in the European Economic Area except Iceland. Check this [page](https://support.stripe.com/questions/accepting-japan-credit-bureau-%28jcb%29-payments) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        klarna:
+          description: Klarna gives customers a range of [payment options](https://stripe.com/docs/payments/klarna#payment-options) during checkout. Available payment options vary depending on the customer's billing address and the transaction amount. These payment options make it convenient for customers to purchase items in all price ranges. Check this [page](https://stripe.com/docs/payments/klarna) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        konbini:
+          description: Konbini allows customers in Japan to pay for bills and online purchases at convenience stores with cash. Check this [page](https://stripe.com/docs/payments/konbini) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        link:
+          description: '[Link](https://stripe.com/docs/payments/link) is a payment method network. With Link, users save their payment details once, then reuse that information to pay with one click for any business on the network.'
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        name:
+          description: Configuration name.
+          maxLength: 100
+          type: string
+        oxxo:
+          description: OXXO is a Mexican chain of convenience stores with thousands of locations across Latin America and represents nearly 20% of online transactions in Mexico. OXXO allows customers to pay bills and online purchases in-store with cash. Check this [page](https://stripe.com/docs/payments/oxxo) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        p24:
+          description: Przelewy24 is a Poland-based payment method aggregator that allows customers to complete transactions online using bank transfers and other methods. Bank transfers account for 30% of online payments in Poland and Przelewy24 provides a way for customers to pay with over 165 banks. Check this [page](https://stripe.com/docs/payments/p24) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        parent:
+          description: Configuration's parent configuration. Specify to create a child configuration.
+          maxLength: 100
+          type: string
+        paynow:
+          description: PayNow is a Singapore-based payment method that allows customers to make a payment using their preferred app from participating banks and participating non-bank financial institutions. Check this [page](https://stripe.com/docs/payments/paynow) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        paypal:
+          description: PayPal, a digital wallet popular with customers in Europe, allows your customers worldwide to pay using their PayPal account. Check this [page](https://stripe.com/docs/payments/paypal) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        promptpay:
+          description: PromptPay is a Thailand-based payment method that allows customers to make a payment using their preferred app from participating banks. Check this [page](https://stripe.com/docs/payments/promptpay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        revolut_pay:
+          description: Revolut Pay, developed by Revolut, a global finance app, is a digital wallet payment method. Revolut Pay uses the customer’s stored balance or cards to fund the payment, and offers the option for non-Revolut customers to save their details after their first purchase.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        sepa_debit:
+          description: The [Single Euro Payments Area (SEPA)](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area) is an initiative of the European Union to simplify payments within and across member countries. SEPA established and enforced banking standards to allow for the direct debiting of every EUR-denominated bank account within the SEPA region, check this [page](https://stripe.com/docs/payments/sepa-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        sofort:
+          description: Stripe users in Europe and the United States can use the [Payment Intents API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from customers. Check this [page](https://stripe.com/docs/payments/sofort) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        us_bank_account:
+          description: Stripe users in the United States can accept ACH direct debit payments from customers with a US bank account using the Automated Clearing House (ACH) payments system operated by Nacha. Check this [page](https://stripe.com/docs/payments/ach-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        wechat_pay:
+          description: WeChat, owned by Tencent, is China's leading mobile app with over 1 billion monthly active users. Chinese consumers can use WeChat Pay to pay for goods and services inside of businesses' apps and websites. WeChat Pay users buy most frequently in gaming, e-commerce, travel, online education, and food/nutrition. Check this [page](https://stripe.com/docs/payments/wechat-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+    PostPaymentMethodConfigurationsConfigurationRequest:
+      type: object
+      properties:
+        acss_debit:
+          description: Canadian pre-authorized debit payments, check this [page](https://stripe.com/docs/payments/acss-debit) for more details like country availability.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        active:
+          description: Whether the configuration can be used for new payments.
+          type: boolean
+        affirm:
+          description: '[Affirm](https://www.affirm.com/) gives your customers a way to split purchases over a series of payments. Depending on the purchase, they can pay with four interest-free payments (Split Pay) or pay over a longer term (Installments), which might include interest. Check this [page](https://stripe.com/docs/payments/affirm) for more details like country availability.'
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        afterpay_clearpay:
+          description: Afterpay gives your customers a way to pay for purchases in installments, check this [page](https://stripe.com/docs/payments/afterpay-clearpay) for more details like country availability. Afterpay is particularly popular among businesses selling fashion, beauty, and sports products.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        alipay:
+          description: Alipay is a digital wallet in China that has more than a billion active users worldwide. Alipay users can pay on the web or on a mobile device using login credentials or their Alipay app. Alipay has a low dispute rate and reduces fraud by authenticating payments using the customer's login credentials. Check this [page](https://stripe.com/docs/payments/alipay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        apple_pay:
+          description: Stripe users can accept [Apple Pay](/payments/apple-pay) in iOS applications in iOS 9 and later, and on the web in Safari starting with iOS 10 or macOS Sierra. There are no additional fees to process Apple Pay payments, and the [pricing](/pricing) is the same as other card transactions. Check this [page](https://stripe.com/docs/apple-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        apple_pay_later:
+          description: Apple Pay Later, a payment method for customers to buy now and pay later, gives your customers a way to split purchases into four installments across six weeks.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        au_becs_debit:
+          description: Stripe users in Australia can accept Bulk Electronic Clearing System (BECS) direct debit payments from customers with an Australian bank account. Check this [page](https://stripe.com/docs/payments/au-becs-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        bacs_debit:
+          description: Stripe users in the UK can accept Bacs Direct Debit payments from customers with a UK bank account, check this [page](https://stripe.com/docs/payments/payment-methods/bacs-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        bancontact:
+          description: Bancontact is the most popular online payment method in Belgium, with over 15 million cards in circulation. [Customers](https://stripe.com/docs/api/customers) use a Bancontact card or mobile app linked to a Belgian bank account to make online payments that are secure, guaranteed, and confirmed immediately. Check this [page](https://stripe.com/docs/payments/bancontact) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        blik:
+          description: BLIK is a [single use](https://stripe.com/docs/payments/payment-methods#usage) payment method that requires customers to authenticate their payments. When customers want to pay online using BLIK, they request a six-digit code from their banking application and enter it into the payment collection form. Check this [page](https://stripe.com/docs/payments/blik) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        boleto:
+          description: Boleto is an official (regulated by the Central Bank of Brazil) payment method in Brazil. Check this [page](https://stripe.com/docs/payments/boleto) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        card:
+          description: Cards are a popular way for consumers and businesses to pay online or in person. Stripe supports global and local card networks.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        cartes_bancaires:
+          description: Cartes Bancaires is France's local card network. More than 95% of these cards are co-branded with either Visa or Mastercard, meaning you can process these cards over either Cartes Bancaires or the Visa or Mastercard networks. Check this [page](https://stripe.com/docs/payments/cartes-bancaires) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        cashapp:
+          description: Cash App is a popular consumer app in the US that allows customers to bank, invest, send, and receive money using their digital wallet. Check this [page](https://stripe.com/docs/payments/cash-app-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        eps:
+          description: EPS is an Austria-based payment method that allows customers to complete transactions online using their bank credentials. EPS is supported by all Austrian banks and is accepted by over 80% of Austrian online retailers. Check this [page](https://stripe.com/docs/payments/eps) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        fpx:
+          description: Financial Process Exchange (FPX) is a Malaysia-based payment method that allows customers to complete transactions online using their bank credentials. Bank Negara Malaysia (BNM), the Central Bank of Malaysia, and eleven other major Malaysian financial institutions are members of the PayNet Group, which owns and operates FPX. It is one of the most popular online payment methods in Malaysia, with nearly 90 million transactions in 2018 according to BNM. Check this [page](https://stripe.com/docs/payments/fpx) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        giropay:
+          description: giropay is a German payment method based on online banking, introduced in 2006. It allows customers to complete transactions online using their online banking environment, with funds debited from their bank account. Depending on their bank, customers confirm payments on giropay using a second factor of authentication or a PIN. giropay accounts for 10% of online checkouts in Germany. Check this [page](https://stripe.com/docs/payments/giropay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        google_pay:
+          description: Google Pay allows customers to make payments in your app or website using any credit or debit card saved to their Google Account, including those from Google Play, YouTube, Chrome, or an Android device. Use the Google Pay API to request any credit or debit card stored in your customer's Google account. Check this [page](https://stripe.com/docs/google-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        grabpay:
+          description: GrabPay is a payment method developed by [Grab](https://www.grab.com/sg/consumer/finance/pay/). GrabPay is a digital wallet - customers maintain a balance in their wallets that they pay out with. Check this [page](https://stripe.com/docs/payments/grabpay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        ideal:
+          description: iDEAL is a Netherlands-based payment method that allows customers to complete transactions online using their bank credentials. All major Dutch banks are members of Currence, the scheme that operates iDEAL, making it the most popular online payment method in the Netherlands with a share of online transactions close to 55%. Check this [page](https://stripe.com/docs/payments/ideal) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        jcb:
+          description: JCB is a credit card company based in Japan. JCB is currently available in Japan to businesses approved by JCB, and available to all businesses in Australia, Canada, Hong Kong, Japan, New Zealand, Singapore, Switzerland, United Kingdom, United States, and all countries in the European Economic Area except Iceland. Check this [page](https://support.stripe.com/questions/accepting-japan-credit-bureau-%28jcb%29-payments) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        klarna:
+          description: Klarna gives customers a range of [payment options](https://stripe.com/docs/payments/klarna#payment-options) during checkout. Available payment options vary depending on the customer's billing address and the transaction amount. These payment options make it convenient for customers to purchase items in all price ranges. Check this [page](https://stripe.com/docs/payments/klarna) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        konbini:
+          description: Konbini allows customers in Japan to pay for bills and online purchases at convenience stores with cash. Check this [page](https://stripe.com/docs/payments/konbini) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        link:
+          description: '[Link](https://stripe.com/docs/payments/link) is a payment method network. With Link, users save their payment details once, then reuse that information to pay with one click for any business on the network.'
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        name:
+          description: Configuration name.
+          maxLength: 100
+          type: string
+        oxxo:
+          description: OXXO is a Mexican chain of convenience stores with thousands of locations across Latin America and represents nearly 20% of online transactions in Mexico. OXXO allows customers to pay bills and online purchases in-store with cash. Check this [page](https://stripe.com/docs/payments/oxxo) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        p24:
+          description: Przelewy24 is a Poland-based payment method aggregator that allows customers to complete transactions online using bank transfers and other methods. Bank transfers account for 30% of online payments in Poland and Przelewy24 provides a way for customers to pay with over 165 banks. Check this [page](https://stripe.com/docs/payments/p24) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        paynow:
+          description: PayNow is a Singapore-based payment method that allows customers to make a payment using their preferred app from participating banks and participating non-bank financial institutions. Check this [page](https://stripe.com/docs/payments/paynow) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        paypal:
+          description: PayPal, a digital wallet popular with customers in Europe, allows your customers worldwide to pay using their PayPal account. Check this [page](https://stripe.com/docs/payments/paypal) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        promptpay:
+          description: PromptPay is a Thailand-based payment method that allows customers to make a payment using their preferred app from participating banks. Check this [page](https://stripe.com/docs/payments/promptpay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        revolut_pay:
+          description: Revolut Pay, developed by Revolut, a global finance app, is a digital wallet payment method. Revolut Pay uses the customer’s stored balance or cards to fund the payment, and offers the option for non-Revolut customers to save their details after their first purchase.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        sepa_debit:
+          description: The [Single Euro Payments Area (SEPA)](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area) is an initiative of the European Union to simplify payments within and across member countries. SEPA established and enforced banking standards to allow for the direct debiting of every EUR-denominated bank account within the SEPA region, check this [page](https://stripe.com/docs/payments/sepa-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        sofort:
+          description: Stripe users in Europe and the United States can use the [Payment Intents API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from customers. Check this [page](https://stripe.com/docs/payments/sofort) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        us_bank_account:
+          description: Stripe users in the United States can accept ACH direct debit payments from customers with a US bank account using the Automated Clearing House (ACH) payments system operated by Nacha. Check this [page](https://stripe.com/docs/payments/ach-debit) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+        wechat_pay:
+          description: WeChat, owned by Tencent, is China's leading mobile app with over 1 billion monthly active users. Chinese consumers can use WeChat Pay to pay for goods and services inside of businesses' apps and websites. WeChat Pay users buy most frequently in gaming, e-commerce, travel, online education, and food/nutrition. Check this [page](https://stripe.com/docs/payments/wechat-pay) for more details.
+          properties:
+            display_preference:
+              properties:
+                preference:
+                  enum:
+                  - none
+                  - 'off'
+                  - 'on'
+                  type: string
+              title: display_preference_param
+              type: object
+          title: payment_method_param
+          type: object
+    PostBillingPortalConfigurationsConfigurationRequest:
+      type: object
+      properties:
+        active:
+          description: Whether the configuration is active and can be used to create portal sessions.
+          type: boolean
+        business_profile:
+          description: The business information shown to customers in the portal.
+          properties:
+            headline:
+              anyOf:
+              - maxLength: 60
+                type: string
+              - enum:
+                - ''
+                type: string
+            privacy_policy_url:
+              anyOf:
+              - type: string
+              - enum:
+                - ''
+                type: string
+            terms_of_service_url:
+              anyOf:
+              - type: string
+              - enum:
+                - ''
+                type: string
+          title: business_profile_update_param
+          type: object
+        default_return_url:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: The default URL to redirect customers to when they click on the portal's link to return to your website. This can be [overriden](https://stripe.com/docs/api/customer_portal/sessions/create#create_portal_session-return_url) when creating the session.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        features:
+          description: Information about the features available in the portal.
+          properties:
+            customer_update:
+              properties:
+                allowed_updates:
+                  anyOf:
+                  - items:
+                      enum:
+                      - address
+                      - email
+                      - name
+                      - phone
+                      - shipping
+                      - tax_id
+                      type: string
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                enabled:
+                  type: boolean
+              title: customer_update_updating_param
+              type: object
+            invoice_history:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              title: invoice_list_param
+              type: object
+            payment_method_update:
+              properties:
+                enabled:
+                  type: boolean
+              required:
+              - enabled
+              title: payment_method_update_param
+              type: object
+            subscription_cancel:
+              properties:
+                cancellation_reason:
+                  properties:
+                    enabled:
+                      type: boolean
+                    options:
+                      anyOf:
+                      - items:
+                          enum:
+                          - customer_service
+                          - low_quality
+                          - missing_features
+                          - other
+                          - switched_service
+                          - too_complex
+                          - too_expensive
+                          - unused
+                          type: string
+                        type: array
+                      - enum:
+                        - ''
+                        type: string
+                  required:
+                  - enabled
+                  title: subscription_cancellation_reason_updating_param
+                  type: object
+                enabled:
+                  type: boolean
+                mode:
+                  enum:
+                  - at_period_end
+                  - immediately
+                  type: string
+                proration_behavior:
+                  enum:
+                  - always_invoice
+                  - create_prorations
+                  - none
+                  type: string
+              title: subscription_cancel_updating_param
+              type: object
+            subscription_pause:
+              properties:
+                enabled:
+                  type: boolean
+              title: subscription_pause_param
+              type: object
+            subscription_update:
+              properties:
+                default_allowed_updates:
+                  anyOf:
+                  - items:
+                      enum:
+                      - price
+                      - promotion_code
+                      - quantity
+                      type: string
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                enabled:
+                  type: boolean
+                products:
+                  anyOf:
+                  - items:
+                      properties:
+                        prices:
+                          items:
+                            maxLength: 5000
+                            type: string
+                          type: array
+                        product:
+                          maxLength: 5000
+                          type: string
+                      required:
+                      - prices
+                      - product
+                      title: subscription_update_product_param
+                      type: object
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
+                proration_behavior:
+                  enum:
+                  - always_invoice
+                  - create_prorations
+                  - none
+                  type: string
+              title: subscription_update_updating_param
+              type: object
+          title: features_updating_param
+          type: object
+        login_page:
+          description: The hosted login page for this configuration. Learn more about the portal login page in our [integration docs](https://stripe.com/docs/billing/subscriptions/integrating-customer-portal#share).
+          properties:
+            enabled:
+              type: boolean
+          required:
+          - enabled
+          title: login_page_update_param
+          type: object
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+    GetBillingPortalConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
+    billing_portal.configuration:
+      description: A portal configuration describes the functionality and behavior of a portal session.
+      properties:
+        active:
+          description: Whether the configuration is active and can be used to create portal sessions.
+          type: boolean
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          - $ref: '#/components/schemas/deleted_application'
+          description: ID of the Connect Application that created the configuration.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+            - $ref: '#/components/schemas/deleted_application'
+        business_profile:
+          $ref: '#/components/schemas/portal_business_profile'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        default_return_url:
+          description: The default URL to redirect customers to when they click on the portal's link to return to your website. This can be [overriden](https://stripe.com/docs/api/customer_portal/sessions/create#create_portal_session-return_url) when creating the session.
+          maxLength: 5000
+          nullable: true
+          type: string
+        features:
+          $ref: '#/components/schemas/portal_features'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        is_default:
+          description: Whether the configuration is the default. If `true`, this configuration can be managed in the Dashboard and portal sessions will use this configuration unless it is overriden when creating the session.
+          type: boolean
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        login_page:
+          $ref: '#/components/schemas/portal_login_page'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - billing_portal.configuration
+          type: string
+        updated:
+          description: Time at which the object was last updated. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+      required:
+      - active
+      - business_profile
+      - created
+      - features
+      - id
+      - is_default
+      - livemode
+      - login_page
+      - object
+      - updated
+      title: PortalConfiguration
+      type: object
+      x-expandableFields:
+      - application
+      - business_profile
+      - features
+      - login_page
+      x-resourceId: billing_portal.configuration

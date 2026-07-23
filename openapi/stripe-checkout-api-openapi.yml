@@ -1,11 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Stripe Checkout API
-  description: >-
-    Checkout is a low-code payment integration that creates a customizable form
-    for collecting payments. You can embed Checkout directly in your website or
-    redirect customers to a Stripe-hosted payment page. It supports one-time
-    payments and subscriptions and accepts over 40 local payment methods.
+  title: Stripe Accounts Account Checkout API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -13,144 +9,130 @@ info:
   termsOfService: https://stripe.com/us/terms/
   version: '2023-10-16'
   x-stripeSpecFilename: spec3
-security:
-  - basicAuth: []
-  - bearerAuth: []
 servers:
-  - url: https://api.stripe.com/
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Checkout
 paths:
   /v1/checkout/sessions:
     get:
       description: <p>Returns a list of Checkout Sessions.</p>
-      operationId: getCheckoutSessions
+      operationId: GetCheckoutSessions
       parameters:
-        - description: >-
-            Only return the Checkout Sessions that were created during the given
-            date interval.
-          explode: true
-          in: query
-          name: created
-          required: false
-          schema:
-            anyOf:
-              - properties:
-                  gt:
-                    type: integer
-                  gte:
-                    type: integer
-                  lt:
-                    type: integer
-                  lte:
-                    type: integer
-                title: range_query_specs
-                type: object
-              - type: integer
-          style: deepObject
-        - description: Only return the Checkout Sessions for the Customer specified.
-          in: query
-          name: customer
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
-        - description: >-
-            Only return the Checkout Sessions for the Customer details
-            specified.
-          explode: true
-          in: query
-          name: customer_details
-          required: false
-          schema:
-            properties:
-              email:
-                type: string
-            required:
-              - email
-            title: customer_details_params
+      - description: Only return the Checkout Sessions that were created during the given date interval.
+        explode: true
+        in: query
+        name: created
+        required: false
+        schema:
+          anyOf:
+          - properties:
+              gt:
+                type: integer
+              gte:
+                type: integer
+              lt:
+                type: integer
+              lte:
+                type: integer
+            title: range_query_specs
             type: object
-          style: deepObject
-        - description: >-
-            A cursor for use in pagination. `ending_before` is an object ID that
-            defines your place in the list. For instance, if you make a list
-            request and receive 100 objects, starting with `obj_bar`, your
-            subsequent call can include `ending_before=obj_bar` in order to
-            fetch the previous page of the list.
-          in: query
-          name: ending_before
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
-        - description: Specifies which fields in the response should be expanded.
-          explode: true
-          in: query
-          name: expand
-          required: false
-          schema:
-            items:
-              maxLength: 5000
+          - type: integer
+        style: deepObject
+      - description: Only return the Checkout Sessions for the Customer specified.
+        in: query
+        name: customer
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return the Checkout Sessions for the Customer details specified.
+        explode: true
+        in: query
+        name: customer_details
+        required: false
+        schema:
+          properties:
+            email:
               type: string
-            type: array
-          style: deepObject
-        - description: >-
-            A limit on the number of objects to be returned. Limit can range
-            between 1 and 100, and the default is 10.
-          in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-          style: form
-        - description: Only return the Checkout Session for the PaymentIntent specified.
-          in: query
-          name: payment_intent
-          required: false
-          schema:
+          required:
+          - email
+          title: customer_details_params
+          type: object
+        style: deepObject
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
             maxLength: 5000
             type: string
-          style: form
-        - description: Only return the Checkout Sessions for the Payment Link specified.
-          in: query
-          name: payment_link
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
-        - description: >-
-            A cursor for use in pagination. `starting_after` is an object ID
-            that defines your place in the list. For instance, if you make a
-            list request and receive 100 objects, ending with `obj_foo`, your
-            subsequent call can include `starting_after=obj_foo` in order to
-            fetch the next page of the list.
-          in: query
-          name: starting_after
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
-        - description: Only return the Checkout Sessions matching the given status.
-          in: query
-          name: status
-          required: false
-          schema:
-            enum:
-              - complete
-              - expired
-              - open
-            type: string
-          style: form
-        - description: Only return the Checkout Session for the subscription specified.
-          in: query
-          name: subscription
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Only return the Checkout Session for the PaymentIntent specified.
+        in: query
+        name: payment_intent
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return the Checkout Sessions for the Payment Link specified.
+        in: query
+        name: payment_link
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return the Checkout Sessions matching the given status.
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - complete
+          - expired
+          - open
+          type: string
+        style: form
+      - description: Only return the Checkout Session for the subscription specified.
+        in: query
+        name: subscription
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -166,7 +148,7 @@ paths:
               schema:
                 description: ''
                 x-expandableFields:
-                  - data
+                - data
                 $ref: '#/components/schemas/PaymentPagesCheckoutSessionList'
           description: Successful response.
         default:
@@ -175,19 +157,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Get   Checkout Sessions
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Checkout
-        - Get
-        - Sessions
+      - Checkout
     post:
       description: <p>Creates a Session object.</p>
-      operationId: postCheckoutSessions
+      operationId: PostCheckoutSessions
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -269,39 +243,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Post   Checkout Sessions
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Checkout
-        - Post
-        - Sessions
+      - Checkout
   /v1/checkout/sessions/{session}:
     get:
       description: <p>Retrieves a Session object.</p>
-      operationId: getCheckoutSessionsSession
+      operationId: GetCheckoutSessionsSession
       parameters:
-        - description: Specifies which fields in the response should be expanded.
-          explode: true
-          in: query
-          name: expand
-          required: false
-          schema:
-            items:
-              maxLength: 5000
-              type: string
-            type: array
-          style: deepObject
-        - in: path
-          name: session
-          required: true
-          schema:
-            maxLength: 66
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
             type: string
-          style: simple
+          type: array
+        style: deepObject
+      - in: path
+        name: session
+        required: true
+        schema:
+          maxLength: 66
+          type: string
+        style: simple
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -323,34 +289,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Get   Checkout Sessions Session
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Checkout
-        - Get
-        - Sessions
+      - Checkout
   /v1/checkout/sessions/{session}/expire:
     post:
-      description: >-
-        <p>A Session can be expired when it is in one of these statuses:
-        <code>open</code> </p>
+      description: '<p>A Session can be expired when it is in one of these statuses: <code>open</code> </p>
 
 
-        <p>After it expires, a customer can’t complete a Session and customers
-        loading the Session see a message saying the Session is expired.</p>
-      operationId: postCheckoutSessionsSessionExpire
+        <p>After it expires, a customer can’t complete a Session and customers loading the Session see a message saying the Session is expired.</p>'
+      operationId: PostCheckoutSessionsSessionExpire
       parameters:
-        - in: path
-          name: session
-          required: true
-          schema:
-            maxLength: 5000
-            type: string
-          style: simple
+      - in: path
+        name: session
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -375,79 +330,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Post   Checkout Sessions Session Expire
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Checkout
-        - Expire
-        - Post
-        - Sessions
+      - Checkout
   /v1/checkout/sessions/{session}/line_items:
     get:
-      description: >-
-        <p>When retrieving a Checkout Session, there is an includable
-        <strong>line_items</strong> property containing the first handful of
-        those items. There is also a URL where you can retrieve the full
-        (paginated) list of line items.</p>
-      operationId: getCheckoutSessionsSessionLineItems
+      description: <p>When retrieving a Checkout Session, there is an includable <strong>line_items</strong> property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+      operationId: GetCheckoutSessionsSessionLineItems
       parameters:
-        - description: >-
-            A cursor for use in pagination. `ending_before` is an object ID that
-            defines your place in the list. For instance, if you make a list
-            request and receive 100 objects, starting with `obj_bar`, your
-            subsequent call can include `ending_before=obj_bar` in order to
-            fetch the previous page of the list.
-          in: query
-          name: ending_before
-          required: false
-          schema:
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
             maxLength: 5000
             type: string
-          style: form
-        - description: Specifies which fields in the response should be expanded.
-          explode: true
-          in: query
-          name: expand
-          required: false
-          schema:
-            items:
-              maxLength: 5000
-              type: string
-            type: array
-          style: deepObject
-        - description: >-
-            A limit on the number of objects to be returned. Limit can range
-            between 1 and 100, and the default is 10.
-          in: query
-          name: limit
-          required: false
-          schema:
-            type: integer
-          style: form
-        - in: path
-          name: session
-          required: true
-          schema:
-            maxLength: 5000
-            type: string
-          style: simple
-        - description: >-
-            A cursor for use in pagination. `starting_after` is an object ID
-            that defines your place in the list. For instance, if you make a
-            list request and receive 100 objects, ending with `obj_foo`, your
-            subsequent call can include `starting_after=obj_foo` in order to
-            fetch the next page of the list.
-          in: query
-          name: starting_after
-          required: false
-          schema:
-            maxLength: 5000
-            type: string
-          style: form
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - in: path
+        name: session
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -463,7 +393,7 @@ paths:
               schema:
                 description: ''
                 x-expandableFields:
-                  - data
+                - data
                 $ref: '#/components/schemas/PaymentPagesCheckoutSessionListLineItems'
           description: Successful response.
         default:
@@ -472,634 +402,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Get   Checkout Sessions Session Line Items
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Checkout
-        - Get
-        - Items
-        - Line
-        - Sessions
+      - Checkout
 components:
   schemas:
+    GetCheckoutSessionsRequest:
+      type: object
+      properties: {}
     error:
       description: An error response from the Stripe API
       properties:
         error:
           $ref: '#/components/schemas/api_errors'
       required:
-        - error
+      - error
       type: object
-    checkout.session:
-      description: >-
-        A Checkout Session represents your customer's session as they pay for
-
-        one-time purchases or subscriptions through
-        [Checkout](https://stripe.com/docs/payments/checkout)
-
-        or [Payment Links](https://stripe.com/docs/payments/payment-links). We
-        recommend creating a
-
-        new Session each time your customer attempts to pay.
-
-
-        Once payment is successful, the Checkout Session will contain a
-        reference
-
-        to the [Customer](https://stripe.com/docs/api/customers), and either the
-        successful
-
-        [PaymentIntent](https://stripe.com/docs/api/payment_intents) or an
-        active
-
-        [Subscription](https://stripe.com/docs/api/subscriptions).
-
-
-        You can create a Checkout Session on your server and redirect to its URL
-
-        to begin Checkout.
-
-
-        Related guide: [Checkout
-        quickstart](https://stripe.com/docs/checkout/quickstart)
+    GetCheckoutSessionsSessionLineItemsRequest:
+      type: object
+      properties: {}
+    PostCheckoutSessionsSessionExpireRequest:
+      type: object
       properties:
-        after_expiration:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_after_expiration
-          description: >-
-            When set, provides configuration for actions to take if this
-            Checkout Session expires.
-          nullable: true
-        allow_promotion_codes:
-          description: Enables user redeemable promotion codes.
-          nullable: true
-          type: boolean
-        amount_subtotal:
-          description: Total of all items before discounts or taxes are applied.
-          nullable: true
-          type: integer
-        amount_total:
-          description: Total of all items after discounts and taxes are applied.
-          nullable: true
-          type: integer
-        automatic_tax:
-          $ref: '#/components/schemas/payment_pages_checkout_session_automatic_tax'
-        billing_address_collection:
-          description: >-
-            Describes whether Checkout should collect the customer's billing
-            address.
-          enum:
-            - auto
-            - required
-          nullable: true
-          type: string
-        cancel_url:
-          description: >-
-            If set, Checkout displays a back button and customers will be
-            directed to this URL if they decide to cancel payment and return to
-            your website.
-          maxLength: 5000
-          nullable: true
-          type: string
-        client_reference_id:
-          description: |-
-            A unique string to reference the Checkout Session. This can be a
-            customer ID, a cart ID, or similar, and can be used to reconcile the
-            Session with your internal systems.
-          maxLength: 5000
-          nullable: true
-          type: string
-        client_secret:
-          description: >-
-            Client secret to be used when initializing Stripe.js embedded
-            checkout.
-          maxLength: 5000
-          nullable: true
-          type: string
-        consent:
-          anyOf:
-            - $ref: '#/components/schemas/payment_pages_checkout_session_consent'
-          description: Results of `consent_collection` for this session.
-          nullable: true
-        consent_collection:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_consent_collection
-          description: >-
-            When set, provides configuration for the Checkout Session to gather
-            active consent from customers.
-          nullable: true
-        created:
-          description: >-
-            Time at which the object was created. Measured in seconds since the
-            Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: >-
-            Three-letter [ISO currency
-            code](https://www.iso.org/iso-4217-currency-codes.html), in
-            lowercase. Must be a [supported
-            currency](https://stripe.com/docs/currencies).
-          nullable: true
-          type: string
-        currency_conversion:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_currency_conversion
-          description: >-
-            Currency conversion details for automatic currency conversion
-            sessions
-          nullable: true
-        custom_fields:
-          description: >-
-            Collect additional information from your customer using custom
-            fields. Up to 2 fields are supported.
-          items:
-            $ref: '#/components/schemas/payment_pages_checkout_session_custom_fields'
-          type: array
-        custom_text:
-          $ref: '#/components/schemas/payment_pages_checkout_session_custom_text'
-        customer:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/customer'
-            - $ref: '#/components/schemas/deleted_customer'
-          description: >-
-            The ID of the customer for this Session.
-
-            For Checkout Sessions in `subscription` mode or Checkout Sessions
-            with `customer_creation` set as `always` in `payment` mode, Checkout
-
-            will create a new customer object based on information provided
-
-            during the payment flow unless an existing customer was provided
-            when
-
-            the Session was created.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/customer'
-              - $ref: '#/components/schemas/deleted_customer'
-        customer_creation:
-          description: >-
-            Configure whether a Checkout Session creates a Customer when the
-            Checkout Session completes.
-          enum:
-            - always
-            - if_required
-          nullable: true
-          type: string
-        customer_details:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_customer_details
-          description: >-
-            The customer details including the customer's tax exempt status and
-            the customer's tax IDs. Only the customer's email is present on
-            Sessions in `setup` mode.
-          nullable: true
-        customer_email:
-          description: >-
-            If provided, this value will be used when the Customer object is
-            created.
-
-            If not provided, customers will be asked to enter their email
-            address.
-
-            Use this parameter to prefill customer data if you already have an
-            email
-
-            on file. To access information about the customer once the payment
-            flow is
-
-            complete, use the `customer` attribute.
-          maxLength: 5000
-          nullable: true
-          type: string
-        expires_at:
-          description: The timestamp at which the Checkout Session will expire.
-          format: unix-time
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        invoice:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/invoice'
-          description: ID of the invoice created by the Checkout Session, if it exists.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/invoice'
-        invoice_creation:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_invoice_creation
-          description: Details on the state of invoice creation for the Checkout Session.
-          nullable: true
-        line_items:
-          description: The line items purchased by the customer.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/item'
-              type: array
-            has_more:
-              description: >-
-                True if this list has another page of items after this one that
-                can be fetched.
-              type: boolean
-            object:
-              description: >-
-                String representing the object's type. Objects of the same type
-                share the same value. Always has the value `list`.
-              enum:
-                - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              type: string
-          required:
-            - data
-            - has_more
-            - object
-            - url
-          title: PaymentPagesCheckoutSessionListLineItems
-          type: object
-          x-expandableFields:
-            - data
-        livemode:
-          description: >-
-            Has the value `true` if the object exists in live mode or the value
-            `false` if the object exists in test mode.
-          type: boolean
-        locale:
-          description: >-
-            The IETF language tag of the locale Checkout is displayed in. If
-            blank or `auto`, the browser's locale is used.
-          enum:
-            - auto
-            - bg
-            - cs
-            - da
-            - de
-            - el
-            - en
-            - en-GB
-            - es
-            - es-419
-            - et
-            - fi
-            - fil
-            - fr
-            - fr-CA
-            - hr
-            - hu
-            - id
-            - it
-            - ja
-            - ko
-            - lt
-            - lv
-            - ms
-            - mt
-            - nb
-            - nl
-            - pl
-            - pt
-            - pt-BR
-            - ro
-            - ru
-            - sk
-            - sl
-            - sv
-            - th
-            - tr
-            - vi
-            - zh
-            - zh-HK
-            - zh-TW
-          nullable: true
-          type: string
-          x-stripeBypassValidation: true
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: >-
-            Set of [key-value pairs](https://stripe.com/docs/api/metadata) that
-            you can attach to an object. This can be useful for storing
-            additional information about the object in a structured format.
-          nullable: true
-          type: object
-        mode:
-          description: The mode of the Checkout Session.
-          enum:
-            - payment
-            - setup
-            - subscription
-          type: string
-        object:
-          description: >-
-            String representing the object's type. Objects of the same type
-            share the same value.
-          enum:
-            - checkout.session
-          type: string
-        payment_intent:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/payment_intent'
-          description: The ID of the PaymentIntent for Checkout Sessions in `payment` mode.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/payment_intent'
-        payment_link:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/payment_link'
-          description: The ID of the Payment Link that created this Session.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/payment_link'
-        payment_method_collection:
-          description: >-
-            Configure whether a Checkout Session should collect a payment
-            method.
-          enum:
-            - always
-            - if_required
-          nullable: true
-          type: string
-        payment_method_configuration_details:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_method_config_biz_payment_method_configuration_details
-          description: >-
-            Information about the payment method configuration used for this
-            Checkout session if using dynamic payment methods.
-          nullable: true
-        payment_method_options:
-          anyOf:
-            - $ref: '#/components/schemas/checkout_session_payment_method_options'
-          description: >-
-            Payment-method-specific configuration for the PaymentIntent or
-            SetupIntent of this CheckoutSession.
-          nullable: true
-        payment_method_types:
-          description: |-
-            A list of the types of payment methods (e.g. card) this Checkout
-            Session is allowed to accept.
+        expand:
+          description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-        payment_status:
-          description: >-
-            The payment status of the Checkout Session, one of `paid`, `unpaid`,
-            or `no_payment_required`.
-
-            You can use this value to decide when to fulfill your customer's
-            order.
-          enum:
-            - no_payment_required
-            - paid
-            - unpaid
-          type: string
-        phone_number_collection:
-          $ref: >-
-            #/components/schemas/payment_pages_checkout_session_phone_number_collection
-        recovered_from:
-          description: >-
-            The ID of the original expired Checkout Session that triggered the
-            recovery flow.
-          maxLength: 5000
-          nullable: true
-          type: string
-        redirect_on_completion:
-          description: >-
-            Applies to Checkout Sessions with `ui_mode: embedded`. By default,
-            Stripe will always redirect to your return_url after a successful
-            confirmation. If you set `redirect_on_completion: 'if_required'`,
-            then we will only redirect if your user chooses a redirect-based
-            payment method.
-          enum:
-            - always
-            - if_required
-            - never
-          type: string
-        return_url:
-          description: >-
-            Applies to Checkout Sessions with `ui_mode: embedded`. The URL to
-            redirect your customer back to after they authenticate or cancel
-            their payment on the payment method's app or site.
-          maxLength: 5000
-          type: string
-        setup_intent:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/setup_intent'
-          description: The ID of the SetupIntent for Checkout Sessions in `setup` mode.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/setup_intent'
-        shipping_address_collection:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_shipping_address_collection
-          description: >-
-            When set, provides configuration for Checkout to collect a shipping
-            address from a customer.
-          nullable: true
-        shipping_cost:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_shipping_cost
-          description: >-
-            The details of the customer cost of shipping, including the customer
-            chosen ShippingRate.
-          nullable: true
-        shipping_details:
-          anyOf:
-            - $ref: '#/components/schemas/shipping'
-          description: Shipping information for this Checkout Session.
-          nullable: true
-        shipping_options:
-          description: The shipping rate options applied to this Session.
-          items:
-            $ref: >-
-              #/components/schemas/payment_pages_checkout_session_shipping_option
-          type: array
-        status:
-          description: >-
-            The status of the Checkout Session, one of `open`, `complete`, or
-            `expired`.
-          enum:
-            - complete
-            - expired
-            - open
-          nullable: true
-          type: string
-        submit_type:
-          description: >-
-            Describes the type of transaction being performed by Checkout in
-            order to customize
-
-            relevant text on the page, such as the submit button. `submit_type`
-            can only be
-
-            specified on Checkout Sessions in `payment` mode, but not Checkout
-            Sessions
-
-            in `subscription` or `setup` mode. Possible values are `auto`,
-            `pay`, `book`, `donate`. If blank or `auto`, `pay` is used.
-          enum:
-            - auto
-            - book
-            - donate
-            - pay
-          nullable: true
-          type: string
-        subscription:
-          anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/subscription'
-          description: >-
-            The ID of the subscription for Checkout Sessions in `subscription`
-            mode.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-              - $ref: '#/components/schemas/subscription'
-        success_url:
-          description: |-
-            The URL the customer will be directed to after the payment or
-            subscription creation is successful.
-          maxLength: 5000
-          nullable: true
-          type: string
-        tax_id_collection:
-          $ref: >-
-            #/components/schemas/payment_pages_checkout_session_tax_id_collection
-        total_details:
-          anyOf:
-            - $ref: >-
-                #/components/schemas/payment_pages_checkout_session_total_details
-          description: Tax and discount details for the computed total amount.
-          nullable: true
-        ui_mode:
-          description: The UI mode of the Session. Can be `hosted` (default) or `embedded`.
-          enum:
-            - embedded
-            - hosted
-          nullable: true
-          type: string
-          x-stripeBypassValidation: true
-        url:
-          description: >-
-            The URL to the Checkout Session. Redirect customers to this URL to
-            take them to Checkout. If you’re using [Custom
-            Domains](https://stripe.com/docs/payments/checkout/custom-domains),
-            the URL will use your subdomain. Otherwise, it’ll use
-            `checkout.stripe.com.`
-
-            This value is only present when the session is active.
-          maxLength: 5000
-          nullable: true
-          type: string
-      required:
-        - automatic_tax
-        - created
-        - custom_fields
-        - custom_text
-        - expires_at
-        - id
-        - livemode
-        - mode
-        - object
-        - payment_method_types
-        - payment_status
-        - shipping_options
-      title: Session
-      type: object
-      x-expandableFields:
-        - after_expiration
-        - automatic_tax
-        - consent
-        - consent_collection
-        - currency_conversion
-        - custom_fields
-        - custom_text
-        - customer
-        - customer_details
-        - invoice
-        - invoice_creation
-        - line_items
-        - payment_intent
-        - payment_link
-        - payment_method_configuration_details
-        - payment_method_options
-        - phone_number_collection
-        - setup_intent
-        - shipping_address_collection
-        - shipping_cost
-        - shipping_details
-        - shipping_options
-        - subscription
-        - tax_id_collection
-        - total_details
-      x-resourceId: checkout.session
-    GetCheckoutSessionsRequest:
-      type: object
-      properties: {}
-    PaymentPagesCheckoutSessionList:
-      type: object
-      required:
-        - data
-        - has_more
-        - object
-        - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/checkout.session'
-          type: array
-        has_more:
-          description: >-
-            True if this list has another page of items after this one that can
-            be fetched.
-          type: boolean
-        object:
-          description: >-
-            String representing the object's type. Objects of the same type
-            share the same value. Always has the value `list`.
-          enum:
-            - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     PostCheckoutSessionsRequest:
       type: object
       properties:
@@ -1113,7 +442,7 @@ components:
                 enabled:
                   type: boolean
               required:
-                - enabled
+              - enabled
               title: recovery_params
               type: object
           title: after_expiration_params
@@ -1122,78 +451,63 @@ components:
           description: Enables user redeemable promotion codes.
           type: boolean
         automatic_tax:
-          description: >-
-            Settings for automatic tax lookup for this session and resulting
-            payments, invoices, and subscriptions.
+          description: Settings for automatic tax lookup for this session and resulting payments, invoices, and subscriptions.
           properties:
             enabled:
               type: boolean
           required:
-            - enabled
+          - enabled
           title: automatic_tax_params
           type: object
         billing_address_collection:
-          description: >-
-            Specify whether Checkout should collect the customer's billing
-            address.
+          description: Specify whether Checkout should collect the customer's billing address.
           enum:
-            - auto
-            - required
+          - auto
+          - required
           type: string
         cancel_url:
-          description: >-
-            If set, Checkout displays a back button and customers will be
-            directed to this URL if they decide to cancel payment and return to
-            your website.
+          description: If set, Checkout displays a back button and customers will be directed to this URL if they decide to cancel payment and return to your website.
           maxLength: 5000
           type: string
         client_reference_id:
-          description: |-
-            A unique string to reference the Checkout Session. This can be a
+          description: 'A unique string to reference the Checkout Session. This can be a
+
             customer ID, a cart ID, or similar, and can be used to reconcile the
-            session with your internal systems.
+
+            session with your internal systems.'
           maxLength: 200
           type: string
         consent_collection:
-          description: >-
-            Configure fields for the Checkout Session to gather active consent
-            from customers.
+          description: Configure fields for the Checkout Session to gather active consent from customers.
           properties:
             payment_method_reuse_agreement:
               properties:
                 position:
                   enum:
-                    - auto
-                    - hidden
+                  - auto
+                  - hidden
                   type: string
               required:
-                - position
+              - position
               title: payment_method_reuse_agreement_params
               type: object
             promotions:
               enum:
-                - auto
-                - none
+              - auto
+              - none
               type: string
             terms_of_service:
               enum:
-                - none
-                - required
+              - none
+              - required
               type: string
           title: consent_collection_params
           type: object
         currency:
-          description: >-
-            Three-letter [ISO currency
-            code](https://www.iso.org/iso-4217-currency-codes.html), in
-            lowercase. Must be a [supported
-            currency](https://stripe.com/docs/currencies). Required in `setup`
-            mode when `payment_method_types` is not set.
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies). Required in `setup` mode when `payment_method_types` is not set.
           type: string
         custom_fields:
-          description: >-
-            Collect additional information from your customer using custom
-            fields. Up to 2 fields are supported.
+          description: Collect additional information from your customer using custom fields. Up to 2 fields are supported.
           items:
             properties:
               dropdown:
@@ -1208,13 +522,13 @@ components:
                           maxLength: 100
                           type: string
                       required:
-                        - label
-                        - value
+                      - label
+                      - value
                       title: custom_field_option_param
                       type: object
                     type: array
                 required:
-                  - options
+                - options
                 title: custom_field_dropdown_param
                 type: object
               key:
@@ -1227,11 +541,11 @@ components:
                     type: string
                   type:
                     enum:
-                      - custom
+                    - custom
                     type: string
                 required:
-                  - custom
-                  - type
+                - custom
+                - type
                 title: custom_field_label_param
                 type: object
               numeric:
@@ -1254,14 +568,14 @@ components:
                 type: object
               type:
                 enum:
-                  - dropdown
-                  - numeric
-                  - text
+                - dropdown
+                - numeric
+                - text
                 type: string
             required:
-              - key
-              - label
-              - type
+            - key
+            - label
+            - type
             title: custom_field_param
             type: object
           type: array
@@ -1270,166 +584,134 @@ components:
           properties:
             after_submit:
               anyOf:
-                - properties:
-                    message:
-                      maxLength: 1200
-                      type: string
-                  required:
-                    - message
-                  title: custom_text_position_param
-                  type: object
-                - enum:
-                    - ''
-                  type: string
+              - properties:
+                  message:
+                    maxLength: 1200
+                    type: string
+                required:
+                - message
+                title: custom_text_position_param
+                type: object
+              - enum:
+                - ''
+                type: string
             shipping_address:
               anyOf:
-                - properties:
-                    message:
-                      maxLength: 1200
-                      type: string
-                  required:
-                    - message
-                  title: custom_text_position_param
-                  type: object
-                - enum:
-                    - ''
-                  type: string
+              - properties:
+                  message:
+                    maxLength: 1200
+                    type: string
+                required:
+                - message
+                title: custom_text_position_param
+                type: object
+              - enum:
+                - ''
+                type: string
             submit:
               anyOf:
-                - properties:
-                    message:
-                      maxLength: 1200
-                      type: string
-                  required:
-                    - message
-                  title: custom_text_position_param
-                  type: object
-                - enum:
-                    - ''
-                  type: string
+              - properties:
+                  message:
+                    maxLength: 1200
+                    type: string
+                required:
+                - message
+                title: custom_text_position_param
+                type: object
+              - enum:
+                - ''
+                type: string
             terms_of_service_acceptance:
               anyOf:
-                - properties:
-                    message:
-                      maxLength: 1200
-                      type: string
-                  required:
-                    - message
-                  title: custom_text_position_param
-                  type: object
-                - enum:
-                    - ''
-                  type: string
+              - properties:
+                  message:
+                    maxLength: 1200
+                    type: string
+                required:
+                - message
+                title: custom_text_position_param
+                type: object
+              - enum:
+                - ''
+                type: string
           title: custom_text_param
           type: object
         customer:
-          description: >-
-            ID of an existing Customer, if one exists. In `payment` mode, the
-            customer’s most recently saved card
+          description: 'ID of an existing Customer, if one exists. In `payment` mode, the customer’s most recently saved card
 
-            payment method will be used to prefill the email, name, card
-            details, and billing address
+            payment method will be used to prefill the email, name, card details, and billing address
 
-            on the Checkout page. In `subscription` mode, the customer’s
-            [default payment
-            method](https://stripe.com/docs/api/customers/update#update_customer-invoice_settings-default_payment_method)
+            on the Checkout page. In `subscription` mode, the customer’s [default payment method](https://stripe.com/docs/api/customers/update#update_customer-invoice_settings-default_payment_method)
 
-            will be used if it’s a card, otherwise the most recently saved card
-            will be used. A valid billing address, billing name and billing
-            email are required on the payment method for Checkout to prefill the
-            customer's card details.
+            will be used if it’s a card, otherwise the most recently saved card will be used. A valid billing address, billing name and billing email are required on the payment method for Checkout to prefill the customer''s card details.
 
 
-            If the Customer already has a valid
-            [email](https://stripe.com/docs/api/customers/object#customer_object-email)
-            set, the email will be prefilled and not editable in Checkout.
+            If the Customer already has a valid [email](https://stripe.com/docs/api/customers/object#customer_object-email) set, the email will be prefilled and not editable in Checkout.
 
-            If the Customer does not have a valid `email`, Checkout will set the
-            email entered during the session on the Customer.
+            If the Customer does not have a valid `email`, Checkout will set the email entered during the session on the Customer.
 
 
-            If blank for Checkout Sessions in `subscription` mode or with
-            `customer_creation` set as `always` in `payment` mode, Checkout will
-            create a new Customer object based on information provided during
-            the payment flow.
+            If blank for Checkout Sessions in `subscription` mode or with `customer_creation` set as `always` in `payment` mode, Checkout will create a new Customer object based on information provided during the payment flow.
 
 
-            You can set
-            [`payment_intent_data.setup_future_usage`](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-payment_intent_data-setup_future_usage)
-            to have Checkout automatically attach the payment method to the
-            Customer you pass in for future reuse.
+            You can set [`payment_intent_data.setup_future_usage`](https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-payment_intent_data-setup_future_usage) to have Checkout automatically attach the payment method to the Customer you pass in for future reuse.'
           maxLength: 5000
           type: string
         customer_creation:
-          description: >-
-            Configure whether a Checkout Session creates a
-            [Customer](https://stripe.com/docs/api/customers) during Session
-            confirmation.
+          description: 'Configure whether a Checkout Session creates a [Customer](https://stripe.com/docs/api/customers) during Session confirmation.
 
 
-            When a Customer is not created, you can still retrieve email,
-            address, and other customer data entered in Checkout
+            When a Customer is not created, you can still retrieve email, address, and other customer data entered in Checkout
 
-            with
-            [customer_details](https://stripe.com/docs/api/checkout/sessions/object#checkout_session_object-customer_details).
+            with [customer_details](https://stripe.com/docs/api/checkout/sessions/object#checkout_session_object-customer_details).
 
 
-            Sessions that don't create Customers instead are grouped by [guest
-            customers](https://stripe.com/docs/payments/checkout/guest-customers)
+            Sessions that don''t create Customers instead are grouped by [guest customers](https://stripe.com/docs/payments/checkout/guest-customers)
 
-            in the Dashboard. Promotion codes limited to first time customers
-            will return invalid for these Sessions.
+            in the Dashboard. Promotion codes limited to first time customers will return invalid for these Sessions.
 
 
-            Can only be set in `payment` and `setup` mode.
+            Can only be set in `payment` and `setup` mode.'
           enum:
-            - always
-            - if_required
+          - always
+          - if_required
           type: string
         customer_email:
-          description: >-
-            If provided, this value will be used when the Customer object is
-            created.
+          description: 'If provided, this value will be used when the Customer object is created.
 
-            If not provided, customers will be asked to enter their email
-            address.
+            If not provided, customers will be asked to enter their email address.
 
-            Use this parameter to prefill customer data if you already have an
-            email
+            Use this parameter to prefill customer data if you already have an email
 
             on file. To access information about the customer once a session is
 
-            complete, use the `customer` field.
+            complete, use the `customer` field.'
           type: string
         customer_update:
-          description: >-
-            Controls what fields on Customer can be updated by the Checkout
-            Session. Can only be provided when `customer` is provided.
+          description: Controls what fields on Customer can be updated by the Checkout Session. Can only be provided when `customer` is provided.
           properties:
             address:
               enum:
-                - auto
-                - never
+              - auto
+              - never
               type: string
               x-stripeBypassValidation: true
             name:
               enum:
-                - auto
-                - never
+              - auto
+              - never
               type: string
               x-stripeBypassValidation: true
             shipping:
               enum:
-                - auto
-                - never
+              - auto
+              - never
               type: string
               x-stripeBypassValidation: true
           title: customer_update_params
           type: object
         discounts:
-          description: >-
-            The coupon or promotion code to apply to this Session. Currently,
-            only up to one may be specified.
+          description: The coupon or promotion code to apply to this Session. Currently, only up to one may be specified.
           items:
             properties:
               coupon:
@@ -1448,10 +730,7 @@ components:
             type: string
           type: array
         expires_at:
-          description: >-
-            The Epoch time in seconds at which the Checkout Session will expire.
-            It can be anywhere from 30 minutes to 24 hours after Checkout
-            Session creation. By default, this value is 24 hours from creation.
+          description: The Epoch time in seconds at which the Checkout Session will expire. It can be anywhere from 30 minutes to 24 hours after Checkout Session creation. By default, this value is 24 hours from creation.
           format: unix-time
           type: integer
         invoice_creation:
@@ -1463,32 +742,32 @@ components:
               properties:
                 account_tax_ids:
                   anyOf:
-                    - items:
-                        maxLength: 5000
-                        type: string
-                      type: array
-                    - enum:
-                        - ''
+                  - items:
+                      maxLength: 5000
                       type: string
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
                 custom_fields:
                   anyOf:
-                    - items:
-                        properties:
-                          name:
-                            maxLength: 30
-                            type: string
-                          value:
-                            maxLength: 30
-                            type: string
-                        required:
-                          - name
-                          - value
-                        title: custom_field_params
-                        type: object
-                      type: array
-                    - enum:
-                        - ''
-                      type: string
+                  - items:
+                      properties:
+                        name:
+                          maxLength: 30
+                          type: string
+                        value:
+                          maxLength: 30
+                          type: string
+                      required:
+                      - name
+                      - value
+                      title: custom_field_params
+                      type: object
+                    type: array
+                  - enum:
+                    - ''
+                    type: string
                 description:
                   maxLength: 1500
                   type: string
@@ -1501,39 +780,32 @@ components:
                   type: object
                 rendering_options:
                   anyOf:
-                    - properties:
-                        amount_tax_display:
-                          enum:
-                            - ''
-                            - exclude_tax
-                            - include_inclusive_tax
-                          type: string
-                      title: rendering_options_param
-                      type: object
-                    - enum:
+                  - properties:
+                      amount_tax_display:
+                        enum:
                         - ''
-                      type: string
+                        - exclude_tax
+                        - include_inclusive_tax
+                        type: string
+                    title: rendering_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
               title: invoice_data_params
               type: object
           required:
-            - enabled
+          - enabled
           title: invoice_creation_params
           type: object
         line_items:
-          description: >-
-            A list of items the customer is purchasing. Use this parameter to
-            pass one-time or recurring
-            [Prices](https://stripe.com/docs/api/prices).
+          description: 'A list of items the customer is purchasing. Use this parameter to pass one-time or recurring [Prices](https://stripe.com/docs/api/prices).
 
 
-            For `payment` mode, there is a maximum of 100 line items, however it
-            is recommended to consolidate line items if there are more than a
-            few dozen.
+            For `payment` mode, there is a maximum of 100 line items, however it is recommended to consolidate line items if there are more than a few dozen.
 
 
-            For `subscription` mode, there is a maximum of 20 line items with
-            recurring Prices and 20 line items with one-time Prices. Line items
-            with one-time Prices will be on the initial invoice only.
+            For `subscription` mode, there is a maximum of 20 line items with recurring Prices and 20 line items with one-time Prices. Line items with one-time Prices will be on the initial invoice only.'
           items:
             properties:
               adjustable_quantity:
@@ -1545,7 +817,7 @@ components:
                   minimum:
                     type: integer
                 required:
-                  - enabled
+                - enabled
                 title: adjustable_quantity_params
                 type: object
               dynamic_tax_rates:
@@ -1583,29 +855,29 @@ components:
                         maxLength: 5000
                         type: string
                     required:
-                      - name
+                    - name
                     title: product_data
                     type: object
                   recurring:
                     properties:
                       interval:
                         enum:
-                          - day
-                          - month
-                          - week
-                          - year
+                        - day
+                        - month
+                        - week
+                        - year
                         type: string
                       interval_count:
                         type: integer
                     required:
-                      - interval
+                    - interval
                     title: recurring_adhoc
                     type: object
                   tax_behavior:
                     enum:
-                      - exclusive
-                      - inclusive
-                      - unspecified
+                    - exclusive
+                    - inclusive
+                    - unspecified
                     type: string
                   unit_amount:
                     type: integer
@@ -1613,7 +885,7 @@ components:
                     format: decimal
                     type: string
                 required:
-                  - currency
+                - currency
                 title: price_data_with_product_data
                 type: object
               quantity:
@@ -1627,84 +899,73 @@ components:
             type: object
           type: array
         locale:
-          description: >-
-            The IETF language tag of the locale Checkout is displayed in. If
-            blank or `auto`, the browser's locale is used.
+          description: The IETF language tag of the locale Checkout is displayed in. If blank or `auto`, the browser's locale is used.
           enum:
-            - auto
-            - bg
-            - cs
-            - da
-            - de
-            - el
-            - en
-            - en-GB
-            - es
-            - es-419
-            - et
-            - fi
-            - fil
-            - fr
-            - fr-CA
-            - hr
-            - hu
-            - id
-            - it
-            - ja
-            - ko
-            - lt
-            - lv
-            - ms
-            - mt
-            - nb
-            - nl
-            - pl
-            - pt
-            - pt-BR
-            - ro
-            - ru
-            - sk
-            - sl
-            - sv
-            - th
-            - tr
-            - vi
-            - zh
-            - zh-HK
-            - zh-TW
+          - auto
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - en-GB
+          - es
+          - es-419
+          - et
+          - fi
+          - fil
+          - fr
+          - fr-CA
+          - hr
+          - hu
+          - id
+          - it
+          - ja
+          - ko
+          - lt
+          - lv
+          - ms
+          - mt
+          - nb
+          - nl
+          - pl
+          - pt
+          - pt-BR
+          - ro
+          - ru
+          - sk
+          - sl
+          - sv
+          - th
+          - tr
+          - vi
+          - zh
+          - zh-HK
+          - zh-TW
           type: string
           x-stripeBypassValidation: true
         metadata:
           additionalProperties:
             type: string
-          description: >-
-            Set of [key-value pairs](https://stripe.com/docs/api/metadata) that
-            you can attach to an object. This can be useful for storing
-            additional information about the object in a structured format.
-            Individual keys can be unset by posting an empty value to them. All
-            keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
           type: object
         mode:
-          description: >-
-            The mode of the Checkout Session. Pass `subscription` if the
-            Checkout Session includes at least one recurring item.
+          description: The mode of the Checkout Session. Pass `subscription` if the Checkout Session includes at least one recurring item.
           enum:
-            - payment
-            - setup
-            - subscription
+          - payment
+          - setup
+          - subscription
           type: string
         payment_intent_data:
-          description: >-
-            A subset of parameters to be passed to PaymentIntent creation for
-            Checkout Sessions in `payment` mode.
+          description: A subset of parameters to be passed to PaymentIntent creation for Checkout Sessions in `payment` mode.
           properties:
             application_fee_amount:
               type: integer
             capture_method:
               enum:
-                - automatic
-                - automatic_async
-                - manual
+              - automatic
+              - automatic_async
+              - manual
               type: string
             description:
               maxLength: 1000
@@ -1719,8 +980,8 @@ components:
               type: string
             setup_future_usage:
               enum:
-                - off_session
-                - on_session
+              - off_session
+              - on_session
               type: string
             shipping:
               properties:
@@ -1745,7 +1006,7 @@ components:
                       maxLength: 5000
                       type: string
                   required:
-                    - line1
+                  - line1
                   title: address
                   type: object
                 carrier:
@@ -1761,8 +1022,8 @@ components:
                   maxLength: 5000
                   type: string
               required:
-                - address
-                - name
+              - address
+              - name
               title: shipping
               type: object
             statement_descriptor:
@@ -1778,7 +1039,7 @@ components:
                 destination:
                   type: string
               required:
-                - destination
+              - destination
               title: transfer_data_params
               type: object
             transfer_group:
@@ -1786,29 +1047,21 @@ components:
           title: payment_intent_data_params
           type: object
         payment_method_collection:
-          description: >-
-            Specify whether Checkout should collect a payment method. When set
-            to `if_required`, Checkout will not collect a payment method when
-            the total due for the session is 0.
+          description: 'Specify whether Checkout should collect a payment method. When set to `if_required`, Checkout will not collect a payment method when the total due for the session is 0.
 
-            This may occur if the Checkout Session includes a free trial or a
-            discount.
+            This may occur if the Checkout Session includes a free trial or a discount.
 
 
             Can only be set in `subscription` mode.
 
 
-            If you'd like information on how to collect a payment method outside
-            of Checkout, read the guide on configuring [subscriptions with a
-            free trial](https://stripe.com/docs/payments/checkout/free-trials).
+            If you''d like information on how to collect a payment method outside of Checkout, read the guide on configuring [subscriptions with a free trial](https://stripe.com/docs/payments/checkout/free-trials).'
           enum:
-            - always
-            - if_required
+          - always
+          - if_required
           type: string
         payment_method_configuration:
-          description: >-
-            The ID of the payment method configuration to use with this Checkout
-            session.
+          description: The ID of the payment method configuration to use with this Checkout session.
           maxLength: 100
           type: string
         payment_method_options:
@@ -1818,22 +1071,22 @@ components:
               properties:
                 currency:
                   enum:
-                    - cad
-                    - usd
+                  - cad
+                  - usd
                   type: string
                 mandate_options:
                   properties:
                     custom_mandate_url:
                       anyOf:
-                        - type: string
-                        - enum:
-                            - ''
-                          type: string
+                      - type: string
+                      - enum:
+                        - ''
+                        type: string
                     default_for:
                       items:
                         enum:
-                          - invoice
-                          - subscription
+                        - invoice
+                        - subscription
                         type: string
                       type: array
                     interval_description:
@@ -1841,28 +1094,28 @@ components:
                       type: string
                     payment_schedule:
                       enum:
-                        - combined
-                        - interval
-                        - sporadic
+                      - combined
+                      - interval
+                      - sporadic
                       type: string
                     transaction_type:
                       enum:
-                        - business
-                        - personal
+                      - business
+                      - personal
                       type: string
                   title: mandate_options_param
                   type: object
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
                 verification_method:
                   enum:
-                    - automatic
-                    - instant
-                    - microdeposits
+                  - automatic
+                  - instant
+                  - microdeposits
                   type: string
                   x-stripeBypassValidation: true
               title: payment_method_options_param
@@ -1871,7 +1124,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -1879,7 +1132,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -1887,7 +1140,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -1895,7 +1148,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -1903,9 +1156,9 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -1913,7 +1166,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -1923,9 +1176,9 @@ components:
                   type: integer
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -1939,8 +1192,8 @@ components:
                   type: object
                 setup_future_usage:
                   enum:
-                    - off_session
-                    - on_session
+                  - off_session
+                  - on_session
                   type: string
                 statement_descriptor_suffix_kana:
                   maxLength: 22
@@ -1954,9 +1207,9 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -1970,42 +1223,42 @@ components:
                           maxLength: 5000
                           type: string
                       required:
-                        - country
+                      - country
                       title: eu_bank_transfer_params
                       type: object
                     requested_address_types:
                       items:
                         enum:
-                          - aba
-                          - iban
-                          - sepa
-                          - sort_code
-                          - spei
-                          - swift
-                          - zengin
+                        - aba
+                        - iban
+                        - sepa
+                        - sort_code
+                        - spei
+                        - swift
+                        - zengin
                         type: string
                         x-stripeBypassValidation: true
                       type: array
                     type:
                       enum:
-                        - eu_bank_transfer
-                        - gb_bank_transfer
-                        - jp_bank_transfer
-                        - mx_bank_transfer
-                        - us_bank_transfer
+                      - eu_bank_transfer
+                      - gb_bank_transfer
+                      - jp_bank_transfer
+                      - mx_bank_transfer
+                      - us_bank_transfer
                       type: string
                       x-stripeBypassValidation: true
                   required:
-                    - type
+                  - type
                   title: bank_transfer_param
                   type: object
                 funding_type:
                   enum:
-                    - bank_transfer
+                  - bank_transfer
                   type: string
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2013,7 +1266,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2021,7 +1274,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2029,7 +1282,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2037,7 +1290,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2045,7 +1298,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2053,7 +1306,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2063,7 +1316,7 @@ components:
                   type: integer
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2071,8 +1324,8 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
+                  - none
+                  - off_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -2082,7 +1335,7 @@ components:
                   type: integer
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2090,7 +1343,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
                 tos_shown_and_accepted:
                   type: boolean
@@ -2100,7 +1353,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2108,32 +1361,32 @@ components:
               properties:
                 capture_method:
                   enum:
-                    - ''
-                    - manual
+                  - ''
+                  - manual
                   type: string
                 preferred_locale:
                   enum:
-                    - cs-CZ
-                    - da-DK
-                    - de-AT
-                    - de-DE
-                    - de-LU
-                    - el-GR
-                    - en-GB
-                    - en-US
-                    - es-ES
-                    - fi-FI
-                    - fr-BE
-                    - fr-FR
-                    - fr-LU
-                    - hu-HU
-                    - it-IT
-                    - nl-BE
-                    - nl-NL
-                    - pl-PL
-                    - pt-PT
-                    - sk-SK
-                    - sv-SE
+                  - cs-CZ
+                  - da-DK
+                  - de-AT
+                  - de-DE
+                  - de-LU
+                  - el-GR
+                  - en-GB
+                  - en-US
+                  - es-ES
+                  - fi-FI
+                  - fr-BE
+                  - fr-FR
+                  - fr-LU
+                  - hu-HU
+                  - it-IT
+                  - nl-BE
+                  - nl-NL
+                  - pl-PL
+                  - pt-PT
+                  - sk-SK
+                  - sv-SE
                   type: string
                   x-stripeBypassValidation: true
                 reference:
@@ -2144,9 +1397,9 @@ components:
                   type: string
                 setup_future_usage:
                   enum:
-                    - ''
-                    - none
-                    - off_session
+                  - ''
+                  - none
+                  - off_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -2160,8 +1413,8 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
+                  - none
+                  - off_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -2169,9 +1422,9 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
               title: payment_method_options_param
               type: object
@@ -2179,7 +1432,7 @@ components:
               properties:
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               title: payment_method_options_param
               type: object
@@ -2190,10 +1443,10 @@ components:
                     permissions:
                       items:
                         enum:
-                          - balances
-                          - ownership
-                          - payment_method
-                          - transactions
+                        - balances
+                        - ownership
+                        - payment_method
+                        - transactions
                         maxLength: 5000
                         type: string
                         x-stripeBypassValidation: true
@@ -2201,8 +1454,8 @@ components:
                     prefetch:
                       items:
                         enum:
-                          - balances
-                          - transactions
+                        - balances
+                        - transactions
                         type: string
                         x-stripeBypassValidation: true
                       type: array
@@ -2210,14 +1463,14 @@ components:
                   type: object
                 setup_future_usage:
                   enum:
-                    - none
-                    - off_session
-                    - on_session
+                  - none
+                  - off_session
+                  - on_session
                   type: string
                 verification_method:
                   enum:
-                    - automatic
-                    - instant
+                  - automatic
+                  - instant
                   type: string
                   x-stripeBypassValidation: true
               title: payment_method_options_param
@@ -2229,130 +1482,107 @@ components:
                   type: string
                 client:
                   enum:
-                    - android
-                    - ios
-                    - web
+                  - android
+                  - ios
+                  - web
                   type: string
                   x-stripeBypassValidation: true
                 setup_future_usage:
                   enum:
-                    - none
+                  - none
                   type: string
               required:
-                - client
+              - client
               title: payment_method_options_param
               type: object
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: >-
-            A list of the types of payment methods (e.g., `card`) this Checkout
-            Session can accept.
+          description: 'A list of the types of payment methods (e.g., `card`) this Checkout Session can accept.
 
 
-            You can omit this attribute to manage your payment methods from the
-            [Stripe
-            Dashboard](https://dashboard.stripe.com/settings/payment_methods).
+            You can omit this attribute to manage your payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
 
-            See [Dynamic Payment
-            Methods](https://stripe.com/docs/payments/payment-methods/integration-options#using-dynamic-payment-methods)
-            for more details.
+            See [Dynamic Payment Methods](https://stripe.com/docs/payments/payment-methods/integration-options#using-dynamic-payment-methods) for more details.
 
 
-            Read more about the supported payment methods and their requirements
-            in our [payment
+            Read more about the supported payment methods and their requirements in our [payment
 
             method details guide](/docs/payments/checkout/payment-methods).
 
 
-            If multiple payment methods are passed, Checkout will dynamically
-            reorder them to
+            If multiple payment methods are passed, Checkout will dynamically reorder them to
 
-            prioritize the most relevant payment methods based on the customer's
-            location and
+            prioritize the most relevant payment methods based on the customer''s location and
 
-            other characteristics.
+            other characteristics.'
           items:
             enum:
-              - acss_debit
-              - affirm
-              - afterpay_clearpay
-              - alipay
-              - au_becs_debit
-              - bacs_debit
-              - bancontact
-              - blik
-              - boleto
-              - card
-              - cashapp
-              - customer_balance
-              - eps
-              - fpx
-              - giropay
-              - grabpay
-              - ideal
-              - klarna
-              - konbini
-              - link
-              - oxxo
-              - p24
-              - paynow
-              - paypal
-              - pix
-              - promptpay
-              - revolut_pay
-              - sepa_debit
-              - sofort
-              - us_bank_account
-              - wechat_pay
-              - zip
+            - acss_debit
+            - affirm
+            - afterpay_clearpay
+            - alipay
+            - au_becs_debit
+            - bacs_debit
+            - bancontact
+            - blik
+            - boleto
+            - card
+            - cashapp
+            - customer_balance
+            - eps
+            - fpx
+            - giropay
+            - grabpay
+            - ideal
+            - klarna
+            - konbini
+            - link
+            - oxxo
+            - p24
+            - paynow
+            - paypal
+            - pix
+            - promptpay
+            - revolut_pay
+            - sepa_debit
+            - sofort
+            - us_bank_account
+            - wechat_pay
+            - zip
             type: string
             x-stripeBypassValidation: true
           type: array
         phone_number_collection:
-          description: >-
-            Controls phone number collection settings for the session.
+          description: 'Controls phone number collection settings for the session.
 
 
-            We recommend that you review your privacy policy and check with your
-            legal contacts
+            We recommend that you review your privacy policy and check with your legal contacts
 
-            before using this feature. Learn more about [collecting phone
-            numbers with
-            Checkout](https://stripe.com/docs/payments/checkout/phone-numbers).
+            before using this feature. Learn more about [collecting phone numbers with Checkout](https://stripe.com/docs/payments/checkout/phone-numbers).'
           properties:
             enabled:
               type: boolean
           required:
-            - enabled
+          - enabled
           title: phone_number_collection_params
           type: object
         redirect_on_completion:
-          description: >-
-            This parameter applies to `ui_mode: embedded`. By default, Stripe
-            will always redirect to your return_url after a successful
-            confirmation. If you set `redirect_on_completion: 'if_required'`,
-            then we will only redirect if your user chooses a redirect-based
-            payment method.
+          description: 'This parameter applies to `ui_mode: embedded`. By default, Stripe will always redirect to your return_url after a successful confirmation. If you set `redirect_on_completion: ''if_required''`, then we will only redirect if your user chooses a redirect-based payment method.'
           enum:
-            - always
-            - if_required
-            - never
+          - always
+          - if_required
+          - never
           type: string
         return_url:
-          description: >-
-            The URL to redirect your customer back to after they authenticate or
-            cancel their payment on the
+          description: 'The URL to redirect your customer back to after they authenticate or cancel their payment on the
 
-            payment method's app or site. This parameter is required if ui_mode
-            is `embedded`
+            payment method''s app or site. This parameter is required if ui_mode is `embedded`
 
-            and redirect-based payment methods are enabled on the session.
+            and redirect-based payment methods are enabled on the session.'
           type: string
         setup_intent_data:
-          description: >-
-            A subset of parameters to be passed to SetupIntent creation for
-            Checkout Sessions in `setup` mode.
+          description: A subset of parameters to be passed to SetupIntent creation for Checkout Sessions in `setup` mode.
           properties:
             description:
               maxLength: 1000
@@ -2366,260 +1596,256 @@ components:
           title: setup_intent_data_param
           type: object
         shipping_address_collection:
-          description: >-
-            When set, provides configuration for Checkout to collect a shipping
-            address from a customer.
+          description: When set, provides configuration for Checkout to collect a shipping address from a customer.
           properties:
             allowed_countries:
               items:
                 enum:
-                  - AC
-                  - AD
-                  - AE
-                  - AF
-                  - AG
-                  - AI
-                  - AL
-                  - AM
-                  - AO
-                  - AQ
-                  - AR
-                  - AT
-                  - AU
-                  - AW
-                  - AX
-                  - AZ
-                  - BA
-                  - BB
-                  - BD
-                  - BE
-                  - BF
-                  - BG
-                  - BH
-                  - BI
-                  - BJ
-                  - BL
-                  - BM
-                  - BN
-                  - BO
-                  - BQ
-                  - BR
-                  - BS
-                  - BT
-                  - BV
-                  - BW
-                  - BY
-                  - BZ
-                  - CA
-                  - CD
-                  - CF
-                  - CG
-                  - CH
-                  - CI
-                  - CK
-                  - CL
-                  - CM
-                  - CN
-                  - CO
-                  - CR
-                  - CV
-                  - CW
-                  - CY
-                  - CZ
-                  - DE
-                  - DJ
-                  - DK
-                  - DM
-                  - DO
-                  - DZ
-                  - EC
-                  - EE
-                  - EG
-                  - EH
-                  - ER
-                  - ES
-                  - ET
-                  - FI
-                  - FJ
-                  - FK
-                  - FO
-                  - FR
-                  - GA
-                  - GB
-                  - GD
-                  - GE
-                  - GF
-                  - GG
-                  - GH
-                  - GI
-                  - GL
-                  - GM
-                  - GN
-                  - GP
-                  - GQ
-                  - GR
-                  - GS
-                  - GT
-                  - GU
-                  - GW
-                  - GY
-                  - HK
-                  - HN
-                  - HR
-                  - HT
-                  - HU
-                  - ID
-                  - IE
-                  - IL
-                  - IM
-                  - IN
-                  - IO
-                  - IQ
-                  - IS
-                  - IT
-                  - JE
-                  - JM
-                  - JO
-                  - JP
-                  - KE
-                  - KG
-                  - KH
-                  - KI
-                  - KM
-                  - KN
-                  - KR
-                  - KW
-                  - KY
-                  - KZ
-                  - LA
-                  - LB
-                  - LC
-                  - LI
-                  - LK
-                  - LR
-                  - LS
-                  - LT
-                  - LU
-                  - LV
-                  - LY
-                  - MA
-                  - MC
-                  - MD
-                  - ME
-                  - MF
-                  - MG
-                  - MK
-                  - ML
-                  - MM
-                  - MN
-                  - MO
-                  - MQ
-                  - MR
-                  - MS
-                  - MT
-                  - MU
-                  - MV
-                  - MW
-                  - MX
-                  - MY
-                  - MZ
-                  - NA
-                  - NC
-                  - NE
-                  - NG
-                  - NI
-                  - NL
-                  - 'NO'
-                  - NP
-                  - NR
-                  - NU
-                  - NZ
-                  - OM
-                  - PA
-                  - PE
-                  - PF
-                  - PG
-                  - PH
-                  - PK
-                  - PL
-                  - PM
-                  - PN
-                  - PR
-                  - PS
-                  - PT
-                  - PY
-                  - QA
-                  - RE
-                  - RO
-                  - RS
-                  - RU
-                  - RW
-                  - SA
-                  - SB
-                  - SC
-                  - SE
-                  - SG
-                  - SH
-                  - SI
-                  - SJ
-                  - SK
-                  - SL
-                  - SM
-                  - SN
-                  - SO
-                  - SR
-                  - SS
-                  - ST
-                  - SV
-                  - SX
-                  - SZ
-                  - TA
-                  - TC
-                  - TD
-                  - TF
-                  - TG
-                  - TH
-                  - TJ
-                  - TK
-                  - TL
-                  - TM
-                  - TN
-                  - TO
-                  - TR
-                  - TT
-                  - TV
-                  - TW
-                  - TZ
-                  - UA
-                  - UG
-                  - US
-                  - UY
-                  - UZ
-                  - VA
-                  - VC
-                  - VE
-                  - VG
-                  - VN
-                  - VU
-                  - WF
-                  - WS
-                  - XK
-                  - YE
-                  - YT
-                  - ZA
-                  - ZM
-                  - ZW
-                  - ZZ
+                - AC
+                - AD
+                - AE
+                - AF
+                - AG
+                - AI
+                - AL
+                - AM
+                - AO
+                - AQ
+                - AR
+                - AT
+                - AU
+                - AW
+                - AX
+                - AZ
+                - BA
+                - BB
+                - BD
+                - BE
+                - BF
+                - BG
+                - BH
+                - BI
+                - BJ
+                - BL
+                - BM
+                - BN
+                - BO
+                - BQ
+                - BR
+                - BS
+                - BT
+                - BV
+                - BW
+                - BY
+                - BZ
+                - CA
+                - CD
+                - CF
+                - CG
+                - CH
+                - CI
+                - CK
+                - CL
+                - CM
+                - CN
+                - CO
+                - CR
+                - CV
+                - CW
+                - CY
+                - CZ
+                - DE
+                - DJ
+                - DK
+                - DM
+                - DO
+                - DZ
+                - EC
+                - EE
+                - EG
+                - EH
+                - ER
+                - ES
+                - ET
+                - FI
+                - FJ
+                - FK
+                - FO
+                - FR
+                - GA
+                - GB
+                - GD
+                - GE
+                - GF
+                - GG
+                - GH
+                - GI
+                - GL
+                - GM
+                - GN
+                - GP
+                - GQ
+                - GR
+                - GS
+                - GT
+                - GU
+                - GW
+                - GY
+                - HK
+                - HN
+                - HR
+                - HT
+                - HU
+                - ID
+                - IE
+                - IL
+                - IM
+                - IN
+                - IO
+                - IQ
+                - IS
+                - IT
+                - JE
+                - JM
+                - JO
+                - JP
+                - KE
+                - KG
+                - KH
+                - KI
+                - KM
+                - KN
+                - KR
+                - KW
+                - KY
+                - KZ
+                - LA
+                - LB
+                - LC
+                - LI
+                - LK
+                - LR
+                - LS
+                - LT
+                - LU
+                - LV
+                - LY
+                - MA
+                - MC
+                - MD
+                - ME
+                - MF
+                - MG
+                - MK
+                - ML
+                - MM
+                - MN
+                - MO
+                - MQ
+                - MR
+                - MS
+                - MT
+                - MU
+                - MV
+                - MW
+                - MX
+                - MY
+                - MZ
+                - NA
+                - NC
+                - NE
+                - NG
+                - NI
+                - NL
+                - 'NO'
+                - NP
+                - NR
+                - NU
+                - NZ
+                - OM
+                - PA
+                - PE
+                - PF
+                - PG
+                - PH
+                - PK
+                - PL
+                - PM
+                - PN
+                - PR
+                - PS
+                - PT
+                - PY
+                - QA
+                - RE
+                - RO
+                - RS
+                - RU
+                - RW
+                - SA
+                - SB
+                - SC
+                - SE
+                - SG
+                - SH
+                - SI
+                - SJ
+                - SK
+                - SL
+                - SM
+                - SN
+                - SO
+                - SR
+                - SS
+                - ST
+                - SV
+                - SX
+                - SZ
+                - TA
+                - TC
+                - TD
+                - TF
+                - TG
+                - TH
+                - TJ
+                - TK
+                - TL
+                - TM
+                - TN
+                - TO
+                - TR
+                - TT
+                - TV
+                - TW
+                - TZ
+                - UA
+                - UG
+                - US
+                - UY
+                - UZ
+                - VA
+                - VC
+                - VE
+                - VG
+                - VN
+                - VU
+                - WF
+                - WS
+                - XK
+                - YE
+                - YT
+                - ZA
+                - ZM
+                - ZW
+                - ZZ
                 type: string
               type: array
           required:
-            - allowed_countries
+          - allowed_countries
           title: shipping_address_collection_params
           type: object
         shipping_options:
-          description: >-
-            The shipping rate options to apply to this Session. Up to a maximum
-            of 5.
+          description: The shipping rate options to apply to this Session. Up to a maximum of 5.
           items:
             properties:
               shipping_rate:
@@ -2633,34 +1859,34 @@ components:
                         properties:
                           unit:
                             enum:
-                              - business_day
-                              - day
-                              - hour
-                              - month
-                              - week
+                            - business_day
+                            - day
+                            - hour
+                            - month
+                            - week
                             type: string
                           value:
                             type: integer
                         required:
-                          - unit
-                          - value
+                        - unit
+                        - value
                         title: delivery_estimate_bound
                         type: object
                       minimum:
                         properties:
                           unit:
                             enum:
-                              - business_day
-                              - day
-                              - hour
-                              - month
-                              - week
+                            - business_day
+                            - day
+                            - hour
+                            - month
+                            - week
                             type: string
                           value:
                             type: integer
                         required:
-                          - unit
-                          - value
+                        - unit
+                        - value
                         title: delivery_estimate_bound
                         type: object
                     title: delivery_estimate
@@ -2681,18 +1907,18 @@ components:
                               type: integer
                             tax_behavior:
                               enum:
-                                - exclusive
-                                - inclusive
-                                - unspecified
+                              - exclusive
+                              - inclusive
+                              - unspecified
                               type: string
                           required:
-                            - amount
+                          - amount
                           title: currency_option
                           type: object
                         type: object
                     required:
-                      - amount
-                      - currency
+                    - amount
+                    - currency
                     title: fixed_amount
                     type: object
                   metadata:
@@ -2701,46 +1927,39 @@ components:
                     type: object
                   tax_behavior:
                     enum:
-                      - exclusive
-                      - inclusive
-                      - unspecified
+                    - exclusive
+                    - inclusive
+                    - unspecified
                     type: string
                   tax_code:
                     type: string
                   type:
                     enum:
-                      - fixed_amount
+                    - fixed_amount
                     type: string
                 required:
-                  - display_name
+                - display_name
                 title: method_params
                 type: object
             title: shipping_option_params
             type: object
           type: array
         submit_type:
-          description: >-
-            Describes the type of transaction being performed by Checkout in
-            order to customize
+          description: 'Describes the type of transaction being performed by Checkout in order to customize
 
-            relevant text on the page, such as the submit button. `submit_type`
-            can only be
+            relevant text on the page, such as the submit button. `submit_type` can only be
 
-            specified on Checkout Sessions in `payment` mode, but not Checkout
-            Sessions
+            specified on Checkout Sessions in `payment` mode, but not Checkout Sessions
 
-            in `subscription` or `setup` mode. Possible values are `auto`,
-            `pay`, `book`, `donate`. If blank or `auto`, `pay` is used.
+            in `subscription` or `setup` mode. Possible values are `auto`, `pay`, `book`, `donate`. If blank or `auto`, `pay` is used.'
           enum:
-            - auto
-            - book
-            - donate
-            - pay
+          - auto
+          - book
+          - donate
+          - pay
           type: string
         subscription_data:
-          description: >-
-            A subset of parameters to be passed to subscription creation for
-            Checkout Sessions in `subscription` mode.
+          description: A subset of parameters to be passed to subscription creation for Checkout Sessions in `subscription` mode.
           properties:
             application_fee_percent:
               type: number
@@ -2763,8 +1982,8 @@ components:
               type: string
             proration_behavior:
               enum:
-                - create_prorations
-                - none
+              - create_prorations
+              - none
               type: string
             transfer_data:
               properties:
@@ -2773,7 +1992,7 @@ components:
                 destination:
                   type: string
               required:
-                - destination
+              - destination
               title: transfer_data_specs
               type: object
             trial_end:
@@ -2787,34 +2006,30 @@ components:
                   properties:
                     missing_payment_method:
                       enum:
-                        - cancel
-                        - create_invoice
-                        - pause
+                      - cancel
+                      - create_invoice
+                      - pause
                       type: string
                   required:
-                    - missing_payment_method
+                  - missing_payment_method
                   title: end_behavior
                   type: object
               required:
-                - end_behavior
+              - end_behavior
               title: trial_settings_config
               type: object
           title: subscription_data_params
           type: object
         success_url:
-          description: >-
-            The URL to which Stripe should send customers when payment or setup
+          description: 'The URL to which Stripe should send customers when payment or setup
 
             is complete.
 
-            This parameter is not allowed if ui_mode is `embedded`. If you’d
-            like to use
+            This parameter is not allowed if ui_mode is `embedded`. If you’d like to use
 
-            information from the successful Checkout Session on your page, read
-            the
+            information from the successful Checkout Session on your page, read the
 
-            guide on [customizing your success
-            page](https://stripe.com/docs/payments/checkout/custom-success-page).
+            guide on [customizing your success page](https://stripe.com/docs/payments/checkout/custom-success-page).'
           maxLength: 5000
           type: string
         tax_id_collection:
@@ -2823,38 +2038,496 @@ components:
             enabled:
               type: boolean
           required:
-            - enabled
+          - enabled
           title: tax_id_collection_params
           type: object
         ui_mode:
           description: '`ui_mode` can be `hosted` or `embedded`. The default is `hosted`.'
           enum:
-            - embedded
-            - hosted
+          - embedded
+          - hosted
           type: string
           x-stripeBypassValidation: true
-    GetCheckoutSessionsSessionRequest:
-      type: object
-      properties: {}
-    PostCheckoutSessionsSessionExpireRequest:
-      type: object
+    checkout.session:
+      description: 'A Checkout Session represents your customer''s session as they pay for
+
+        one-time purchases or subscriptions through [Checkout](https://stripe.com/docs/payments/checkout)
+
+        or [Payment Links](https://stripe.com/docs/payments/payment-links). We recommend creating a
+
+        new Session each time your customer attempts to pay.
+
+
+        Once payment is successful, the Checkout Session will contain a reference
+
+        to the [Customer](https://stripe.com/docs/api/customers), and either the successful
+
+        [PaymentIntent](https://stripe.com/docs/api/payment_intents) or an active
+
+        [Subscription](https://stripe.com/docs/api/subscriptions).
+
+
+        You can create a Checkout Session on your server and redirect to its URL
+
+        to begin Checkout.
+
+
+        Related guide: [Checkout quickstart](https://stripe.com/docs/checkout/quickstart)'
       properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
+        after_expiration:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_after_expiration'
+          description: When set, provides configuration for actions to take if this Checkout Session expires.
+          nullable: true
+        allow_promotion_codes:
+          description: Enables user redeemable promotion codes.
+          nullable: true
+          type: boolean
+        amount_subtotal:
+          description: Total of all items before discounts or taxes are applied.
+          nullable: true
+          type: integer
+        amount_total:
+          description: Total of all items after discounts and taxes are applied.
+          nullable: true
+          type: integer
+        automatic_tax:
+          $ref: '#/components/schemas/payment_pages_checkout_session_automatic_tax'
+        billing_address_collection:
+          description: Describes whether Checkout should collect the customer's billing address.
+          enum:
+          - auto
+          - required
+          nullable: true
+          type: string
+        cancel_url:
+          description: If set, Checkout displays a back button and customers will be directed to this URL if they decide to cancel payment and return to your website.
+          maxLength: 5000
+          nullable: true
+          type: string
+        client_reference_id:
+          description: 'A unique string to reference the Checkout Session. This can be a
+
+            customer ID, a cart ID, or similar, and can be used to reconcile the
+
+            Session with your internal systems.'
+          maxLength: 5000
+          nullable: true
+          type: string
+        client_secret:
+          description: Client secret to be used when initializing Stripe.js embedded checkout.
+          maxLength: 5000
+          nullable: true
+          type: string
+        consent:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_consent'
+          description: Results of `consent_collection` for this session.
+          nullable: true
+        consent_collection:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_consent_collection'
+          description: When set, provides configuration for the Checkout Session to gather active consent from customers.
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          nullable: true
+          type: string
+        currency_conversion:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_currency_conversion'
+          description: Currency conversion details for automatic currency conversion sessions
+          nullable: true
+        custom_fields:
+          description: Collect additional information from your customer using custom fields. Up to 2 fields are supported.
+          items:
+            $ref: '#/components/schemas/payment_pages_checkout_session_custom_fields'
+          type: array
+        custom_text:
+          $ref: '#/components/schemas/payment_pages_checkout_session_custom_text'
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: 'The ID of the customer for this Session.
+
+            For Checkout Sessions in `subscription` mode or Checkout Sessions with `customer_creation` set as `always` in `payment` mode, Checkout
+
+            will create a new customer object based on information provided
+
+            during the payment flow unless an existing customer was provided when
+
+            the Session was created.'
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        customer_creation:
+          description: Configure whether a Checkout Session creates a Customer when the Checkout Session completes.
+          enum:
+          - always
+          - if_required
+          nullable: true
+          type: string
+        customer_details:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_customer_details'
+          description: The customer details including the customer's tax exempt status and the customer's tax IDs. Only the customer's email is present on Sessions in `setup` mode.
+          nullable: true
+        customer_email:
+          description: 'If provided, this value will be used when the Customer object is created.
+
+            If not provided, customers will be asked to enter their email address.
+
+            Use this parameter to prefill customer data if you already have an email
+
+            on file. To access information about the customer once the payment flow is
+
+            complete, use the `customer` attribute.'
+          maxLength: 5000
+          nullable: true
+          type: string
+        expires_at:
+          description: The timestamp at which the Checkout Session will expire.
+          format: unix-time
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        invoice:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoice'
+          description: ID of the invoice created by the Checkout Session, if it exists.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoice'
+        invoice_creation:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_invoice_creation'
+          description: Details on the state of invoice creation for the Checkout Session.
+          nullable: true
+        line_items:
+          description: The line items purchased by the customer.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/item'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: PaymentPagesCheckoutSessionListLineItems
+          type: object
+          x-expandableFields:
+          - data
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        locale:
+          description: The IETF language tag of the locale Checkout is displayed in. If blank or `auto`, the browser's locale is used.
+          enum:
+          - auto
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - en-GB
+          - es
+          - es-419
+          - et
+          - fi
+          - fil
+          - fr
+          - fr-CA
+          - hr
+          - hu
+          - id
+          - it
+          - ja
+          - ko
+          - lt
+          - lv
+          - ms
+          - mt
+          - nb
+          - nl
+          - pl
+          - pt
+          - pt-BR
+          - ro
+          - ru
+          - sk
+          - sl
+          - sv
+          - th
+          - tr
+          - vi
+          - zh
+          - zh-HK
+          - zh-TW
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        mode:
+          description: The mode of the Checkout Session.
+          enum:
+          - payment
+          - setup
+          - subscription
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - checkout.session
+          type: string
+        payment_intent:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_intent'
+          description: The ID of the PaymentIntent for Checkout Sessions in `payment` mode.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_intent'
+        payment_link:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_link'
+          description: The ID of the Payment Link that created this Session.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_link'
+        payment_method_collection:
+          description: Configure whether a Checkout Session should collect a payment method.
+          enum:
+          - always
+          - if_required
+          nullable: true
+          type: string
+        payment_method_configuration_details:
+          anyOf:
+          - $ref: '#/components/schemas/payment_method_config_biz_payment_method_configuration_details'
+          description: Information about the payment method configuration used for this Checkout session if using dynamic payment methods.
+          nullable: true
+        payment_method_options:
+          anyOf:
+          - $ref: '#/components/schemas/checkout_session_payment_method_options'
+          description: Payment-method-specific configuration for the PaymentIntent or SetupIntent of this CheckoutSession.
+          nullable: true
+        payment_method_types:
+          description: 'A list of the types of payment methods (e.g. card) this Checkout
+
+            Session is allowed to accept.'
           items:
             maxLength: 5000
             type: string
           type: array
-    GetCheckoutSessionsSessionLineItemsRequest:
+        payment_status:
+          description: 'The payment status of the Checkout Session, one of `paid`, `unpaid`, or `no_payment_required`.
+
+            You can use this value to decide when to fulfill your customer''s order.'
+          enum:
+          - no_payment_required
+          - paid
+          - unpaid
+          type: string
+        phone_number_collection:
+          $ref: '#/components/schemas/payment_pages_checkout_session_phone_number_collection'
+        recovered_from:
+          description: The ID of the original expired Checkout Session that triggered the recovery flow.
+          maxLength: 5000
+          nullable: true
+          type: string
+        redirect_on_completion:
+          description: 'Applies to Checkout Sessions with `ui_mode: embedded`. By default, Stripe will always redirect to your return_url after a successful confirmation. If you set `redirect_on_completion: ''if_required''`, then we will only redirect if your user chooses a redirect-based payment method.'
+          enum:
+          - always
+          - if_required
+          - never
+          type: string
+        return_url:
+          description: 'Applies to Checkout Sessions with `ui_mode: embedded`. The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method''s app or site.'
+          maxLength: 5000
+          type: string
+        setup_intent:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/setup_intent'
+          description: The ID of the SetupIntent for Checkout Sessions in `setup` mode.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/setup_intent'
+        shipping_address_collection:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_shipping_address_collection'
+          description: When set, provides configuration for Checkout to collect a shipping address from a customer.
+          nullable: true
+        shipping_cost:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_shipping_cost'
+          description: The details of the customer cost of shipping, including the customer chosen ShippingRate.
+          nullable: true
+        shipping_details:
+          anyOf:
+          - $ref: '#/components/schemas/shipping'
+          description: Shipping information for this Checkout Session.
+          nullable: true
+        shipping_options:
+          description: The shipping rate options applied to this Session.
+          items:
+            $ref: '#/components/schemas/payment_pages_checkout_session_shipping_option'
+          type: array
+        status:
+          description: The status of the Checkout Session, one of `open`, `complete`, or `expired`.
+          enum:
+          - complete
+          - expired
+          - open
+          nullable: true
+          type: string
+        submit_type:
+          description: 'Describes the type of transaction being performed by Checkout in order to customize
+
+            relevant text on the page, such as the submit button. `submit_type` can only be
+
+            specified on Checkout Sessions in `payment` mode, but not Checkout Sessions
+
+            in `subscription` or `setup` mode. Possible values are `auto`, `pay`, `book`, `donate`. If blank or `auto`, `pay` is used.'
+          enum:
+          - auto
+          - book
+          - donate
+          - pay
+          nullable: true
+          type: string
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: The ID of the subscription for Checkout Sessions in `subscription` mode.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        success_url:
+          description: 'The URL the customer will be directed to after the payment or
+
+            subscription creation is successful.'
+          maxLength: 5000
+          nullable: true
+          type: string
+        tax_id_collection:
+          $ref: '#/components/schemas/payment_pages_checkout_session_tax_id_collection'
+        total_details:
+          anyOf:
+          - $ref: '#/components/schemas/payment_pages_checkout_session_total_details'
+          description: Tax and discount details for the computed total amount.
+          nullable: true
+        ui_mode:
+          description: The UI mode of the Session. Can be `hosted` (default) or `embedded`.
+          enum:
+          - embedded
+          - hosted
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        url:
+          description: 'The URL to the Checkout Session. Redirect customers to this URL to take them to Checkout. If you’re using [Custom Domains](https://stripe.com/docs/payments/checkout/custom-domains), the URL will use your subdomain. Otherwise, it’ll use `checkout.stripe.com.`
+
+            This value is only present when the session is active.'
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - automatic_tax
+      - created
+      - custom_fields
+      - custom_text
+      - expires_at
+      - id
+      - livemode
+      - mode
+      - object
+      - payment_method_types
+      - payment_status
+      - shipping_options
+      title: Session
       type: object
-      properties: {}
+      x-expandableFields:
+      - after_expiration
+      - automatic_tax
+      - consent
+      - consent_collection
+      - currency_conversion
+      - custom_fields
+      - custom_text
+      - customer
+      - customer_details
+      - invoice
+      - invoice_creation
+      - line_items
+      - payment_intent
+      - payment_link
+      - payment_method_configuration_details
+      - payment_method_options
+      - phone_number_collection
+      - setup_intent
+      - shipping_address_collection
+      - shipping_cost
+      - shipping_details
+      - shipping_options
+      - subscription
+      - tax_id_collection
+      - total_details
+      x-resourceId: checkout.session
     PaymentPagesCheckoutSessionListLineItems:
       type: object
       required:
-        - data
-        - has_more
-        - object
-        - url
+      - data
+      - has_more
+      - object
+      - url
       properties:
         data:
           description: Details about each object.
@@ -2862,40 +2535,41 @@ components:
             $ref: '#/components/schemas/item'
           type: array
         has_more:
-          description: >-
-            True if this list has another page of items after this one that can
-            be fetched.
+          description: True if this list has another page of items after this one that can be fetched.
           type: boolean
         object:
-          description: >-
-            String representing the object's type. Objects of the same type
-            share the same value. Always has the value `list`.
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
           enum:
-            - list
+          - list
           type: string
         url:
           description: The URL where this list can be accessed.
           maxLength: 5000
           type: string
-  securitySchemes:
-    basicAuth:
-      description: >-
-        Basic HTTP authentication. Allowed headers-- Authorization: Basic
-        <api_key> | Authorization: Basic <base64 hash of `api_key:`>
-      scheme: basic
-      type: http
-    bearerAuth:
-      bearerFormat: auth-scheme
-      description: >-
-        Bearer HTTP authentication. Allowed headers-- Authorization: Bearer
-        <api_key>
-      scheme: bearer
-      type: http
-tags:
-  - name: Checkout
-  - name: Expire
-  - name: Get
-  - name: Items
-  - name: Line
-  - name: Post
-  - name: Sessions
+    PaymentPagesCheckoutSessionList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/checkout.session'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetCheckoutSessionsSessionRequest:
+      type: object
+      properties: {}

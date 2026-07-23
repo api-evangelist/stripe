@@ -1,0 +1,1609 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Authorization API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Authorization
+paths:
+  /v1/issuing/authorizations:
+    get:
+      description: <p>Returns a list of Issuing <code>Authorization</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>
+      operationId: getIssuingAuthorizations
+      parameters:
+      - description: Only return authorizations that belong to the given card.
+        in: query
+        name: card
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return authorizations that belong to the given cardholder.
+        in: query
+        name: cardholder
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return authorizations that were created during the given date interval.
+        explode: true
+        in: query
+        name: created
+        required: false
+        schema:
+          anyOf:
+          - properties:
+              gt:
+                type: integer
+              gte:
+                type: integer
+              lt:
+                type: integer
+              lte:
+                type: integer
+            title: range_query_specs
+            type: object
+          - type: integer
+        style: deepObject
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return authorizations with the given status. One of `pending`, `closed`, or `reversed`.
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - closed
+          - pending
+          - reversed
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetIssuingAuthorizationsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/IssuingAuthorizationList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Issuing Authorizations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+  /v1/issuing/authorizations/{authorization}:
+    get:
+      description: <p>Retrieves an Issuing <code>Authorization</code> object.</p>
+      operationId: getIssuingAuthorizationsAuthorization
+      parameters:
+      - in: path
+        name: authorization
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetIssuingAuthorizationsAuthorizationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/issuing.authorization'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Issuing Authorizations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+    post:
+      description: <p>Updates the specified Issuing <code>Authorization</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>
+      operationId: postIssuingAuthorizationsAuthorization
+      parameters:
+      - in: path
+        name: authorization
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostIssuingAuthorizationsAuthorizationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/issuing.authorization'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Issuing Authorizations
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+  /v1/issuing/authorizations/{authorization}/approve:
+    post:
+      description: "<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href=\"/docs/issuing/controls/real-time-authorizations\">real-time authorization</a> flow. \nThis method is deprecated. Instead, <a href=\"/docs/issuing/controls/real-time-authorizations#authorization-handling\">respond directly to the webhook request to approve an authorization</a>.</p>"
+      operationId: postIssuingAuthorizationsAuthorizationApprove
+      parameters:
+      - in: path
+        name: authorization
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostIssuingAuthorizationsAuthorizationApproveRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/issuing.authorization'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Issuing Authorizations Approve
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+  /v1/issuing/authorizations/{authorization}/decline:
+    post:
+      description: '<p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href="/docs/issuing/controls/real-time-authorizations">real time authorization</a> flow.
+
+        This method is deprecated. Instead, <a href="/docs/issuing/controls/real-time-authorizations#authorization-handling">respond directly to the webhook request to decline an authorization</a>.</p>'
+      operationId: postIssuingAuthorizationsAuthorizationDecline
+      parameters:
+      - in: path
+        name: authorization
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostIssuingAuthorizationsAuthorizationDeclineRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/issuing.authorization'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Issuing Authorizations Decline
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+  /v1/payment_intents/{intent}/increment_authorization:
+    post:
+      description: '<p>Perform an incremental authorization on an eligible
+
+        <a href="/docs/api/payment_intents/object">PaymentIntent</a>. To be eligible, the
+
+        PaymentIntent’s status must be <code>requires_capture</code> and
+
+        <a href="/docs/api/charges/object#charge_object-payment_method_details-card_present-incremental_authorization_supported">incremental_authorization_supported</a>
+
+        must be <code>true</code>.</p>
+
+
+        <p>Incremental authorizations attempt to increase the authorized amount on
+
+        your customer’s card to the new, higher <code>amount</code> provided. Similar to the
+
+        initial authorization, incremental authorizations can be declined. A
+
+        single PaymentIntent can call this endpoint multiple times to further
+
+        increase the authorized amount.</p>
+
+
+        <p>If the incremental authorization succeeds, the PaymentIntent object
+
+        returns with the updated
+
+        <a href="/docs/api/payment_intents/object#payment_intent_object-amount">amount</a>.
+
+        If the incremental authorization fails, a
+
+        <a href="/docs/error-codes#card-declined">card_declined</a> error returns, and no other
+
+        fields on the PaymentIntent or Charge update. The PaymentIntent
+
+        object remains capturable for the previously authorized amount.</p>
+
+
+        <p>Each PaymentIntent can have a maximum of 10 incremental authorization attempts, including declines.
+
+        After it’s captured, a PaymentIntent can no longer be incremented.</p>
+
+
+        <p>Learn more about <a href="/docs/terminal/features/incremental-authorizations">incremental authorizations</a>.</p>'
+      operationId: postPaymentIntentsIntentIncrementAuthorization
+      parameters:
+      - in: path
+        name: intent
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              transfer_data:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostPaymentIntentsIntentIncrementAuthorizationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_intent'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Payment Intents Increment Authorization
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Authorization
+components:
+  schemas:
+    PostIssuingAuthorizationsAuthorizationRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+    issuing.cardholder:
+      description: 'An Issuing `Cardholder` object represents an individual or business entity who is [issued](https://stripe.com/docs/issuing) cards.
+
+
+        Related guide: [How to create a cardholder](https://stripe.com/docs/issuing/cards#create-cardholder)'
+      properties:
+        billing:
+          $ref: '#/components/schemas/issuing_cardholder_address'
+        company:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_cardholder_company'
+          description: Additional information about a `company` cardholder.
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        email:
+          description: The cardholder's email address.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        individual:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_cardholder_individual'
+          description: Additional information about an `individual` cardholder.
+          nullable: true
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        name:
+          description: The cardholder's name. This will be printed on cards issued to them.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.cardholder
+          type: string
+        phone_number:
+          description: The cardholder's phone number. This is required for all cardholders who will be creating EU cards. See the [3D Secure documentation](https://stripe.com/docs/issuing/3d-secure#when-is-3d-secure-applied) for more details.
+          maxLength: 5000
+          nullable: true
+          type: string
+        preferred_locales:
+          description: "The cardholder’s preferred locales (languages), ordered by preference. Locales can be `de`, `en`, `es`, `fr`, or `it`.\n This changes the language of the [3D Secure flow](https://stripe.com/docs/issuing/3d-secure) and one-time password messages sent to the cardholder."
+          items:
+            enum:
+            - de
+            - en
+            - es
+            - fr
+            - it
+            type: string
+          nullable: true
+          type: array
+        requirements:
+          $ref: '#/components/schemas/issuing_cardholder_requirements'
+        spending_controls:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_cardholder_authorization_controls'
+          description: Rules that control spending across this cardholder's cards. Refer to our [documentation](https://stripe.com/docs/issuing/controls/spending-controls) for more details.
+          nullable: true
+        status:
+          description: Specifies whether to permit authorizations on this cardholder's cards.
+          enum:
+          - active
+          - blocked
+          - inactive
+          type: string
+        type:
+          description: One of `individual` or `company`. See [Choose a cardholder type](https://stripe.com/docs/issuing/other/choose-cardholder) for more details.
+          enum:
+          - company
+          - individual
+          type: string
+          x-stripeBypassValidation: true
+      required:
+      - billing
+      - created
+      - id
+      - livemode
+      - metadata
+      - name
+      - object
+      - requirements
+      - status
+      - type
+      title: IssuingCardholder
+      type: object
+      x-expandableFields:
+      - billing
+      - company
+      - individual
+      - requirements
+      - spending_controls
+      x-resourceId: issuing.cardholder
+    issuing.transaction:
+      description: 'Any use of an [issued card](https://stripe.com/docs/issuing) that results in funds entering or leaving
+
+        your Stripe account, such as a completed purchase or refund, is represented by an Issuing
+
+        `Transaction` object.
+
+
+        Related guide: [Issued card transactions](https://stripe.com/docs/issuing/purchases/transactions)'
+      properties:
+        amount:
+          description: The transaction amount, which will be reflected in your balance. This amount is in your currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+        amount_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_amount_details'
+          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          nullable: true
+        authorization:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.authorization'
+          description: The `Authorization` object that led to this transaction.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.authorization'
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: ID of the [balance transaction](https://stripe.com/docs/api/balance_transactions) associated with this transaction.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        card:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.card'
+          description: The card used to make this transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.card'
+        cardholder:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.cardholder'
+          description: The cardholder to whom this transaction belongs.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.cardholder'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        dispute:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.dispute'
+          description: If you've disputed the transaction, the ID of the dispute.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.dispute'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        merchant_amount:
+          description: The amount that the merchant will receive, denominated in `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). It will be different from `amount` if the merchant is taking payment in a different currency.
+          type: integer
+        merchant_currency:
+          description: The currency with which the merchant is taking payment.
+          type: string
+        merchant_data:
+          $ref: '#/components/schemas/issuing_authorization_merchant_data'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network_data:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_network_data'
+          description: Details about the transaction, such as processing dates, set by the card network.
+          nullable: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.transaction
+          type: string
+        purchase_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_purchase_details'
+          description: Additional purchase information that is optionally provided by the merchant.
+          nullable: true
+        token:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.token'
+          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this transaction. If a network token was not used for this transaction, this field will be null.'
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.token'
+        treasury:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_treasury'
+          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this transaction if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts'
+          nullable: true
+        type:
+          description: The nature of the transaction.
+          enum:
+          - capture
+          - refund
+          type: string
+          x-stripeBypassValidation: true
+        wallet:
+          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`.
+          enum:
+          - apple_pay
+          - google_pay
+          - samsung_pay
+          nullable: true
+          type: string
+      required:
+      - amount
+      - card
+      - created
+      - currency
+      - id
+      - livemode
+      - merchant_amount
+      - merchant_currency
+      - merchant_data
+      - metadata
+      - object
+      - type
+      title: IssuingTransaction
+      type: object
+      x-expandableFields:
+      - amount_details
+      - authorization
+      - balance_transaction
+      - card
+      - cardholder
+      - dispute
+      - merchant_data
+      - network_data
+      - purchase_details
+      - token
+      - treasury
+      x-resourceId: issuing.transaction
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    issuing.token:
+      description: An issuing token object is created when an issued card is added to a digital wallet. As a [card issuer](https://stripe.com/docs/issuing), you can [view and manage these tokens](https://stripe.com/docs/issuing/controls/token-management) through Stripe.
+      properties:
+        card:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.card'
+          description: Card associated with this token.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.card'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        device_fingerprint:
+          description: The hashed ID derived from the device ID from the card network associated with the token
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        last4:
+          description: The last four digits of the token.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        network:
+          description: The token service provider / card network associated with the token.
+          enum:
+          - mastercard
+          - visa
+          type: string
+        network_data:
+          $ref: '#/components/schemas/issuing_network_token_network_data'
+        network_updated_at:
+          description: Time at which the token was last updated by the card network. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.token
+          type: string
+        status:
+          description: The usage state of the token.
+          enum:
+          - active
+          - deleted
+          - requested
+          - suspended
+          type: string
+        wallet_provider:
+          description: The digital wallet for this token, if one was used.
+          enum:
+          - apple_pay
+          - google_pay
+          - samsung_pay
+          type: string
+      required:
+      - card
+      - created
+      - id
+      - livemode
+      - network
+      - network_updated_at
+      - object
+      - status
+      title: IssuingNetworkToken
+      type: object
+      x-expandableFields:
+      - card
+      - network_data
+      x-resourceId: issuing.token
+    payment_intent:
+      description: 'A PaymentIntent guides you through the process of collecting a payment from your customer.
+
+        We recommend that you create exactly one PaymentIntent for each order or
+
+        customer session in your system. You can reference the PaymentIntent later to
+
+        see the history of payment attempts for a particular session.
+
+
+        A PaymentIntent transitions through
+
+        [multiple statuses](https://stripe.com/docs/payments/intents#intent-statuses)
+
+        throughout its lifetime as it interfaces with Stripe.js to perform
+
+        authentication flows and ultimately creates at most one successful charge.
+
+
+        Related guide: [Payment Intents API](https://stripe.com/docs/payments/payment-intents)'
+      properties:
+        amount:
+          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          type: integer
+        amount_capturable:
+          description: Amount that can be captured from this PaymentIntent.
+          type: integer
+        amount_details:
+          $ref: '#/components/schemas/payment_flows_amount_details'
+        amount_received:
+          description: Amount that this PaymentIntent collects.
+          type: integer
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          description: ID of the Connect application that created the PaymentIntent.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+        application_fee_amount:
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          nullable: true
+          type: integer
+        automatic_payment_methods:
+          anyOf:
+          - $ref: '#/components/schemas/payment_flows_automatic_payment_methods_payment_intent'
+          description: Settings to configure compatible payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods)
+          nullable: true
+        canceled_at:
+          description: Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since the Unix epoch.
+          format: unix-time
+          nullable: true
+          type: integer
+        cancellation_reason:
+          description: Reason for cancellation of this PaymentIntent, either user-provided (`duplicate`, `fraudulent`, `requested_by_customer`, or `abandoned`) or generated by Stripe internally (`failed_invoice`, `void_invoice`, or `automatic`).
+          enum:
+          - abandoned
+          - automatic
+          - duplicate
+          - failed_invoice
+          - fraudulent
+          - requested_by_customer
+          - void_invoice
+          nullable: true
+          type: string
+        capture_method:
+          description: Controls when the funds will be captured from the customer's account.
+          enum:
+          - automatic
+          - automatic_async
+          - manual
+          type: string
+        client_secret:
+          description: "The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. \n\nThe client secret can be used to complete a payment from your frontend. It should not be stored, logged, or exposed to anyone other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.\n\nRefer to our docs to [accept a payment](https://stripe.com/docs/payments/accept-a-payment?ui=elements) and learn about how `client_secret` should be handled."
+          maxLength: 5000
+          nullable: true
+          type: string
+        confirmation_method:
+          description: Describes whether we can confirm this PaymentIntent automatically, or if it requires customer action to confirm the payment.
+          enum:
+          - automatic
+          - manual
+          type: string
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: 'ID of the Customer this PaymentIntent belongs to, if one exists.
+
+
+            Payment methods attached to other Customers cannot be used with this PaymentIntent.
+
+
+            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete.'
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        invoice:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoice'
+          description: ID of the invoice that created this PaymentIntent, if it exists.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoice'
+        last_payment_error:
+          anyOf:
+          - $ref: '#/components/schemas/api_errors'
+          description: The payment error encountered in the previous PaymentIntent confirmation. It will be cleared if the PaymentIntent is later updated for any reason.
+          nullable: true
+        latest_charge:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/charge'
+          description: The latest charge created by this PaymentIntent.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/charge'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Learn more about [storing information in metadata](https://stripe.com/docs/payments/payment-intents/creating-payment-intents#storing-information-in-metadata).
+          type: object
+        next_action:
+          anyOf:
+          - $ref: '#/components/schemas/payment_intent_next_action'
+          description: If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using the provided source.
+          nullable: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - payment_intent
+          type: string
+        on_behalf_of:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts) for details.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        payment_method:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_method'
+          description: ID of the payment method used in this PaymentIntent.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_method'
+        payment_method_configuration_details:
+          anyOf:
+          - $ref: '#/components/schemas/payment_method_config_biz_payment_method_configuration_details'
+          description: Information about the payment method configuration used for this PaymentIntent.
+          nullable: true
+        payment_method_options:
+          anyOf:
+          - $ref: '#/components/schemas/payment_intent_payment_method_options'
+          description: Payment-method-specific configuration for this PaymentIntent.
+          nullable: true
+        payment_method_types:
+          description: The list of payment method types (e.g. card) that this PaymentIntent is allowed to use.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        processing:
+          anyOf:
+          - $ref: '#/components/schemas/payment_intent_processing'
+          description: If present, this property tells you about the processing state of the payment.
+          nullable: true
+        receipt_email:
+          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          maxLength: 5000
+          nullable: true
+          type: string
+        review:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/review'
+          description: ID of the review associated with this PaymentIntent, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/review'
+        setup_future_usage:
+          description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
+
+
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+
+
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
+          enum:
+          - off_session
+          - on_session
+          nullable: true
+          type: string
+        shipping:
+          anyOf:
+          - $ref: '#/components/schemas/shipping'
+          description: Shipping information for this PaymentIntent.
+          nullable: true
+        statement_descriptor:
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          maxLength: 5000
+          nullable: true
+          type: string
+        statement_descriptor_suffix:
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
+          maxLength: 5000
+          nullable: true
+          type: string
+        status:
+          description: Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `canceled`, or `succeeded`. Read more about each PaymentIntent [status](https://stripe.com/docs/payments/intents#intent-statuses).
+          enum:
+          - canceled
+          - processing
+          - requires_action
+          - requires_capture
+          - requires_confirmation
+          - requires_payment_method
+          - succeeded
+          type: string
+        transfer_data:
+          anyOf:
+          - $ref: '#/components/schemas/transfer_data'
+          description: The data that automatically creates a Transfer after the payment finalizes. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          nullable: true
+        transfer_group:
+          description: A string that identifies the resulting payment as part of a group. Learn more about the [use case for connected accounts](https://stripe.com/docs/connect/separate-charges-and-transfers).
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - amount
+      - capture_method
+      - confirmation_method
+      - created
+      - currency
+      - id
+      - livemode
+      - object
+      - payment_method_types
+      - status
+      title: PaymentIntent
+      type: object
+      x-expandableFields:
+      - amount_details
+      - application
+      - automatic_payment_methods
+      - customer
+      - invoice
+      - last_payment_error
+      - latest_charge
+      - next_action
+      - on_behalf_of
+      - payment_method
+      - payment_method_configuration_details
+      - payment_method_options
+      - processing
+      - review
+      - shipping
+      - transfer_data
+      x-resourceId: payment_intent
+    issuing.authorization:
+      description: 'When an [issued card](https://stripe.com/docs/issuing) is used to make a purchase, an Issuing `Authorization`
+
+        object is created. [Authorizations](https://stripe.com/docs/issuing/purchases/authorizations) must be approved for the
+
+        purchase to be completed successfully.
+
+
+        Related guide: [Issued card authorizations](https://stripe.com/docs/issuing/purchases/authorizations)'
+      properties:
+        amount:
+          description: The total amount that was authorized or rejected. This amount is in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `amount` should be the same as `merchant_amount`, unless `currency` and `merchant_currency` are different.
+          type: integer
+        amount_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_amount_details'
+          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          nullable: true
+        approved:
+          description: Whether the authorization has been approved.
+          type: boolean
+        authorization_method:
+          description: How the card details were provided.
+          enum:
+          - chip
+          - contactless
+          - keyed_in
+          - online
+          - swipe
+          type: string
+        balance_transactions:
+          description: List of balance transactions associated with this authorization.
+          items:
+            $ref: '#/components/schemas/balance_transaction'
+          type: array
+        card:
+          $ref: '#/components/schemas/issuing.card'
+        cardholder:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.cardholder'
+          description: The cardholder to whom this authorization belongs.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.cardholder'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: The currency of the cardholder. This currency can be different from the currency presented at authorization and the `merchant_currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        merchant_amount:
+          description: The total amount that was authorized or rejected. This amount is in the `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `merchant_amount` should be the same as `amount`, unless `merchant_currency` and `currency` are different.
+          type: integer
+        merchant_currency:
+          description: The local currency that was presented to the cardholder for the authorization. This currency can be different from the cardholder currency and the `currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        merchant_data:
+          $ref: '#/components/schemas/issuing_authorization_merchant_data'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network_data:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_network_data'
+          description: Details about the authorization, such as identifiers, set by the card network.
+          nullable: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.authorization
+          type: string
+        pending_request:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_pending_request'
+          description: The pending authorization request. This field will only be non-null during an `issuing_authorization.request` webhook.
+          nullable: true
+        request_history:
+          description: History of every time a `pending_request` authorization was approved/declined, either by you directly or by Stripe (e.g. based on your spending_controls). If the merchant changes the authorization by performing an incremental authorization, you can look at this field to see the previous requests for the authorization. This field can be helpful in determining why a given authorization was approved/declined.
+          items:
+            $ref: '#/components/schemas/issuing_authorization_request'
+          type: array
+        status:
+          description: The current status of the authorization in its lifecycle.
+          enum:
+          - closed
+          - pending
+          - reversed
+          type: string
+        token:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.token'
+          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this authorization. If a network token was not used for this authorization, this field will be null.'
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.token'
+        transactions:
+          description: List of [transactions](https://stripe.com/docs/api/issuing/transactions) associated with this authorization.
+          items:
+            $ref: '#/components/schemas/issuing.transaction'
+          type: array
+        treasury:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_treasury'
+          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this authorization if it was created on a [FinancialAccount](https://stripe.com/docs/api/treasury/financial_accounts).'
+          nullable: true
+        verification_data:
+          $ref: '#/components/schemas/issuing_authorization_verification_data'
+        wallet:
+          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`. Will populate as `null` when no digital wallet was utilized.
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - amount
+      - approved
+      - authorization_method
+      - balance_transactions
+      - card
+      - created
+      - currency
+      - id
+      - livemode
+      - merchant_amount
+      - merchant_currency
+      - merchant_data
+      - metadata
+      - object
+      - request_history
+      - status
+      - transactions
+      - verification_data
+      title: IssuingAuthorization
+      type: object
+      x-expandableFields:
+      - amount_details
+      - balance_transactions
+      - card
+      - cardholder
+      - merchant_data
+      - network_data
+      - pending_request
+      - request_history
+      - token
+      - transactions
+      - treasury
+      - verification_data
+      x-resourceId: issuing.authorization
+    PostIssuingAuthorizationsAuthorizationDeclineRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+    IssuingAuthorizationList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/issuing.authorization'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/issuing/authorizations
+          type: string
+    GetIssuingAuthorizationsRequest:
+      type: object
+      properties: {}
+    issuing.card:
+      description: You can [create physical or virtual cards](https://stripe.com/docs/issuing/cards) that are issued to cardholders.
+      properties:
+        brand:
+          description: The brand of the card.
+          maxLength: 5000
+          type: string
+        cancellation_reason:
+          description: The reason why the card was canceled.
+          enum:
+          - design_rejected
+          - lost
+          - stolen
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        cardholder:
+          $ref: '#/components/schemas/issuing.cardholder'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Supported currencies are `usd` in the US, `eur` in the EU, and `gbp` in the UK.
+          type: string
+        cvc:
+          description: The card's CVC. For security reasons, this is only available for virtual cards, and will be omitted unless you explicitly request it with [the `expand` parameter](https://stripe.com/docs/api/expanding_objects). Additionally, it's only available via the ["Retrieve a card" endpoint](https://stripe.com/docs/api/issuing/cards/retrieve), not via "List all cards" or any other endpoint.
+          maxLength: 5000
+          type: string
+        exp_month:
+          description: The expiration month of the card.
+          type: integer
+        exp_year:
+          description: The expiration year of the card.
+          type: integer
+        financial_account:
+          description: The financial account this card is attached to.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        last4:
+          description: The last 4 digits of the card number.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        number:
+          description: The full unredacted card number. For security reasons, this is only available for virtual cards, and will be omitted unless you explicitly request it with [the `expand` parameter](https://stripe.com/docs/api/expanding_objects). Additionally, it's only available via the ["Retrieve a card" endpoint](https://stripe.com/docs/api/issuing/cards/retrieve), not via "List all cards" or any other endpoint.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.card
+          type: string
+        replaced_by:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.card'
+          description: The latest card that replaces this card, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.card'
+        replacement_for:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.card'
+          description: The card this card replaces, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.card'
+        replacement_reason:
+          description: The reason why the previous card needed to be replaced.
+          enum:
+          - damaged
+          - expired
+          - lost
+          - stolen
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        shipping:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_card_shipping'
+          description: Where and how the card will be shipped.
+          nullable: true
+        spending_controls:
+          $ref: '#/components/schemas/issuing_card_authorization_controls'
+        status:
+          description: Whether authorizations can be approved on this card. May be blocked from activating cards depending on past-due Cardholder requirements. Defaults to `inactive`.
+          enum:
+          - active
+          - canceled
+          - inactive
+          type: string
+          x-stripeBypassValidation: true
+        type:
+          description: The type of the card.
+          enum:
+          - physical
+          - virtual
+          type: string
+        wallets:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_card_wallets'
+          description: Information relating to digital wallets (like Apple Pay and Google Pay).
+          nullable: true
+      required:
+      - brand
+      - cardholder
+      - created
+      - currency
+      - exp_month
+      - exp_year
+      - id
+      - last4
+      - livemode
+      - metadata
+      - object
+      - spending_controls
+      - status
+      - type
+      title: IssuingCard
+      type: object
+      x-expandableFields:
+      - cardholder
+      - replaced_by
+      - replacement_for
+      - shipping
+      - spending_controls
+      - wallets
+      x-resourceId: issuing.card
+    issuing.dispute:
+      description: 'As a [card issuer](https://stripe.com/docs/issuing), you can dispute transactions that the cardholder does not recognize, suspects to be fraudulent, or has other issues with.
+
+
+        Related guide: [Issuing disputes](https://stripe.com/docs/issuing/purchases/disputes)'
+      properties:
+        amount:
+          description: Disputed amount in the card's currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). Usually the amount of the `transaction`, but can differ (usually because of currency fluctuation).
+          type: integer
+        balance_transactions:
+          description: List of balance transactions associated with the dispute.
+          items:
+            $ref: '#/components/schemas/balance_transaction'
+          nullable: true
+          type: array
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: The currency the `transaction` was made in.
+          type: string
+        evidence:
+          $ref: '#/components/schemas/issuing_dispute_evidence'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.dispute
+          type: string
+        status:
+          description: Current status of the dispute.
+          enum:
+          - expired
+          - lost
+          - submitted
+          - unsubmitted
+          - won
+          type: string
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.transaction'
+          description: The transaction being disputed.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.transaction'
+        treasury:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_dispute_treasury'
+          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this dispute if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts'
+          nullable: true
+      required:
+      - amount
+      - created
+      - currency
+      - evidence
+      - id
+      - livemode
+      - metadata
+      - object
+      - status
+      - transaction
+      title: IssuingDispute
+      type: object
+      x-expandableFields:
+      - balance_transactions
+      - evidence
+      - transaction
+      - treasury
+      x-resourceId: issuing.dispute
+    PostPaymentIntentsIntentIncrementAuthorizationRequest:
+      type: object
+      required:
+      - amount
+      properties:
+        amount:
+          description: The updated total amount that you intend to collect from the cardholder. This amount must be greater than the currently authorized amount.
+          type: integer
+        application_fee_amount:
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          type: integer
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 1000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        statement_descriptor:
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          maxLength: 22
+          type: string
+        transfer_data:
+          description: 'The parameters used to automatically create a transfer after the payment is captured.
+
+            Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).'
+          properties:
+            amount:
+              type: integer
+          title: transfer_data_update_params
+          type: object
+    GetIssuingAuthorizationsAuthorizationRequest:
+      type: object
+      properties: {}
+    PostIssuingAuthorizationsAuthorizationApproveRequest:
+      type: object
+      properties:
+        amount:
+          description: If the authorization's `pending_request.is_amount_controllable` property is `true`, you may provide this value to control how much to hold for the authorization. Must be positive (use [`decline`](https://stripe.com/docs/api/issuing/authorizations/decline) to decline an authorization request).
+          type: integer
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.

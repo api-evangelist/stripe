@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Redact API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Redact
+paths:
+  /v1/identity/verification_sessions/{session}/redact:
+    post:
+      description: '<p>Redact a VerificationSession to remove all collected information from Stripe. This will redact
+
+        the VerificationSession and all objects related to it, including VerificationReports, Events,
+
+        request logs, etc.</p>
+
+
+        <p>A VerificationSession object can be redacted when it is in <code>requires_input</code> or <code>verified</code>
+
+        <a href="/docs/identity/how-sessions-work">status</a>. Redacting a VerificationSession in <code>requires_action</code>
+
+        state will automatically cancel it.</p>
+
+
+        <p>The redaction process may take up to four days. When the redaction process is in progress, the
+
+        VerificationSession’s <code>redaction.status</code> field will be set to <code>processing</code>; when the process is
+
+        finished, it will change to <code>redacted</code> and an <code>identity.verification_session.redacted</code> event
+
+        will be emitted.</p>
+
+
+        <p>Redaction is irreversible. Redacted objects are still accessible in the Stripe API, but all the
+
+        fields that contain personal data will be replaced by the string <code>[redacted]</code> or a similar
+
+        placeholder. The <code>metadata</code> field will also be erased. Redacted objects cannot be updated or
+
+        used for any purpose.</p>
+
+
+        <p><a href="/docs/identity/verification-sessions#redact">Learn more</a>.</p>'
+      operationId: postIdentityVerificationSessionsSessionRedact
+      parameters:
+      - in: path
+        name: session
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostIdentityVerificationSessionsSessionRedactRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identity.verification_session'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Identity Verification Sessions Session Redact
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Redact
+components:
+  schemas:
+    identity.verification_report:
+      description: 'A VerificationReport is the result of an attempt to collect and verify data from a user.
+
+        The collection of verification checks performed is determined from the `type` and `options`
+
+        parameters used. You can find the result of each verification check performed in the
+
+        appropriate sub-resource: `document`, `id_number`, `selfie`.
+
+
+        Each VerificationReport contains a copy of any data collected by the user as well as
+
+        reference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)
+
+        API. To configure and create VerificationReports, use the
+
+        [VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.
+
+
+        Related guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        document:
+          $ref: '#/components/schemas/gelato_document_report'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number:
+          $ref: '#/components/schemas/gelato_id_number_report'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - identity.verification_report
+          type: string
+        options:
+          $ref: '#/components/schemas/gelato_verification_report_options'
+        selfie:
+          $ref: '#/components/schemas/gelato_selfie_report'
+        type:
+          description: Type of report.
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+        verification_session:
+          description: ID of the VerificationSession that created this report.
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - created
+      - id
+      - livemode
+      - object
+      title: GelatoVerificationReport
+      type: object
+      x-expandableFields:
+      - document
+      - id_number
+      - options
+      - selfie
+      x-resourceId: identity.verification_report
+    identity.verification_session:
+      description: 'A VerificationSession guides you through the process of collecting and verifying the identities
+
+        of your users. It contains details about the type of verification, such as what [verification
+
+        check](/docs/identity/verification-checks) to perform. Only create one VerificationSession for
+
+        each verification in your system.
+
+
+        A VerificationSession transitions through [multiple
+
+        statuses](/docs/identity/how-sessions-work) throughout its lifetime as it progresses through
+
+        the verification flow. The VerificationSession contains the user''s verified data after
+
+        verification checks are complete.
+
+
+        Related guide: [The Verification Sessions API](https://stripe.com/docs/identity/verification-sessions)'
+      properties:
+        client_secret:
+          description: The short-lived client secret used by Stripe.js to [show a verification modal](https://stripe.com/docs/js/identity/modal) inside your app. This client secret expires after 24 hours and can only be used once. Don’t store it, log it, embed it in a URL, or expose it to anyone other than the user. Make sure that you have TLS enabled on any page that includes the client secret. Refer to our docs on [passing the client secret to the frontend](https://stripe.com/docs/identity/verification-sessions#client-secret) to learn more.
+          maxLength: 5000
+          nullable: true
+          type: string
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        last_error:
+          anyOf:
+          - $ref: '#/components/schemas/gelato_session_last_error'
+          description: If present, this property tells you the last error encountered when processing the verification.
+          nullable: true
+        last_verification_report:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/identity.verification_report'
+          description: ID of the most recent VerificationReport. [Learn more about accessing detailed verification results.](https://stripe.com/docs/identity/verification-sessions#results)
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/identity.verification_report'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - identity.verification_session
+          type: string
+        options:
+          anyOf:
+          - $ref: '#/components/schemas/gelato_verification_session_options'
+          description: A set of options for the session’s verification checks.
+          nullable: true
+        redaction:
+          anyOf:
+          - $ref: '#/components/schemas/verification_session_redaction'
+          description: Redaction status of this VerificationSession. If the VerificationSession is not redacted, this field will be null.
+          nullable: true
+        status:
+          description: Status of this VerificationSession. [Learn more about the lifecycle of sessions](https://stripe.com/docs/identity/how-sessions-work).
+          enum:
+          - canceled
+          - processing
+          - requires_input
+          - verified
+          type: string
+        type:
+          description: The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.
+          enum:
+          - document
+          - id_number
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        url:
+          description: The short-lived URL that you use to redirect a user to Stripe to submit their identity information. This URL expires after 48 hours and can only be used once. Don’t store it, log it, send it in emails or expose it to anyone other than the user. Refer to our docs on [verifying identity documents](https://stripe.com/docs/identity/verify-identity-documents?platform=web&type=redirect) to learn how to redirect users to Stripe.
+          maxLength: 5000
+          nullable: true
+          type: string
+        verified_outputs:
+          anyOf:
+          - $ref: '#/components/schemas/gelato_verified_outputs'
+          description: The user’s verified data.
+          nullable: true
+      required:
+      - created
+      - id
+      - livemode
+      - metadata
+      - object
+      - status
+      title: GelatoVerificationSession
+      type: object
+      x-expandableFields:
+      - last_error
+      - last_verification_report
+      - options
+      - redaction
+      - verified_outputs
+      x-resourceId: identity.verification_session
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostIdentityVerificationSessionsSessionRedactRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array

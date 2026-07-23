@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Domain API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Domain
+paths:
+  /v1/apple_pay/domains:
+    post:
+      description: <p>Create an apple pay domain.</p>
+      operationId: PostApplePayDomains
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              properties:
+                domain_name:
+                  type: string
+                expand:
+                  description: Specifies which fields in the response should be expanded.
+                  items:
+                    maxLength: 5000
+                    type: string
+                  type: array
+              required:
+              - domain_name
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apple_pay_domain'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Apple Pay Domain
+      tags:
+      - Domain
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/apple_pay/domains/{domain}:
+    delete:
+      description: <p>Delete an apple pay domain.</p>
+      operationId: DeleteApplePayDomainsDomain
+      parameters:
+      - in: path
+        name: domain
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              properties: {}
+              type: object
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_apple_pay_domain'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete Apple Pay Domain
+      tags:
+      - Domain
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieve an apple pay domain.</p>
+      operationId: GetApplePayDomainsDomain
+      parameters:
+      - in: path
+        name: domain
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              properties: {}
+              type: object
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apple_pay_domain'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Apple Pay Domain
+      tags:
+      - Domain
+      x-api-evangelist-processing:
+        ChooseTags: true
+components:
+  schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    apple_pay_domain:
+      description: ''
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        domain_name:
+          maxLength: 5000
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - apple_pay_domain
+          type: string
+      required:
+      - created
+      - domain_name
+      - id
+      - livemode
+      - object
+      title: ApplePayDomain
+      type: object
+      x-expandableFields: []
+      x-resourceId: apple_pay_domain
+    deleted_apple_pay_domain:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - apple_pay_domain
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedApplePayDomain
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_apple_pay_domain

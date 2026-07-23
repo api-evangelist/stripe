@@ -1,0 +1,1666 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Account
+paths:
+  /v1/account:
+    get:
+      description: <p>Retrieves the details of an account.</p>
+      operationId: GetAccount
+      parameters:
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/account_links:
+    post:
+      description: <p>Creates an AccountLink object that includes a single-use Stripe URL that the platform can redirect their user to in order to take them through the Connect Onboarding flow.</p>
+      operationId: PostAccountLinks
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountLinksRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_link'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Account Link
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/account_sessions:
+    post:
+      description: <p>Creates a AccountSession object that includes a single-use token that the platform can use on their front-end to grant client-side API access.</p>
+      operationId: PostAccountSessions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              components:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountSessionsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account_session'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Account Session
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts:
+    post:
+      description: '<p>With <a href="/docs/connect">Connect</a>, you can create Stripe accounts for your users.
+
+        To do this, youll first need to <a href="https://dashboard.stripe.com/account/applications/settings">register your platform</a>.</p>
+
+
+        <p>If youve already collected information for your connected accounts, you <a href="/docs/connect/best-practices#onboarding">can prefill that information</a> when
+
+        creating the account. Connect Onboarding wont ask for the prefilled information during account onboarding.
+
+        You can prefill any information on the account.</p>'
+      operationId: PostAccounts
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              bank_account:
+                explode: true
+                style: deepObject
+              business_profile:
+                explode: true
+                style: deepObject
+              capabilities:
+                explode: true
+                style: deepObject
+              company:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              individual:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              settings:
+                explode: true
+                style: deepObject
+              tos_acceptance:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}:
+    delete:
+      description: '<p>With <a href="/docs/connect">Connect</a>, you can delete accounts you manage.</p>
+
+
+        <p>Accounts created using test-mode keys can be deleted at any time. Standard accounts created using live-mode keys cannot be deleted. Custom or Express accounts created using live-mode keys can only be deleted once all balances are zero.</p>
+
+
+        <p>If you want to delete your own account, use the <a href="https://dashboard.stripe.com/settings/account">account information tab in your account settings</a> instead.</p>'
+      operationId: DeleteAccountsAccount
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteAccountsAccountRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieves the details of an account.</p>
+      operationId: GetAccountsAccount
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    post:
+      description: '<p>Updates a <a href="/docs/connect/accounts">connected account</a> by setting the values of the parameters passed. Any parameters not provided are
+
+        left unchanged.</p>
+
+
+        <p>For Custom accounts, you can update any information on the account. For other accounts, you can update all information until that
+
+        account has started to go through Connect Onboarding. Once you create an <a href="/docs/api/account_links">Account Link</a>
+
+        for a Standard or Express account, some parameters can no longer be changed. These are marked as <strong>Custom Only</strong> or <strong>Custom and Express</strong>
+
+        below.</p>
+
+
+        <p>To update your own account, use the <a href="https://dashboard.stripe.com/settings/account">Dashboard</a>. Refer to our
+
+        <a href="/docs/connect/updating-accounts">Connect</a> documentation to learn more about updating accounts.</p>'
+      operationId: PostAccountsAccount
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              business_profile:
+                explode: true
+                style: deepObject
+              capabilities:
+                explode: true
+                style: deepObject
+              company:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              individual:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              settings:
+                explode: true
+                style: deepObject
+              tos_acceptance:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/bank_accounts:
+    post:
+      description: <p>Create an external account for a given account.</p>
+      operationId: PostAccountsAccountBankAccounts
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              bank_account:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountBankAccountsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Bank Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/bank_accounts/{id}:
+    delete:
+      description: <p>Delete a specified external account for a given account.</p>
+      operationId: DeleteAccountsAccountBankAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteAccountsAccountBankAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete Bank Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieve a specified external account for a given account.</p>
+      operationId: GetAccountsAccountBankAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountBankAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Bank Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    post:
+      description: '<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href="/docs/connect/custom-accounts">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>
+
+
+        <p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>'
+      operationId: PostAccountsAccountBankAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountBankAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Bank Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/external_accounts:
+    post:
+      description: <p>Create an external account for a given account.</p>
+      operationId: PostAccountsAccountExternalAccounts
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              bank_account:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountExternalAccountsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create External Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/external_accounts/{id}:
+    delete:
+      description: <p>Delete a specified external account for a given account.</p>
+      operationId: DeleteAccountsAccountExternalAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteAccountsAccountExternalAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete External Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieve a specified external account for a given account.</p>
+      operationId: GetAccountsAccountExternalAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountExternalAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve External Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+    post:
+      description: '<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href="/docs/connect/custom-accounts">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>
+
+
+        <p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>'
+      operationId: PostAccountsAccountExternalAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountExternalAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update External Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/reject:
+    post:
+      description: '<p>With <a href="/docs/connect">Connect</a>, you may flag accounts as suspicious.</p>
+
+
+        <p>Test-mode Custom and Express accounts can be rejected at any time. Accounts created using live-mode keys may only be rejected once all balances are zero.</p>'
+      operationId: PostAccountsAccountReject
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountRejectRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Reject Account
+      tags:
+      - Account
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/link_account_sessions:
+    post:
+      description: <p>To launch the Financial Connections authorization flow, create a <code>Session</code>. The session’s <code>client_secret</code> can be used to launch the flow using Stripe.js.</p>
+      operationId: postLinkAccountSessions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              account_holder:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              filters:
+                explode: true
+                style: deepObject
+              permissions:
+                explode: true
+                style: deepObject
+              prefetch:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostLinkAccountSessionsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financial_connections.session'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Link Account Sessions
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Account
+  /v1/link_account_sessions/{session}:
+    get:
+      description: <p>Retrieves the details of a Financial Connections <code>Session</code></p>
+      operationId: getLinkAccountSessionsSession
+      parameters:
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: session
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetLinkAccountSessionsSessionRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financial_connections.session'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Link Account Sessions Session
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Account
+components:
+  schemas:
+    account_link:
+      description: 'Account Links are the means by which a Connect platform grants a connected account permission to access
+
+        Stripe-hosted applications, such as Connect Onboarding.
+
+
+        Related guide: [Connect Onboarding](https://stripe.com/docs/connect/custom/hosted-onboarding)'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        expires_at:
+          description: The timestamp at which this account link will expire.
+          format: unix-time
+          type: integer
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account_link
+          type: string
+        url:
+          description: The URL for the account link.
+          maxLength: 5000
+          type: string
+      required:
+      - created
+      - expires_at
+      - object
+      - url
+      title: AccountLink
+      type: object
+      x-expandableFields: []
+      x-resourceId: account_link
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    financial_connections.account:
+      description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree of access.
+      properties:
+        account_holder:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_accountholder'
+          description: The account holder that this account belongs to.
+          nullable: true
+        balance:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_balance'
+          description: The most recent information about the account's balance.
+          nullable: true
+        balance_refresh:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_balance_refresh'
+          description: The state of the most recent attempt to refresh the account balance.
+          nullable: true
+        category:
+          description: The type of the account. Account category is further divided in `subcategory`.
+          enum:
+          - cash
+          - credit
+          - investment
+          - other
+          type: string
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        display_name:
+          description: A human-readable name that has been assigned to this account, either by the account holder or by the institution.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        institution_name:
+          description: The name of the institution that holds this account.
+          maxLength: 5000
+          type: string
+        last4:
+          description: The last 4 digits of the account number. If present, this will be 4 numeric characters.
+          maxLength: 5000
+          nullable: true
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - financial_connections.account
+          type: string
+        ownership:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/financial_connections.account_ownership'
+          description: The most recent information about the account's owners.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/financial_connections.account_ownership'
+        ownership_refresh:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_ownership_refresh'
+          description: The state of the most recent attempt to refresh the account owners.
+          nullable: true
+        permissions:
+          description: The list of permissions granted by this account.
+          items:
+            enum:
+            - balances
+            - ownership
+            - payment_method
+            - transactions
+            type: string
+          nullable: true
+          type: array
+        status:
+          description: The status of the link to the account.
+          enum:
+          - active
+          - disconnected
+          - inactive
+          type: string
+        subcategory:
+          description: "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`."
+          enum:
+          - checking
+          - credit_card
+          - line_of_credit
+          - mortgage
+          - other
+          - savings
+          type: string
+        subscriptions:
+          description: The list of data refresh subscriptions requested on this account.
+          items:
+            enum:
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          nullable: true
+          type: array
+        supported_payment_method_types:
+          description: The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be created from this account.
+          items:
+            enum:
+            - link
+            - us_bank_account
+            type: string
+          type: array
+        transaction_refresh:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_transaction_refresh'
+          description: The state of the most recent attempt to refresh the account transactions.
+          nullable: true
+      required:
+      - category
+      - created
+      - id
+      - institution_name
+      - livemode
+      - object
+      - status
+      - subcategory
+      - supported_payment_method_types
+      title: BankConnectionsResourceLinkedAccount
+      type: object
+      x-expandableFields:
+      - account_holder
+      - balance
+      - balance_refresh
+      - ownership
+      - ownership_refresh
+      - transaction_refresh
+      x-resourceId: financial_connections.account
+    external_account:
+      anyOf:
+      - $ref: '#/components/schemas/bank_account'
+      - $ref: '#/components/schemas/card'
+      title: Polymorphic
+      x-resourceId: external_account
+      x-stripeBypassValidation: true
+    GetLinkAccountSessionsSessionRequest:
+      type: object
+      properties: {}
+    PostLinkAccountSessionsRequest:
+      type: object
+      required:
+      - account_holder
+      - permissions
+      properties:
+        account_holder:
+          description: The account holder to link accounts for.
+          properties:
+            account:
+              maxLength: 5000
+              type: string
+            customer:
+              maxLength: 5000
+              type: string
+            type:
+              enum:
+              - account
+              - customer
+              type: string
+          required:
+          - type
+          title: accountholder_params
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        filters:
+          description: Filters to restrict the kinds of accounts to collect.
+          properties:
+            countries:
+              items:
+                maxLength: 5000
+                type: string
+              type: array
+          required:
+          - countries
+          title: filters_params
+          type: object
+        permissions:
+          description: 'List of data features that you would like to request access to.
+
+
+            Possible values are `balances`, `transactions`, `ownership`, and `payment_method`.'
+          items:
+            enum:
+            - balances
+            - ownership
+            - payment_method
+            - transactions
+            maxLength: 5000
+            type: string
+            x-stripeBypassValidation: true
+          type: array
+        prefetch:
+          description: List of data features that you would like to retrieve upon account creation.
+          items:
+            enum:
+            - balances
+            - ownership
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          type: array
+        return_url:
+          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
+          maxLength: 5000
+          type: string
+    account_session:
+      description: 'An AccountSession allows a Connect platform to grant access to a connected account in Connect embedded components.
+
+
+        We recommend that you create an AccountSession each time you need to display an embedded component
+
+        to your user. Do not save AccountSessions to your database as they expire relatively
+
+        quickly, and cannot be used more than once.
+
+
+        Related guide: [Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components)'
+      properties:
+        account:
+          description: The ID of the account the AccountSession was created for
+          maxLength: 5000
+          type: string
+        client_secret:
+          description: 'The client secret of this AccountSession. Used on the client to set up secure access to the given `account`.
+
+
+            The client secret can be used to provide access to `account` from your frontend. It should not be stored, logged, or exposed to anyone other than the connected account. Make sure that you have TLS enabled on any page that includes the client secret.
+
+
+            Refer to our docs to [setup Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components) and learn about how `client_secret` should be handled.'
+          maxLength: 5000
+          type: string
+        components:
+          $ref: '#/components/schemas/connect_embedded_account_session_create_components'
+        expires_at:
+          description: The timestamp at which this AccountSession will expire.
+          format: unix-time
+          type: integer
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account_session
+          type: string
+      required:
+      - account
+      - client_secret
+      - components
+      - expires_at
+      - livemode
+      - object
+      title: ConnectEmbeddedMethodAccountSessionCreateMethodAccountSession
+      type: object
+      x-expandableFields:
+      - components
+      x-resourceId: account_session
+    deleted_account:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedAccount
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_account
+    deleted_external_account:
+      anyOf:
+      - $ref: '#/components/schemas/deleted_bank_account'
+      - $ref: '#/components/schemas/deleted_card'
+      title: Polymorphic
+      x-resourceId: deleted_external_account
+      x-stripeBypassValidation: true
+    financial_connections.session:
+      description: A Financial Connections Session is the secure way to programmatically launch the client-side Stripe.js modal that lets your users link their accounts.
+      properties:
+        account_holder:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_accountholder'
+          description: The account holder for whom accounts are collected in this session.
+          nullable: true
+        accounts:
+          description: The accounts that were collected as part of this Session.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/financial_connections.account'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              pattern: ^/v1/financial_connections/accounts
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: BankConnectionsResourceLinkedAccountList
+          type: object
+          x-expandableFields:
+          - data
+        client_secret:
+          description: A value that will be passed to the client to launch the authentication flow.
+          maxLength: 5000
+          type: string
+        filters:
+          $ref: '#/components/schemas/bank_connections_resource_link_account_session_filters'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - financial_connections.session
+          type: string
+        permissions:
+          description: Permissions requested for accounts collected during this session.
+          items:
+            enum:
+            - balances
+            - ownership
+            - payment_method
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          type: array
+        prefetch:
+          description: Data features requested to be retrieved upon account creation.
+          items:
+            enum:
+            - balances
+            - ownership
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          nullable: true
+          type: array
+        return_url:
+          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
+          maxLength: 5000
+          type: string
+      required:
+      - accounts
+      - client_secret
+      - id
+      - livemode
+      - object
+      - permissions
+      title: BankConnectionsResourceLinkAccountSession
+      type: object
+      x-expandableFields:
+      - account_holder
+      - accounts
+      - filters
+      x-resourceId: financial_connections.session
+    account:
+      description: 'This is an object representing a Stripe account. You can retrieve it to see
+
+        properties on the account like its current requirements or if the account is
+
+        enabled to make live charges or receive payouts.
+
+
+        For Custom accounts, the properties below are always returned. For other accounts, some properties are returned until that
+
+        account has started to go through Connect Onboarding. Once you create an [Account Link](https://stripe.com/docs/api/account_links)
+
+        for a Standard or Express account, some parameters are no longer returned. These are marked as **Custom Only** or **Custom and Express**
+
+        below. Learn about the differences [between accounts](https://stripe.com/docs/connect/accounts).'
+      properties:
+        business_profile:
+          anyOf:
+          - $ref: '#/components/schemas/account_business_profile'
+          description: Business information about the account.
+          nullable: true
+        business_type:
+          description: The business type.
+          enum:
+          - company
+          - government_entity
+          - individual
+          - non_profit
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        capabilities:
+          $ref: '#/components/schemas/account_capabilities'
+        charges_enabled:
+          description: Whether the account can create live charges.
+          type: boolean
+        company:
+          $ref: '#/components/schemas/legal_entity_company'
+        controller:
+          $ref: '#/components/schemas/account_unification_account_controller'
+        country:
+          description: The account's country.
+          maxLength: 5000
+          type: string
+        created:
+          description: Time at which the account was connected. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        default_currency:
+          description: Three-letter ISO currency code representing the default currency for the account. This must be a currency that [Stripe supports in the account's country](https://stripe.com/docs/payouts).
+          maxLength: 5000
+          type: string
+        details_submitted:
+          description: Whether account details have been submitted. Standard accounts cannot receive payouts before this is true.
+          type: boolean
+        email:
+          description: An email address associated with the account. It's not used for authentication and Stripe doesn't market to this field without explicit approval from the platform.
+          maxLength: 5000
+          nullable: true
+          type: string
+        external_accounts:
+          description: External accounts (bank accounts and debit cards) currently attached to this account
+          properties:
+            data:
+              description: The list contains all external accounts that have been attached to the Stripe account. These may be bank accounts or cards.
+              items:
+                anyOf:
+                - $ref: '#/components/schemas/bank_account'
+                - $ref: '#/components/schemas/card'
+                title: Polymorphic
+                x-stripeBypassValidation: true
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: ExternalAccountList
+          type: object
+          x-expandableFields:
+          - data
+        future_requirements:
+          $ref: '#/components/schemas/account_future_requirements'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        individual:
+          $ref: '#/components/schemas/person'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account
+          type: string
+        payouts_enabled:
+          description: Whether Stripe can send payouts to this account.
+          type: boolean
+        requirements:
+          $ref: '#/components/schemas/account_requirements'
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/account_settings'
+          description: Options for customizing how the account functions within Stripe.
+          nullable: true
+        tos_acceptance:
+          $ref: '#/components/schemas/account_tos_acceptance'
+        type:
+          description: The Stripe account type. Can be `standard`, `express`, or `custom`.
+          enum:
+          - custom
+          - express
+          - standard
+          type: string
+      required:
+      - id
+      - object
+      title: Account
+      type: object
+      x-expandableFields:
+      - business_profile
+      - capabilities
+      - company
+      - controller
+      - external_accounts
+      - future_requirements
+      - individual
+      - requirements
+      - settings
+      - tos_acceptance
+      x-resourceId: account
+    person:
+      description: 'This is an object representing a person associated with a Stripe account.
+
+
+        A platform cannot access a Standard or Express account''s persons after the account starts onboarding, such as after generating an account link for the account.
+
+        See the [Standard onboarding](https://stripe.com/docs/connect/standard-accounts) or [Express onboarding documentation](https://stripe.com/docs/connect/express-accounts) for information about platform prefilling and account onboarding steps.
+
+
+        Related guide: [Handling identity verification with the API](https://stripe.com/docs/connect/handling-api-verification#person-information)'
+      properties:
+        account:
+          description: The account the person is associated with.
+          maxLength: 5000
+          type: string
+        additional_tos_acceptances:
+          $ref: '#/components/schemas/person_additional_tos_acceptances'
+        address:
+          $ref: '#/components/schemas/address'
+        address_kana:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        address_kanji:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        dob:
+          $ref: '#/components/schemas/legal_entity_dob'
+        email:
+          description: The person's email address.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name:
+          description: The person's first name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kana:
+          description: The Kana variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kanji:
+          description: The Kanji variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        full_name_aliases:
+          description: A list of alternate names or aliases that the person is known by.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        future_requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_future_requirements'
+          nullable: true
+        gender:
+          description: The person's gender (International regulations require either "male" or "female").
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number_provided:
+          description: Whether the person's `id_number` was provided. True if either the full ID number was provided or if only the required part of the ID number was provided (ex. last four of an individual's SSN for the US indicated by `ssn_last_4_provided`).
+          type: boolean
+        id_number_secondary_provided:
+          description: Whether the person's `id_number_secondary` was provided.
+          type: boolean
+        last_name:
+          description: The person's last name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kana:
+          description: The Kana variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kanji:
+          description: The Kanji variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        maiden_name:
+          description: The person's maiden name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        nationality:
+          description: The country where the person is a national.
+          maxLength: 5000
+          nullable: true
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - person
+          type: string
+        phone:
+          description: The person's phone number.
+          maxLength: 5000
+          nullable: true
+          type: string
+        political_exposure:
+          description: Indicates if the person or any of their representatives, family members, or other closely related persons, declares that they hold or have held an important public job or function, in any jurisdiction.
+          enum:
+          - existing
+          - none
+          type: string
+        registered_address:
+          $ref: '#/components/schemas/address'
+        relationship:
+          $ref: '#/components/schemas/person_relationship'
+        requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_requirements'
+          nullable: true
+        ssn_last_4_provided:
+          description: Whether the last four digits of the person's Social Security number have been provided (U.S. only).
+          type: boolean
+        verification:
+          $ref: '#/components/schemas/legal_entity_person_verification'
+      required:
+      - account
+      - created
+      - id
+      - object
+      title: Person
+      type: object
+      x-expandableFields:
+      - additional_tos_acceptances
+      - address
+      - address_kana
+      - address_kanji
+      - dob
+      - future_requirements
+      - registered_address
+      - relationship
+      - requirements
+      - verification
+      x-resourceId: person

@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Persons API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Persons
+paths:
+  /v1/accounts/{account}/people:
+    get:
+      description: <p>Returns a list of people associated with the accounts legal entity. The people are returned sorted by creation date, with the most recent people appearing first.</p>
+      operationId: GetAccountsAccountPeople
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Filters on the list of people returned based on the person's relationship to the account's company.
+        explode: true
+        in: query
+        name: relationship
+        required: false
+        schema:
+          properties:
+            director:
+              type: boolean
+            executive:
+              type: boolean
+            legal_guardian:
+              type: boolean
+            owner:
+              type: boolean
+            representative:
+              type: boolean
+          title: all_people_relationship_specs
+          type: object
+        style: deepObject
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountPeopleRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/PersonList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe List Persons
+      tags:
+      - Persons
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/persons:
+    get:
+      description: <p>Returns a list of people associated with the accounts legal entity. The people are returned sorted by creation date, with the most recent people appearing first.</p>
+      operationId: GetAccountsAccountPersons
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Filters on the list of people returned based on the person's relationship to the account's company.
+        explode: true
+        in: query
+        name: relationship
+        required: false
+        schema:
+          properties:
+            director:
+              type: boolean
+            executive:
+              type: boolean
+            legal_guardian:
+              type: boolean
+            owner:
+              type: boolean
+            representative:
+              type: boolean
+          title: all_people_relationship_specs
+          type: object
+        style: deepObject
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountPersonsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/PersonList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe List Persons
+      tags:
+      - Persons
+      x-api-evangelist-processing:
+        ChooseTags: true
+components:
+  schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object

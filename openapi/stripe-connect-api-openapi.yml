@@ -1,22 +1,21 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
-  title: Stripe Connect API
-  description: >-
-    Stripe Connect is a set of programmable APIs and tools that lets you
-    facilitate payments on your software platform, build a marketplace, and
-    pay out sellers or service providers globally.
+  title: Stripe Accounts Account Connect API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
     url: https://stripe.com
   termsOfService: https://stripe.com/us/terms/
-  version: '2024-06-20'
+  version: '2023-10-16'
   x-stripeSpecFilename: spec3
-security:
-  - basicAuth: []
-  - bearerAuth: []
 servers:
-  - url: https://api.stripe.com/
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Connect
 paths:
   /v1/accounts:
     get:
@@ -24,33 +23,33 @@ paths:
       description: <p>Returns a list of accounts connected to your platform via Connect.</p>
       operationId: GetAccounts
       parameters:
-        - name: ending_before
-          in: query
-          required: false
-          schema:
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: expand
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
             type: string
             maxLength: 5000
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: expand
-          in: query
-          required: false
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-              maxLength: 5000
-          style: deepObject
+        style: deepObject
       responses:
         '200':
           description: Successful response.
@@ -62,7 +61,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -78,7 +77,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
     post:
       summary: Stripe Create Connected Account
       description: <p>Creates a new connected account with your platform.</p>
@@ -92,9 +91,9 @@ paths:
                 type:
                   type: string
                   enum:
-                    - custom
-                    - express
-                    - standard
+                  - custom
+                  - express
+                  - standard
                 country:
                   type: string
                 email:
@@ -104,10 +103,10 @@ paths:
                 business_type:
                   type: string
                   enum:
-                    - company
-                    - government_entity
-                    - individual
-                    - non_profit
+                  - company
+                  - government_entity
+                  - individual
+                  - non_profit
                 business_profile:
                   type: object
                   properties:
@@ -156,29 +155,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/accounts/{account}:
     get:
       summary: Stripe Retrieve Connected Account
       description: <p>Retrieves the details of an account.</p>
       operationId: GetAccountsAccount
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
+      - name: expand
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
             type: string
             maxLength: 5000
-        - name: expand
-          in: query
-          required: false
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-              maxLength: 5000
-          style: deepObject
+        style: deepObject
       responses:
         '200':
           description: Successful response.
@@ -193,18 +192,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
     post:
       summary: Stripe Update Connected Account
       description: <p>Updates a connected account by setting the values of the parameters passed.</p>
       operationId: PostAccountsAccount
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -245,18 +244,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
     delete:
       summary: Stripe Delete Connected Account
       description: <p>Deletes a connected account. You can only delete accounts that your platform has created using Connect.</p>
       operationId: DeleteAccountsAccount
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -278,19 +277,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/accounts/{account}/reject:
     post:
       summary: Stripe Reject Connected Account
       description: <p>Rejects a connected account and disables the ability to make charges or receive payouts.</p>
       operationId: PostAccountsAccountReject
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       requestBody:
         required: true
         content:
@@ -298,7 +297,7 @@ paths:
             schema:
               type: object
               required:
-                - reason
+              - reason
               properties:
                 reason:
                   type: string
@@ -317,7 +316,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/account_links:
     post:
       summary: Stripe Create Account Link
@@ -330,10 +329,10 @@ paths:
             schema:
               type: object
               required:
-                - account
-                - refresh_url
-                - return_url
-                - type
+              - account
+              - refresh_url
+              - return_url
+              - type
               properties:
                 account:
                   type: string
@@ -345,13 +344,13 @@ paths:
                 type:
                   type: string
                   enum:
-                    - account_onboarding
-                    - account_update
+                  - account_onboarding
+                  - account_update
                 collect:
                   type: string
                   enum:
-                    - currently_due
-                    - eventually_due
+                  - currently_due
+                  - eventually_due
       responses:
         '200':
           description: Successful response.
@@ -366,7 +365,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/account_sessions:
     post:
       summary: Stripe Create Account Session
@@ -379,8 +378,8 @@ paths:
             schema:
               type: object
               required:
-                - account
-                - components
+              - account
+              - components
               properties:
                 account:
                   type: string
@@ -401,19 +400,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/accounts/{account}/login_links:
     post:
       summary: Stripe Create Login Link
       description: <p>Creates a single-use login link for a connected account to access their Stripe dashboard.</p>
       operationId: PostAccountsAccountLoginLinks
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -428,19 +427,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
   /v1/accounts/{account}/capabilities:
     get:
       summary: Stripe List Account Capabilities
       description: <p>Returns a list of capabilities associated with the account.</p>
       operationId: GetAccountsAccountCapabilities
       parameters:
-        - name: account
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: account
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -452,7 +451,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -468,99 +467,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Connect
+      - Connect
 components:
   schemas:
-    account:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - account
-        business_profile:
-          type:
-            - object
-            - 'null'
-        business_type:
-          type:
-            - string
-            - 'null'
-        capabilities:
-          type:
-            - object
-            - 'null'
-        charges_enabled:
-          type: boolean
-        company:
-          type:
-            - object
-            - 'null'
-        country:
-          type:
-            - string
-            - 'null'
-        created:
-          type: integer
-        default_currency:
-          type:
-            - string
-            - 'null'
-        details_submitted:
-          type: boolean
-        email:
-          type:
-            - string
-            - 'null'
-        external_accounts:
-          type:
-            - object
-            - 'null'
-        individual:
-          type:
-            - object
-            - 'null'
-        metadata:
-          type:
-            - object
-            - 'null'
-          additionalProperties:
-            type: string
-        payouts_enabled:
-          type: boolean
-        requirements:
-          type:
-            - object
-            - 'null'
-        settings:
-          type:
-            - object
-            - 'null'
-        tos_acceptance:
-          type:
-            - object
-            - 'null'
-        type:
-          type:
-            - string
-            - 'null'
-          enum:
-            - custom
-            - express
-            - standard
-      required:
-        - id
-        - object
     account_link:
       type: object
       properties:
         object:
           type: string
           enum:
-            - account_link
+          - account_link
         created:
           type: integer
         expires_at:
@@ -568,85 +484,10 @@ components:
         url:
           type: string
       required:
-        - object
-        - created
-        - expires_at
-        - url
-    account_session:
-      type: object
-      properties:
-        object:
-          type: string
-          enum:
-            - account_session
-        account:
-          type: string
-        client_secret:
-          type: string
-        components:
-          type: object
-        expires_at:
-          type: integer
-        livemode:
-          type: boolean
-      required:
-        - object
-        - account
-        - client_secret
-        - components
-        - expires_at
-        - livemode
-    login_link:
-      type: object
-      properties:
-        object:
-          type: string
-          enum:
-            - login_link
-        created:
-          type: integer
-        url:
-          type: string
-      required:
-        - object
-        - created
-        - url
-    capability:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - capability
-        account:
-          type: string
-        requested:
-          type: boolean
-        requested_at:
-          type:
-            - integer
-            - 'null'
-        requirements:
-          type:
-            - object
-            - 'null'
-        status:
-          type: string
-          enum:
-            - active
-            - disabled
-            - inactive
-            - pending
-            - unrequested
-      required:
-        - id
-        - object
-        - account
-        - requested
-        - status
+      - object
+      - created
+      - expires_at
+      - url
     error:
       type: object
       properties:
@@ -661,12 +502,161 @@ components:
               type: string
             param:
               type: string
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    bearerAuth:
-      type: http
-      scheme: bearer
-tags:
-  - name: Connect
+    account_session:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+          - account_session
+        account:
+          type: string
+        client_secret:
+          type: string
+        components:
+          type: object
+        expires_at:
+          type: integer
+        livemode:
+          type: boolean
+      required:
+      - object
+      - account
+      - client_secret
+      - components
+      - expires_at
+      - livemode
+    capability:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - capability
+        account:
+          type: string
+        requested:
+          type: boolean
+        requested_at:
+          type:
+          - integer
+          - 'null'
+        requirements:
+          type:
+          - object
+          - 'null'
+        status:
+          type: string
+          enum:
+          - active
+          - disabled
+          - inactive
+          - pending
+          - unrequested
+      required:
+      - id
+      - object
+      - account
+      - requested
+      - status
+    account:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - account
+        business_profile:
+          type:
+          - object
+          - 'null'
+        business_type:
+          type:
+          - string
+          - 'null'
+        capabilities:
+          type:
+          - object
+          - 'null'
+        charges_enabled:
+          type: boolean
+        company:
+          type:
+          - object
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        created:
+          type: integer
+        default_currency:
+          type:
+          - string
+          - 'null'
+        details_submitted:
+          type: boolean
+        email:
+          type:
+          - string
+          - 'null'
+        external_accounts:
+          type:
+          - object
+          - 'null'
+        individual:
+          type:
+          - object
+          - 'null'
+        metadata:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        payouts_enabled:
+          type: boolean
+        requirements:
+          type:
+          - object
+          - 'null'
+        settings:
+          type:
+          - object
+          - 'null'
+        tos_acceptance:
+          type:
+          - object
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+          enum:
+          - custom
+          - express
+          - standard
+      required:
+      - id
+      - object
+    login_link:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+          - login_link
+        created:
+          type: integer
+        url:
+          type: string
+      required:
+      - object
+      - created
+      - url

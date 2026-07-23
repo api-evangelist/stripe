@@ -1,0 +1,1068 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Update API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Update
+paths:
+  /v1/accounts/{account}:
+    post:
+      description: '<p>Updates a <a href="/docs/connect/accounts">connected account</a> by setting the values of the parameters passed. Any parameters not provided are
+
+        left unchanged.</p>
+
+
+        <p>For Custom accounts, you can update any information on the account. For other accounts, you can update all information until that
+
+        account has started to go through Connect Onboarding. Once you create an <a href="/docs/api/account_links">Account Link</a>
+
+        for a Standard or Express account, some parameters can no longer be changed. These are marked as <strong>Custom Only</strong> or <strong>Custom and Express</strong>
+
+        below.</p>
+
+
+        <p>To update your own account, use the <a href="https://dashboard.stripe.com/settings/account">Dashboard</a>. Refer to our
+
+        <a href="/docs/connect/updating-accounts">Connect</a> documentation to learn more about updating accounts.</p>'
+      operationId: PostAccountsAccount
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              business_profile:
+                explode: true
+                style: deepObject
+              capabilities:
+                explode: true
+                style: deepObject
+              company:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              individual:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              settings:
+                explode: true
+                style: deepObject
+              tos_acceptance:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Account
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/bank_accounts/{id}:
+    post:
+      description: '<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href="/docs/connect/custom-accounts">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>
+
+
+        <p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>'
+      operationId: PostAccountsAccountBankAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountBankAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Bank Account
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/capabilities/{capability}:
+    post:
+      description: <p>Updates an existing Account Capability. Request or remove a capability by updating its <code>requested</code> parameter.</p>
+      operationId: PostAccountsAccountCapabilitiesCapability
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: capability
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountCapabilitiesCapabilityRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/capability'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Capability
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/external_accounts/{id}:
+    post:
+      description: '<p>Updates the metadata, account holder name, account holder type of a bank account belonging to a <a href="/docs/connect/custom-accounts">Custom account</a>, and optionally sets it as the default for its currency. Other bank account details are not editable by design.</p>
+
+
+        <p>You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.</p>'
+      operationId: PostAccountsAccountExternalAccountsId
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountExternalAccountsIdRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external_account'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update External Account
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/people/{person}:
+    post:
+      description: <p>Updates an existing person.</p>
+      operationId: PostAccountsAccountPeoplePerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPeoplePersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Person
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/persons/{person}:
+    post:
+      description: <p>Updates an existing person.</p>
+      operationId: PostAccountsAccountPersonsPerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPersonsPersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Person
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/application_fees/{fee}/refunds/{id}:
+    post:
+      description: '<p>Updates the specified application fee refund by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>
+
+
+        <p>This request only accepts metadata as an argument.</p>'
+      operationId: PostApplicationFeesFeeRefundsId
+      parameters:
+      - in: path
+        name: fee
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: id
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              properties:
+                expand:
+                  description: Specifies which fields in the response should be expanded.
+                  items:
+                    maxLength: 5000
+                    type: string
+                  type: array
+                metadata:
+                  anyOf:
+                  - additionalProperties:
+                      type: string
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                  description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+              type: object
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fee_refund'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Application Fee Refund
+      tags:
+      - Update
+      x-api-evangelist-processing:
+        ChooseTags: true
+components:
+  schemas:
+    person:
+      description: 'This is an object representing a person associated with a Stripe account.
+
+
+        A platform cannot access a Standard or Express account''s persons after the account starts onboarding, such as after generating an account link for the account.
+
+        See the [Standard onboarding](https://stripe.com/docs/connect/standard-accounts) or [Express onboarding documentation](https://stripe.com/docs/connect/express-accounts) for information about platform prefilling and account onboarding steps.
+
+
+        Related guide: [Handling identity verification with the API](https://stripe.com/docs/connect/handling-api-verification#person-information)'
+      properties:
+        account:
+          description: The account the person is associated with.
+          maxLength: 5000
+          type: string
+        additional_tos_acceptances:
+          $ref: '#/components/schemas/person_additional_tos_acceptances'
+        address:
+          $ref: '#/components/schemas/address'
+        address_kana:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        address_kanji:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        dob:
+          $ref: '#/components/schemas/legal_entity_dob'
+        email:
+          description: The person's email address.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name:
+          description: The person's first name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kana:
+          description: The Kana variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kanji:
+          description: The Kanji variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        full_name_aliases:
+          description: A list of alternate names or aliases that the person is known by.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        future_requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_future_requirements'
+          nullable: true
+        gender:
+          description: The person's gender (International regulations require either "male" or "female").
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number_provided:
+          description: Whether the person's `id_number` was provided. True if either the full ID number was provided or if only the required part of the ID number was provided (ex. last four of an individual's SSN for the US indicated by `ssn_last_4_provided`).
+          type: boolean
+        id_number_secondary_provided:
+          description: Whether the person's `id_number_secondary` was provided.
+          type: boolean
+        last_name:
+          description: The person's last name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kana:
+          description: The Kana variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kanji:
+          description: The Kanji variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        maiden_name:
+          description: The person's maiden name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        nationality:
+          description: The country where the person is a national.
+          maxLength: 5000
+          nullable: true
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - person
+          type: string
+        phone:
+          description: The person's phone number.
+          maxLength: 5000
+          nullable: true
+          type: string
+        political_exposure:
+          description: Indicates if the person or any of their representatives, family members, or other closely related persons, declares that they hold or have held an important public job or function, in any jurisdiction.
+          enum:
+          - existing
+          - none
+          type: string
+        registered_address:
+          $ref: '#/components/schemas/address'
+        relationship:
+          $ref: '#/components/schemas/person_relationship'
+        requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_requirements'
+          nullable: true
+        ssn_last_4_provided:
+          description: Whether the last four digits of the person's Social Security number have been provided (U.S. only).
+          type: boolean
+        verification:
+          $ref: '#/components/schemas/legal_entity_person_verification'
+      required:
+      - account
+      - created
+      - id
+      - object
+      title: Person
+      type: object
+      x-expandableFields:
+      - additional_tos_acceptances
+      - address
+      - address_kana
+      - address_kanji
+      - dob
+      - future_requirements
+      - registered_address
+      - relationship
+      - requirements
+      - verification
+      x-resourceId: person
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    external_account:
+      anyOf:
+      - $ref: '#/components/schemas/bank_account'
+      - $ref: '#/components/schemas/card'
+      title: Polymorphic
+      x-resourceId: external_account
+      x-stripeBypassValidation: true
+    capability:
+      description: 'This is an object representing a capability for a Stripe account.
+
+
+        Related guide: [Account capabilities](https://stripe.com/docs/connect/account-capabilities)'
+      properties:
+        account:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: The account for which the capability enables functionality.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        future_requirements:
+          $ref: '#/components/schemas/account_capability_future_requirements'
+        id:
+          description: The identifier for the capability.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - capability
+          type: string
+        requested:
+          description: Whether the capability has been requested.
+          type: boolean
+        requested_at:
+          description: Time at which the capability was requested. Measured in seconds since the Unix epoch.
+          format: unix-time
+          nullable: true
+          type: integer
+        requirements:
+          $ref: '#/components/schemas/account_capability_requirements'
+        status:
+          description: The status of the capability. Can be `active`, `inactive`, `pending`, or `unrequested`.
+          enum:
+          - active
+          - disabled
+          - inactive
+          - pending
+          - unrequested
+          type: string
+      required:
+      - account
+      - id
+      - object
+      - requested
+      - status
+      title: AccountCapability
+      type: object
+      x-expandableFields:
+      - account
+      - future_requirements
+      - requirements
+      x-resourceId: capability
+    application_fee:
+      description: ''
+      properties:
+        account:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: ID of the Stripe account this fee was taken from.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        amount:
+          description: Amount earned, in cents (or local equivalent).
+          type: integer
+        amount_refunded:
+          description: Amount in cents (or local equivalent) refunded (can be less than the amount attribute on the fee if a partial refund was issued)
+          type: integer
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          description: ID of the Connect application that earned the fee.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: Balance transaction that describes the impact of this collected application fee on your account balance (not including refunds).
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        charge:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/charge'
+          description: ID of the charge that the application fee was taken from.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/charge'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - application_fee
+          type: string
+        originating_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/charge'
+          description: ID of the corresponding charge on the platform account, if this fee was the result of a charge using the `destination` parameter.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/charge'
+        refunded:
+          description: Whether the fee has been fully refunded. If the fee is only partially refunded, this attribute will still be false.
+          type: boolean
+        refunds:
+          description: A list of refunds that have been applied to the fee.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/fee_refund'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: FeeRefundList
+          type: object
+          x-expandableFields:
+          - data
+      required:
+      - account
+      - amount
+      - amount_refunded
+      - application
+      - charge
+      - created
+      - currency
+      - id
+      - livemode
+      - object
+      - refunded
+      - refunds
+      title: PlatformFee
+      type: object
+      x-expandableFields:
+      - account
+      - application
+      - balance_transaction
+      - charge
+      - originating_transaction
+      - refunds
+      x-resourceId: application_fee
+    account:
+      description: 'This is an object representing a Stripe account. You can retrieve it to see
+
+        properties on the account like its current requirements or if the account is
+
+        enabled to make live charges or receive payouts.
+
+
+        For Custom accounts, the properties below are always returned. For other accounts, some properties are returned until that
+
+        account has started to go through Connect Onboarding. Once you create an [Account Link](https://stripe.com/docs/api/account_links)
+
+        for a Standard or Express account, some parameters are no longer returned. These are marked as **Custom Only** or **Custom and Express**
+
+        below. Learn about the differences [between accounts](https://stripe.com/docs/connect/accounts).'
+      properties:
+        business_profile:
+          anyOf:
+          - $ref: '#/components/schemas/account_business_profile'
+          description: Business information about the account.
+          nullable: true
+        business_type:
+          description: The business type.
+          enum:
+          - company
+          - government_entity
+          - individual
+          - non_profit
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        capabilities:
+          $ref: '#/components/schemas/account_capabilities'
+        charges_enabled:
+          description: Whether the account can create live charges.
+          type: boolean
+        company:
+          $ref: '#/components/schemas/legal_entity_company'
+        controller:
+          $ref: '#/components/schemas/account_unification_account_controller'
+        country:
+          description: The account's country.
+          maxLength: 5000
+          type: string
+        created:
+          description: Time at which the account was connected. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        default_currency:
+          description: Three-letter ISO currency code representing the default currency for the account. This must be a currency that [Stripe supports in the account's country](https://stripe.com/docs/payouts).
+          maxLength: 5000
+          type: string
+        details_submitted:
+          description: Whether account details have been submitted. Standard accounts cannot receive payouts before this is true.
+          type: boolean
+        email:
+          description: An email address associated with the account. It's not used for authentication and Stripe doesn't market to this field without explicit approval from the platform.
+          maxLength: 5000
+          nullable: true
+          type: string
+        external_accounts:
+          description: External accounts (bank accounts and debit cards) currently attached to this account
+          properties:
+            data:
+              description: The list contains all external accounts that have been attached to the Stripe account. These may be bank accounts or cards.
+              items:
+                anyOf:
+                - $ref: '#/components/schemas/bank_account'
+                - $ref: '#/components/schemas/card'
+                title: Polymorphic
+                x-stripeBypassValidation: true
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: ExternalAccountList
+          type: object
+          x-expandableFields:
+          - data
+        future_requirements:
+          $ref: '#/components/schemas/account_future_requirements'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        individual:
+          $ref: '#/components/schemas/person'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account
+          type: string
+        payouts_enabled:
+          description: Whether Stripe can send payouts to this account.
+          type: boolean
+        requirements:
+          $ref: '#/components/schemas/account_requirements'
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/account_settings'
+          description: Options for customizing how the account functions within Stripe.
+          nullable: true
+        tos_acceptance:
+          $ref: '#/components/schemas/account_tos_acceptance'
+        type:
+          description: The Stripe account type. Can be `standard`, `express`, or `custom`.
+          enum:
+          - custom
+          - express
+          - standard
+          type: string
+      required:
+      - id
+      - object
+      title: Account
+      type: object
+      x-expandableFields:
+      - business_profile
+      - capabilities
+      - company
+      - controller
+      - external_accounts
+      - future_requirements
+      - individual
+      - requirements
+      - settings
+      - tos_acceptance
+      x-resourceId: account
+    fee_refund:
+      description: '`Application Fee Refund` objects allow you to refund an application fee that
+
+        has previously been created but not yet refunded. Funds will be refunded to
+
+        the Stripe account from which the fee was originally collected.
+
+
+        Related guide: [Refunding application fees](https://stripe.com/docs/connect/destination-charges#refunding-app-fee)'
+      properties:
+        amount:
+          description: Amount, in cents (or local equivalent).
+          type: integer
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: Balance transaction that describes the impact on your account balance.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        fee:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application_fee'
+          description: ID of the application fee that was refunded.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application_fee'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - fee_refund
+          type: string
+      required:
+      - amount
+      - created
+      - currency
+      - fee
+      - id
+      - object
+      title: FeeRefund
+      type: object
+      x-expandableFields:
+      - balance_transaction
+      - fee
+      x-resourceId: fee_refund

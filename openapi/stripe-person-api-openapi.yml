@@ -1,0 +1,718 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Person API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Person
+paths:
+  /v1/accounts/{account}/people:
+    post:
+      description: <p>Creates a new person.</p>
+      operationId: PostAccountsAccountPeople
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPeopleRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/people/{person}:
+    delete:
+      description: <p>Deletes an existing persons relationship to the accounts legal entity. Any person with a relationship for an account can be deleted through the API, except if the person is the <code>account_opener</code>. If your integration is using the <code>executive</code> parameter, you cannot delete the only verified <code>executive</code> on file.</p>
+      operationId: DeleteAccountsAccountPeoplePerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteAccountsAccountPeoplePersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieves an existing person.</p>
+      operationId: GetAccountsAccountPeoplePerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountPeoplePersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+    post:
+      description: <p>Updates an existing person.</p>
+      operationId: PostAccountsAccountPeoplePerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPeoplePersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/persons:
+    post:
+      description: <p>Creates a new person.</p>
+      operationId: PostAccountsAccountPersons
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPersonsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+  /v1/accounts/{account}/persons/{person}:
+    delete:
+      description: <p>Deletes an existing persons relationship to the accounts legal entity. Any person with a relationship for an account can be deleted through the API, except if the person is the <code>account_opener</code>. If your integration is using the <code>executive</code> parameter, you cannot delete the only verified <code>executive</code> on file.</p>
+      operationId: DeleteAccountsAccountPersonsPerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteAccountsAccountPersonsPersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Delete Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+    get:
+      description: <p>Retrieves an existing person.</p>
+      operationId: GetAccountsAccountPersonsPerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetAccountsAccountPersonsPersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Retrieve Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+    post:
+      description: <p>Updates an existing person.</p>
+      operationId: PostAccountsAccountPersonsPerson
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - in: path
+        name: person
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              additional_tos_acceptances:
+                explode: true
+                style: deepObject
+              address:
+                explode: true
+                style: deepObject
+              address_kana:
+                explode: true
+                style: deepObject
+              address_kanji:
+                explode: true
+                style: deepObject
+              dob:
+                explode: true
+                style: deepObject
+              documents:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              full_name_aliases:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              registered_address:
+                explode: true
+                style: deepObject
+              relationship:
+                explode: true
+                style: deepObject
+              verification:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountPersonsPersonRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Update Person
+      tags:
+      - Person
+      x-api-evangelist-processing:
+        ChooseTags: true
+components:
+  schemas:
+    person:
+      description: 'This is an object representing a person associated with a Stripe account.
+
+
+        A platform cannot access a Standard or Express account''s persons after the account starts onboarding, such as after generating an account link for the account.
+
+        See the [Standard onboarding](https://stripe.com/docs/connect/standard-accounts) or [Express onboarding documentation](https://stripe.com/docs/connect/express-accounts) for information about platform prefilling and account onboarding steps.
+
+
+        Related guide: [Handling identity verification with the API](https://stripe.com/docs/connect/handling-api-verification#person-information)'
+      properties:
+        account:
+          description: The account the person is associated with.
+          maxLength: 5000
+          type: string
+        additional_tos_acceptances:
+          $ref: '#/components/schemas/person_additional_tos_acceptances'
+        address:
+          $ref: '#/components/schemas/address'
+        address_kana:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        address_kanji:
+          anyOf:
+          - $ref: '#/components/schemas/legal_entity_japan_address'
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        dob:
+          $ref: '#/components/schemas/legal_entity_dob'
+        email:
+          description: The person's email address.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name:
+          description: The person's first name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kana:
+          description: The Kana variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        first_name_kanji:
+          description: The Kanji variation of the person's first name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        full_name_aliases:
+          description: A list of alternate names or aliases that the person is known by.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        future_requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_future_requirements'
+          nullable: true
+        gender:
+          description: The person's gender (International regulations require either "male" or "female").
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number_provided:
+          description: Whether the person's `id_number` was provided. True if either the full ID number was provided or if only the required part of the ID number was provided (ex. last four of an individual's SSN for the US indicated by `ssn_last_4_provided`).
+          type: boolean
+        id_number_secondary_provided:
+          description: Whether the person's `id_number_secondary` was provided.
+          type: boolean
+        last_name:
+          description: The person's last name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kana:
+          description: The Kana variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_name_kanji:
+          description: The Kanji variation of the person's last name (Japan only).
+          maxLength: 5000
+          nullable: true
+          type: string
+        maiden_name:
+          description: The person's maiden name.
+          maxLength: 5000
+          nullable: true
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        nationality:
+          description: The country where the person is a national.
+          maxLength: 5000
+          nullable: true
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - person
+          type: string
+        phone:
+          description: The person's phone number.
+          maxLength: 5000
+          nullable: true
+          type: string
+        political_exposure:
+          description: Indicates if the person or any of their representatives, family members, or other closely related persons, declares that they hold or have held an important public job or function, in any jurisdiction.
+          enum:
+          - existing
+          - none
+          type: string
+        registered_address:
+          $ref: '#/components/schemas/address'
+        relationship:
+          $ref: '#/components/schemas/person_relationship'
+        requirements:
+          anyOf:
+          - $ref: '#/components/schemas/person_requirements'
+          nullable: true
+        ssn_last_4_provided:
+          description: Whether the last four digits of the person's Social Security number have been provided (U.S. only).
+          type: boolean
+        verification:
+          $ref: '#/components/schemas/legal_entity_person_verification'
+      required:
+      - account
+      - created
+      - id
+      - object
+      title: Person
+      type: object
+      x-expandableFields:
+      - additional_tos_acceptances
+      - address
+      - address_kana
+      - address_kanji
+      - dob
+      - future_requirements
+      - registered_address
+      - relationship
+      - requirements
+      - verification
+      x-resourceId: person
+    deleted_person:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - person
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedPerson
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_person
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object

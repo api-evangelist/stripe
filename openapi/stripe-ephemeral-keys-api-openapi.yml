@@ -1,10 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Stripe Ephemeral Keys API
-  description: >-
-    Stripe.js uses ephemeral keys to securely retrieve Card information from the
-    Stripe API without publicly exposing your secret keys. You need to do some
-    of the ephemeral key exchange on the server-side to set this up.
+  title: Stripe Accounts Account Ephemeral Keys API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -12,16 +9,18 @@ info:
   termsOfService: https://stripe.com/us/terms/
   version: '2023-10-16'
   x-stripeSpecFilename: spec3
-security:
-  - basicAuth: []
-  - bearerAuth: []
 servers:
-  - url: https://api.stripe.com/
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Ephemeral Keys
 paths:
   /v1/ephemeral_keys:
     post:
       description: <p>Creates a short-lived API key for a given resource.</p>
-      operationId: postEphemeralKeys
+      operationId: PostEphemeralKeys
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -46,27 +45,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Post   Ephemeral Keys
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Keys
-        - Post
+      - Ephemeral Keys
   /v1/ephemeral_keys/{key}:
     delete:
       description: <p>Invalidates a short-lived API key for a given resource.</p>
-      operationId: deleteEphemeralKeysKey
+      operationId: DeleteEphemeralKeysKey
       parameters:
-        - in: path
-          name: key
-          required: true
-          schema:
-            maxLength: 5000
-            type: string
-          style: simple
+      - in: path
+        name: key
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -91,30 +83,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
           description: Error response.
-      summary: Stripe Delete   Ephemeral Keys Key
-      x-api-evangelist-processing:
-        GenerateOperationSummariesFromPath: true
-        PascalCaseOperationSummaries: true
-        CaselCaseOperationIds: true
-        ChooseTags: true
       tags:
-        - Delete
-        - Keys
+      - Ephemeral Keys
 components:
   schemas:
     ephemeral_key:
       description: ''
       properties:
         created:
-          description: >-
-            Time at which the object was created. Measured in seconds since the
-            Unix epoch.
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
           type: integer
         expires:
-          description: >-
-            Time at which the key will expire. Measured in seconds since the
-            Unix epoch.
+          description: Time at which the key will expire. Measured in seconds since the Unix epoch.
           format: unix-time
           type: integer
         id:
@@ -122,48 +103,32 @@ components:
           maxLength: 5000
           type: string
         livemode:
-          description: >-
-            Has the value `true` if the object exists in live mode or the value
-            `false` if the object exists in test mode.
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
           type: boolean
         object:
-          description: >-
-            String representing the object's type. Objects of the same type
-            share the same value.
+          description: String representing the object's type. Objects of the same type share the same value.
           enum:
-            - ephemeral_key
+          - ephemeral_key
           type: string
         secret:
-          description: >-
-            The key's secret. You can use this value to make authorized requests
-            to the Stripe API.
+          description: The key's secret. You can use this value to make authorized requests to the Stripe API.
           maxLength: 5000
           type: string
       required:
-        - created
-        - expires
-        - id
-        - livemode
-        - object
+      - created
+      - expires
+      - id
+      - livemode
+      - object
       title: EphemeralKey
       type: object
       x-expandableFields: []
       x-resourceId: ephemeral_key
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-        - error
-      type: object
     PostEphemeralKeysRequest:
       type: object
       properties:
         customer:
-          description: >-
-            The ID of the Customer you'd like to modify using the resulting
-            ephemeral key.
+          description: The ID of the Customer you'd like to modify using the resulting ephemeral key.
           maxLength: 5000
           type: string
         expand:
@@ -173,24 +138,25 @@ components:
             type: string
           type: array
         issuing_card:
-          description: >-
-            The ID of the Issuing Card you'd like to access using the resulting
-            ephemeral key.
+          description: The ID of the Issuing Card you'd like to access using the resulting ephemeral key.
           maxLength: 5000
           type: string
         nonce:
-          description: >-
-            A single-use token, created by Stripe.js, used for creating
-            ephemeral keys for Issuing Cards without exchanging sensitive
-            information.
+          description: A single-use token, created by Stripe.js, used for creating ephemeral keys for Issuing Cards without exchanging sensitive information.
           maxLength: 5000
           type: string
         verification_session:
-          description: >-
-            The ID of the Identity VerificationSession you'd like to access
-            using the resulting ephemeral key
+          description: The ID of the Identity VerificationSession you'd like to access using the resulting ephemeral key
           maxLength: 5000
           type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     DeleteEphemeralKeysKeyRequest:
       type: object
       properties:
@@ -200,21 +166,3 @@ components:
             maxLength: 5000
             type: string
           type: array
-  securitySchemes:
-    basicAuth:
-      description: >-
-        Basic HTTP authentication. Allowed headers-- Authorization: Basic
-        <api_key> | Authorization: Basic <base64 hash of `api_key:`>
-      scheme: basic
-      type: http
-    bearerAuth:
-      bearerFormat: auth-scheme
-      description: >-
-        Bearer HTTP authentication. Allowed headers-- Authorization: Bearer
-        <api_key>
-      scheme: bearer
-      type: http
-tags:
-  - name: Delete
-  - name: Keys
-  - name: Post

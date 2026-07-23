@@ -1,0 +1,284 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Detach API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Detach
+paths:
+  /v1/payment_methods/{payment_method}/detach:
+    post:
+      description: <p>Detaches a PaymentMethod object from a Customer. After a PaymentMethod is detached, it can no longer be used for a payment or re-attached to a Customer.</p>
+      operationId: postPaymentMethodsPaymentMethodDetach
+      parameters:
+      - in: path
+        name: payment_method
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostPaymentMethodsPaymentMethodDetachRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment_method'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Payment Methods Detach
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Detach
+components:
+  schemas:
+    payment_method:
+      description: 'PaymentMethod objects represent your customer''s payment instruments.
+
+        You can use them with [PaymentIntents](https://stripe.com/docs/payments/payment-intents) to collect payments or save them to
+
+        Customer objects to store instrument details for future payments.
+
+
+        Related guides: [Payment Methods](https://stripe.com/docs/payments/payment-methods) and [More Payment Scenarios](https://stripe.com/docs/payments/more-payment-scenarios).'
+      properties:
+        acss_debit:
+          $ref: '#/components/schemas/payment_method_acss_debit'
+        affirm:
+          $ref: '#/components/schemas/payment_method_affirm'
+        afterpay_clearpay:
+          $ref: '#/components/schemas/payment_method_afterpay_clearpay'
+        alipay:
+          $ref: '#/components/schemas/payment_flows_private_payment_methods_alipay'
+        au_becs_debit:
+          $ref: '#/components/schemas/payment_method_au_becs_debit'
+        bacs_debit:
+          $ref: '#/components/schemas/payment_method_bacs_debit'
+        bancontact:
+          $ref: '#/components/schemas/payment_method_bancontact'
+        billing_details:
+          $ref: '#/components/schemas/billing_details'
+        blik:
+          $ref: '#/components/schemas/payment_method_blik'
+        boleto:
+          $ref: '#/components/schemas/payment_method_boleto'
+        card:
+          $ref: '#/components/schemas/payment_method_card'
+        card_present:
+          $ref: '#/components/schemas/payment_method_card_present'
+        cashapp:
+          $ref: '#/components/schemas/payment_method_cashapp'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          description: The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved to a Customer.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+        customer_balance:
+          $ref: '#/components/schemas/payment_method_customer_balance'
+        eps:
+          $ref: '#/components/schemas/payment_method_eps'
+        fpx:
+          $ref: '#/components/schemas/payment_method_fpx'
+        giropay:
+          $ref: '#/components/schemas/payment_method_giropay'
+        grabpay:
+          $ref: '#/components/schemas/payment_method_grabpay'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        ideal:
+          $ref: '#/components/schemas/payment_method_ideal'
+        interac_present:
+          $ref: '#/components/schemas/payment_method_interac_present'
+        klarna:
+          $ref: '#/components/schemas/payment_method_klarna'
+        konbini:
+          $ref: '#/components/schemas/payment_method_konbini'
+        link:
+          $ref: '#/components/schemas/payment_method_link'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - payment_method
+          type: string
+        oxxo:
+          $ref: '#/components/schemas/payment_method_oxxo'
+        p24:
+          $ref: '#/components/schemas/payment_method_p24'
+        paynow:
+          $ref: '#/components/schemas/payment_method_paynow'
+        paypal:
+          $ref: '#/components/schemas/payment_method_paypal'
+        pix:
+          $ref: '#/components/schemas/payment_method_pix'
+        promptpay:
+          $ref: '#/components/schemas/payment_method_promptpay'
+        radar_options:
+          $ref: '#/components/schemas/radar_radar_options'
+        revolut_pay:
+          $ref: '#/components/schemas/payment_method_revolut_pay'
+        sepa_debit:
+          $ref: '#/components/schemas/payment_method_sepa_debit'
+        sofort:
+          $ref: '#/components/schemas/payment_method_sofort'
+        type:
+          description: The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
+          enum:
+          - acss_debit
+          - affirm
+          - afterpay_clearpay
+          - alipay
+          - au_becs_debit
+          - bacs_debit
+          - bancontact
+          - blik
+          - boleto
+          - card
+          - card_present
+          - cashapp
+          - customer_balance
+          - eps
+          - fpx
+          - giropay
+          - grabpay
+          - ideal
+          - interac_present
+          - klarna
+          - konbini
+          - link
+          - oxxo
+          - p24
+          - paynow
+          - paypal
+          - pix
+          - promptpay
+          - revolut_pay
+          - sepa_debit
+          - sofort
+          - us_bank_account
+          - wechat_pay
+          - zip
+          type: string
+          x-stripeBypassValidation: true
+        us_bank_account:
+          $ref: '#/components/schemas/payment_method_us_bank_account'
+        wechat_pay:
+          $ref: '#/components/schemas/payment_method_wechat_pay'
+        zip:
+          $ref: '#/components/schemas/payment_method_zip'
+      required:
+      - billing_details
+      - created
+      - id
+      - livemode
+      - object
+      - type
+      title: PaymentMethod
+      type: object
+      x-expandableFields:
+      - acss_debit
+      - affirm
+      - afterpay_clearpay
+      - alipay
+      - au_becs_debit
+      - bacs_debit
+      - bancontact
+      - billing_details
+      - blik
+      - boleto
+      - card
+      - card_present
+      - cashapp
+      - customer
+      - customer_balance
+      - eps
+      - fpx
+      - giropay
+      - grabpay
+      - ideal
+      - interac_present
+      - klarna
+      - konbini
+      - link
+      - oxxo
+      - p24
+      - paynow
+      - paypal
+      - pix
+      - promptpay
+      - radar_options
+      - revolut_pay
+      - sepa_debit
+      - sofort
+      - us_bank_account
+      - wechat_pay
+      - zip
+      x-resourceId: payment_method
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostPaymentMethodsPaymentMethodDetachRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array

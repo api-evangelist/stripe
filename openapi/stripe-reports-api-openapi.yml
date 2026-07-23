@@ -1,0 +1,291 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Reports API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Reports
+paths:
+  /v1/identity/verification_reports:
+    get:
+      description: <p>List all verification reports.</p>
+      operationId: getIdentityVerificationReports
+      parameters:
+      - explode: true
+        in: query
+        name: created
+        required: false
+        schema:
+          anyOf:
+          - properties:
+              gt:
+                type: integer
+              gte:
+                type: integer
+              lt:
+                type: integer
+              lte:
+                type: integer
+            title: range_query_specs
+            type: object
+          - type: integer
+        style: deepObject
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Only return VerificationReports of this type
+        in: query
+        name: type
+        required: false
+        schema:
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+        style: form
+      - description: Only return VerificationReports created by this VerificationSession ID. It is allowed to provide a VerificationIntent ID.
+        in: query
+        name: verification_session
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetIdentityVerificationReportsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/GelatoVerificationReportList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Identity Verification Reports
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Reports
+  /v1/identity/verification_reports/{report}:
+    get:
+      description: <p>Retrieves an existing VerificationReport</p>
+      operationId: getIdentityVerificationReportsReport
+      parameters:
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: report
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetIdentityVerificationReportsReportRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identity.verification_report'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Get   Identity Verification Reports Report
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Reports
+components:
+  schemas:
+    GelatoVerificationReportList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/identity.verification_report'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/identity/verification_reports
+          type: string
+    identity.verification_report:
+      description: 'A VerificationReport is the result of an attempt to collect and verify data from a user.
+
+        The collection of verification checks performed is determined from the `type` and `options`
+
+        parameters used. You can find the result of each verification check performed in the
+
+        appropriate sub-resource: `document`, `id_number`, `selfie`.
+
+
+        Each VerificationReport contains a copy of any data collected by the user as well as
+
+        reference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)
+
+        API. To configure and create VerificationReports, use the
+
+        [VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.
+
+
+        Related guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        document:
+          $ref: '#/components/schemas/gelato_document_report'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number:
+          $ref: '#/components/schemas/gelato_id_number_report'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - identity.verification_report
+          type: string
+        options:
+          $ref: '#/components/schemas/gelato_verification_report_options'
+        selfie:
+          $ref: '#/components/schemas/gelato_selfie_report'
+        type:
+          description: Type of report.
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+        verification_session:
+          description: ID of the VerificationSession that created this report.
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - created
+      - id
+      - livemode
+      - object
+      title: GelatoVerificationReport
+      type: object
+      x-expandableFields:
+      - document
+      - id_number
+      - options
+      - selfie
+      x-resourceId: identity.verification_report
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetIdentityVerificationReportsRequest:
+      type: object
+      properties: {}
+    GetIdentityVerificationReportsReportRequest:
+      type: object
+      properties: {}

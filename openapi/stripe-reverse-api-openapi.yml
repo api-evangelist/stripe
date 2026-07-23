@@ -1,0 +1,271 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Reverse API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Reverse
+paths:
+  /v1/payouts/{payout}/reverse:
+    post:
+      description: '<p>Reverses a payout by debiting the destination bank account. At this time, you can only reverse payouts for connected accounts to US bank accounts. If the payout is in the <code>pending</code> status, use <code>/v1/payouts/:id/cancel</code> instead.</p>
+
+
+        <p>By requesting a reversal through <code>/v1/payouts/:id/reverse</code>, you confirm that the authorized signatory of the selected bank account authorizes the debit on the bank account and that no other authorization is required.</p>'
+      operationId: postPayoutsPayoutReverse
+      parameters:
+      - in: path
+        name: payout
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostPayoutsPayoutReverseRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payout'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Payouts Reverse
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Reverse
+components:
+  schemas:
+    PostPayoutsPayoutReverseRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    payout:
+      description: 'A `Payout` object is created when you receive funds from Stripe, or when you
+
+        initiate a payout to either a bank account or debit card of a [connected
+
+        Stripe account](/docs/connect/bank-debit-card-payouts). You can retrieve individual payouts,
+
+        and list all payouts. Payouts are made on [varying
+
+        schedules](/docs/connect/manage-payout-schedule), depending on your country and
+
+        industry.
+
+
+        Related guide: [Receiving payouts](https://stripe.com/docs/payouts)'
+      properties:
+        amount:
+          description: The amount (in cents (or local equivalent)) that transfers to your bank account or debit card.
+          type: integer
+        arrival_date:
+          description: Date that you can expect the payout to arrive in the bank. This factors in delays to account for weekends or bank holidays.
+          format: unix-time
+          type: integer
+        automatic:
+          description: Returns `true` if the payout is created by an [automated payout schedule](https://stripe.com/docs/payouts#payout-schedule) and `false` if it's [requested manually](https://stripe.com/docs/payouts#manual-payouts).
+          type: boolean
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: ID of the balance transaction that describes the impact of this payout on your account balance.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          nullable: true
+          type: string
+        destination:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/bank_account'
+          - $ref: '#/components/schemas/card'
+          - $ref: '#/components/schemas/deleted_bank_account'
+          - $ref: '#/components/schemas/deleted_card'
+          description: ID of the bank account or card the payout is sent to.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/bank_account'
+            - $ref: '#/components/schemas/card'
+            - $ref: '#/components/schemas/deleted_bank_account'
+            - $ref: '#/components/schemas/deleted_card'
+          x-stripeBypassValidation: true
+        failure_balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: If the payout fails or cancels, this is the ID of the balance transaction that reverses the initial balance transaction and returns the funds from the failed payout back in your balance.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        failure_code:
+          description: Error code that provides a reason for a payout failure, if available. View our [list of failure codes](https://stripe.com/docs/api#payout_failures).
+          maxLength: 5000
+          nullable: true
+          type: string
+        failure_message:
+          description: Message that provides the reason for a payout failure, if available.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        method:
+          description: The method used to send this payout, which can be `standard` or `instant`. `instant` is supported for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - payout
+          type: string
+        original_payout:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payout'
+          description: If the payout reverses another, this is the ID of the original payout.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payout'
+        reconciliation_status:
+          description: If `completed`, you can use the [Balance Transactions API](https://stripe.com/docs/api/balance_transactions/list#balance_transaction_list-payout) to list all balance transactions that are paid out in this payout.
+          enum:
+          - completed
+          - in_progress
+          - not_applicable
+          type: string
+        reversed_by:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payout'
+          description: If the payout reverses, this is the ID of the payout that reverses this payout.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payout'
+        source_type:
+          description: 'The source balance this payout came from, which can be one of the following: `card`, `fpx`, or `bank_account`.'
+          maxLength: 5000
+          type: string
+        statement_descriptor:
+          description: Extra information about a payout that displays on the user's bank statement.
+          maxLength: 5000
+          nullable: true
+          type: string
+        status:
+          description: 'Current status of the payout: `paid`, `pending`, `in_transit`, `canceled` or `failed`. A payout is `pending` until it''s submitted to the bank, when it becomes `in_transit`. The status changes to `paid` if the transaction succeeds, or to `failed` or `canceled` (within 5 business days). Some payouts that fail might initially show as `paid`, then change to `failed`.'
+          maxLength: 5000
+          type: string
+        type:
+          description: Can be `bank_account` or `card`.
+          enum:
+          - bank_account
+          - card
+          type: string
+          x-stripeBypassValidation: true
+      required:
+      - amount
+      - arrival_date
+      - automatic
+      - created
+      - currency
+      - id
+      - livemode
+      - method
+      - object
+      - reconciliation_status
+      - source_type
+      - status
+      - type
+      title: Payout
+      type: object
+      x-expandableFields:
+      - balance_transaction
+      - destination
+      - failure_balance_transaction
+      - original_payout
+      - reversed_by
+      x-resourceId: payout

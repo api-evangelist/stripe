@@ -1,0 +1,858 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Subscription Items API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Subscription Items
+paths:
+  /v1/subscription_items:
+    get:
+      description: <p>Returns a list of your subscription items for a given subscription.</p>
+      operationId: GetSubscriptionItems
+      parameters:
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The ID of the subscription whose items will be retrieved.
+        in: query
+        name: subscription
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetSubscriptionItemsRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/SubscriptionsItemsSubscriptionItemList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+    post:
+      description: <p>Adds a new item to an existing subscription. No existing items will be changed or replaced.</p>
+      operationId: PostSubscriptionItems
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              billing_thresholds:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              price_data:
+                explode: true
+                style: deepObject
+              tax_rates:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostSubscriptionItemsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscription_item'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+  /v1/subscription_items/{item}:
+    delete:
+      description: <p>Deletes an item from the subscription. Removing a subscription item from a subscription will not cancel the subscription.</p>
+      operationId: DeleteSubscriptionItemsItem
+      parameters:
+      - in: path
+        name: item
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteSubscriptionItemsItemRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_subscription_item'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+    get:
+      description: <p>Retrieves the subscription item with the given ID.</p>
+      operationId: GetSubscriptionItemsItem
+      parameters:
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - in: path
+        name: item
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetSubscriptionItemsItemRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscription_item'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+    post:
+      description: <p>Updates the plan or quantity of an item on a current subscription.</p>
+      operationId: PostSubscriptionItemsItem
+      parameters:
+      - in: path
+        name: item
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              billing_thresholds:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+              price_data:
+                explode: true
+                style: deepObject
+              tax_rates:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostSubscriptionItemsItemRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscription_item'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+  /v1/subscription_items/{subscription_item}/usage_record_summaries:
+    get:
+      description: '<p>For the specified subscription item, returns a list of summary objects. Each object in the list provides usage information that’s been summarized from multiple usage records and over a subscription billing period (e.g., 15 usage records in the month of September).</p>
+
+
+        <p>The list is sorted in reverse-chronological order (newest first). The first list item represents the most current usage period that hasn’t ended yet. Since new usage records can still be added, the returned summary information for the subscription item’s ID should be seen as unstable until the subscription billing period ends.</p>'
+      operationId: GetSubscriptionItemsSubscriptionItemUsageRecordSummaries
+      parameters:
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+        in: query
+        name: ending_before
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+        in: query
+        name: starting_after
+        required: false
+        schema:
+          maxLength: 5000
+          type: string
+        style: form
+      - in: path
+        name: subscription_item
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: ''
+                x-expandableFields:
+                - data
+                $ref: '#/components/schemas/UsageEventsResourceUsageRecordSummaryList'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+  /v1/subscription_items/{subscription_item}/usage_records:
+    post:
+      description: '<p>Creates a usage record for a specified subscription item and date, and fills it with a quantity.</p>
+
+
+        <p>Usage records provide <code>quantity</code> information that Stripe uses to track how much a customer is using your service. With usage information and the pricing model set up by the <a href="https://stripe.com/docs/billing/subscriptions/metered-billing">metered billing</a> plan, Stripe helps you send accurate invoices to your customers.</p>
+
+
+        <p>The default calculation for usage is to add up all the <code>quantity</code> values of the usage records within a billing period. You can change this default behavior with the billing plan’s <code>aggregate_usage</code> <a href="/docs/api/plans/create#create_plan-aggregate_usage">parameter</a>. When there is more than one usage record with the same timestamp, Stripe adds the <code>quantity</code> values together. In most cases, this is the desired resolution, however, you can change this behavior with the <code>action</code> parameter.</p>
+
+
+        <p>The default pricing model for metered billing is <a href="/docs/api/plans/object#plan_object-billing_scheme">per-unit pricing</a>. For finer granularity, you can configure metered billing to have a <a href="https://stripe.com/docs/billing/subscriptions/tiers">tiered pricing</a> model.</p>'
+      operationId: PostSubscriptionItemsSubscriptionItemUsageRecords
+      parameters:
+      - in: path
+        name: subscription_item
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              timestamp:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostSubscriptionItemsSubscriptionItemUsageRecordsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usage_record'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      tags:
+      - Subscription Items
+components:
+  schemas:
+    subscription_item:
+      description: 'Subscription items allow you to create customer subscriptions with more than
+
+        one plan, making it easy to represent complex billing relationships.'
+      properties:
+        billing_thresholds:
+          anyOf:
+          - $ref: '#/components/schemas/subscription_item_billing_thresholds'
+          description: Define thresholds at which an invoice will be sent, and the related subscription advanced to a new billing period
+          nullable: true
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+        price:
+          $ref: '#/components/schemas/price'
+        quantity:
+          description: The [quantity](https://stripe.com/docs/subscriptions/quantities) of the plan to which the customer should be subscribed.
+          type: integer
+        subscription:
+          description: The `subscription` this `subscription_item` belongs to.
+          maxLength: 5000
+          type: string
+        tax_rates:
+          description: The tax rates which apply to this `subscription_item`. When set, the `default_tax_rates` on the subscription do not apply to this `subscription_item`.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          nullable: true
+          type: array
+      required:
+      - created
+      - id
+      - metadata
+      - object
+      - price
+      - subscription
+      title: SubscriptionItem
+      type: object
+      x-expandableFields:
+      - billing_thresholds
+      - price
+      - tax_rates
+      x-resourceId: subscription_item
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    DeleteSubscriptionItemsItemRequest:
+      type: object
+      properties:
+        clear_usage:
+          description: Delete all usage for the given subscription item. Allowed only when the current plan's `usage_type` is `metered`.
+          type: boolean
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        proration_date:
+          description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
+          format: unix-time
+          type: integer
+    SubscriptionsItemsSubscriptionItemList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/subscription_item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/subscription_items
+          type: string
+    UsageEventsResourceUsageRecordSummaryList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/usage_record_summary'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostSubscriptionItemsSubscriptionItemUsageRecordsRequest:
+      type: object
+      required:
+      - quantity
+      properties:
+        action:
+          description: Valid values are `increment` (default) or `set`. When using `increment` the specified `quantity` will be added to the usage at the specified timestamp. The `set` action will overwrite the usage quantity at that timestamp. If the subscription has [billing thresholds](https://stripe.com/docs/api/subscriptions/object#subscription_object-billing_thresholds), `increment` is the only allowed value.
+          enum:
+          - increment
+          - set
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        quantity:
+          description: The usage quantity for the specified timestamp.
+          type: integer
+        timestamp:
+          anyOf:
+          - enum:
+            - now
+            maxLength: 5000
+            type: string
+          - format: unix-time
+            type: integer
+          description: The timestamp for the usage event. This timestamp must be within the current billing period of the subscription of the provided `subscription_item`, and must not be in the future. When passing `"now"`, Stripe records usage for the current time. Default is `"now"` if a value is not provided.
+    GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest:
+      type: object
+      properties: {}
+    deleted_subscription_item:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedSubscriptionItem
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_subscription_item
+    usage_record:
+      description: 'Usage records allow you to report customer usage and metrics to Stripe for
+
+        metered billing of subscription prices.
+
+
+        Related guide: [Metered billing](https://stripe.com/docs/billing/subscriptions/metered-billing)'
+      properties:
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - usage_record
+          type: string
+        quantity:
+          description: The usage quantity for the specified date.
+          type: integer
+        subscription_item:
+          description: The ID of the subscription item this usage record contains data for.
+          maxLength: 5000
+          type: string
+        timestamp:
+          description: The timestamp when this usage occurred.
+          format: unix-time
+          type: integer
+      required:
+      - id
+      - livemode
+      - object
+      - quantity
+      - subscription_item
+      - timestamp
+      title: UsageRecord
+      type: object
+      x-expandableFields: []
+      x-resourceId: usage_record
+    GetSubscriptionItemsRequest:
+      type: object
+      properties: {}
+    PostSubscriptionItemsRequest:
+      type: object
+      required:
+      - subscription
+      properties:
+        billing_thresholds:
+          anyOf:
+          - properties:
+              usage_gte:
+                type: integer
+            required:
+            - usage_gte
+            title: item_billing_thresholds_param
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period. When updating, pass an empty string to remove previously-defined thresholds.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        payment_behavior:
+          description: 'Use `allow_incomplete` to transition the subscription to `status=past_due` if a payment is required but cannot be paid. This allows you to manage scenarios where additional user actions are needed to pay a subscription''s invoice. For example, SCA regulation may require 3DS authentication to complete payment. See the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication) for Billing to learn more. This is the default behavior.
+
+
+            Use `default_incomplete` to transition the subscription to `status=past_due` when payment is required and await explicit confirmation of the invoice''s payment intent. This allows simpler management of scenarios where additional user actions are needed to pay a subscription’s invoice. Such as failed payments, [SCA regulation](https://stripe.com/docs/billing/migration/strong-customer-authentication), or collecting a mandate for a bank debit payment method.
+
+
+            Use `pending_if_incomplete` to update the subscription using [pending updates](https://stripe.com/docs/billing/subscriptions/pending-updates). When you use `pending_if_incomplete` you can only pass the parameters [supported by pending updates](https://stripe.com/docs/billing/pending-updates-reference#supported-attributes).
+
+
+            Use `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription''s invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA regulation and further user action is needed, this parameter does not update the subscription and returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See the [changelog](https://stripe.com/docs/upgrades#2019-03-14) to learn more.'
+          enum:
+          - allow_incomplete
+          - default_incomplete
+          - error_if_incomplete
+          - pending_if_incomplete
+          type: string
+        price:
+          description: The ID of the price object.
+          maxLength: 5000
+          type: string
+        price_data:
+          description: Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline.
+          properties:
+            currency:
+              type: string
+            product:
+              maxLength: 5000
+              type: string
+            recurring:
+              properties:
+                interval:
+                  enum:
+                  - day
+                  - month
+                  - week
+                  - year
+                  type: string
+                interval_count:
+                  type: integer
+              required:
+              - interval
+              title: recurring_adhoc
+              type: object
+            tax_behavior:
+              enum:
+              - exclusive
+              - inclusive
+              - unspecified
+              type: string
+            unit_amount:
+              type: integer
+            unit_amount_decimal:
+              format: decimal
+              type: string
+          required:
+          - currency
+          - product
+          - recurring
+          title: recurring_price_data
+          type: object
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        proration_date:
+          description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
+          format: unix-time
+          type: integer
+        quantity:
+          description: The quantity you'd like to apply to the subscription item you're creating.
+          type: integer
+        subscription:
+          description: The identifier of the subscription to modify.
+          maxLength: 5000
+          type: string
+        tax_rates:
+          anyOf:
+          - items:
+              maxLength: 5000
+              type: string
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
+    PostSubscriptionItemsItemRequest:
+      type: object
+      properties:
+        billing_thresholds:
+          anyOf:
+          - properties:
+              usage_gte:
+                type: integer
+            required:
+            - usage_gte
+            title: item_billing_thresholds_param
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period. When updating, pass an empty string to remove previously-defined thresholds.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        off_session:
+          description: Indicates if a customer is on or off-session while an invoice payment is attempted.
+          type: boolean
+        payment_behavior:
+          description: 'Use `allow_incomplete` to transition the subscription to `status=past_due` if a payment is required but cannot be paid. This allows you to manage scenarios where additional user actions are needed to pay a subscription''s invoice. For example, SCA regulation may require 3DS authentication to complete payment. See the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication) for Billing to learn more. This is the default behavior.
+
+
+            Use `default_incomplete` to transition the subscription to `status=past_due` when payment is required and await explicit confirmation of the invoice''s payment intent. This allows simpler management of scenarios where additional user actions are needed to pay a subscription’s invoice. Such as failed payments, [SCA regulation](https://stripe.com/docs/billing/migration/strong-customer-authentication), or collecting a mandate for a bank debit payment method.
+
+
+            Use `pending_if_incomplete` to update the subscription using [pending updates](https://stripe.com/docs/billing/subscriptions/pending-updates). When you use `pending_if_incomplete` you can only pass the parameters [supported by pending updates](https://stripe.com/docs/billing/pending-updates-reference#supported-attributes).
+
+
+            Use `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription''s invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA regulation and further user action is needed, this parameter does not update the subscription and returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See the [changelog](https://stripe.com/docs/upgrades#2019-03-14) to learn more.'
+          enum:
+          - allow_incomplete
+          - default_incomplete
+          - error_if_incomplete
+          - pending_if_incomplete
+          type: string
+        price:
+          description: The ID of the price object. When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
+          maxLength: 5000
+          type: string
+        price_data:
+          description: Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline.
+          properties:
+            currency:
+              type: string
+            product:
+              maxLength: 5000
+              type: string
+            recurring:
+              properties:
+                interval:
+                  enum:
+                  - day
+                  - month
+                  - week
+                  - year
+                  type: string
+                interval_count:
+                  type: integer
+              required:
+              - interval
+              title: recurring_adhoc
+              type: object
+            tax_behavior:
+              enum:
+              - exclusive
+              - inclusive
+              - unspecified
+              type: string
+            unit_amount:
+              type: integer
+            unit_amount_decimal:
+              format: decimal
+              type: string
+          required:
+          - currency
+          - product
+          - recurring
+          title: recurring_price_data
+          type: object
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        proration_date:
+          description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
+          format: unix-time
+          type: integer
+        quantity:
+          description: The quantity you'd like to apply to the subscription item you're creating.
+          type: integer
+        tax_rates:
+          anyOf:
+          - items:
+              maxLength: 5000
+              type: string
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
+    GetSubscriptionItemsItemRequest:
+      type: object
+      properties: {}

@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Login API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Login
+paths:
+  /v1/accounts/{account}/login_links:
+    post:
+      description: '<p>Creates a single-use login link for an Express account to access their Stripe dashboard.</p>
+
+
+        <p><strong>You may only create login links for <a href="/docs/connect/express-accounts">Express accounts</a> connected to your platform</strong>.</p>'
+      operationId: PostAccountsAccountLoginLinks
+      parameters:
+      - in: path
+        name: account
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostAccountsAccountLoginLinksRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/login_link'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Create Login Link
+      tags:
+      - Login
+      x-api-evangelist-processing:
+        ChooseTags: true
+components:
+  schemas:
+    login_link:
+      description: Login Links are single-use login link for an Express account to access their Stripe dashboard.
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - login_link
+          type: string
+        url:
+          description: The URL for the login link.
+          maxLength: 5000
+          type: string
+      required:
+      - created
+      - object
+      - url
+      title: LoginLink
+      type: object
+      x-expandableFields: []
+      x-resourceId: login_link
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object

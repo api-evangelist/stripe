@@ -1,0 +1,1020 @@
+openapi: 3.0.0
+info:
+  title: Stripe Accounts Account Finalize API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  contact:
+    email: dev-platform@stripe.com
+    name: Stripe Dev Platform Team
+    url: https://stripe.com
+  termsOfService: https://stripe.com/us/terms/
+  version: '2023-10-16'
+  x-stripeSpecFilename: spec3
+servers:
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Finalize
+paths:
+  /v1/invoices/{invoice}/finalize:
+    post:
+      description: <p>Stripe automatically finalizes drafts before sending and attempting payment on invoices. However, if you’d like to finalize a draft invoice manually, you can do so using this method.</p>
+      operationId: postInvoicesInvoiceFinalize
+      parameters:
+      - in: path
+        name: invoice
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostInvoicesInvoiceFinalizeRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Error response.
+      summary: Stripe Post   Invoices Invoice Finalize
+      x-api-evangelist-processing:
+        GenerateOperationSummariesFromPath: true
+        PascalCaseOperationSummaries: true
+        CaselCaseOperationIds: true
+        ChooseTags: true
+      tags:
+      - Finalize
+components:
+  schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    invoice:
+      description: 'Invoices are statements of amounts owed by a customer, and are either
+
+        generated one-off, or generated periodically from a subscription.
+
+
+        They contain [invoice items](https://stripe.com/docs/api#Invoice Items), and proration adjustments
+
+        that may be caused by subscription upgrades/downgrades (if necessary).
+
+
+        If your invoice is configured to be billed through automatic charges,
+
+        Stripe automatically finalizes your invoice and attempts payment. Note
+
+        that finalizing the invoice,
+
+        [when automatic](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection), does
+
+        not happen immediately as the invoice is created. Stripe waits
+
+        until one hour after the last webhook was successfully sent (or the last
+
+        webhook timed out after failing). If you (and the platforms you may have
+
+        connected to) have no webhooks configured, Stripe waits one hour after
+
+        creation to finalize the invoice.
+
+
+        If your invoice is configured to be billed by sending an email, then based on your
+
+        [email settings](https://dashboard.stripe.com/account/billing/automatic),
+
+        Stripe will email the invoice to your customer and await payment. These
+
+        emails can contain a link to a hosted page to pay the invoice.
+
+
+        Stripe applies any customer credit on the account before determining the
+
+        amount due for the invoice (i.e., the amount that will be actually
+
+        charged). If the amount due for the invoice is less than Stripe''s [minimum allowed charge
+
+        per currency](/docs/currencies#minimum-and-maximum-charge-amounts), the
+
+        invoice is automatically marked paid, and we add the amount due to the
+
+        customer''s credit balance which is applied to the next invoice.
+
+
+        More details on the customer''s credit balance are
+
+        [here](https://stripe.com/docs/billing/customer/balance).
+
+
+        Related guide: [Send invoices to customers](https://stripe.com/docs/billing/invoices/sending)'
+      properties:
+        account_country:
+          description: The country of the business associated with this invoice, most often the business creating the invoice.
+          maxLength: 5000
+          nullable: true
+          type: string
+        account_name:
+          description: The public name of the business associated with this invoice, most often the business creating the invoice.
+          maxLength: 5000
+          nullable: true
+          type: string
+        account_tax_ids:
+          description: The account tax IDs associated with the invoice. Only editable when the invoice is a draft.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/tax_id'
+            - $ref: '#/components/schemas/deleted_tax_id'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/tax_id'
+              - $ref: '#/components/schemas/deleted_tax_id'
+          nullable: true
+          type: array
+        amount_due:
+          description: Final amount due at this time for this invoice. If the invoice's total is smaller than the minimum charge amount, for example, or if there is account credit that can be applied to the invoice, the `amount_due` may be 0. If there is a positive `starting_balance` for the invoice (the customer owes money), the `amount_due` will also take that into account. The charge that gets generated for the invoice will be for the amount specified in `amount_due`.
+          type: integer
+        amount_paid:
+          description: The amount, in cents (or local equivalent), that was paid.
+          type: integer
+        amount_remaining:
+          description: The difference between amount_due and amount_paid, in cents (or local equivalent).
+          type: integer
+        amount_shipping:
+          description: This is the sum of all the shipping amounts.
+          type: integer
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          - $ref: '#/components/schemas/deleted_application'
+          description: ID of the Connect Application that created the invoice.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+            - $ref: '#/components/schemas/deleted_application'
+        application_fee_amount:
+          description: The fee in cents (or local equivalent) that will be applied to the invoice and transferred to the application owner's Stripe account when the invoice is paid.
+          nullable: true
+          type: integer
+        attempt_count:
+          description: Number of payment attempts made for this invoice, from the perspective of the payment retry schedule. Any payment attempt counts as the first attempt, and subsequently only automatic retries increment the attempt count. In other words, manual payment attempts after the first attempt do not affect the retry schedule.
+          type: integer
+        attempted:
+          description: Whether an attempt has been made to pay the invoice. An invoice is not attempted until 1 hour after the `invoice.created` webhook, for example, so you might not want to display that invoice as unpaid to your users.
+          type: boolean
+        auto_advance:
+          description: Controls whether Stripe performs [automatic collection](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection) of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action.
+          type: boolean
+        automatic_tax:
+          $ref: '#/components/schemas/automatic_tax'
+        billing_reason:
+          description: 'Indicates the reason why the invoice was created.
+
+
+            * `manual`: Unrelated to a subscription, for example, created via the invoice editor.
+
+            * `subscription`: No longer in use. Applies to subscriptions from before May 2018 where no distinction was made between updates, cycles, and thresholds.
+
+            * `subscription_create`: A new subscription was created.
+
+            * `subscription_cycle`: A subscription advanced into a new period.
+
+            * `subscription_threshold`: A subscription reached a billing threshold.
+
+            * `subscription_update`: A subscription was updated.
+
+            * `upcoming`: Reserved for simulated invoices, per the upcoming invoice endpoint.'
+          enum:
+          - automatic_pending_invoice_item_invoice
+          - manual
+          - quote_accept
+          - subscription
+          - subscription_create
+          - subscription_cycle
+          - subscription_threshold
+          - subscription_update
+          - upcoming
+          nullable: true
+          type: string
+        charge:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/charge'
+          description: ID of the latest charge generated for this invoice, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/charge'
+        collection_method:
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this invoice using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment instructions.
+          enum:
+          - charge_automatically
+          - send_invoice
+          type: string
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        custom_fields:
+          description: Custom fields displayed on the invoice.
+          items:
+            $ref: '#/components/schemas/invoice_setting_custom_field'
+          nullable: true
+          type: array
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: The ID of the customer who will be billed.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        customer_address:
+          anyOf:
+          - $ref: '#/components/schemas/address'
+          description: The customer's address. Until the invoice is finalized, this field will equal `customer.address`. Once the invoice is finalized, this field will no longer be updated.
+          nullable: true
+        customer_email:
+          description: The customer's email. Until the invoice is finalized, this field will equal `customer.email`. Once the invoice is finalized, this field will no longer be updated.
+          maxLength: 5000
+          nullable: true
+          type: string
+        customer_name:
+          description: The customer's name. Until the invoice is finalized, this field will equal `customer.name`. Once the invoice is finalized, this field will no longer be updated.
+          maxLength: 5000
+          nullable: true
+          type: string
+        customer_phone:
+          description: The customer's phone number. Until the invoice is finalized, this field will equal `customer.phone`. Once the invoice is finalized, this field will no longer be updated.
+          maxLength: 5000
+          nullable: true
+          type: string
+        customer_shipping:
+          anyOf:
+          - $ref: '#/components/schemas/shipping'
+          description: The customer's shipping information. Until the invoice is finalized, this field will equal `customer.shipping`. Once the invoice is finalized, this field will no longer be updated.
+          nullable: true
+        customer_tax_exempt:
+          description: The customer's tax exempt status. Until the invoice is finalized, this field will equal `customer.tax_exempt`. Once the invoice is finalized, this field will no longer be updated.
+          enum:
+          - exempt
+          - none
+          - reverse
+          nullable: true
+          type: string
+        customer_tax_ids:
+          description: The customer's tax IDs. Until the invoice is finalized, this field will contain the same tax IDs as `customer.tax_ids`. Once the invoice is finalized, this field will no longer be updated.
+          items:
+            $ref: '#/components/schemas/invoices_resource_invoice_tax_id'
+          nullable: true
+          type: array
+        default_payment_method:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_method'
+          description: ID of the default payment method for the invoice. It must belong to the customer associated with the invoice. If not set, defaults to the subscription's default payment method, if any, or to the default payment method in the customer's invoice settings.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_method'
+        default_source:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/bank_account'
+          - $ref: '#/components/schemas/card'
+          - $ref: '#/components/schemas/source'
+          description: ID of the default payment source for the invoice. It must belong to the customer associated with the invoice and be in a chargeable state. If not set, defaults to the subscription's default source, if any, or to the customer's default source.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/bank_account'
+            - $ref: '#/components/schemas/card'
+            - $ref: '#/components/schemas/source'
+          x-stripeBypassValidation: true
+        default_tax_rates:
+          description: The tax rates applied to this invoice, if any.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          type: array
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users. Referenced as 'memo' in the Dashboard.
+          maxLength: 5000
+          nullable: true
+          type: string
+        discount:
+          anyOf:
+          - $ref: '#/components/schemas/discount'
+          description: Describes the current discount applied to this invoice, if there is one. Not populated if there are multiple discounts.
+          nullable: true
+        discounts:
+          description: The discounts applied to the invoice. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/discount'
+            - $ref: '#/components/schemas/deleted_discount'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/discount'
+              - $ref: '#/components/schemas/deleted_discount'
+          nullable: true
+          type: array
+        due_date:
+          description: The date on which payment for this invoice is due. This value will be `null` for invoices where `collection_method=charge_automatically`.
+          format: unix-time
+          nullable: true
+          type: integer
+        effective_at:
+          description: The date when this invoice is in effect. Same as `finalized_at` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the invoice PDF and receipt.
+          format: unix-time
+          nullable: true
+          type: integer
+        ending_balance:
+          description: Ending customer balance after the invoice is finalized. Invoices are finalized approximately an hour after successful webhook delivery or when payment collection is attempted for the invoice. If the invoice has not been finalized yet, this will be null.
+          nullable: true
+          type: integer
+        footer:
+          description: Footer displayed on the invoice.
+          maxLength: 5000
+          nullable: true
+          type: string
+        from_invoice:
+          anyOf:
+          - $ref: '#/components/schemas/invoices_from_invoice'
+          description: Details of the invoice that was cloned. See the [revision documentation](https://stripe.com/docs/invoicing/invoice-revisions) for more details.
+          nullable: true
+        hosted_invoice_url:
+          description: The URL for the hosted invoice page, which allows customers to view and pay an invoice. If the invoice has not been finalized yet, this will be null.
+          maxLength: 5000
+          nullable: true
+          type: string
+        id:
+          description: Unique identifier for the object. This property is always present unless the invoice is an upcoming invoice. See [Retrieve an upcoming invoice](https://stripe.com/docs/api/invoices/upcoming) for more details.
+          maxLength: 5000
+          type: string
+        invoice_pdf:
+          description: The link to download the PDF for the invoice. If the invoice has not been finalized yet, this will be null.
+          maxLength: 5000
+          nullable: true
+          type: string
+        last_finalization_error:
+          anyOf:
+          - $ref: '#/components/schemas/api_errors'
+          description: The error encountered during the previous attempt to finalize the invoice. This field is cleared when the invoice is successfully finalized.
+          nullable: true
+        latest_revision:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoice'
+          description: The ID of the most recent non-draft revision of this invoice
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoice'
+        lines:
+          description: 'The individual line items that make up the invoice. `lines` is sorted as follows: (1) pending invoice items (including prorations) in reverse chronological order, (2) subscription items in reverse chronological order, and (3) invoice items added after invoice creation in chronological order.'
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/line_item'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: InvoiceLinesList
+          type: object
+          x-expandableFields:
+          - data
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        next_payment_attempt:
+          description: The time at which payment will next be attempted. This value will be `null` for invoices where `collection_method=send_invoice`.
+          format: unix-time
+          nullable: true
+          type: integer
+        number:
+          description: A unique, identifying string that appears on emails sent to the customer for this invoice. This starts with the customer's unique invoice_prefix if it is specified.
+          maxLength: 5000
+          nullable: true
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - invoice
+          type: string
+        on_behalf_of:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: The account (if any) for which the funds of the invoice payment are intended. If set, the invoice will be presented with the branding and support information of the specified account. See the [Invoices with Connect](https://stripe.com/docs/billing/invoices/connect) documentation for details.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        paid:
+          description: Whether payment was successfully collected for this invoice. An invoice can be paid (most commonly) with a charge or with credit from the customer's account balance.
+          type: boolean
+        paid_out_of_band:
+          description: Returns true if the invoice was manually marked paid, returns false if the invoice hasn't been paid yet or was paid on Stripe.
+          type: boolean
+        payment_intent:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_intent'
+          description: The PaymentIntent associated with this invoice. The PaymentIntent is generated when the invoice is finalized, and can then be used to pay the invoice. Note that voiding an invoice will cancel the PaymentIntent.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_intent'
+        payment_settings:
+          $ref: '#/components/schemas/invoices_payment_settings'
+        period_end:
+          description: End of the usage period during which invoice items were added to this invoice.
+          format: unix-time
+          type: integer
+        period_start:
+          description: Start of the usage period during which invoice items were added to this invoice.
+          format: unix-time
+          type: integer
+        post_payment_credit_notes_amount:
+          description: Total amount of all post-payment credit notes issued for this invoice.
+          type: integer
+        pre_payment_credit_notes_amount:
+          description: Total amount of all pre-payment credit notes issued for this invoice.
+          type: integer
+        quote:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/quote'
+          description: The quote this invoice was generated from.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/quote'
+        receipt_number:
+          description: This is the transaction number that appears on email receipts sent for this invoice.
+          maxLength: 5000
+          nullable: true
+          type: string
+        rendering:
+          anyOf:
+          - $ref: '#/components/schemas/invoices_invoice_rendering'
+          description: The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted Invoice Page.
+          nullable: true
+        shipping_cost:
+          anyOf:
+          - $ref: '#/components/schemas/invoices_shipping_cost'
+          description: The details of the cost of shipping, including the ShippingRate applied on the invoice.
+          nullable: true
+        shipping_details:
+          anyOf:
+          - $ref: '#/components/schemas/shipping'
+          description: Shipping details for the invoice. The Invoice PDF will use the `shipping_details` value if it is set, otherwise the PDF will render the shipping address from the customer.
+          nullable: true
+        starting_balance:
+          description: Starting customer balance before the invoice is finalized. If the invoice has not been finalized yet, this will be the current customer balance. For revision invoices, this also includes any customer balance that was applied to the original invoice.
+          type: integer
+        statement_descriptor:
+          description: Extra information about an invoice for the customer's credit card statement.
+          maxLength: 5000
+          nullable: true
+          type: string
+        status:
+          description: The status of the invoice, one of `draft`, `open`, `paid`, `uncollectible`, or `void`. [Learn more](https://stripe.com/docs/billing/invoices/workflow#workflow-overview)
+          enum:
+          - draft
+          - open
+          - paid
+          - uncollectible
+          - void
+          nullable: true
+          type: string
+          x-stripeBypassValidation: true
+        status_transitions:
+          $ref: '#/components/schemas/invoices_status_transitions'
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: The subscription that this invoice was prepared for, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        subscription_details:
+          anyOf:
+          - $ref: '#/components/schemas/subscription_details_data'
+          description: Details about the subscription that created this invoice.
+          nullable: true
+        subscription_proration_date:
+          description: Only set for upcoming invoices that preview prorations. The time used to calculate prorations.
+          type: integer
+        subtotal:
+          description: Total of all subscriptions, invoice items, and prorations on the invoice before any invoice level discount or exclusive tax is applied. Item discounts are already incorporated
+          type: integer
+        subtotal_excluding_tax:
+          description: The integer amount in cents (or local equivalent) representing the subtotal of the invoice before any invoice level discount or tax is applied. Item discounts are already incorporated
+          nullable: true
+          type: integer
+        tax:
+          description: The amount of tax on this invoice. This is the sum of all the tax amounts on this invoice.
+          nullable: true
+          type: integer
+        test_clock:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/test_helpers.test_clock'
+          description: ID of the test clock this invoice belongs to.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/test_helpers.test_clock'
+        threshold_reason:
+          $ref: '#/components/schemas/invoice_threshold_reason'
+        total:
+          description: Total after discounts and taxes.
+          type: integer
+        total_discount_amounts:
+          description: The aggregate amounts calculated per discount across all line items.
+          items:
+            $ref: '#/components/schemas/discounts_resource_discount_amount'
+          nullable: true
+          type: array
+        total_excluding_tax:
+          description: The integer amount in cents (or local equivalent) representing the total amount of the invoice including all discounts but excluding all tax.
+          nullable: true
+          type: integer
+        total_tax_amounts:
+          description: The aggregate amounts calculated per tax rate for all line items.
+          items:
+            $ref: '#/components/schemas/invoice_tax_amount'
+          type: array
+        transfer_data:
+          anyOf:
+          - $ref: '#/components/schemas/invoice_transfer_data'
+          description: The account (if any) the payment will be attributed to for tax reporting, and where funds from the payment will be transferred to for the invoice.
+          nullable: true
+        webhooks_delivered_at:
+          description: Invoices are automatically paid or sent 1 hour after webhooks are delivered, or until all webhook delivery attempts have [been exhausted](https://stripe.com/docs/billing/webhooks#understand). This field tracks the time when webhooks for this invoice were successfully delivered. If the invoice had no webhooks to deliver, this will be set while the invoice is being created.
+          format: unix-time
+          nullable: true
+          type: integer
+      required:
+      - amount_due
+      - amount_paid
+      - amount_remaining
+      - amount_shipping
+      - attempt_count
+      - attempted
+      - automatic_tax
+      - collection_method
+      - created
+      - currency
+      - default_tax_rates
+      - lines
+      - livemode
+      - object
+      - paid
+      - paid_out_of_band
+      - payment_settings
+      - period_end
+      - period_start
+      - post_payment_credit_notes_amount
+      - pre_payment_credit_notes_amount
+      - starting_balance
+      - status_transitions
+      - subtotal
+      - total
+      - total_tax_amounts
+      title: Invoice
+      type: object
+      x-expandableFields:
+      - account_tax_ids
+      - application
+      - automatic_tax
+      - charge
+      - custom_fields
+      - customer
+      - customer_address
+      - customer_shipping
+      - customer_tax_ids
+      - default_payment_method
+      - default_source
+      - default_tax_rates
+      - discount
+      - discounts
+      - from_invoice
+      - last_finalization_error
+      - latest_revision
+      - lines
+      - on_behalf_of
+      - payment_intent
+      - payment_settings
+      - quote
+      - rendering
+      - shipping_cost
+      - shipping_details
+      - status_transitions
+      - subscription
+      - subscription_details
+      - test_clock
+      - threshold_reason
+      - total_discount_amounts
+      - total_tax_amounts
+      - transfer_data
+      x-resourceId: invoice
+    line_item:
+      description: ''
+      properties:
+        amount:
+          description: The amount, in cents (or local equivalent).
+          type: integer
+        amount_excluding_tax:
+          description: The integer amount in cents (or local equivalent) representing the amount for this line item, excluding all tax and discounts.
+          nullable: true
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          nullable: true
+          type: string
+        discount_amounts:
+          description: The amount of discount calculated per discount for this line item.
+          items:
+            $ref: '#/components/schemas/discounts_resource_discount_amount'
+          nullable: true
+          type: array
+        discountable:
+          description: If true, discounts will apply to this line item. Always false for prorations.
+          type: boolean
+        discounts:
+          description: The discounts applied to the invoice line item. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/discount'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/discount'
+          nullable: true
+          type: array
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        invoice_item:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoiceitem'
+          description: The ID of the [invoice item](https://stripe.com/docs/api/Invoice Items) associated with this line item if any.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoiceitem'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Note that for line items with `type=subscription` this will reflect the metadata of the subscription that caused the line item to be created.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - line_item
+          type: string
+        period:
+          $ref: '#/components/schemas/invoice_line_item_period'
+        price:
+          anyOf:
+          - $ref: '#/components/schemas/price'
+          description: The price of the line item.
+          nullable: true
+        proration:
+          description: Whether this is a proration.
+          type: boolean
+        proration_details:
+          anyOf:
+          - $ref: '#/components/schemas/invoices_resource_line_items_proration_details'
+          description: Additional details for proration line items
+          nullable: true
+        quantity:
+          description: The quantity of the subscription, if the line item is a subscription or a proration.
+          nullable: true
+          type: integer
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: The subscription that the invoice item pertains to, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        subscription_item:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription_item'
+          description: The subscription item that generated this line item. Left empty if the line item is not an explicit result of a subscription.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription_item'
+        tax_amounts:
+          description: The amount of tax calculated per tax rate for this line item
+          items:
+            $ref: '#/components/schemas/invoice_tax_amount'
+          type: array
+        tax_rates:
+          description: The tax rates which apply to the line item.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          type: array
+        type:
+          description: A string identifying the type of the source of this line item, either an `invoiceitem` or a `subscription`.
+          enum:
+          - invoiceitem
+          - subscription
+          type: string
+        unit_amount_excluding_tax:
+          description: The amount in cents (or local equivalent) representing the unit amount for this line item, excluding all tax and discounts.
+          format: decimal
+          nullable: true
+          type: string
+      required:
+      - amount
+      - currency
+      - discountable
+      - id
+      - livemode
+      - metadata
+      - object
+      - period
+      - proration
+      - type
+      title: InvoiceLineItem
+      type: object
+      x-expandableFields:
+      - discount_amounts
+      - discounts
+      - invoice_item
+      - period
+      - price
+      - proration_details
+      - subscription
+      - subscription_item
+      - tax_amounts
+      - tax_rates
+      x-resourceId: line_item
+    PostInvoicesInvoiceFinalizeRequest:
+      type: object
+      properties:
+        auto_advance:
+          description: Controls whether Stripe performs [automatic collection](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection) of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action.
+          type: boolean
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    invoiceitem:
+      description: 'Invoice Items represent the component lines of an [invoice](https://stripe.com/docs/api/invoices). An invoice item is added to an
+
+        invoice by creating or updating it with an `invoice` field, at which point it will be included as
+
+        [an invoice line item](https://stripe.com/docs/api/invoices/line_item) within
+
+        [invoice.lines](https://stripe.com/docs/api/invoices/object#invoice_object-lines).
+
+
+        Invoice Items can be created before you are ready to actually send the invoice. This can be particularly useful when combined
+
+        with a [subscription](https://stripe.com/docs/api/subscriptions). Sometimes you want to add a charge or credit to a customer, but actually charge
+
+        or credit the customer’s card only at the end of a regular billing cycle. This is useful for combining several charges
+
+        (to minimize per-transaction fees), or for having Stripe tabulate your usage-based billing totals.
+
+
+        Related guides: [Integrate with the Invoicing API](https://stripe.com/docs/invoicing/integration), [Subscription Invoices](https://stripe.com/docs/billing/invoices/subscription#adding-upcoming-invoice-items).'
+      properties:
+        amount:
+          description: Amount (in the `currency` specified) of the invoice item. This should always be equal to `unit_amount * quantity`.
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: The ID of the customer who will be billed when this invoice item is billed.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        date:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          nullable: true
+          type: string
+        discountable:
+          description: If true, discounts will apply to this invoice item. Always false for prorations.
+          type: boolean
+        discounts:
+          description: The discounts which apply to the invoice item. Item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/discount'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/discount'
+          nullable: true
+          type: array
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        invoice:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoice'
+          description: The ID of the invoice this invoice item belongs to.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoice'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          nullable: true
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - invoiceitem
+          type: string
+        period:
+          $ref: '#/components/schemas/invoice_line_item_period'
+        price:
+          anyOf:
+          - $ref: '#/components/schemas/price'
+          description: The price of the invoice item.
+          nullable: true
+        proration:
+          description: Whether the invoice item was created automatically as a proration adjustment when the customer switched plans.
+          type: boolean
+        quantity:
+          description: Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the subscription that the proration was computed for.
+          type: integer
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: The subscription that this invoice item has been created for, if any.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        subscription_item:
+          description: The subscription item that this invoice item has been created for, if any.
+          maxLength: 5000
+          type: string
+        tax_rates:
+          description: The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do not apply to this invoice item.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          nullable: true
+          type: array
+        test_clock:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/test_helpers.test_clock'
+          description: ID of the test clock this invoice item belongs to.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/test_helpers.test_clock'
+        unit_amount:
+          description: Unit amount (in the `currency` specified) of the invoice item.
+          nullable: true
+          type: integer
+        unit_amount_decimal:
+          description: Same as `unit_amount`, but contains a decimal value with at most 12 decimal places.
+          format: decimal
+          nullable: true
+          type: string
+      required:
+      - amount
+      - currency
+      - customer
+      - date
+      - discountable
+      - id
+      - livemode
+      - object
+      - period
+      - proration
+      - quantity
+      title: InvoiceItem
+      type: object
+      x-expandableFields:
+      - customer
+      - discounts
+      - invoice
+      - period
+      - price
+      - subscription
+      - tax_rates
+      - test_clock
+      x-resourceId: invoiceitem

@@ -1,23 +1,21 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
-  title: Stripe Entitlements API
-  description: >-
-    Entitlements enable you to map the features of your internal service to
-    Stripe products. After you map your features, Stripe notifies you about
-    when to provision or de-provision access according to your customers
-    subscription status.
+  title: Stripe Accounts Account Entitlements API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
     url: https://stripe.com
   termsOfService: https://stripe.com/us/terms/
-  version: '2024-06-20'
+  version: '2023-10-16'
   x-stripeSpecFilename: spec3
-security:
-  - basicAuth: []
-  - bearerAuth: []
 servers:
-  - url: https://api.stripe.com/
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Entitlements
 paths:
   /v1/entitlements/active_entitlements:
     get:
@@ -25,30 +23,30 @@ paths:
       description: <p>Retrieve a list of active entitlements for a customer.</p>
       operationId: GetEntitlementsActiveEntitlements
       parameters:
-        - name: customer
-          in: query
-          required: true
-          description: The ID of the customer.
-          schema:
-            type: string
-            maxLength: 5000
-        - name: ending_before
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
+      - name: customer
+        in: query
+        required: true
+        description: The ID of the customer.
+        schema:
+          type: string
+          maxLength: 5000
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -60,7 +58,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -76,19 +74,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
   /v1/entitlements/active_entitlements/{id}:
     get:
       summary: Stripe Retrieve Active Entitlement
       description: <p>Retrieve an active entitlement.</p>
       operationId: GetEntitlementsActiveEntitlementsId
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -103,30 +101,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
   /v1/entitlements/features:
     get:
       summary: Stripe List Features
       description: <p>Retrieve a list of features.</p>
       operationId: GetEntitlementsFeatures
       parameters:
-        - name: ending_before
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -138,7 +136,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -154,7 +152,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
     post:
       summary: Stripe Create Feature
       description: <p>Creates a feature.</p>
@@ -166,8 +164,8 @@ paths:
             schema:
               type: object
               required:
-                - lookup_key
-                - name
+              - lookup_key
+              - name
               properties:
                 lookup_key:
                   type: string
@@ -195,19 +193,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
   /v1/entitlements/features/{id}:
     get:
       summary: Stripe Retrieve Feature
       description: <p>Retrieves a feature.</p>
       operationId: GetEntitlementsFeaturesId
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -222,18 +220,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
     post:
       summary: Stripe Update Feature
       description: <p>Update a feature's metadata or other properties.</p>
       operationId: PostEntitlementsFeaturesId
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -263,31 +261,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Entitlements
+      - Entitlements
 components:
   schemas:
-    entitlements.active_entitlement:
+    error:
       type: object
       properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - entitlements.active_entitlement
-        feature:
-          type: string
-        livemode:
-          type: boolean
-        lookup_key:
-          type: string
-      required:
-        - id
-        - object
-        - feature
-        - livemode
-        - lookup_key
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
     entitlements.feature:
       type: object
       properties:
@@ -297,7 +287,7 @@ components:
         object:
           type: string
           enum:
-            - entitlements.feature
+          - entitlements.feature
         active:
           type: boolean
         livemode:
@@ -313,33 +303,32 @@ components:
           type: string
           maxLength: 80
       required:
-        - id
-        - object
-        - active
-        - livemode
-        - lookup_key
-        - metadata
-        - name
-    error:
+      - id
+      - object
+      - active
+      - livemode
+      - lookup_key
+      - metadata
+      - name
+    entitlements.active_entitlement:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-            message:
-              type: string
-            code:
-              type: string
-            param:
-              type: string
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    bearerAuth:
-      type: http
-      scheme: bearer
-tags:
-  - name: Entitlements
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - entitlements.active_entitlement
+        feature:
+          type: string
+        livemode:
+          type: boolean
+        lookup_key:
+          type: string
+      required:
+      - id
+      - object
+      - feature
+      - livemode
+      - lookup_key

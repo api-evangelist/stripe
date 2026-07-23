@@ -1,21 +1,21 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
-  title: Stripe Terminal API
-  description: >-
-    Use Stripe Terminal to accept in-person payments and extend Stripe payments
-    to your point of sale.
+  title: Stripe Accounts Account Terminal API
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
     url: https://stripe.com
   termsOfService: https://stripe.com/us/terms/
-  version: '2024-06-20'
+  version: '2023-10-16'
   x-stripeSpecFilename: spec3
-security:
-  - basicAuth: []
-  - bearerAuth: []
 servers:
-  - url: https://api.stripe.com/
+- url: https://api.stripe.com/
+security:
+- basicAuth: []
+- bearerAuth: []
+tags:
+- name: Terminal
 paths:
   /v1/terminal/locations:
     get:
@@ -23,23 +23,23 @@ paths:
       description: <p>Returns a list of Location objects.</p>
       operationId: GetTerminalLocations
       parameters:
-        - name: ending_before
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -51,7 +51,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -67,7 +67,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     post:
       summary: Stripe Create Terminal Location
       description: <p>Creates a new Location object.</p>
@@ -79,13 +79,13 @@ paths:
             schema:
               type: object
               required:
-                - address
-                - display_name
+              - address
+              - display_name
               properties:
                 address:
                   type: object
                   required:
-                    - country
+                  - country
                   properties:
                     city:
                       type: string
@@ -123,19 +123,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
   /v1/terminal/locations/{location}:
     get:
       summary: Stripe Retrieve Terminal Location
       description: <p>Retrieves a Location object.</p>
       operationId: GetTerminalLocationsLocation
       parameters:
-        - name: location
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: location
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -150,18 +150,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     post:
       summary: Stripe Update Terminal Location
       description: <p>Updates a Location object by setting the values of the parameters passed.</p>
       operationId: PostTerminalLocationsLocation
       parameters:
-        - name: location
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: location
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -191,18 +191,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     delete:
       summary: Stripe Delete Terminal Location
       description: <p>Deletes a Location object.</p>
       operationId: DeleteTerminalLocationsLocation
       parameters:
-        - name: location
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: location
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -224,49 +224,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
   /v1/terminal/readers:
     get:
       summary: Stripe List Terminal Readers
       description: <p>Returns a list of Reader objects.</p>
       operationId: GetTerminalReaders
       parameters:
-        - name: device_type
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: location
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: status
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - offline
-              - online
-        - name: ending_before
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
-            maxLength: 5000
+      - name: device_type
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: location
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - offline
+          - online
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -278,7 +278,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -294,7 +294,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     post:
       summary: Stripe Create Terminal Reader
       description: <p>Creates a new Reader object.</p>
@@ -306,7 +306,7 @@ paths:
             schema:
               type: object
               required:
-                - registration_code
+              - registration_code
               properties:
                 registration_code:
                   type: string
@@ -335,19 +335,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
   /v1/terminal/readers/{reader}:
     get:
       summary: Stripe Retrieve Terminal Reader
       description: <p>Retrieves a Reader object.</p>
       operationId: GetTerminalReadersReader
       parameters:
-        - name: reader
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: reader
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -362,18 +362,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     post:
       summary: Stripe Update Terminal Reader
       description: <p>Updates a Reader object by setting the values of the parameters passed.</p>
       operationId: PostTerminalReadersReader
       parameters:
-        - name: reader
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: reader
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -401,18 +401,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     delete:
       summary: Stripe Delete Terminal Reader
       description: <p>Deletes a Reader object.</p>
       operationId: DeleteTerminalReadersReader
       parameters:
-        - name: reader
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 5000
+      - name: reader
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 5000
       responses:
         '200':
           description: Successful response.
@@ -434,28 +434,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
   /v1/terminal/configurations:
     get:
       summary: Stripe List Terminal Configurations
       description: <p>Returns a list of Configuration objects.</p>
       operationId: GetTerminalConfigurations
       parameters:
-        - name: ending_before
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: starting_after
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: ending_before
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: starting_after
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           description: Successful response.
@@ -467,7 +467,7 @@ paths:
                   object:
                     type: string
                     enum:
-                      - list
+                    - list
                   data:
                     type: array
                     items:
@@ -483,7 +483,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
     post:
       summary: Stripe Create Terminal Configuration
       description: <p>Creates a new Configuration object.</p>
@@ -512,7 +512,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
   /v1/terminal/connection_tokens:
     post:
       summary: Stripe Create Connection Token
@@ -541,134 +541,353 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       tags:
-        - Terminal
+      - Terminal
+  /v1/terminal/configurations/{configuration}:
+    delete:
+      description: <p>Deletes a <code>Configuration</code> object.</p>
+      operationId: DeleteTerminalConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/DeleteTerminalConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleted_terminal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+    get:
+      description: <p>Retrieves a <code>Configuration</code> object.</p>
+      operationId: GetTerminalConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      - description: Specifies which fields in the response should be expanded.
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        style: deepObject
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/GetTerminalConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/terminal.configuration_2'
+                - $ref: '#/components/schemas/deleted_terminal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+    post:
+      description: <p>Updates a new <code>Configuration</code> object.</p>
+      operationId: PostTerminalConfigurationsConfiguration
+      parameters:
+      - in: path
+        name: configuration
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              bbpos_wisepos_e:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+              offline:
+                explode: true
+                style: deepObject
+              tipping:
+                explode: true
+                style: deepObject
+              verifone_p400:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalConfigurationsConfigurationRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/terminal.configuration_2'
+                - $ref: '#/components/schemas/deleted_terminal.configuration'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+  /v1/terminal/readers/{reader}/cancel_action:
+    post:
+      description: <p>Cancels the current reader action.</p>
+      operationId: PostTerminalReadersReaderCancelAction
+      parameters:
+      - in: path
+        name: reader
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalReadersReaderCancelActionRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader_2'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+  /v1/terminal/readers/{reader}/process_payment_intent:
+    post:
+      description: <p>Initiates a payment flow on a Reader.</p>
+      operationId: PostTerminalReadersReaderProcessPaymentIntent
+      parameters:
+      - in: path
+        name: reader
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              process_config:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalReadersReaderProcessPaymentIntentRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader_2'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+  /v1/terminal/readers/{reader}/process_setup_intent:
+    post:
+      description: <p>Initiates a setup intent flow on a Reader.</p>
+      operationId: PostTerminalReadersReaderProcessSetupIntent
+      parameters:
+      - in: path
+        name: reader
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              process_config:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalReadersReaderProcessSetupIntentRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader_2'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+  /v1/terminal/readers/{reader}/refund_payment:
+    post:
+      description: <p>Initiates a refund on a Reader</p>
+      operationId: PostTerminalReadersReaderRefundPayment
+      parameters:
+      - in: path
+        name: reader
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              expand:
+                explode: true
+                style: deepObject
+              metadata:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalReadersReaderRefundPaymentRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader_2'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
+  /v1/terminal/readers/{reader}/set_reader_display:
+    post:
+      description: <p>Sets reader display to show cart details.</p>
+      operationId: PostTerminalReadersReaderSetReaderDisplay
+      parameters:
+      - in: path
+        name: reader
+        required: true
+        schema:
+          maxLength: 5000
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding:
+              cart:
+                explode: true
+                style: deepObject
+              expand:
+                explode: true
+                style: deepObject
+            schema:
+              additionalProperties: false
+              $ref: '#/components/schemas/PostTerminalReadersReaderSetReaderDisplayRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/terminal.reader_2'
+          description: Successful response.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_2'
+          description: Error response.
+      tags:
+      - Terminal
 components:
   schemas:
-    terminal.location:
+    PostTerminalReadersReaderCancelActionRequest:
       type: object
       properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - terminal.location
-        address:
-          type: object
-        configuration_overrides:
-          type:
-            - string
-            - 'null'
-        display_name:
-          type: string
-        livemode:
-          type: boolean
-        metadata:
-          type: object
-          additionalProperties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
             type: string
-      required:
-        - id
-        - object
-        - address
-        - display_name
-        - livemode
-        - metadata
-    terminal.reader:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - terminal.reader
-        action:
-          type:
-            - object
-            - 'null'
-        device_sw_version:
-          type:
-            - string
-            - 'null'
-        device_type:
-          type: string
-        ip_address:
-          type:
-            - string
-            - 'null'
-        label:
-          type: string
-        livemode:
-          type: boolean
-        location:
-          type:
-            - string
-            - 'null'
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-        serial_number:
-          type: string
-        status:
-          type:
-            - string
-            - 'null'
-      required:
-        - id
-        - object
-        - device_type
-        - label
-        - livemode
-        - metadata
-        - serial_number
-    terminal.configuration:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-            - terminal.configuration
-        is_account_default:
-          type:
-            - boolean
-            - 'null'
-        livemode:
-          type: boolean
-        tipping:
-          type:
-            - object
-            - 'null'
-        offline:
-          type:
-            - object
-            - 'null'
-      required:
-        - id
-        - object
-        - livemode
-    terminal.connection_token:
-      type: object
-      properties:
-        object:
-          type: string
-          enum:
-            - terminal.connection_token
-        location:
-          type:
-            - string
-            - 'null'
-        secret:
-          type: string
-      required:
-        - object
-        - secret
+          type: array
     error:
       type: object
       properties:
@@ -683,12 +902,726 @@ components:
               type: string
             param:
               type: string
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    bearerAuth:
-      type: http
-      scheme: bearer
-tags:
-  - name: Terminal
+    DeleteTerminalConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
+    GetTerminalConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
+    terminal.location_2:
+      description: 'A Location represents a grouping of readers.
+
+
+        Related guide: [Fleet management](https://stripe.com/docs/terminal/fleet/locations)'
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+        configuration_overrides:
+          description: The ID of a configuration that will be used to customize all readers in this location.
+          maxLength: 5000
+          type: string
+        display_name:
+          description: The display name of the location.
+          maxLength: 5000
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - terminal.location
+          type: string
+      required:
+      - address
+      - display_name
+      - id
+      - livemode
+      - metadata
+      - object
+      title: TerminalLocationLocation
+      type: object
+      x-expandableFields:
+      - address
+      x-resourceId: terminal.location
+    terminal.reader_2:
+      description: 'A Reader represents a physical device for accepting payment details.
+
+
+        Related guide: [Connecting to a reader](https://stripe.com/docs/terminal/payments/connect-reader)'
+      properties:
+        action:
+          anyOf:
+          - $ref: '#/components/schemas/terminal_reader_reader_resource_reader_action'
+          description: The most recent action performed by the reader.
+          nullable: true
+        device_sw_version:
+          description: The current software version of the reader.
+          maxLength: 5000
+          nullable: true
+          type: string
+        device_type:
+          description: Type of reader, one of `bbpos_wisepad3`, `stripe_m2`, `bbpos_chipper2x`, `bbpos_wisepos_e`, `verifone_P400`, or `simulated_wisepos_e`.
+          enum:
+          - bbpos_chipper2x
+          - bbpos_wisepad3
+          - bbpos_wisepos_e
+          - simulated_wisepos_e
+          - stripe_m2
+          - verifone_P400
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        ip_address:
+          description: The local IP address of the reader.
+          maxLength: 5000
+          nullable: true
+          type: string
+        label:
+          description: Custom label given to the reader for easier identification.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        location:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/terminal.location_2'
+          description: The location identifier of the reader.
+          nullable: true
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/terminal.location_2'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - terminal.reader
+          type: string
+        serial_number:
+          description: Serial number of the reader.
+          maxLength: 5000
+          type: string
+        status:
+          description: The networking status of the reader.
+          maxLength: 5000
+          nullable: true
+          type: string
+      required:
+      - device_type
+      - id
+      - label
+      - livemode
+      - metadata
+      - object
+      - serial_number
+      title: TerminalReaderReader
+      type: object
+      x-expandableFields:
+      - action
+      - location
+      x-resourceId: terminal.reader
+    PostTerminalReadersReaderSetReaderDisplayRequest:
+      type: object
+      required:
+      - type
+      properties:
+        cart:
+          description: Cart
+          properties:
+            currency:
+              type: string
+            line_items:
+              items:
+                properties:
+                  amount:
+                    type: integer
+                  description:
+                    maxLength: 5000
+                    type: string
+                  quantity:
+                    type: integer
+                required:
+                - amount
+                - description
+                - quantity
+                title: line_item
+                type: object
+              type: array
+            tax:
+              type: integer
+            total:
+              type: integer
+          required:
+          - currency
+          - line_items
+          - total
+          title: cart
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        type:
+          description: Type
+          enum:
+          - cart
+          type: string
+    PostTerminalReadersReaderProcessSetupIntentRequest:
+      type: object
+      required:
+      - customer_consent_collected
+      - setup_intent
+      properties:
+        customer_consent_collected:
+          description: Customer Consent Collected
+          type: boolean
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        process_config:
+          description: Configuration overrides
+          properties: {}
+          title: process_setup_config
+          type: object
+        setup_intent:
+          description: SetupIntent ID
+          maxLength: 5000
+          type: string
+    PostTerminalReadersReaderProcessPaymentIntentRequest:
+      type: object
+      required:
+      - payment_intent
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        payment_intent:
+          description: PaymentIntent ID
+          maxLength: 5000
+          type: string
+        process_config:
+          description: Configuration overrides
+          properties:
+            skip_tipping:
+              type: boolean
+            tipping:
+              properties:
+                amount_eligible:
+                  type: integer
+              title: tipping_config
+              type: object
+          title: process_config
+          type: object
+    terminal.location:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - terminal.location
+        address:
+          type: object
+        configuration_overrides:
+          type:
+          - string
+          - 'null'
+        display_name:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - id
+      - object
+      - address
+      - display_name
+      - livemode
+      - metadata
+    deleted_terminal.configuration:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - terminal.configuration
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: TerminalConfigurationDeletedConfiguration
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_terminal.configuration
+    PostTerminalReadersReaderRefundPaymentRequest:
+      type: object
+      properties:
+        amount:
+          description: A positive integer in __cents__ representing how much of this charge to refund.
+          type: integer
+        charge:
+          description: ID of the Charge to refund.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        payment_intent:
+          description: ID of the PaymentIntent to refund.
+          maxLength: 5000
+          type: string
+        refund_application_fee:
+          description: Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.
+          type: boolean
+        reverse_transfer:
+          description: Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount). A transfer can be reversed only by the application that created the charge.
+          type: boolean
+    PostTerminalConfigurationsConfigurationRequest:
+      type: object
+      properties:
+        bbpos_wisepos_e:
+          anyOf:
+          - properties:
+              splashscreen:
+                anyOf:
+                - type: string
+                - enum:
+                  - ''
+                  type: string
+            title: bbpos_wise_pose
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: An object containing device type specific settings for BBPOS WisePOS E readers
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        offline:
+          anyOf:
+          - properties:
+              enabled:
+                type: boolean
+            required:
+            - enabled
+            title: offline
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Configurations for collecting transactions offline.
+        tipping:
+          anyOf:
+          - properties:
+              aud:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              cad:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              chf:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              czk:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              dkk:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              eur:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              gbp:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              hkd:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              myr:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              nok:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              nzd:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              sek:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              sgd:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+              usd:
+                properties:
+                  fixed_amounts:
+                    items:
+                      type: integer
+                    type: array
+                  percentages:
+                    items:
+                      type: integer
+                    type: array
+                  smart_tip_threshold:
+                    type: integer
+                title: currency_specific_config
+                type: object
+            title: tipping
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Tipping configurations for readers supporting on-reader tips
+        verifone_p400:
+          anyOf:
+          - properties:
+              splashscreen:
+                anyOf:
+                - type: string
+                - enum:
+                  - ''
+                  type: string
+            title: verifone_p400
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: An object containing device type specific settings for Verifone P400 readers
+    terminal.configuration:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - terminal.configuration
+        is_account_default:
+          type:
+          - boolean
+          - 'null'
+        livemode:
+          type: boolean
+        tipping:
+          type:
+          - object
+          - 'null'
+        offline:
+          type:
+          - object
+          - 'null'
+      required:
+      - id
+      - object
+      - livemode
+    terminal.configuration_2:
+      description: A Configurations object represents how features should be configured for terminal readers.
+      properties:
+        bbpos_wisepos_e:
+          $ref: '#/components/schemas/terminal_configuration_configuration_resource_device_type_specific_config'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        is_account_default:
+          description: Whether this Configuration is the default for your account
+          nullable: true
+          type: boolean
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - terminal.configuration
+          type: string
+        offline:
+          $ref: '#/components/schemas/terminal_configuration_configuration_resource_offline_config'
+        tipping:
+          $ref: '#/components/schemas/terminal_configuration_configuration_resource_tipping'
+        verifone_p400:
+          $ref: '#/components/schemas/terminal_configuration_configuration_resource_device_type_specific_config'
+      required:
+      - id
+      - livemode
+      - object
+      title: TerminalConfigurationConfiguration
+      type: object
+      x-expandableFields:
+      - bbpos_wisepos_e
+      - offline
+      - tipping
+      - verifone_p400
+      x-resourceId: terminal.configuration
+    terminal.reader:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - terminal.reader
+        action:
+          type:
+          - object
+          - 'null'
+        device_sw_version:
+          type:
+          - string
+          - 'null'
+        device_type:
+          type: string
+        ip_address:
+          type:
+          - string
+          - 'null'
+        label:
+          type: string
+        livemode:
+          type: boolean
+        location:
+          type:
+          - string
+          - 'null'
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        serial_number:
+          type: string
+        status:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - object
+      - device_type
+      - label
+      - livemode
+      - metadata
+      - serial_number
+    error_2:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    terminal.connection_token:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+          - terminal.connection_token
+        location:
+          type:
+          - string
+          - 'null'
+        secret:
+          type: string
+      required:
+      - object
+      - secret
