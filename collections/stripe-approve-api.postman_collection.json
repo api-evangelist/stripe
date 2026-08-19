@@ -1,0 +1,304 @@
+{
+  "item": [
+    {
+      "id": "90f84278-2730-431a-a117-57d61493525c",
+      "name": "Approve",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "006e159c-0c88-4e75-8948-1de310f2c18c",
+          "name": "Stripe Post   Issuing Authorizations Approve",
+          "request": {
+            "name": "Stripe Post   Issuing Authorizations Approve",
+            "description": {
+              "content": "<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href=\"/docs/issuing/controls/real-time-authorizations\">real-time authorization</a> flow. \nThis method is deprecated. Instead, <a href=\"/docs/issuing/controls/real-time-authorizations#authorization-handling\">respond directly to the webhook request to approve an authorization</a>.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "issuing",
+                "authorizations",
+                ":authorization",
+                "approve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "authorization",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "amount",
+                  "value": "<integer>",
+                  "description": "If the authorization's `pending_request.is_amount_controllable` property is `true`, you may provide this value to control how much to hold for the authorization. Must be positive (use [`decline`](https://stripe.com/docs/api/issuing/authorizations/decline) to decline an authorization request)."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "006f479e-51fe-4a74-b874-3191cc8da432",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "authorizations",
+                    ":authorization",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authorization",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "If the authorization's `pending_request.is_amount_controllable` property is `true`, you may provide this value to control how much to hold for the authorization. Must be positive (use [`decline`](https://stripe.com/docs/api/issuing/authorizations/decline) to decline an authorization request).",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 4579,\n  \"approved\": false,\n  \"authorization_method\": \"swipe\",\n  \"balance_transactions\": [\n    {\n      \"value\": \"reference #/components/schemas/balance_transaction not found in the OpenAPI spec\"\n    },\n    {\n      \"value\": \"reference #/components/schemas/balance_transaction not found in the OpenAPI spec\"\n    }\n  ],\n  \"card\": {\n    \"brand\": \"string\",\n    \"cardholder\": {\n      \"billing\": {\n        \"value\": \"reference #/components/schemas/issuing_cardholder_address not found in the OpenAPI spec\"\n      },\n      \"created\": 6711,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"name\": \"string\",\n      \"object\": \"issuing.cardholder\",\n      \"requirements\": {\n        \"value\": \"reference #/components/schemas/issuing_cardholder_requirements not found in the OpenAPI spec\"\n      },\n      \"status\": \"blocked\",\n      \"type\": \"individual\",\n      \"company\": {\n        \"value\": \"reference #/components/schemas/issuing_cardholder_company not found in the OpenAPI spec\"\n      },\n      \"email\": \"string\",\n      \"individual\": {\n        \"value\": \"reference #/components/schemas/issuing_cardholder_individual not found in the OpenAPI spec\"\n      },\n      \"phone_number\": \"string\",\n      \"preferred_locales\": [\n        \"en\",\n        \"it\"\n      ],\n      \"spending_controls\": {\n        \"value\": \"reference #/components/schemas/issuing_cardholder_authorization_controls not found in the OpenAPI spec\"\n      }\n    },\n    \"created\": 580,\n    \"currency\": \"string\",\n    \"exp_month\": 255,\n    \"exp_year\": 8488,\n    \"id\": \"string\",\n    \"last4\": \"string\",\n    \"livemode\": false,\n    \"metadata\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    },\n    \"object\": \"issuing.card\",\n    \"spending_controls\": {\n      \"value\": \"reference #/components/schemas/issuing_card_authorization_controls not found in the OpenAPI spec\"\n    },\n    \"status\": \"canceled\",\n    \"type\": \"physical\",\n    \"cancellation_reason\": \"design_rejected\",\n    \"cvc\": \"string\",\n    \"financial_account\": \"string\",\n    \"number\": \"string\",\n    \"replaced_by\": \"string\",\n    \"replacement_for\": \"string\",\n    \"replacement_reason\": \"stolen\",\n    \"shipping\": {\n      \"value\": \"reference #/components/schemas/issuing_card_shipping not found in the OpenAPI spec\"\n    },\n    \"wallets\": {\n      \"value\": \"reference #/components/schemas/issuing_card_wallets not found in the OpenAPI spec\"\n    }\n  },\n  \"created\": 6944,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"merchant_amount\": 8822,\n  \"merchant_currency\": \"string\",\n  \"merchant_data\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_merchant_data not found in the OpenAPI spec\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"object\": \"issuing.authorization\",\n  \"request_history\": [\n    {\n      \"value\": \"reference #/components/schemas/issuing_authorization_request not found in the OpenAPI spec\"\n    },\n    {\n      \"value\": \"reference #/components/schemas/issuing_authorization_request not found in the OpenAPI spec\"\n    }\n  ],\n  \"status\": \"closed\",\n  \"transactions\": [\n    {\n      \"amount\": 6183,\n      \"card\": \"string\",\n      \"created\": 9171,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"merchant_amount\": 6269,\n      \"merchant_currency\": \"string\",\n      \"merchant_data\": {\n        \"value\": \"reference #/components/schemas/issuing_authorization_merchant_data not found in the OpenAPI spec\"\n      },\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"object\": \"issuing.transaction\",\n      \"type\": \"capture\",\n      \"amount_details\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_amount_details not found in the OpenAPI spec\"\n      },\n      \"authorization\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"cardholder\": \"string\",\n      \"dispute\": \"string\",\n      \"network_data\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_network_data not found in the OpenAPI spec\"\n      },\n      \"purchase_details\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_purchase_details not found in the OpenAPI spec\"\n      },\n      \"token\": \"string\",\n      \"treasury\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_treasury not found in the OpenAPI spec\"\n      },\n      \"wallet\": \"samsung_pay\"\n    },\n    {\n      \"amount\": 8931,\n      \"card\": \"string\",\n      \"created\": 3011,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"merchant_amount\": 7196,\n      \"merchant_currency\": \"string\",\n      \"merchant_data\": {\n        \"value\": \"reference #/components/schemas/issuing_authorization_merchant_data not found in the OpenAPI spec\"\n      },\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"object\": \"issuing.transaction\",\n      \"type\": \"capture\",\n      \"amount_details\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_amount_details not found in the OpenAPI spec\"\n      },\n      \"authorization\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"cardholder\": \"string\",\n      \"dispute\": \"string\",\n      \"network_data\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_network_data not found in the OpenAPI spec\"\n      },\n      \"purchase_details\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_purchase_details not found in the OpenAPI spec\"\n      },\n      \"token\": \"string\",\n      \"treasury\": {\n        \"value\": \"reference #/components/schemas/issuing_transaction_treasury not found in the OpenAPI spec\"\n      },\n      \"wallet\": \"apple_pay\"\n    }\n  ],\n  \"verification_data\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_verification_data not found in the OpenAPI spec\"\n  },\n  \"amount_details\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_amount_details not found in the OpenAPI spec\"\n  },\n  \"cardholder\": \"string\",\n  \"network_data\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_network_data not found in the OpenAPI spec\"\n  },\n  \"pending_request\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_pending_request not found in the OpenAPI spec\"\n  },\n  \"token\": \"string\",\n  \"treasury\": {\n    \"value\": \"reference #/components/schemas/issuing_authorization_treasury not found in the OpenAPI spec\"\n  },\n  \"wallet\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f490d635-5180-4f32-9393-83d89d0accd5",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "authorizations",
+                    ":authorization",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "authorization",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "If the authorization's `pending_request.is_amount_controllable` property is `true`, you may provide this value to control how much to hold for the authorization. Must be positive (use [`decline`](https://stripe.com/docs/api/issuing/authorizations/decline) to decline an authorization request).",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.stripe.com/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ac1555a2-e827-420c-99c8-c8456f9b5eaa",
+    "name": "Stripe Accounts Account Approve API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "type": "text/plain"
+    }
+  }
+}

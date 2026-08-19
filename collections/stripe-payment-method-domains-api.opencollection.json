@@ -1,0 +1,158 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stripe Accounts Account Payment Method Domains API",
+    "version": "2023-10-16"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Method Domains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetPaymentMethodDomains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/payment_method_domains",
+            "params": [
+              {
+                "name": "domain_name",
+                "value": "",
+                "type": "query",
+                "description": "The domain name that this payment method domain object represents."
+              },
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Whether this payment method domain is enabled. If the domain is not enabled, payment methods will not appear in Elements"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Lists the details of existing payment method domains.</p>"
+        },
+        {
+          "info": {
+            "name": "PostPaymentMethodDomains",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_method_domains",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a payment method domain.</p>"
+        },
+        {
+          "info": {
+            "name": "GetPaymentMethodDomainsPaymentMethodDomain",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/payment_method_domains/:payment_method_domain",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "payment_method_domain",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves the details of an existing payment method domain.</p>"
+        },
+        {
+          "info": {
+            "name": "PostPaymentMethodDomainsPaymentMethodDomain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_method_domains/:payment_method_domain",
+            "params": [
+              {
+                "name": "payment_method_domain",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates an existing payment method domain.</p>"
+        },
+        {
+          "info": {
+            "name": "PostPaymentMethodDomainsPaymentMethodDomainValidate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_method_domains/:payment_method_domain/validate",
+            "params": [
+              {
+                "name": "payment_method_domain",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Some payment methods such as Apple Pay require additional steps to verify a domain. If the requirements weren’t satisfied when the domain was created, the payment method will be inactive on the domain.\nThe payment method doesn’t appear in Elements for this domain until it is active.</p>\n\n<p>To activate a payment method on an existing payment method domain, complete the required validation steps specific to the payment method, and then validate the payment method domain with this endpoint.</p>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

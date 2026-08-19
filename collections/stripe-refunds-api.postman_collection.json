@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "3e01b08e-9c77-4717-ad1e-0246b79d704f",
+      "id": "c503f591-0685-4011-92a0-89b3748bff7a",
       "name": "Refunds",
       "description": {
         "content": "",
@@ -9,12 +9,12 @@
       },
       "item": [
         {
-          "id": "ed7ef0ad-15bc-43e0-9593-b4a6d22e017d",
-          "name": "Stripe List Refunds",
+          "id": "622870ab-3845-4c93-ba55-2c577481bd40",
+          "name": "Get Refunds",
           "request": {
-            "name": "Stripe List Refunds",
+            "name": "Get Refunds",
             "description": {
-              "content": "<p>Returns a list of all refunds you created.</p>",
+              "content": "<p>Returns a list of all refunds you created. We return the refunds in sorted order, with the most recent refunds appearing first The 10 most recent refunds are always available by default on the Charge object.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -34,50 +34,83 @@
                 },
                 {
                   "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
                   "key": "payment_intent",
                   "value": "<string>",
                   "description": "Only return refunds for the PaymentIntent specified by this ID."
                 },
                 {
                   "disabled": false,
-                  "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
-                  "value": "<integer>"
-                },
-                {
-                  "disabled": false,
                   "key": "starting_after",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "expand[0]",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "713b9cab-956f-4d60-8a28-a0b9d7c85c00",
+              "id": "d54e810a-2e35-47eb-b2d0-b333d96373dd",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -94,19 +127,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "payment_intent",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -116,26 +153,33 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -145,12 +189,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"refund\",\n      \"amount\": 4279,\n      \"created\": 413,\n      \"currency\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"balance_transaction\": \"string\",\n      \"charge\": \"string\",\n      \"description\": \"string\",\n      \"failure_balance_transaction\": \"string\",\n      \"failure_reason\": \"string\",\n      \"payment_intent\": \"string\",\n      \"reason\": \"null\",\n      \"receipt_number\": \"string\",\n      \"source_transfer_reversal\": \"string\",\n      \"status\": \"string\",\n      \"transfer_reversal\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"refund\",\n      \"amount\": 5487,\n      \"created\": 6269,\n      \"currency\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"balance_transaction\": \"string\",\n      \"charge\": \"string\",\n      \"description\": \"string\",\n      \"failure_balance_transaction\": \"string\",\n      \"failure_reason\": \"string\",\n      \"payment_intent\": \"string\",\n      \"reason\": \"duplicate\",\n      \"receipt_number\": \"string\",\n      \"source_transfer_reversal\": \"string\",\n      \"status\": \"string\",\n      \"transfer_reversal\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"amount\": 366,\n      \"created\": 7603,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"refund\",\n      \"balance_transaction\": \"string\",\n      \"charge\": \"string\",\n      \"description\": \"string\",\n      \"destination_details\": {\n        \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n      },\n      \"failure_balance_transaction\": \"string\",\n      \"failure_reason\": \"string\",\n      \"instructions_email\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"next_action\": {\n        \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n      },\n      \"payment_intent\": \"string\",\n      \"reason\": \"fraudulent\",\n      \"receipt_number\": \"string\",\n      \"source_transfer_reversal\": \"string\",\n      \"status\": \"string\",\n      \"transfer_reversal\": \"string\"\n    },\n    {\n      \"amount\": 5232,\n      \"created\": 5377,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"refund\",\n      \"balance_transaction\": \"string\",\n      \"charge\": \"string\",\n      \"description\": \"string\",\n      \"destination_details\": {\n        \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n      },\n      \"failure_balance_transaction\": \"string\",\n      \"failure_reason\": \"string\",\n      \"instructions_email\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"next_action\": {\n        \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n      },\n      \"payment_intent\": \"string\",\n      \"reason\": \"fraudulent\",\n      \"receipt_number\": \"string\",\n      \"source_transfer_reversal\": \"string\",\n      \"status\": \"string\",\n      \"transfer_reversal\": \"string\"\n    }\n  ],\n  \"has_more\": false,\n  \"object\": \"list\",\n  \"url\": \"/v1/refunds\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "cb1df70f-4b30-4977-b45b-ff86bded63de",
+              "id": "e311ab3b-fa29-4fb1-ab9c-088116bb44e0",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -167,19 +211,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "payment_intent",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -189,26 +237,33 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -218,7 +273,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -229,12 +284,12 @@
           }
         },
         {
-          "id": "fa4322b3-e584-44ff-9b78-ffaaea4d517b",
-          "name": "Stripe Create Refund",
+          "id": "eefac36a-a756-4cc7-9b09-c11d8dea8b28",
+          "name": "Post Refunds",
           "request": {
-            "name": "Stripe Create Refund",
+            "name": "Post Refunds",
             "description": {
-              "content": "<p>When you create a new refund, you must specify a Charge or PaymentIntent object on which to create it.</p>",
+              "content": "<p>When you create a new refund, you must specify a Charge or a PaymentIntent object on which to create it.</p>\n\n<p>Creating a new refund will refund a charge that has previously been created but not yet refunded.\nFunds will be refunded to the credit or debit card that was originally charged.</p>\n\n<p>You can optionally refund only part of a charge.\nYou can do so multiple times, until the entire charge has been refunded.</p>\n\n<p>Once entirely refunded, a charge can’t be refunded again.\nThis method will raise an error when called on an already-refunded charge,\nor when trying to refund more money than is left on a charge.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -265,54 +320,99 @@
               "urlencoded": [
                 {
                   "disabled": false,
+                  "key": "amount",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
                   "key": "charge",
                   "value": "<string>",
                   "description": "The identifier of the charge to refund."
                 },
                 {
                   "disabled": false,
-                  "key": "payment_intent",
+                  "key": "currency",
                   "value": "<string>",
-                  "description": "ID of the PaymentIntent to refund."
+                  "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies)."
                 },
                 {
                   "disabled": false,
-                  "key": "amount",
-                  "value": "<integer>",
-                  "description": "A positive integer in cents representing how much to refund."
+                  "key": "customer",
+                  "value": "<string>",
+                  "description": "Customer whose customer balance to refund from."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "instructions_email",
+                  "value": "<string>",
+                  "description": "For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_1]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_2]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "origin",
+                  "value": "<string>",
+                  "description": "Origin of the refund"
+                },
+                {
+                  "disabled": false,
+                  "key": "payment_intent",
+                  "value": "<string>",
+                  "description": "The identifier of the PaymentIntent to refund."
                 },
                 {
                   "disabled": false,
                   "key": "reason",
                   "value": "<string>",
-                  "description": "The reason for the refund."
-                },
-                {
-                  "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "reverse_transfer",
-                  "value": "<boolean>"
+                  "description": "String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms."
                 },
                 {
                   "disabled": false,
                   "key": "refund_application_fee",
-                  "value": "<boolean>"
+                  "value": "<boolean>",
+                  "description": "Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge."
+                },
+                {
+                  "disabled": false,
+                  "key": "reverse_transfer",
+                  "value": "<boolean>",
+                  "description": "Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "ad10d8c7-851e-4028-a721-931cd6002158",
+              "id": "30ac687c-0d9c-4b5c-a161-292d227fa1fc",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -328,14 +428,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -344,6 +436,11 @@
                 "body": {
                   "mode": "urlencoded",
                   "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
                     {
                       "disabled": false,
                       "description": {
@@ -356,7 +453,79 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "ID of the PaymentIntent to refund.",
+                        "content": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+                        "type": "text/plain"
+                      },
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Customer whose customer balance to refund from.",
+                        "type": "text/plain"
+                      },
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.",
+                        "type": "text/plain"
+                      },
+                      "key": "instructions_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Origin of the refund",
+                        "type": "text/plain"
+                      },
+                      "key": "origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The identifier of the PaymentIntent to refund.",
                         "type": "text/plain"
                       },
                       "key": "payment_intent",
@@ -365,16 +534,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "A positive integer in cents representing how much to refund.",
-                        "type": "text/plain"
-                      },
-                      "key": "amount",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The reason for the refund.",
+                        "content": "String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.",
                         "type": "text/plain"
                       },
                       "key": "reason",
@@ -382,22 +542,20 @@
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "reverse_transfer",
+                      "description": {
+                        "content": "Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.",
+                        "type": "text/plain"
+                      },
+                      "key": "refund_application_fee",
                       "value": "<boolean>"
                     },
                     {
                       "disabled": false,
-                      "key": "refund_application_fee",
+                      "description": {
+                        "content": "Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.",
+                        "type": "text/plain"
+                      },
+                      "key": "reverse_transfer",
                       "value": "<boolean>"
                     }
                   ]
@@ -411,12 +569,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"amount\": 9160,\n  \"created\": 6983,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
+              "body": "{\n  \"amount\": 1833,\n  \"created\": 330,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"destination_details\": {\n    \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n  },\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"instructions_email\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"next_action\": {\n    \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n  },\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2de8842e-39a7-4907-a9aa-99a6bb7f133d",
+              "id": "49189f4d-d661-4937-8afa-69b0eed59d4c",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -432,14 +590,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -448,6 +598,11 @@
                 "body": {
                   "mode": "urlencoded",
                   "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
                     {
                       "disabled": false,
                       "description": {
@@ -460,7 +615,79 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "ID of the PaymentIntent to refund.",
+                        "content": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+                        "type": "text/plain"
+                      },
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Customer whose customer balance to refund from.",
+                        "type": "text/plain"
+                      },
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.",
+                        "type": "text/plain"
+                      },
+                      "key": "instructions_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Origin of the refund",
+                        "type": "text/plain"
+                      },
+                      "key": "origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The identifier of the PaymentIntent to refund.",
                         "type": "text/plain"
                       },
                       "key": "payment_intent",
@@ -469,16 +696,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "A positive integer in cents representing how much to refund.",
-                        "type": "text/plain"
-                      },
-                      "key": "amount",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The reason for the refund.",
+                        "content": "String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.",
                         "type": "text/plain"
                       },
                       "key": "reason",
@@ -486,22 +704,20 @@
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "reverse_transfer",
+                      "description": {
+                        "content": "Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.",
+                        "type": "text/plain"
+                      },
+                      "key": "refund_application_fee",
                       "value": "<boolean>"
                     },
                     {
                       "disabled": false,
-                      "key": "refund_application_fee",
+                      "description": {
+                        "content": "Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.",
+                        "type": "text/plain"
+                      },
+                      "key": "reverse_transfer",
                       "value": "<boolean>"
                     }
                   ]
@@ -515,7 +731,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -526,10 +742,10 @@
           }
         },
         {
-          "id": "a8b36ecb-ed53-4a77-9475-c9336d71de24",
-          "name": "Stripe Retrieve Refund",
+          "id": "d86412b3-0b38-43db-9718-5c7816b5e89f",
+          "name": "Get Refunds Refund",
           "request": {
-            "name": "Stripe Retrieve Refund",
+            "name": "Get Refunds Refund",
             "description": {
               "content": "<p>Retrieves the details of an existing refund.</p>",
               "type": "text/plain"
@@ -547,12 +763,14 @@
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 }
               ],
               "variable": [
@@ -567,16 +785,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "4c6383b1-9939-4860-ae63-a8cb8a8fc463",
+              "id": "3c123322-8026-424c-8a54-0e3c1780c302",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -610,20 +836,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -633,12 +854,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"amount\": 9160,\n  \"created\": 6983,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
+              "body": "{\n  \"amount\": 1833,\n  \"created\": 330,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"destination_details\": {\n    \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n  },\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"instructions_email\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"next_action\": {\n    \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n  },\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bb685bac-e21b-45f7-8212-e398faa4963b",
+              "id": "84c60ce1-63de-4b77-aa56-43d4892b96d8",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -672,20 +893,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -695,7 +911,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -706,12 +922,12 @@
           }
         },
         {
-          "id": "679c4913-8e91-4693-b645-4fd5cd5dcd09",
-          "name": "Stripe Update Refund",
+          "id": "a6cd4e10-1ac4-45a1-abd1-739372159bdf",
+          "name": "Post Refunds Refund",
           "request": {
-            "name": "Stripe Update Refund",
+            "name": "Post Refunds Refund",
             "description": {
-              "content": "<p>Updates the refund that you specify by setting the values of the parameters that you pass.</p>",
+              "content": "<p>Updates the refund that you specify by setting the values of the passed parameters. Any parameters that you don’t provide remain unchanged.</p>\n\n<p>This request only accepts <code>metadata</code> as an argument.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -751,30 +967,34 @@
               "urlencoded": [
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "key_2",
-                  "value": "<string>"
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
-                  "key": "key_3",
-                  "value": "<string>"
+                  "key": "metadata[key_1]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "a0eb841b-1a8e-4342-baf6-d749427d5e2a",
+              "id": "02f87c3c-7f24-4912-91b4-60a179972bd5",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -799,14 +1019,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -817,7 +1029,56 @@
                   "urlencoded": [
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_2]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_3]",
                       "value": "<string>"
                     }
                   ]
@@ -831,12 +1092,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"amount\": 9160,\n  \"created\": 6983,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
+              "body": "{\n  \"amount\": 1833,\n  \"created\": 330,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"destination_details\": {\n    \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n  },\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"instructions_email\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"next_action\": {\n    \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n  },\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "37650fda-451a-4a6b-b93c-80f68e9a2d5e",
+              "id": "c35d792d-f9cf-4fd8-a517-a83b107f376d",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -861,14 +1122,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -879,7 +1132,56 @@
                   "urlencoded": [
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_2]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_3]",
                       "value": "<string>"
                     }
                   ]
@@ -893,7 +1195,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -904,12 +1206,12 @@
           }
         },
         {
-          "id": "fec7b40e-ab33-4457-b4d7-73449ba85f0d",
-          "name": "Stripe Cancel Refund",
+          "id": "db975863-7e6e-4387-b1d8-a0ecfddf4c37",
+          "name": "Post Refunds Refund Cancel",
           "request": {
-            "name": "Stripe Cancel Refund",
+            "name": "Post Refunds Refund Cancel",
             "description": {
-              "content": "<p>Cancels a refund with a status of requires_action.</p>",
+              "content": "<p>Cancels a refund with a status of <code>requires_action</code>.</p>\n\n<p>You can’t cancel refunds in other states. Only refunds for payment methods that require customer action can enter the <code>requires_action</code> state.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -935,16 +1237,37 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "POST",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
           },
           "response": [
             {
-              "id": "3b790980-e452-40d2-8570-c09067b50934",
+              "id": "dafe344e-c472-4a68-a1a8-afbf6e646cbd",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -970,20 +1293,34 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
@@ -993,12 +1330,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"amount\": 9160,\n  \"created\": 6983,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
+              "body": "{\n  \"amount\": 1833,\n  \"created\": 330,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"refund\",\n  \"balance_transaction\": \"string\",\n  \"charge\": \"string\",\n  \"description\": \"string\",\n  \"destination_details\": {\n    \"value\": \"reference #/components/schemas/refund_destination_details not found in the OpenAPI spec\"\n  },\n  \"failure_balance_transaction\": \"string\",\n  \"failure_reason\": \"string\",\n  \"instructions_email\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"next_action\": {\n    \"value\": \"reference #/components/schemas/refund_next_action not found in the OpenAPI spec\"\n  },\n  \"payment_intent\": \"string\",\n  \"reason\": \"fraudulent\",\n  \"receipt_number\": \"string\",\n  \"source_transfer_reversal\": \"string\",\n  \"status\": \"string\",\n  \"transfer_reversal\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d6d09fe1-620a-4377-88ce-ee4eadb34267",
+              "id": "8ddbaf92-d50c-4512-b35f-c70effd3d77f",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1024,20 +1361,34 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -1047,7 +1398,232 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0ec4c980-287b-4535-8301-ce9ccc900ec6",
+          "name": "Stripe List Application Fee Refunds",
+          "request": {
+            "name": "Stripe List Application Fee Refunds",
+            "description": {
+              "content": "<p>You can see a list of the refunds belonging to a specific application fee. Note that the 10 most recent refunds are always available by default on the application fee object. If you need more than those 10, you can use this API method and the <code>limit</code> and <code>starting_after</code> parameters to page through additional refunds.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "application_fees",
+                ":id",
+                "refunds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "ea1d0b48-8839-432f-90f6-2315fcb26b3c",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "application_fees",
+                    ":id",
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"amount\": 6775,\n      \"created\": 1196,\n      \"currency\": \"string\",\n      \"fee\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"fee_refund\",\n      \"balance_transaction\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    {\n      \"amount\": 6823,\n      \"created\": 6363,\n      \"currency\": \"string\",\n      \"fee\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"fee_refund\",\n      \"balance_transaction\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      }\n    }\n  ],\n  \"has_more\": false,\n  \"object\": \"list\",\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0e069ccd-b84d-4d6a-ac34-b83b885cdb8d",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "application_fees",
+                    ":id",
+                    "refunds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1069,25 +1645,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "be6311bf-0cef-4a78-b48d-6c1548b7a06a",
-    "name": "Stripe Refunds API",
+    "_postman_id": "3c89058e-51dc-464c-88e0-741a9a2dd9bd",
+    "name": "Stripe Accounts Account Refunds API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "Refund objects allow you to refund a previously created charge that isn't refunded yet. Funds are refunded to the credit or debit card that's initially charged.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

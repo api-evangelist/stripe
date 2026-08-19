@@ -1,0 +1,259 @@
+{
+  "item": [
+    {
+      "id": "9994a015-bf21-4f08-9ee7-340837494e68",
+      "name": "Attach",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b29bb7d3-f75b-4975-9790-fe967abc27dd",
+          "name": "Stripe Post   Payment Methods Attach",
+          "request": {
+            "name": "Stripe Post   Payment Methods Attach",
+            "description": {
+              "content": "<p>Attaches a PaymentMethod object to a Customer.</p>\n\n<p>To attach a new PaymentMethod to a customer for future payments, we recommend you use a <a href=\"/docs/api/setup_intents\">SetupIntent</a>\nor a PaymentIntent with <a href=\"/docs/api/payment_intents/create#create_payment_intent-setup_future_usage\">setup_future_usage</a>.\nThese approaches will perform any necessary steps to set up the PaymentMethod for future payments. Using the <code>/v1/payment_methods/:id/attach</code>\nendpoint without first using a SetupIntent or PaymentIntent with <code>setup_future_usage</code> does not optimize the PaymentMethod for\nfuture use, which makes later declines and payment friction more likely.\nSee <a href=\"/docs/payments/payment-intents#future-usage\">Optimizing cards for future payments</a> for more information about setting up\nfuture payments.</p>\n\n<p>To use this PaymentMethod as the default for invoice or subscription payments,\nset <a href=\"/docs/api/customers/update#update_customer-invoice_settings-default_payment_method\"><code>invoice_settings.default_payment_method</code></a>,\non the Customer to the PaymentMethod’s ID.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "payment_methods",
+                ":payment_method",
+                "attach"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "payment_method",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "customer",
+                  "value": "<string>",
+                  "description": "(Required) The ID of the customer to which to attach the PaymentMethod."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c52f0831-2a78-4e97-a5c5-677fe717e78b",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payment_methods",
+                    ":payment_method",
+                    "attach"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_method",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The ID of the customer to which to attach the PaymentMethod.",
+                        "type": "text/plain"
+                      },
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"billing_details\": {\n    \"value\": \"reference #/components/schemas/billing_details not found in the OpenAPI spec\"\n  },\n  \"created\": 3260,\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"object\": \"payment_method\",\n  \"type\": \"card_present\",\n  \"acss_debit\": {\n    \"value\": \"reference #/components/schemas/payment_method_acss_debit not found in the OpenAPI spec\"\n  },\n  \"affirm\": {\n    \"value\": \"reference #/components/schemas/payment_method_affirm not found in the OpenAPI spec\"\n  },\n  \"afterpay_clearpay\": {\n    \"value\": \"reference #/components/schemas/payment_method_afterpay_clearpay not found in the OpenAPI spec\"\n  },\n  \"alipay\": {\n    \"value\": \"reference #/components/schemas/payment_flows_private_payment_methods_alipay not found in the OpenAPI spec\"\n  },\n  \"au_becs_debit\": {\n    \"value\": \"reference #/components/schemas/payment_method_au_becs_debit not found in the OpenAPI spec\"\n  },\n  \"bacs_debit\": {\n    \"value\": \"reference #/components/schemas/payment_method_bacs_debit not found in the OpenAPI spec\"\n  },\n  \"bancontact\": {\n    \"value\": \"reference #/components/schemas/payment_method_bancontact not found in the OpenAPI spec\"\n  },\n  \"blik\": {\n    \"value\": \"reference #/components/schemas/payment_method_blik not found in the OpenAPI spec\"\n  },\n  \"boleto\": {\n    \"value\": \"reference #/components/schemas/payment_method_boleto not found in the OpenAPI spec\"\n  },\n  \"card\": {\n    \"value\": \"reference #/components/schemas/payment_method_card not found in the OpenAPI spec\"\n  },\n  \"card_present\": {\n    \"value\": \"reference #/components/schemas/payment_method_card_present not found in the OpenAPI spec\"\n  },\n  \"cashapp\": {\n    \"value\": \"reference #/components/schemas/payment_method_cashapp not found in the OpenAPI spec\"\n  },\n  \"customer\": \"string\",\n  \"customer_balance\": {\n    \"value\": \"reference #/components/schemas/payment_method_customer_balance not found in the OpenAPI spec\"\n  },\n  \"eps\": {\n    \"value\": \"reference #/components/schemas/payment_method_eps not found in the OpenAPI spec\"\n  },\n  \"fpx\": {\n    \"value\": \"reference #/components/schemas/payment_method_fpx not found in the OpenAPI spec\"\n  },\n  \"giropay\": {\n    \"value\": \"reference #/components/schemas/payment_method_giropay not found in the OpenAPI spec\"\n  },\n  \"grabpay\": {\n    \"value\": \"reference #/components/schemas/payment_method_grabpay not found in the OpenAPI spec\"\n  },\n  \"ideal\": {\n    \"value\": \"reference #/components/schemas/payment_method_ideal not found in the OpenAPI spec\"\n  },\n  \"interac_present\": {\n    \"value\": \"reference #/components/schemas/payment_method_interac_present not found in the OpenAPI spec\"\n  },\n  \"klarna\": {\n    \"value\": \"reference #/components/schemas/payment_method_klarna not found in the OpenAPI spec\"\n  },\n  \"konbini\": {\n    \"value\": \"reference #/components/schemas/payment_method_konbini not found in the OpenAPI spec\"\n  },\n  \"link\": {\n    \"value\": \"reference #/components/schemas/payment_method_link not found in the OpenAPI spec\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"oxxo\": {\n    \"value\": \"reference #/components/schemas/payment_method_oxxo not found in the OpenAPI spec\"\n  },\n  \"p24\": {\n    \"value\": \"reference #/components/schemas/payment_method_p24 not found in the OpenAPI spec\"\n  },\n  \"paynow\": {\n    \"value\": \"reference #/components/schemas/payment_method_paynow not found in the OpenAPI spec\"\n  },\n  \"paypal\": {\n    \"value\": \"reference #/components/schemas/payment_method_paypal not found in the OpenAPI spec\"\n  },\n  \"pix\": {\n    \"value\": \"reference #/components/schemas/payment_method_pix not found in the OpenAPI spec\"\n  },\n  \"promptpay\": {\n    \"value\": \"reference #/components/schemas/payment_method_promptpay not found in the OpenAPI spec\"\n  },\n  \"radar_options\": {\n    \"value\": \"reference #/components/schemas/radar_radar_options not found in the OpenAPI spec\"\n  },\n  \"revolut_pay\": {\n    \"value\": \"reference #/components/schemas/payment_method_revolut_pay not found in the OpenAPI spec\"\n  },\n  \"sepa_debit\": {\n    \"value\": \"reference #/components/schemas/payment_method_sepa_debit not found in the OpenAPI spec\"\n  },\n  \"sofort\": {\n    \"value\": \"reference #/components/schemas/payment_method_sofort not found in the OpenAPI spec\"\n  },\n  \"us_bank_account\": {\n    \"value\": \"reference #/components/schemas/payment_method_us_bank_account not found in the OpenAPI spec\"\n  },\n  \"wechat_pay\": {\n    \"value\": \"reference #/components/schemas/payment_method_wechat_pay not found in the OpenAPI spec\"\n  },\n  \"zip\": {\n    \"value\": \"reference #/components/schemas/payment_method_zip not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bcdce23f-787b-431e-ad12-1fb9deb727f8",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "payment_methods",
+                    ":payment_method",
+                    "attach"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "payment_method",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The ID of the customer to which to attach the PaymentMethod.",
+                        "type": "text/plain"
+                      },
+                      "key": "customer",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.stripe.com/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dcd40b06-df62-4841-ae93-be748381d422",
+    "name": "Stripe Accounts Account Attach API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "type": "text/plain"
+    }
+  }
+}

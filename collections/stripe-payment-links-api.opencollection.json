@@ -1,26 +1,19 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Payment Links API",
+    "name": "Stripe Accounts Account Payment Links API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Get",
+        "name": "Payment Links",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "Stripe Get   Payment Links",
+            "name": "GetPaymentLinks",
             "type": "http"
           },
           "http": {
@@ -67,7 +60,22 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Payment Links",
+            "name": "PostPaymentLinks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_links",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a payment link.</p>"
+        },
+        {
+          "info": {
+            "name": "GetPaymentLinksPaymentLink",
             "type": "http"
           },
           "http": {
@@ -95,7 +103,29 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Payment Links Line Items",
+            "name": "PostPaymentLinksPaymentLink",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_links/:payment_link",
+            "params": [
+              {
+                "name": "payment_link",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates a payment link.</p>"
+        },
+        {
+          "info": {
+            "name": "GetPaymentLinksPaymentLinkLineItems",
             "type": "http"
           },
           "http": {
@@ -138,51 +168,6 @@
             }
           },
           "docs": "<p>When retrieving a payment link, there is an includable <strong>line_items</strong> property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Links",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Payment Links",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payment_links",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Creates a payment link.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Post   Payment Links",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payment_links/:payment_link",
-            "params": [
-              {
-                "name": "payment_link",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Updates a payment link.</p>"
         }
       ]
     }

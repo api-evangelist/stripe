@@ -1,15 +1,8 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Radar API",
-    "version": "2024-06-20"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
+    "name": "Stripe Accounts Account Radar API",
+    "version": "2023-10-16"
   },
   "items": [
     {
@@ -20,7 +13,7 @@
       "items": [
         {
           "info": {
-            "name": "Stripe List Early Fraud Warnings",
+            "name": "GetRadarEarlyFraudWarnings",
             "type": "http"
           },
           "http": {
@@ -34,38 +27,52 @@
                 "description": "Only return early fraud warnings for the charge specified by this charge ID."
               },
               {
+                "name": "created",
+                "value": "",
+                "type": "query",
+                "description": "Only return early fraud warnings that were created during the given date interval."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
                 "name": "payment_intent",
                 "value": "",
                 "type": "query",
                 "description": "Only return early fraud warnings for charges that were created by the PaymentIntent specified by this PaymentIntent ID."
               },
               {
-                "name": "ending_before",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query"
-              },
-              {
                 "name": "starting_after",
                 "value": "",
-                "type": "query"
-              },
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query"
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
           "docs": "<p>Returns a list of early fraud warnings.</p>"
         },
         {
           "info": {
-            "name": "Stripe Retrieve Early Fraud Warning",
+            "name": "GetRadarEarlyFraudWarningsEarlyFraudWarning",
             "type": "http"
           },
           "http": {
@@ -80,15 +87,143 @@
               {
                 "name": "expand",
                 "value": "",
-                "type": "query"
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
-          "docs": "<p>Retrieves the details of an early fraud warning that has previously been created.</p>"
+          "docs": "<p>Retrieves the details of an early fraud warning that has previously been created. </p>\n\n<p>Please refer to the <a href=\"#early_fraud_warning_object\">early fraud warning</a> object reference for more details.</p>"
         },
         {
           "info": {
-            "name": "Stripe List Value Lists",
+            "name": "GetRadarValueListItems",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_list_items",
+            "params": [
+              {
+                "name": "created",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              },
+              {
+                "name": "value",
+                "value": "",
+                "type": "query",
+                "description": "Return items belonging to the parent list whose value matches the specified value (using an \"is like\" match)."
+              },
+              {
+                "name": "value_list",
+                "value": "",
+                "type": "query",
+                "description": "Identifier for the parent value list this item belongs to."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of <code>ValueListItem</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
+        },
+        {
+          "info": {
+            "name": "PostRadarValueListItems",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/radar/value_list_items",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a new <code>ValueListItem</code> object, which is added to the specified parent value list.</p>"
+        },
+        {
+          "info": {
+            "name": "GetRadarValueListItemsItem",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "item",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves a <code>ValueListItem</code> object.</p>"
+        },
+        {
+          "info": {
+            "name": "DeleteRadarValueListItemsItem",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
+            "params": [
+              {
+                "name": "item",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Deletes a <code>ValueListItem</code> object, removing it from its parent value list.</p>"
+        },
+        {
+          "info": {
+            "name": "GetRadarValueLists",
             "type": "http"
           },
           "http": {
@@ -99,41 +234,54 @@
                 "name": "alias",
                 "value": "",
                 "type": "query",
-                "description": "The alias used to reference the value list."
+                "description": "The alias used to reference the value list when writing rules."
               },
               {
                 "name": "contains",
                 "value": "",
                 "type": "query",
-                "description": "A value contained within a value list."
+                "description": "A value contained within a value list - returns all value lists containing this value."
+              },
+              {
+                "name": "created",
+                "value": "",
+                "type": "query"
               },
               {
                 "name": "ending_before",
                 "value": "",
-                "type": "query"
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "starting_after",
-                "value": "",
-                "type": "query"
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
               },
               {
                 "name": "expand",
                 "value": "",
-                "type": "query"
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
-          "docs": "<p>Returns a list of ValueList objects.</p>"
+          "docs": "<p>Returns a list of <code>ValueList</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
         },
         {
           "info": {
-            "name": "Stripe Create Value List",
+            "name": "PostRadarValueLists",
             "type": "http"
           },
           "http": {
@@ -141,31 +289,14 @@
             "url": "https://api.stripe.com/v1/radar/value_lists",
             "body": {
               "type": "form-urlencoded",
-              "data": [
-                {
-                  "name": "alias",
-                  "value": ""
-                },
-                {
-                  "name": "name",
-                  "value": ""
-                },
-                {
-                  "name": "item_type",
-                  "value": ""
-                },
-                {
-                  "name": "metadata",
-                  "value": ""
-                }
-              ]
+              "data": []
             }
           },
-          "docs": "<p>Creates a new ValueList object.</p>"
+          "docs": "<p>Creates a new <code>ValueList</code> object, which can then be referenced in rules.</p>"
         },
         {
           "info": {
-            "name": "Stripe Retrieve Value List",
+            "name": "GetRadarValueListsValueList",
             "type": "http"
           },
           "http": {
@@ -173,17 +304,27 @@
             "url": "https://api.stripe.com/v1/radar/value_lists/:value_list",
             "params": [
               {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
                 "name": "value_list",
                 "value": "",
                 "type": "path"
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
-          "docs": "<p>Retrieves a ValueList object.</p>"
+          "docs": "<p>Retrieves a <code>ValueList</code> object.</p>"
         },
         {
           "info": {
-            "name": "Stripe Update Value List",
+            "name": "PostRadarValueListsValueList",
             "type": "http"
           },
           "http": {
@@ -198,27 +339,14 @@
             ],
             "body": {
               "type": "form-urlencoded",
-              "data": [
-                {
-                  "name": "alias",
-                  "value": ""
-                },
-                {
-                  "name": "name",
-                  "value": ""
-                },
-                {
-                  "name": "metadata",
-                  "value": ""
-                }
-              ]
+              "data": []
             }
           },
-          "docs": "<p>Updates a ValueList object by setting the values of the parameters passed.</p>"
+          "docs": "<p>Updates a <code>ValueList</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged. Note that <code>item_type</code> is immutable.</p>"
         },
         {
           "info": {
-            "name": "Stripe Delete Value List",
+            "name": "DeleteRadarValueListsValueList",
             "type": "http"
           },
           "http": {
@@ -230,107 +358,13 @@
                 "value": "",
                 "type": "path"
               }
-            ]
-          },
-          "docs": "<p>Deletes a ValueList object.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe List Value List Items",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/radar/value_list_items",
-            "params": [
-              {
-                "name": "value_list",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "value",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "ending_before",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query"
-              },
-              {
-                "name": "starting_after",
-                "value": "",
-                "type": "query"
-              }
-            ]
-          },
-          "docs": "<p>Returns a list of ValueListItem objects.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Create Value List Item",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/radar/value_list_items",
+            ],
             "body": {
               "type": "form-urlencoded",
-              "data": [
-                {
-                  "name": "value",
-                  "value": ""
-                },
-                {
-                  "name": "value_list",
-                  "value": ""
-                }
-              ]
+              "data": []
             }
           },
-          "docs": "<p>Creates a new ValueListItem object.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Retrieve Value List Item",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
-            "params": [
-              {
-                "name": "item",
-                "value": "",
-                "type": "path"
-              }
-            ]
-          },
-          "docs": "<p>Retrieves a ValueListItem object.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Delete Value List Item",
-            "type": "http"
-          },
-          "http": {
-            "method": "DELETE",
-            "url": "https://api.stripe.com/v1/radar/value_list_items/:item",
-            "params": [
-              {
-                "name": "item",
-                "value": "",
-                "type": "path"
-              }
-            ]
-          },
-          "docs": "<p>Deletes a ValueListItem object.</p>"
+          "docs": "<p>Deletes a <code>ValueList</code> object, also deleting any items contained within the value list. To be deleted, a value list must not be referenced in any rules.</p>"
         }
       ]
     }

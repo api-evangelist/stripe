@@ -1,26 +1,19 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Payment Intents API",
+    "name": "Stripe Accounts Account Payment Intents API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Get",
+        "name": "Payment Intents",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "Stripe Get   Payment Intents",
+            "name": "GetPaymentIntents",
             "type": "http"
           },
           "http": {
@@ -73,7 +66,22 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Payment Intents Search",
+            "name": "PostPaymentIntents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_intents",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a PaymentIntent object.</p>\n\n<p>After the PaymentIntent is created, attach a payment method and <a href=\"/docs/api/payment_intents/confirm\">confirm</a>\nto continue the payment. Learn more about <a href=\"/docs/payments/payment-intents\">the available payment flows\nwith the Payment Intents API</a>.</p>\n\n<p>When you use <code>confirm=true</code> during creation, it’s equivalent to creating\nand confirming the PaymentIntent in the same call. You can use any parameters\navailable in the <a hr"
+        },
+        {
+          "info": {
+            "name": "GetPaymentIntentsSearch",
             "type": "http"
           },
           "http": {
@@ -114,7 +122,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Payment Intents",
+            "name": "GetPaymentIntentsIntent",
             "type": "http"
           },
           "http": {
@@ -145,33 +153,10 @@
             }
           },
           "docs": "<p>Retrieves the details of a PaymentIntent that has previously been created. </p>\n\n<p>You can retrieve a PaymentIntent client-side using a publishable key when the <code>client_secret</code> is in the query string. </p>\n\n<p>If you retrieve a PaymentIntent with a publishable key, it only returns a subset of properties. Refer to the <a href=\"#payment_intent_object\">payment intent</a> object reference for more details.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Intents",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Payment Intents",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payment_intents",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Creates a PaymentIntent object.</p>\n\n<p>After the PaymentIntent is created, attach a payment method and <a href=\"/docs/api/payment_intents/confirm\">confirm</a>\nto continue the payment. Learn more about <a href=\"/docs/payments/payment-intents\">the available payment flows\nwith the Payment Intents API</a>.</p>\n\n<p>When you use <code>confirm=true</code> during creation, it’s equivalent to creating\nand confirming the PaymentIntent in the same call. You can use any parameters\navailable in the <a hr"
         },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents",
+            "name": "PostPaymentIntentsIntent",
             "type": "http"
           },
           "http": {
@@ -193,37 +178,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents Verify Microdeposits",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payment_intents/:intent/verify_microdeposits",
-            "params": [
-              {
-                "name": "intent",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Verifies microdeposits on a PaymentIntent object.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Apply",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Payment Intents Apply Customer Balance",
+            "name": "PostPaymentIntentsIntentApplyCustomerBalance",
             "type": "http"
           },
           "http": {
@@ -242,18 +197,10 @@
             }
           },
           "docs": "<p>Manually reconcile the remaining amount for a <code>customer_balance</code> PaymentIntent.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Cancel",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents Cancel",
+            "name": "PostPaymentIntentsIntentCancel",
             "type": "http"
           },
           "http": {
@@ -272,18 +219,10 @@
             }
           },
           "docs": "<p>You can cancel a PaymentIntent object when it’s in one of these statuses: <code>requires_payment_method</code>, <code>requires_capture</code>, <code>requires_confirmation</code>, <code>requires_action</code> or, <a href=\"/docs/payments/intents\">in rare cases</a>, <code>processing</code>. </p>\n\n<p>After it’s canceled, no additional charges are made by the PaymentIntent and any operations on the PaymentIntent fail with an error. For PaymentIntents with a <code>status</code> of <code>requires_ca"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Capture",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents Capture",
+            "name": "PostPaymentIntentsIntentCapture",
             "type": "http"
           },
           "http": {
@@ -302,18 +241,10 @@
             }
           },
           "docs": "<p>Capture the funds of an existing uncaptured PaymentIntent when its status is <code>requires_capture</code>.</p>\n\n<p>Uncaptured PaymentIntents are cancelled a set number of days (7 by default) after their creation.</p>\n\n<p>Learn more about <a href=\"/docs/payments/capture-later\">separate authorization and capture</a>.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Confirm",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents Confirm",
+            "name": "PostPaymentIntentsIntentConfirm",
             "type": "http"
           },
           "http": {
@@ -332,18 +263,10 @@
             }
           },
           "docs": "<p>Confirm that your customer intends to pay with current or provided\npayment method. Upon confirmation, the PaymentIntent will attempt to initiate\na payment.\nIf the selected payment method requires additional authentication steps, the\nPaymentIntent will transition to the <code>requires_action</code> status and\nsuggest additional actions via <code>next_action</code>. If payment fails,\nthe PaymentIntent transitions to the <code>requires_payment_method</code> status or the\n<code>canceled</code> st"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Authorization",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Post   Payment Intents Increment Authorization",
+            "name": "PostPaymentIntentsIntentIncrementAuthorization",
             "type": "http"
           },
           "http": {
@@ -362,6 +285,28 @@
             }
           },
           "docs": "<p>Perform an incremental authorization on an eligible\n<a href=\"/docs/api/payment_intents/object\">PaymentIntent</a>. To be eligible, the\nPaymentIntent’s status must be <code>requires_capture</code> and\n<a href=\"/docs/api/charges/object#charge_object-payment_method_details-card_present-incremental_authorization_supported\">incremental_authorization_supported</a>\nmust be <code>true</code>.</p>\n\n<p>Incremental authorizations attempt to increase the authorized amount on\nyour customer’s card to the ne"
+        },
+        {
+          "info": {
+            "name": "PostPaymentIntentsIntentVerifyMicrodeposits",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payment_intents/:intent/verify_microdeposits",
+            "params": [
+              {
+                "name": "intent",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Verifies microdeposits on a PaymentIntent object.</p>"
         }
       ]
     }

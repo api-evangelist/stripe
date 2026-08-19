@@ -1,26 +1,19 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Issuing API",
+    "name": "Stripe Accounts Account Issuing API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Authorization",
+        "name": "Issuing",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "Stripe Get   Issuing Authorizations",
+            "name": "GetIssuingAuthorizations",
             "type": "http"
           },
           "http": {
@@ -85,7 +78,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Issuing Authorizations",
+            "name": "GetIssuingAuthorizationsAuthorization",
             "type": "http"
           },
           "http": {
@@ -113,7 +106,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Authorizations",
+            "name": "PostIssuingAuthorizationsAuthorization",
             "type": "http"
           },
           "http": {
@@ -135,37 +128,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Authorizations Decline",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/authorizations/:authorization/decline",
-            "params": [
-              {
-                "name": "authorization",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href=\"/docs/issuing/controls/real-time-authorizations\">real time authorization</a> flow.\nThis method is deprecated. Instead, <a href=\"/docs/issuing/controls/real-time-authorizations#authorization-handling\">respond directly to the webhook request to decline an authorization</a>.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Approve",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Authorizations Approve",
+            "name": "PostIssuingAuthorizationsAuthorizationApprove",
             "type": "http"
           },
           "http": {
@@ -184,18 +147,32 @@
             }
           },
           "docs": "<p>[Deprecated] Approves a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href=\"/docs/issuing/controls/real-time-authorizations\">real-time authorization</a> flow. \nThis method is deprecated. Instead, <a href=\"/docs/issuing/controls/real-time-authorizations#authorization-handling\">respond directly to the webhook request to approve an authorization</a>.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Get",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Get   Issuing Cardholders",
+            "name": "PostIssuingAuthorizationsAuthorizationDecline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/authorizations/:authorization/decline",
+            "params": [
+              {
+                "name": "authorization",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>[Deprecated] Declines a pending Issuing <code>Authorization</code> object. This request should be made within the timeout window of the <a href=\"/docs/issuing/controls/real-time-authorizations\">real time authorization</a> flow.\nThis method is deprecated. Instead, <a href=\"/docs/issuing/controls/real-time-authorizations#authorization-handling\">respond directly to the webhook request to decline an authorization</a>.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingCardholders",
             "type": "http"
           },
           "http": {
@@ -266,7 +243,22 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Issuing Cardholders",
+            "name": "PostIssuingCardholders",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/cardholders",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a new Issuing <code>Cardholder</code> object that can be issued cards.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingCardholdersCardholder",
             "type": "http"
           },
           "http": {
@@ -294,285 +286,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Issuing Settlements",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/settlements",
-            "params": [
-              {
-                "name": "created",
-                "value": "",
-                "type": "query",
-                "description": "Only return issuing settlements that were created during the given date interval."
-              },
-              {
-                "name": "ending_before",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
-              },
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query",
-                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
-              },
-              {
-                "name": "starting_after",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Returns a list of Issuing <code>Settlement</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Settlements Settlement",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/settlements/:settlement",
-            "params": [
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "settlement",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Retrieves an Issuing <code>Settlement</code> object.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Tokens",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/tokens",
-            "params": [
-              {
-                "name": "card",
-                "value": "",
-                "type": "query",
-                "description": "The Issuing card identifier to list tokens for."
-              },
-              {
-                "name": "created",
-                "value": "",
-                "type": "query",
-                "description": "Select Issuing tokens that were created during the given date interval."
-              },
-              {
-                "name": "ending_before",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
-              },
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query",
-                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
-              },
-              {
-                "name": "starting_after",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
-              },
-              {
-                "name": "status",
-                "value": "",
-                "type": "query",
-                "description": "Select Issuing tokens with the given status."
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Lists all Issuing <code>Token</code> objects for a given card.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Tokens",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/tokens/:token",
-            "params": [
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "token",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Retrieves an Issuing <code>Token</code> object.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Transactions",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/transactions",
-            "params": [
-              {
-                "name": "card",
-                "value": "",
-                "type": "query",
-                "description": "Only return transactions that belong to the given card."
-              },
-              {
-                "name": "cardholder",
-                "value": "",
-                "type": "query",
-                "description": "Only return transactions that belong to the given cardholder."
-              },
-              {
-                "name": "created",
-                "value": "",
-                "type": "query",
-                "description": "Only return transactions that were created during the given date interval."
-              },
-              {
-                "name": "ending_before",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
-              },
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "limit",
-                "value": "",
-                "type": "query",
-                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
-              },
-              {
-                "name": "starting_after",
-                "value": "",
-                "type": "query",
-                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
-              },
-              {
-                "name": "type",
-                "value": "",
-                "type": "query",
-                "description": "Only return transactions that have the given type. One of `capture` or `refund`."
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Returns a list of Issuing <code>Transaction</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Transactions",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/issuing/transactions/:transaction",
-            "params": [
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "transaction",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Retrieves an Issuing <code>Transaction</code> object.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Issuing",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Cardholders",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/cardholders",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Creates a new Issuing <code>Cardholder</code> object that can be issued cards.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Cardholders",
+            "name": "PostIssuingCardholdersCardholder",
             "type": "http"
           },
           "http": {
@@ -594,103 +308,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing DisputesSubmit",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/disputes/:dispute/submit",
-            "params": [
-              {
-                "name": "dispute",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Submits an Issuing <code>Dispute</code> to the card network. Stripe validates that all evidence fields required for the dispute’s reason are present. For more details, see <a href=\"/docs/issuing/purchases/disputes#dispute-reasons-and-evidence\">Dispute reasons and evidence</a>.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Settlements Settlement",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/settlements/:settlement",
-            "params": [
-              {
-                "name": "settlement",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Updates the specified Issuing <code>Settlement</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Tokens",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/tokens/:token",
-            "params": [
-              {
-                "name": "token",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>"
-        },
-        {
-          "info": {
-            "name": "Stripe Post   Issuing Transactions",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/issuing/transactions/:transaction",
-            "params": [
-              {
-                "name": "transaction",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Updates the specified Issuing <code>Transaction</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Cards",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Get   Issuing Cards",
+            "name": "GetIssuingCards",
             "type": "http"
           },
           "http": {
@@ -773,7 +391,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Cards",
+            "name": "PostIssuingCards",
             "type": "http"
           },
           "http": {
@@ -785,18 +403,10 @@
             }
           },
           "docs": "<p>Creates an Issuing <code>Card</code> object.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Card",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Get   Issuing Cards Card",
+            "name": "GetIssuingCardsCard",
             "type": "http"
           },
           "http": {
@@ -824,7 +434,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Cards Card",
+            "name": "PostIssuingCardsCard",
             "type": "http"
           },
           "http": {
@@ -843,18 +453,10 @@
             }
           },
           "docs": "<p>Updates the specified Issuing <code>Card</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Disputes",
-        "type": "folder"
-      },
-      "items": [
+        },
         {
           "info": {
-            "name": "Stripe Get   Issuing Disputes",
+            "name": "GetIssuingDisputes",
             "type": "http"
           },
           "http": {
@@ -913,7 +515,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Disputes",
+            "name": "PostIssuingDisputes",
             "type": "http"
           },
           "http": {
@@ -928,7 +530,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Issuing Disputes",
+            "name": "GetIssuingDisputesDispute",
             "type": "http"
           },
           "http": {
@@ -956,7 +558,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Issuing Disputes",
+            "name": "PostIssuingDisputesDispute",
             "type": "http"
           },
           "http": {
@@ -975,6 +577,349 @@
             }
           },
           "docs": "<p>Updates the specified Issuing <code>Dispute</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged. Properties on the <code>evidence</code> object can be unset by passing in an empty string.</p>"
+        },
+        {
+          "info": {
+            "name": "PostIssuingDisputesDisputeSubmit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/disputes/:dispute/submit",
+            "params": [
+              {
+                "name": "dispute",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Submits an Issuing <code>Dispute</code> to the card network. Stripe validates that all evidence fields required for the dispute’s reason are present. For more details, see <a href=\"/docs/issuing/purchases/disputes#dispute-reasons-and-evidence\">Dispute reasons and evidence</a>.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingSettlements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/settlements",
+            "params": [
+              {
+                "name": "created",
+                "value": "",
+                "type": "query",
+                "description": "Only return issuing settlements that were created during the given date interval."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of Issuing <code>Settlement</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingSettlementsSettlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/settlements/:settlement",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "settlement",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves an Issuing <code>Settlement</code> object.</p>"
+        },
+        {
+          "info": {
+            "name": "PostIssuingSettlementsSettlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/settlements/:settlement",
+            "params": [
+              {
+                "name": "settlement",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates the specified Issuing <code>Settlement</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingTokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/tokens",
+            "params": [
+              {
+                "name": "card",
+                "value": "",
+                "type": "query",
+                "description": "The Issuing card identifier to list tokens for."
+              },
+              {
+                "name": "created",
+                "value": "",
+                "type": "query",
+                "description": "Select Issuing tokens that were created during the given date interval."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Select Issuing tokens with the given status."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Lists all Issuing <code>Token</code> objects for a given card.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingTokensToken",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/tokens/:token",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves an Issuing <code>Token</code> object.</p>"
+        },
+        {
+          "info": {
+            "name": "PostIssuingTokensToken",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/tokens/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingTransactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/transactions",
+            "params": [
+              {
+                "name": "card",
+                "value": "",
+                "type": "query",
+                "description": "Only return transactions that belong to the given card."
+              },
+              {
+                "name": "cardholder",
+                "value": "",
+                "type": "query",
+                "description": "Only return transactions that belong to the given cardholder."
+              },
+              {
+                "name": "created",
+                "value": "",
+                "type": "query",
+                "description": "Only return transactions that were created during the given date interval."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+              },
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Only return transactions that have the given type. One of `capture` or `refund`."
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Returns a list of Issuing <code>Transaction</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>"
+        },
+        {
+          "info": {
+            "name": "GetIssuingTransactionsTransaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stripe.com/v1/issuing/transactions/:transaction",
+            "params": [
+              {
+                "name": "expand",
+                "value": "",
+                "type": "query",
+                "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "transaction",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Retrieves an Issuing <code>Transaction</code> object.</p>"
+        },
+        {
+          "info": {
+            "name": "PostIssuingTransactionsTransaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/issuing/transactions/:transaction",
+            "params": [
+              {
+                "name": "transaction",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Updates the specified Issuing <code>Transaction</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>"
         }
       ]
     }

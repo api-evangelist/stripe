@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "260ad4f8-78a2-49aa-a102-19317408a514",
+      "id": "c4352212-67da-4186-8827-fd24ad0e0e4d",
       "name": "Tokens",
       "description": {
         "content": "",
@@ -9,7 +9,699 @@
       },
       "item": [
         {
-          "id": "35ff08ec-cc00-460d-a6ea-4b64efadc9ec",
+          "id": "537faf9f-37fe-4e09-b71a-762aa678736c",
+          "name": "Stripe Get   Issuing Tokens",
+          "request": {
+            "name": "Stripe Get   Issuing Tokens",
+            "description": {
+              "content": "<p>Lists all Issuing <code>Token</code> objects for a given card.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "issuing",
+                "tokens"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "card",
+                  "value": "<string>",
+                  "description": "(Required) The Issuing card identifier to list tokens for."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>",
+                  "description": "Select Issuing tokens that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>",
+                  "description": "Select Issuing tokens that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>",
+                  "description": "Select Issuing tokens that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>",
+                  "description": "Select Issuing tokens that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Select Issuing tokens with the given status."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "c9294abe-8326-4878-a95c-157b5697f225",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"card\": \"string\",\n      \"created\": 8260,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"network\": \"mastercard\",\n      \"network_updated_at\": 8930,\n      \"object\": \"issuing.token\",\n      \"status\": \"requested\",\n      \"device_fingerprint\": \"string\",\n      \"last4\": \"string\",\n      \"network_data\": {\n        \"value\": \"reference #/components/schemas/issuing_network_token_network_data not found in the OpenAPI spec\"\n      },\n      \"wallet_provider\": \"google_pay\"\n    },\n    {\n      \"card\": \"string\",\n      \"created\": 918,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"network\": \"visa\",\n      \"network_updated_at\": 3709,\n      \"object\": \"issuing.token\",\n      \"status\": \"active\",\n      \"device_fingerprint\": \"string\",\n      \"last4\": \"string\",\n      \"network_data\": {\n        \"value\": \"reference #/components/schemas/issuing_network_token_network_data not found in the OpenAPI spec\"\n      },\n      \"wallet_provider\": \"google_pay\"\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6e95582-0659-45d4-a6da-d8dbaeb985c6",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "card",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aaccd40c-d93e-4d7b-99ea-720e4e0ba983",
+          "name": "Stripe Get   Issuing Tokens",
+          "request": {
+            "name": "Stripe Get   Issuing Tokens",
+            "description": {
+              "content": "<p>Retrieves an Issuing <code>Token</code> object.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "issuing",
+                "tokens",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "363b90b4-55a8-44b0-9619-64329c2ac066",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"card\": \"string\",\n  \"created\": 7187,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"network\": \"visa\",\n  \"network_updated_at\": 5052,\n  \"object\": \"issuing.token\",\n  \"status\": \"active\",\n  \"device_fingerprint\": \"string\",\n  \"last4\": \"string\",\n  \"network_data\": {\n    \"value\": \"reference #/components/schemas/issuing_network_token_network_data not found in the OpenAPI spec\"\n  },\n  \"wallet_provider\": \"samsung_pay\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2680022-e7da-4c41-aacd-a50964809f13",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "503779df-581c-48ee-a2b1-26c9872699e8",
+          "name": "Stripe Post   Issuing Tokens",
+          "request": {
+            "name": "Stripe Post   Issuing Tokens",
+            "description": {
+              "content": "<p>Attempts to update the specified Issuing <code>Token</code> object to the status specified.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "issuing",
+                "tokens",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "(Required) Specifies which status the token should be updated to."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fe8d5fd0-3943-4cfd-ab9f-cab16a708491",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Specifies which status the token should be updated to.",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"card\": \"string\",\n  \"created\": 7187,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"network\": \"visa\",\n  \"network_updated_at\": 5052,\n  \"object\": \"issuing.token\",\n  \"status\": \"active\",\n  \"device_fingerprint\": \"string\",\n  \"last4\": \"string\",\n  \"network_data\": {\n    \"value\": \"reference #/components/schemas/issuing_network_token_network_data not found in the OpenAPI spec\"\n  },\n  \"wallet_provider\": \"samsung_pay\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57318a38-5e55-4e1c-ab47-42c76ccf2ce7",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "issuing",
+                    "tokens",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Specifies which status the token should be updated to.",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ee85164c-50e4-4279-a525-71d5ffe9ddd0",
           "name": "Stripe Create Token",
           "request": {
             "name": "Stripe Create Token",
@@ -198,7 +890,7 @@
           },
           "response": [
             {
-              "id": "ce55fa3e-d5ba-404f-a3dd-6b5c513fbf3a",
+              "id": "21e155a0-245c-4d8e-88d9-bfd53be5796b",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -213,14 +905,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -391,12 +1075,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"token\",\n  \"created\": 4999,\n  \"livemode\": true,\n  \"type\": \"string\",\n  \"used\": true,\n  \"bank_account\": {},\n  \"card\": {},\n  \"client_ip\": \"string\"\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"token\",\n  \"created\": 9950,\n  \"livemode\": true,\n  \"type\": \"string\",\n  \"used\": true,\n  \"bank_account\": {},\n  \"card\": null,\n  \"client_ip\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d059a366-579e-4a3e-a4f3-fed98832a2f7",
+              "id": "1ed22e8c-44b8-4424-8089-de7d396b3855",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -411,14 +1095,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -600,7 +1276,7 @@
           }
         },
         {
-          "id": "328b266b-6fc9-487a-863d-39fc20ab5cc0",
+          "id": "2ec3cb3e-0da8-4449-bba8-86d721be7529",
           "name": "Stripe Retrieve Token",
           "request": {
             "name": "Stripe Retrieve Token",
@@ -650,7 +1326,7 @@
           },
           "response": [
             {
-              "id": "a8eda87b-4b13-4254-8cc3-01fd84e98d01",
+              "id": "48bdc82c-dea1-41a7-9914-59d83a1aa7cb",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -684,14 +1360,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -707,12 +1375,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"token\",\n  \"created\": 4999,\n  \"livemode\": true,\n  \"type\": \"string\",\n  \"used\": true,\n  \"bank_account\": {},\n  \"card\": {},\n  \"client_ip\": \"string\"\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"token\",\n  \"created\": 9950,\n  \"livemode\": true,\n  \"type\": \"string\",\n  \"used\": true,\n  \"bank_account\": {},\n  \"card\": null,\n  \"client_ip\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "964ff01d-1a61-48ed-830f-389d05917387",
+              "id": "9aa604e9-8911-41a8-9b8a-d0074e36c208",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -745,14 +1413,6 @@
                   ]
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -791,25 +1451,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "cc45dc33-c017-49a2-946f-be98b44415ff",
-    "name": "Stripe Tokens API",
+    "_postman_id": "3bdbe5b1-d576-42b2-a58a-bae8478663d9",
+    "name": "Stripe Accounts Account Tokens API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "Tokenization is the process Stripe uses to collect sensitive card or bank account details, or personally identifiable information (PII), directly from your customers in a secure manner.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

@@ -1,15 +1,8 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Promotion Codes API",
-    "version": "2024-06-20"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
+    "name": "Stripe Accounts Account Promotion Codes API",
+    "version": "2023-10-16"
   },
   "items": [
     {
@@ -20,7 +13,7 @@
       "items": [
         {
           "info": {
-            "name": "Stripe List Promotion Codes",
+            "name": "GetPromotionCodes",
             "type": "http"
           },
           "http": {
@@ -46,6 +39,12 @@
                 "description": "Only return promotion codes for this coupon."
               },
               {
+                "name": "created",
+                "value": "",
+                "type": "query",
+                "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options."
+              },
+              {
                 "name": "customer",
                 "value": "",
                 "type": "query",
@@ -55,7 +54,7 @@
                 "name": "ending_before",
                 "value": "",
                 "type": "query",
-                "description": "A cursor for use in pagination. ending_before is an object ID that defines your place in the list."
+                "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
               },
               {
                 "name": "expand",
@@ -67,21 +66,25 @@
                 "name": "limit",
                 "value": "",
                 "type": "query",
-                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100."
+                "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
               },
               {
                 "name": "starting_after",
                 "value": "",
                 "type": "query",
-                "description": "A cursor for use in pagination. starting_after is an object ID that defines your place in the list."
+                "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
           "docs": "<p>Returns a list of your promotion codes.</p>"
         },
         {
           "info": {
-            "name": "Stripe Create Promotion Code",
+            "name": "PostPromotionCodes",
             "type": "http"
           },
           "http": {
@@ -89,47 +92,14 @@
             "url": "https://api.stripe.com/v1/promotion_codes",
             "body": {
               "type": "form-urlencoded",
-              "data": [
-                {
-                  "name": "coupon",
-                  "value": ""
-                },
-                {
-                  "name": "code",
-                  "value": ""
-                },
-                {
-                  "name": "active",
-                  "value": ""
-                },
-                {
-                  "name": "customer",
-                  "value": ""
-                },
-                {
-                  "name": "expires_at",
-                  "value": ""
-                },
-                {
-                  "name": "max_redemptions",
-                  "value": ""
-                },
-                {
-                  "name": "metadata",
-                  "value": ""
-                },
-                {
-                  "name": "restrictions",
-                  "value": ""
-                }
-              ]
+              "data": []
             }
           },
           "docs": "<p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer, redemption limit, and expiration date.</p>"
         },
         {
           "info": {
-            "name": "Stripe Retrieve Promotion Code",
+            "name": "GetPromotionCodesPromotionCode",
             "type": "http"
           },
           "http": {
@@ -137,23 +107,27 @@
             "url": "https://api.stripe.com/v1/promotion_codes/:promotion_code",
             "params": [
               {
-                "name": "promotion_code",
-                "value": "",
-                "type": "path"
-              },
-              {
                 "name": "expand",
                 "value": "",
                 "type": "query",
                 "description": "Specifies which fields in the response should be expanded."
+              },
+              {
+                "name": "promotion_code",
+                "value": "",
+                "type": "path"
               }
-            ]
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
           },
-          "docs": "<p>Retrieves the promotion code with the given ID.</p>"
+          "docs": "<p>Retrieves the promotion code with the given ID. In order to retrieve a promotion code by the customer-facing <code>code</code> use <a href=\"/docs/api/promotion_codes/list\">list</a> with the desired <code>code</code>.</p>"
         },
         {
           "info": {
-            "name": "Stripe Update Promotion Code",
+            "name": "PostPromotionCodesPromotionCode",
             "type": "http"
           },
           "http": {
@@ -168,23 +142,10 @@
             ],
             "body": {
               "type": "form-urlencoded",
-              "data": [
-                {
-                  "name": "active",
-                  "value": ""
-                },
-                {
-                  "name": "metadata",
-                  "value": ""
-                },
-                {
-                  "name": "restrictions",
-                  "value": ""
-                }
-              ]
+              "data": []
             }
           },
-          "docs": "<p>Updates the specified promotion code by setting the values of the parameters passed.</p>"
+          "docs": "<p>Updates the specified promotion code by setting the values of the parameters passed. Most fields are, by design, not editable.</p>"
         }
       ]
     }

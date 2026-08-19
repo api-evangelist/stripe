@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "eb8bb133-c94d-4da3-96c5-9f5470d8b203",
+      "id": "73a722d9-20b0-4713-a149-d3952022aee7",
       "name": "Radar",
       "description": {
         "content": "",
@@ -9,10 +9,10 @@
       },
       "item": [
         {
-          "id": "413894c2-606f-4cb2-adcc-14b95675d2d4",
-          "name": "Stripe List Early Fraud Warnings",
+          "id": "88fc963d-ea35-414d-965a-b9060165e17a",
+          "name": "Get Radar Early Fraud Warnings",
           "request": {
-            "name": "Stripe List Early Fraud Warnings",
+            "name": "Get Radar Early Fraud Warnings",
             "description": {
               "content": "<p>Returns a list of early fraud warnings.</p>",
               "type": "text/plain"
@@ -35,50 +35,87 @@
                 },
                 {
                   "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>",
+                  "description": "Only return early fraud warnings that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>",
+                  "description": "Only return early fraud warnings that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>",
+                  "description": "Only return early fraud warnings that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>",
+                  "description": "Only return early fraud warnings that were created during the given date interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
                   "key": "payment_intent",
                   "value": "<string>",
                   "description": "Only return early fraud warnings for charges that were created by the PaymentIntent specified by this PaymentIntent ID."
                 },
                 {
                   "disabled": false,
-                  "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
-                  "value": "<integer>"
-                },
-                {
-                  "disabled": false,
                   "key": "starting_after",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "expand[0]",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "fa5d5316-007d-44a9-98d2-5584ef317974",
+              "id": "1110a873-417f-44b2-b61d-4f32a654bd77",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -96,19 +133,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "payment_intent",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -118,26 +159,33 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -147,12 +195,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.early_fraud_warning\",\n      \"actionable\": false,\n      \"charge\": \"string\",\n      \"created\": 3465,\n      \"fraud_type\": \"string\",\n      \"livemode\": true,\n      \"payment_intent\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.early_fraud_warning\",\n      \"actionable\": true,\n      \"charge\": \"string\",\n      \"created\": 309,\n      \"fraud_type\": \"string\",\n      \"livemode\": true,\n      \"payment_intent\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"actionable\": true,\n      \"charge\": \"string\",\n      \"created\": 4228,\n      \"fraud_type\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"radar.early_fraud_warning\",\n      \"payment_intent\": \"string\"\n    },\n    {\n      \"actionable\": false,\n      \"charge\": \"string\",\n      \"created\": 8753,\n      \"fraud_type\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"object\": \"radar.early_fraud_warning\",\n      \"payment_intent\": \"string\"\n    }\n  ],\n  \"has_more\": false,\n  \"object\": \"list\",\n  \"url\": \"/v1/radar/early_fraud_warnings\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e054eabc-92ba-41ad-949d-e4ddc398da57",
+              "id": "83443e42-3798-45bf-bea7-fc189a94e17b",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -170,19 +218,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "payment_intent",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -192,26 +244,33 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "payment_intent",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -221,7 +280,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -232,12 +291,12 @@
           }
         },
         {
-          "id": "c9624e5f-ec0f-41bd-ae53-1a3fea54e6e3",
-          "name": "Stripe Retrieve Early Fraud Warning",
+          "id": "4fc1f0ad-78d2-405b-afbd-25f285396216",
+          "name": "Get Radar Early Fraud Warnings Early Fraud Warning",
           "request": {
-            "name": "Stripe Retrieve Early Fraud Warning",
+            "name": "Get Radar Early Fraud Warnings Early Fraud Warning",
             "description": {
-              "content": "<p>Retrieves the details of an early fraud warning that has previously been created.</p>",
+              "content": "<p>Retrieves the details of an early fraud warning that has previously been created. </p>\n\n<p>Please refer to the <a href=\"#early_fraud_warning_object\">early fraud warning</a> object reference for more details.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -254,12 +313,14 @@
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 }
               ],
               "variable": [
@@ -274,16 +335,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "be09478a-f64e-4c03-9976-e0d9ef56b895",
+              "id": "8a4e2c23-f2d9-4953-90e7-a2d9d1495f98",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -318,20 +387,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -341,12 +405,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.early_fraud_warning\",\n  \"actionable\": false,\n  \"charge\": \"string\",\n  \"created\": 8035,\n  \"fraud_type\": \"string\",\n  \"livemode\": false,\n  \"payment_intent\": \"string\"\n}",
+              "body": "{\n  \"actionable\": false,\n  \"charge\": \"string\",\n  \"created\": 7407,\n  \"fraud_type\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"object\": \"radar.early_fraud_warning\",\n  \"payment_intent\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "52467cf3-f94c-46d5-b6f9-b4647957f8a6",
+              "id": "fe30aac8-65d3-461e-997c-345413c4cea7",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -381,20 +445,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -404,7 +463,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -415,12 +474,849 @@
           }
         },
         {
-          "id": "d2ce410e-4670-4b8f-b0cf-9cb8fcf84c30",
-          "name": "Stripe List Value Lists",
+          "id": "e5c8f286-060d-4015-94ee-5a8b09723717",
+          "name": "Get Radar Value List Items",
           "request": {
-            "name": "Stripe List Value Lists",
+            "name": "Get Radar Value List Items",
             "description": {
-              "content": "<p>Returns a list of ValueList objects.</p>",
+              "content": "<p>Returns a list of <code>ValueListItem</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "radar",
+                "value_list_items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "value",
+                  "value": "<string>",
+                  "description": "Return items belonging to the parent list whose value matches the specified value (using an \"is like\" match)."
+                },
+                {
+                  "disabled": false,
+                  "key": "value_list",
+                  "value": "<string>",
+                  "description": "(Required) Identifier for the parent value list this item belongs to."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "d41a87bd-0541-49c4-a67c-e3557de8d91f",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "value_list",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"created\": 5966,\n      \"created_by\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"radar.value_list_item\",\n      \"value\": \"string\",\n      \"value_list\": \"string\"\n    },\n    {\n      \"created\": 6834,\n      \"created_by\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"radar.value_list_item\",\n      \"value\": \"string\",\n      \"value_list\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"/v1/radar/value_list_items\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac2b7425-7f1f-41c6-9700-3a536a001407",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "value_list",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6dd0eae-56e3-44f3-b692-e92df6c3fc85",
+          "name": "Post Radar Value List Items",
+          "request": {
+            "name": "Post Radar Value List Items",
+            "description": {
+              "content": "<p>Creates a new <code>ValueListItem</code> object, which is added to the specified parent value list.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "radar",
+                "value_list_items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "value",
+                  "value": "<string>",
+                  "description": "(Required) The value of the item (whose type must match the type of the parent value list)."
+                },
+                {
+                  "disabled": false,
+                  "key": "value_list",
+                  "value": "<string>",
+                  "description": "(Required) The identifier of the value list which the created item will be added to."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7047edef-5718-4c81-a95c-c654b15bfc54",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value of the item (whose type must match the type of the parent value list).",
+                        "type": "text/plain"
+                      },
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The identifier of the value list which the created item will be added to.",
+                        "type": "text/plain"
+                      },
+                      "key": "value_list",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 6126,\n  \"created_by\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"object\": \"radar.value_list_item\",\n  \"value\": \"string\",\n  \"value_list\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4859e71e-f199-458c-90a4-66122e36ecf2",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The value of the item (whose type must match the type of the parent value list).",
+                        "type": "text/plain"
+                      },
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The identifier of the value list which the created item will be added to.",
+                        "type": "text/plain"
+                      },
+                      "key": "value_list",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da3b9397-5277-4a96-8bcd-967400b6fd14",
+          "name": "Delete Radar Value List Items Item",
+          "request": {
+            "name": "Delete Radar Value List Items Item",
+            "description": {
+              "content": "<p>Deletes a <code>ValueListItem</code> object, removing it from its parent value list.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "radar",
+                "value_list_items",
+                ":item"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "item",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "c7e54322-a30d-411f-beac-53d96e70e5e6",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items",
+                    ":item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "item",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"string\",\n  \"object\": \"radar.value_list_item\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b05ca4ac-060b-4789-b26d-5de9a4cddb0b",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items",
+                    ":item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "item",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ec19083-0d10-429e-b916-5bcede3eac3d",
+          "name": "Get Radar Value List Items Item",
+          "request": {
+            "name": "Get Radar Value List Items Item",
+            "description": {
+              "content": "<p>Retrieves a <code>ValueListItem</code> object.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "radar",
+                "value_list_items",
+                ":item"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "item",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "e5bf5e03-2c82-4741-9e07-45a8531f3d88",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items",
+                    ":item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "item",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 6126,\n  \"created_by\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"object\": \"radar.value_list_item\",\n  \"value\": \"string\",\n  \"value_list\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b85c846b-b079-47ab-b7ad-38413ce9a5b1",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_list_items",
+                    ":item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "item",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e560067-0c46-4405-8083-0f4d87265fe4",
+          "name": "Get Radar Value Lists",
+          "request": {
+            "name": "Get Radar Value Lists",
+            "description": {
+              "content": "<p>Returns a list of <code>ValueList</code> objects. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -437,54 +1333,87 @@
                   "disabled": false,
                   "key": "alias",
                   "value": "<string>",
-                  "description": "The alias used to reference the value list."
+                  "description": "The alias used to reference the value list when writing rules."
                 },
                 {
                   "disabled": false,
                   "key": "contains",
                   "value": "<string>",
-                  "description": "A value contained within a value list."
+                  "description": "A value contained within a value list - returns all value lists containing this value."
                 },
                 {
                   "disabled": false,
-                  "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
+                  "key": "created[gt]",
                   "value": "<integer>"
                 },
                 {
                   "disabled": false,
-                  "key": "starting_after",
-                  "value": "<string>"
+                  "key": "created[gte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
                 },
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "1fa408a4-59e8-4cb1-9786-894cdb0ab074",
+              "id": "aff5b66e-60ac-4f5b-829c-be2a3e7194e0",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -506,15 +1435,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -524,26 +1461,29 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -553,12 +1493,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.value_list\",\n      \"alias\": \"string\",\n      \"created\": 2778,\n      \"created_by\": \"string\",\n      \"item_type\": \"card_fingerprint\",\n      \"list_items\": {},\n      \"livemode\": true,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.value_list\",\n      \"alias\": \"string\",\n      \"created\": 6762,\n      \"created_by\": \"string\",\n      \"item_type\": \"country\",\n      \"list_items\": {},\n      \"livemode\": true,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"name\": \"string\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"alias\": \"string\",\n      \"created\": 7568,\n      \"created_by\": \"string\",\n      \"id\": \"string\",\n      \"item_type\": \"ip_address\",\n      \"list_items\": {\n        \"data\": [\n          {\n            \"created\": 5198,\n            \"created_by\": \"string\",\n            \"id\": \"string\",\n            \"livemode\": true,\n            \"object\": \"radar.value_list_item\",\n            \"value\": \"string\",\n            \"value_list\": \"string\"\n          },\n          {\n            \"created\": 8149,\n            \"created_by\": \"string\",\n            \"id\": \"string\",\n            \"livemode\": false,\n            \"object\": \"radar.value_list_item\",\n            \"value\": \"string\",\n            \"value_list\": \"string\"\n          }\n        ],\n        \"has_more\": false,\n        \"object\": \"list\",\n        \"url\": \"string\"\n      },\n      \"livemode\": false,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"name\": \"string\",\n      \"object\": \"radar.value_list\"\n    },\n    {\n      \"alias\": \"string\",\n      \"created\": 1338,\n      \"created_by\": \"string\",\n      \"id\": \"string\",\n      \"item_type\": \"ip_address\",\n      \"list_items\": {\n        \"data\": [\n          {\n            \"created\": 9808,\n            \"created_by\": \"string\",\n            \"id\": \"string\",\n            \"livemode\": true,\n            \"object\": \"radar.value_list_item\",\n            \"value\": \"string\",\n            \"value_list\": \"string\"\n          },\n          {\n            \"created\": 1724,\n            \"created_by\": \"string\",\n            \"id\": \"string\",\n            \"livemode\": true,\n            \"object\": \"radar.value_list_item\",\n            \"value\": \"string\",\n            \"value_list\": \"string\"\n          }\n        ],\n        \"has_more\": false,\n        \"object\": \"list\",\n        \"url\": \"string\"\n      },\n      \"livemode\": false,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"name\": \"string\",\n      \"object\": \"radar.value_list\"\n    }\n  ],\n  \"has_more\": false,\n  \"object\": \"list\",\n  \"url\": \"/v1/radar/value_lists\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "bcb8e36e-1922-49e6-af6b-febf1f31ebf3",
+              "id": "c238e9de-9592-4f68-aff6-a6fc6b22ad59",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -580,15 +1520,23 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -598,26 +1546,29 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -627,7 +1578,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -638,12 +1589,12 @@
           }
         },
         {
-          "id": "721da89c-c638-4bdf-8471-0c6548268b8d",
-          "name": "Stripe Create Value List",
+          "id": "60187546-24da-4795-b573-0a49abb40c67",
+          "name": "Post Radar Value Lists",
           "request": {
-            "name": "Stripe Create Value List",
+            "name": "Post Radar Value Lists",
             "description": {
-              "content": "<p>Creates a new ValueList object.</p>",
+              "content": "<p>Creates a new <code>ValueList</code> object, which can then be referenced in rules.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -677,40 +1628,50 @@
                   "disabled": false,
                   "key": "alias",
                   "value": "<string>",
-                  "description": "(Required) "
+                  "description": "(Required) The name of the value list for use in rules."
                 },
                 {
                   "disabled": false,
                   "key": "name",
                   "value": "<string>",
-                  "description": "(Required) "
+                  "description": "(Required) The human-readable name of the value list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "item_type",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Type of the items in the value list. One of `card_fingerprint`, `us_bank_account_fingerprint`, `sepa_debit_fingerprint`, `card_bin`, `email`, `ip_address`, `country`, `string`, `case_sensitive_string`, or `customer_id`. Use `string` if the item type is unknown or mixed."
                 },
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_2",
-                  "value": "<string>"
+                  "key": "metadata[key_1]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "69be4209-1741-48ac-8bb4-91d649dc7c37",
+              "id": "bfd04ab6-0f62-42c4-bef6-f6ffec08d522",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -727,14 +1688,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -746,7 +1699,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) ",
+                        "content": "(Required) The name of the value list for use in rules.",
                         "type": "text/plain"
                       },
                       "key": "alias",
@@ -755,7 +1708,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) ",
+                        "content": "(Required) The human-readable name of the value list.",
                         "type": "text/plain"
                       },
                       "key": "name",
@@ -763,17 +1716,74 @@
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Type of the items in the value list. One of `card_fingerprint`, `us_bank_account_fingerprint`, `sepa_debit_fingerprint`, `card_bin`, `email`, `ip_address`, `country`, `string`, `case_sensitive_string`, or `customer_id`. Use `string` if the item type is unknown or mixed.",
+                        "type": "text/plain"
+                      },
                       "key": "item_type",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_2]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_3]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_4]",
                       "value": "<string>"
                     }
                   ]
@@ -787,12 +1797,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list\",\n  \"alias\": \"string\",\n  \"created\": 1501,\n  \"created_by\": \"string\",\n  \"item_type\": \"card_bin\",\n  \"list_items\": {},\n  \"livemode\": true,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"name\": \"string\"\n}",
+              "body": "{\n  \"alias\": \"string\",\n  \"created\": 4151,\n  \"created_by\": \"string\",\n  \"id\": \"string\",\n  \"item_type\": \"email\",\n  \"list_items\": {\n    \"data\": [\n      {\n        \"created\": 5563,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": true,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      },\n      {\n        \"created\": 6443,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": false,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      }\n    ],\n    \"has_more\": false,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"name\": \"string\",\n  \"object\": \"radar.value_list\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8e1daaa6-e3ec-4fed-a02b-2dc97cee0ee0",
+              "id": "96fb0980-6509-4b18-8837-5c6e0b1e67aa",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -809,14 +1819,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -828,7 +1830,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) ",
+                        "content": "(Required) The name of the value list for use in rules.",
                         "type": "text/plain"
                       },
                       "key": "alias",
@@ -837,7 +1839,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) ",
+                        "content": "(Required) The human-readable name of the value list.",
                         "type": "text/plain"
                       },
                       "key": "name",
@@ -845,17 +1847,74 @@
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Type of the items in the value list. One of `card_fingerprint`, `us_bank_account_fingerprint`, `sepa_debit_fingerprint`, `card_bin`, `email`, `ip_address`, `country`, `string`, `case_sensitive_string`, or `customer_id`. Use `string` if the item type is unknown or mixed.",
+                        "type": "text/plain"
+                      },
                       "key": "item_type",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_2]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_3]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_4]",
                       "value": "<string>"
                     }
                   ]
@@ -869,7 +1928,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -880,12 +1939,12 @@
           }
         },
         {
-          "id": "f0b0dc32-0a24-4c4d-9f89-be55f4d1ac66",
-          "name": "Stripe Retrieve Value List",
+          "id": "baa06953-c39b-4a14-8ec8-1a6fb75cb294",
+          "name": "Delete Radar Value Lists Value List",
           "request": {
-            "name": "Stripe Retrieve Value List",
+            "name": "Delete Radar Value Lists Value List",
             "description": {
-              "content": "<p>Retrieves a ValueList object.</p>",
+              "content": "<p>Deletes a <code>ValueList</code> object, also deleting any items contained within the value list. To be deleted, a value list must not be referenced in any rules.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -911,16 +1970,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
-            "method": "GET",
-            "auth": null
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "b7514d62-648a-412c-aba8-7eeb7488e8dd",
+              "id": "658c880a-a52d-4fb6-9083-51fe5f23f743",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -946,20 +2013,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -969,12 +2031,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list\",\n  \"alias\": \"string\",\n  \"created\": 1501,\n  \"created_by\": \"string\",\n  \"item_type\": \"card_bin\",\n  \"list_items\": {},\n  \"livemode\": true,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"name\": \"string\"\n}",
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"string\",\n  \"object\": \"radar.value_list\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d1e95310-da20-4372-8824-896f1b6cf1b2",
+              "id": "d4e02a15-37d1-46e0-9a80-6c9c32d7a4b4",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1000,20 +2062,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -1023,7 +2080,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1034,12 +2091,195 @@
           }
         },
         {
-          "id": "566f1086-2c07-4dd1-87a6-251ee1be3106",
-          "name": "Stripe Update Value List",
+          "id": "02658fd4-9966-4a1a-92d7-269e5885a4ca",
+          "name": "Get Radar Value Lists Value List",
           "request": {
-            "name": "Stripe Update Value List",
+            "name": "Get Radar Value Lists Value List",
             "description": {
-              "content": "<p>Updates a ValueList object by setting the values of the parameters passed.</p>",
+              "content": "<p>Retrieves a <code>ValueList</code> object.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "radar",
+                "value_lists",
+                ":value_list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "value_list",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "557436e0-19f0-4168-a606-477d2ff882af",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_lists",
+                    ":value_list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "value_list",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"alias\": \"string\",\n  \"created\": 4151,\n  \"created_by\": \"string\",\n  \"id\": \"string\",\n  \"item_type\": \"email\",\n  \"list_items\": {\n    \"data\": [\n      {\n        \"created\": 5563,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": true,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      },\n      {\n        \"created\": 6443,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": false,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      }\n    ],\n    \"has_more\": false,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"name\": \"string\",\n  \"object\": \"radar.value_list\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c99befc-e5d0-4589-8606-8ab4053c57ee",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "radar",
+                    "value_lists",
+                    ":value_list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "value_list",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "074c9d1b-7830-41b0-ba2f-92797a811fdb",
+          "name": "Post Radar Value Lists Value List",
+          "request": {
+            "name": "Post Radar Value Lists Value List",
+            "description": {
+              "content": "<p>Updates a <code>ValueList</code> object by setting the values of the parameters passed. Any parameters not provided will be left unchanged. Note that <code>item_type</code> is immutable.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -1081,24 +2321,39 @@
                 {
                   "disabled": false,
                   "key": "alias",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "The name of the value list for use in rules."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
                   "key": "name",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "The human-readable name of the value list."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "9f1419cb-9b0a-4578-94d4-2d88c232de6c",
+              "id": "c27b9dce-4aaa-4aa5-aee5-4e2edb00dd8a",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1124,14 +2379,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1142,17 +2389,56 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "The name of the value list for use in rules.",
+                        "type": "text/plain"
+                      },
                       "key": "alias",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "name",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The human-readable name of the value list.",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
                       "value": "<string>"
                     }
                   ]
@@ -1166,12 +2452,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list\",\n  \"alias\": \"string\",\n  \"created\": 1501,\n  \"created_by\": \"string\",\n  \"item_type\": \"card_bin\",\n  \"list_items\": {},\n  \"livemode\": true,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"name\": \"string\"\n}",
+              "body": "{\n  \"alias\": \"string\",\n  \"created\": 4151,\n  \"created_by\": \"string\",\n  \"id\": \"string\",\n  \"item_type\": \"email\",\n  \"list_items\": {\n    \"data\": [\n      {\n        \"created\": 5563,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": true,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      },\n      {\n        \"created\": 6443,\n        \"created_by\": \"string\",\n        \"id\": \"string\",\n        \"livemode\": false,\n        \"object\": \"radar.value_list_item\",\n        \"value\": \"string\",\n        \"value_list\": \"string\"\n      }\n    ],\n    \"has_more\": false,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"name\": \"string\",\n  \"object\": \"radar.value_list\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b42f3c08-5683-4718-9ee8-0302ab075169",
+              "id": "cf488c91-6dd4-45e3-9c54-2f3abcc760cc",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1197,14 +2483,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1215,18 +2493,57 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "The name of the value list for use in rules.",
+                        "type": "text/plain"
+                      },
                       "key": "alias",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The human-readable name of the value list.",
+                        "type": "text/plain"
+                      },
                       "key": "name",
                       "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_0",
-                      "value": "<string>"
                     }
                   ]
                 }
@@ -1239,857 +2556,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "90892c01-3031-412c-b02b-0781d205acf3",
-          "name": "Stripe Delete Value List",
-          "request": {
-            "name": "Stripe Delete Value List",
-            "description": {
-              "content": "<p>Deletes a ValueList object.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "radar",
-                "value_lists",
-                ":value_list"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "value_list",
-                  "description": "(Required) "
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "7c66213a-d824-4655-9018-49532dbdbe3f",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_lists",
-                    ":value_list"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "value_list",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list\",\n  \"deleted\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "be022a88-b2af-4108-9d91-7bb29c924bd1",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_lists",
-                    ":value_list"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "value_list",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "4a16d570-b395-4bce-ae77-da09494c9294",
-          "name": "Stripe List Value List Items",
-          "request": {
-            "name": "Stripe List Value List Items",
-            "description": {
-              "content": "<p>Returns a list of ValueListItem objects.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "radar",
-                "value_list_items"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "value_list",
-                  "value": "<string>",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "key": "value",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
-                  "value": "<integer>"
-                },
-                {
-                  "disabled": false,
-                  "key": "starting_after",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "a1f747cc-f046-4327-af73-cb1b86a8d9b3",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "value_list",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "value",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "starting_after",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.value_list_item\",\n      \"created\": 911,\n      \"created_by\": \"string\",\n      \"livemode\": false,\n      \"value\": \"string\",\n      \"value_list\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"radar.value_list_item\",\n      \"created\": 6819,\n      \"created_by\": \"string\",\n      \"livemode\": true,\n      \"value\": \"string\",\n      \"value_list\": \"string\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fe8d672e-b94d-4baa-aa63-b715d767c432",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "value_list",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "value",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "starting_after",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "435fde27-9a67-4cea-ab8e-8b30e184c859",
-          "name": "Stripe Create Value List Item",
-          "request": {
-            "name": "Stripe Create Value List Item",
-            "description": {
-              "content": "<p>Creates a new ValueListItem object.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "radar",
-                "value_list_items"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/x-www-form-urlencoded"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "disabled": false,
-                  "key": "value",
-                  "value": "<string>",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "key": "value_list",
-                  "value": "<string>",
-                  "description": "(Required) "
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "b1eace2a-dda1-41e2-b488-806f8c519d86",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "value",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "value_list",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list_item\",\n  \"created\": 2547,\n  \"created_by\": \"string\",\n  \"livemode\": true,\n  \"value\": \"string\",\n  \"value_list\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2eb2b50d-8afb-47e8-a581-9192affef2ed",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "value",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "value_list",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "7390e920-ba88-4c1b-a811-0485c38e21c2",
-          "name": "Stripe Retrieve Value List Item",
-          "request": {
-            "name": "Stripe Retrieve Value List Item",
-            "description": {
-              "content": "<p>Retrieves a ValueListItem object.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "radar",
-                "value_list_items",
-                ":item"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "item",
-                  "description": "(Required) "
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "defbecd0-9ac1-4ed2-846f-7373e229d43d",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items",
-                    ":item"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "item",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list_item\",\n  \"created\": 2547,\n  \"created_by\": \"string\",\n  \"livemode\": true,\n  \"value\": \"string\",\n  \"value_list\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f33ec1c7-5acc-4ba3-8db4-202bb8de68fb",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items",
-                    ":item"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "item",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "73c1962d-3faf-42b8-9d7a-4c87574d134f",
-          "name": "Stripe Delete Value List Item",
-          "request": {
-            "name": "Stripe Delete Value List Item",
-            "description": {
-              "content": "<p>Deletes a ValueListItem object.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "radar",
-                "value_list_items",
-                ":item"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "item",
-                  "description": "(Required) "
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "f7b2db9c-3e00-4389-8e4d-7951350aed5f",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items",
-                    ":item"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "item",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"radar.value_list_item\",\n  \"deleted\": false\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d1ea4bbc-459d-4937-805b-0ce2da15f56f",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "radar",
-                    "value_list_items",
-                    ":item"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "item",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -2111,25 +2578,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "df33e943-cff2-4f54-af7e-c9295c94c0d0",
-    "name": "Stripe Radar API",
+    "_postman_id": "d43eda0b-9a48-4a62-bd05-22d009e79ffe",
+    "name": "Stripe Accounts Account Radar API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "Stripe Radar provides real-time fraud protection and requires no additional development time. Fraud professionals can add Radar for Fraud Teams to customize protection and get deeper insights.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

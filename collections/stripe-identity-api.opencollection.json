@@ -1,26 +1,19 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Identity API",
+    "name": "Stripe Accounts Account Identity API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Get",
+        "name": "Identity",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "Stripe Get   Identity Verification Reports",
+            "name": "GetIdentityVerificationReports",
             "type": "http"
           },
           "http": {
@@ -78,7 +71,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Identity Verification Reports Report",
+            "name": "GetIdentityVerificationReportsReport",
             "type": "http"
           },
           "http": {
@@ -106,7 +99,7 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Identity Verification Sessions",
+            "name": "GetIdentityVerificationSessions",
             "type": "http"
           },
           "http": {
@@ -158,7 +151,22 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Identity Verification Sessions Session",
+            "name": "PostIdentityVerificationSessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/identity/verification_sessions",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Creates a VerificationSession object.</p>\n\n<p>After the VerificationSession is created, display a verification modal using the session <code>client_secret</code> or send your users to the session’s <code>url</code>.</p>\n\n<p>If your API key is in test mode, verification checks won’t actually process, though everything else will occur as if in live mode.</p>\n\n<p>Related guide: <a href=\"/docs/identity/verify-identity-documents\">Verify your users’ identity documents</a></p>"
+        },
+        {
+          "info": {
+            "name": "GetIdentityVerificationSessionsSession",
             "type": "http"
           },
           "http": {
@@ -183,33 +191,10 @@
             }
           },
           "docs": "<p>Retrieves the details of a VerificationSession that was previously created.</p>\n\n<p>When the session status is <code>requires_input</code>, you can use this method to retrieve a valid\n<code>client_secret</code> or <code>url</code> to allow re-submission.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Identity",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Identity Verification Sessions",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/identity/verification_sessions",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Creates a VerificationSession object.</p>\n\n<p>After the VerificationSession is created, display a verification modal using the session <code>client_secret</code> or send your users to the session’s <code>url</code>.</p>\n\n<p>If your API key is in test mode, verification checks won’t actually process, though everything else will occur as if in live mode.</p>\n\n<p>Related guide: <a href=\"/docs/identity/verify-identity-documents\">Verify your users’ identity documents</a></p>"
         },
         {
           "info": {
-            "name": "Stripe Post   Identity Verification Sessions Session",
+            "name": "PostIdentityVerificationSessionsSession",
             "type": "http"
           },
           "http": {
@@ -231,37 +216,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Identity Verification Sessions Session Redact",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/identity/verification_sessions/:session/redact",
-            "params": [
-              {
-                "name": "session",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Redact a VerificationSession to remove all collected information from Stripe. This will redact\nthe VerificationSession and all objects related to it, including VerificationReports, Events,\nrequest logs, etc.</p>\n\n<p>A VerificationSession object can be redacted when it is in <code>requires_input</code> or <code>verified</code>\n<a href=\"/docs/identity/how-sessions-work\">status</a>. Redacting a VerificationSession in <code>requires_action</code>\nstate will automatically cancel it.</p>\n\n<p>The re"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Cancel",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Identity Verification Sessions Session Cancel",
+            "name": "PostIdentityVerificationSessionsSessionCancel",
             "type": "http"
           },
           "http": {
@@ -280,6 +235,28 @@
             }
           },
           "docs": "<p>A VerificationSession object can be canceled when it is in <code>requires_input</code> <a href=\"/docs/identity/how-sessions-work\">status</a>.</p>\n\n<p>Once canceled, future submission attempts are disabled. This cannot be undone. <a href=\"/docs/identity/verification-sessions#cancel\">Learn more</a>.</p>"
+        },
+        {
+          "info": {
+            "name": "PostIdentityVerificationSessionsSessionRedact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/identity/verification_sessions/:session/redact",
+            "params": [
+              {
+                "name": "session",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Redact a VerificationSession to remove all collected information from Stripe. This will redact\nthe VerificationSession and all objects related to it, including VerificationReports, Events,\nrequest logs, etc.</p>\n\n<p>A VerificationSession object can be redacted when it is in <code>requires_input</code> or <code>verified</code>\n<a href=\"/docs/identity/how-sessions-work\">status</a>. Redacting a VerificationSession in <code>requires_action</code>\nstate will automatically cancel it.</p>\n\n<p>The re"
         }
       ]
     }

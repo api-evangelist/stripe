@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "153e288c-d0bd-4c26-a4d8-c72e91362452",
+      "id": "777d4ea6-a0af-4129-987b-354f37df9b42",
       "name": "Transfers",
       "description": {
         "content": "",
@@ -9,12 +9,12 @@
       },
       "item": [
         {
-          "id": "3e32a73e-b5ba-4ab1-a74a-fae42ff20d61",
-          "name": "Stripe List Transfers",
+          "id": "275e53d9-8957-4b06-8503-b01d73d22980",
+          "name": "Get Transfers",
           "request": {
-            "name": "Stripe List Transfers",
+            "name": "Get Transfers",
             "description": {
-              "content": "<p>Returns a list of existing transfers sent to connected accounts.</p>",
+              "content": "<p>Returns a list of existing transfers sent to connected accounts. The transfers are returned in sorted order, with the most recently created transfers appearing first.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -28,56 +28,89 @@
               "query": [
                 {
                   "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
                   "key": "destination",
                   "value": "<string>",
                   "description": "Only return transfers for the destination specified by this account ID."
                 },
                 {
                   "disabled": false,
-                  "key": "transfer_group",
-                  "value": "<string>",
-                  "description": "Only return transfers with the specified transfer group."
-                },
-                {
-                  "disabled": false,
                   "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
-                  "value": "<integer>"
-                },
-                {
-                  "disabled": false,
-                  "key": "starting_after",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
                 },
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "transfer_group",
+                  "value": "<string>",
+                  "description": "Only return transfers with the specified transfer group."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "70f02ff0-c767-4570-88b4-acb70c608371",
+              "id": "60a4b6b1-1cf7-452f-bb91-d277b0c7ef5a",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -90,15 +123,35 @@
                   ],
                   "query": [
                     {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
                       "key": "destination",
                       "value": "<string>"
                     },
                     {
-                      "key": "transfer_group",
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
-                      "key": "ending_before",
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
@@ -110,11 +163,7 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "expand[0]",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "expand[1]",
+                      "key": "transfer_group",
                       "value": "<string>"
                     }
                   ],
@@ -122,20 +171,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -145,12 +189,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"transfer\",\n      \"amount\": 8550,\n      \"amount_reversed\": 2143,\n      \"created\": 3430,\n      \"currency\": \"string\",\n      \"livemode\": true,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"reversals\": {},\n      \"reversed\": true,\n      \"balance_transaction\": \"string\",\n      \"description\": \"string\",\n      \"destination\": \"string\",\n      \"destination_payment\": \"string\",\n      \"source_transaction\": \"string\",\n      \"source_type\": \"string\",\n      \"transfer_group\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"transfer\",\n      \"amount\": 5717,\n      \"amount_reversed\": 101,\n      \"created\": 3570,\n      \"currency\": \"string\",\n      \"livemode\": false,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"reversals\": {},\n      \"reversed\": false,\n      \"balance_transaction\": \"string\",\n      \"description\": \"string\",\n      \"destination\": \"string\",\n      \"destination_payment\": \"string\",\n      \"source_transaction\": \"string\",\n      \"source_type\": \"string\",\n      \"transfer_group\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"amount\": 7119,\n      \"amount_reversed\": 3752,\n      \"created\": 3123,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"object\": \"transfer\",\n      \"reversals\": {\n        \"data\": [\n          {\n            \"amount\": 7822,\n            \"created\": 5471,\n            \"currency\": \"string\",\n            \"id\": \"string\",\n            \"object\": \"transfer_reversal\",\n            \"transfer\": \"string\",\n            \"balance_transaction\": \"string\",\n            \"destination_payment_refund\": \"string\",\n            \"metadata\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            },\n            \"source_refund\": \"string\"\n          },\n          {\n            \"amount\": 6423,\n            \"created\": 7045,\n            \"currency\": \"string\",\n            \"id\": \"string\",\n            \"object\": \"transfer_reversal\",\n            \"transfer\": \"string\",\n            \"balance_transaction\": \"string\",\n            \"destination_payment_refund\": \"string\",\n            \"metadata\": {\n              \"key_0\": \"string\"\n            },\n            \"source_refund\": \"string\"\n          }\n        ],\n        \"has_more\": false,\n        \"object\": \"list\",\n        \"url\": \"string\"\n      },\n      \"reversed\": false,\n      \"balance_transaction\": \"string\",\n      \"description\": \"string\",\n      \"destination\": \"string\",\n      \"destination_payment\": \"string\",\n      \"source_transaction\": \"string\",\n      \"source_type\": \"string\",\n      \"transfer_group\": \"string\"\n    },\n    {\n      \"amount\": 1748,\n      \"amount_reversed\": 1360,\n      \"created\": 1264,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"object\": \"transfer\",\n      \"reversals\": {\n        \"data\": [\n          {\n            \"amount\": 5277,\n            \"created\": 8065,\n            \"currency\": \"string\",\n            \"id\": \"string\",\n            \"object\": \"transfer_reversal\",\n            \"transfer\": \"string\",\n            \"balance_transaction\": \"string\",\n            \"destination_payment_refund\": \"string\",\n            \"metadata\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            },\n            \"source_refund\": \"string\"\n          },\n          {\n            \"amount\": 2448,\n            \"created\": 6342,\n            \"currency\": \"string\",\n            \"id\": \"string\",\n            \"object\": \"transfer_reversal\",\n            \"transfer\": \"string\",\n            \"balance_transaction\": \"string\",\n            \"destination_payment_refund\": \"string\",\n            \"metadata\": {\n              \"key_0\": \"string\"\n            },\n            \"source_refund\": \"string\"\n          }\n        ],\n        \"has_more\": true,\n        \"object\": \"list\",\n        \"url\": \"string\"\n      },\n      \"reversed\": false,\n      \"balance_transaction\": \"string\",\n      \"description\": \"string\",\n      \"destination\": \"string\",\n      \"destination_payment\": \"string\",\n      \"source_transaction\": \"string\",\n      \"source_type\": \"string\",\n      \"transfer_group\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"/v1/transfers\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "0685f02f-de9e-4f43-b8b7-d11c75edac49",
+              "id": "a39bac05-45de-467a-98ba-86d5202178bc",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -163,15 +207,35 @@
                   ],
                   "query": [
                     {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
                       "key": "destination",
                       "value": "<string>"
                     },
                     {
-                      "key": "transfer_group",
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
-                      "key": "ending_before",
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
@@ -183,11 +247,7 @@
                       "value": "<string>"
                     },
                     {
-                      "key": "expand[0]",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "expand[1]",
+                      "key": "transfer_group",
                       "value": "<string>"
                     }
                   ],
@@ -195,20 +255,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -218,7 +273,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -229,12 +284,12 @@
           }
         },
         {
-          "id": "8205dce3-f4ca-44c8-b29e-0e0b96fe5b61",
-          "name": "Stripe Create Transfer",
+          "id": "69033c10-78de-4458-81cb-eeedc13784cd",
+          "name": "Post Transfers",
           "request": {
-            "name": "Stripe Create Transfer",
+            "name": "Post Transfers",
             "description": {
-              "content": "<p>To send funds from your Stripe account to a connected account, create a new transfer.</p>",
+              "content": "<p>To send funds from your Stripe account to a connected account, you create a new transfer object. Your <a href=\"#balance\">Stripe balance</a> must be able to cover the transfer amount, or you’ll receive an “Insufficient Funds” error.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -267,555 +322,82 @@
                   "disabled": false,
                   "key": "currency",
                   "value": "<string>",
-                  "description": "(Required) Three-letter ISO currency code."
+                  "description": "(Required) 3-letter [ISO code for currency](https://stripe.com/docs/payouts)."
                 },
                 {
                   "disabled": false,
                   "key": "destination",
                   "value": "<string>",
-                  "description": "(Required) The ID of a connected Stripe account."
+                  "description": "(Required) The ID of a connected Stripe account. <a href=\"/docs/connect/separate-charges-and-transfers\">See the Connect documentation</a> for details."
                 },
                 {
                   "disabled": false,
                   "key": "amount",
                   "value": "<integer>",
-                  "description": "A positive integer in cents representing how much to transfer."
+                  "description": "A positive integer in cents (or local equivalent) representing how much to transfer."
                 },
                 {
                   "disabled": false,
                   "key": "description",
                   "value": "<string>",
-                  "description": "An arbitrary string attached to the object."
+                  "description": "An arbitrary string attached to the object. Often useful for displaying to users."
                 },
-                {
-                  "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_2",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "source_transaction",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "source_type",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "transfer_group",
-                  "value": "<string>"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "1462a608-016b-4caa-b571-c9b35e973011",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) Three-letter ISO currency code.",
-                        "type": "text/plain"
-                      },
-                      "key": "currency",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) The ID of a connected Stripe account.",
-                        "type": "text/plain"
-                      },
-                      "key": "destination",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "A positive integer in cents representing how much to transfer.",
-                        "type": "text/plain"
-                      },
-                      "key": "amount",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "An arbitrary string attached to the object.",
-                        "type": "text/plain"
-                      },
-                      "key": "description",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_0",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "source_transaction",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "source_type",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "transfer_group",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer\",\n  \"amount\": 7690,\n  \"amount_reversed\": 9915,\n  \"created\": 2523,\n  \"currency\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"reversals\": {},\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6afa3644-3855-4f5e-9918-c3fa98e9ba03",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) Three-letter ISO currency code.",
-                        "type": "text/plain"
-                      },
-                      "key": "currency",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) The ID of a connected Stripe account.",
-                        "type": "text/plain"
-                      },
-                      "key": "destination",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "A positive integer in cents representing how much to transfer.",
-                        "type": "text/plain"
-                      },
-                      "key": "amount",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "An arbitrary string attached to the object.",
-                        "type": "text/plain"
-                      },
-                      "key": "description",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_0",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "source_transaction",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "source_type",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "transfer_group",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "9d758282-2a90-461a-8694-5754a7b43362",
-          "name": "Stripe Retrieve Transfer",
-          "request": {
-            "name": "Stripe Retrieve Transfer",
-            "description": {
-              "content": "<p>Retrieves the details of an existing transfer.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "transfers",
-                ":transfer"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
                   "value": "<string>",
-                  "key": "transfer",
-                  "description": "(Required) "
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "87334795-8466-4860-98b9-ca527bf8dc67",
-              "name": "Successful response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "transfers",
-                    ":transfer"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "expand[0]",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "expand[1]",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "transfer",
-                      "description": "(Required) "
-                    }
-                  ]
+                  "description": "Specifies which fields in the response should be expanded."
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer\",\n  \"amount\": 7690,\n  \"amount_reversed\": 9915,\n  \"created\": 2523,\n  \"currency\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"reversals\": {},\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "34290805-c427-4b94-828f-438a26cc8a0c",
-              "name": "Error response.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "transfers",
-                    ":transfer"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "expand[0]",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "expand[1]",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "transfer",
-                      "description": "(Required) "
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "d914028b-495c-48ab-86be-fb044e32ba75",
-          "name": "Stripe Update Transfer",
-          "request": {
-            "name": "Stripe Update Transfer",
-            "description": {
-              "content": "<p>Updates the specified transfer by setting the values of the parameters passed.</p>",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "transfers",
-                ":transfer"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
                 {
                   "disabled": false,
-                  "type": "any",
+                  "key": "metadata[key_0]",
                   "value": "<string>",
-                  "key": "transfer",
-                  "description": "(Required) "
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/x-www-form-urlencoded"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "disabled": false,
-                  "key": "description",
-                  "value": "<string>"
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "source_transaction",
+                  "value": "<string>",
+                  "description": "You can use this parameter to transfer funds from a charge before they are added to your available balance. A pending balance will transfer immediately but the funds will not become available until the original charge becomes available. [See the Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-availability) for details."
+                },
+                {
+                  "disabled": false,
+                  "key": "source_type",
+                  "value": "<string>",
+                  "description": "The source balance to use for this transfer. One of `bank_account`, `card`, or `fpx`. For most users, this will default to `card`."
+                },
+                {
+                  "disabled": false,
+                  "key": "transfer_group",
+                  "value": "<string>",
+                  "description": "A string that identifies this transaction as part of a group. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "2bb5fd8c-f2dc-43d5-89bd-255a75ea20bf",
+              "id": "15c2a151-6b17-48dc-bf98-0885726cd8b0",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
                   "path": [
                     "v1",
-                    "transfers",
-                    ":transfer"
+                    "transfers"
                   ],
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "transfer",
-                      "description": "(Required) "
-                    }
-                  ]
+                  "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -827,17 +409,92 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "(Required) 3-letter [ISO code for currency](https://stripe.com/docs/payouts).",
+                        "type": "text/plain"
+                      },
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The ID of a connected Stripe account. <a href=\"/docs/connect/separate-charges-and-transfers\">See the Connect documentation</a> for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A positive integer in cents (or local equivalent) representing how much to transfer.",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string attached to the object. Often useful for displaying to users.",
+                        "type": "text/plain"
+                      },
                       "key": "description",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "You can use this parameter to transfer funds from a charge before they are added to your available balance. A pending balance will transfer immediately but the funds will not become available until the original charge becomes available. [See the Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-availability) for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "source_transaction",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The source balance to use for this transfer. One of `bank_account`, `card`, or `fpx`. For most users, this will default to `card`.",
+                        "type": "text/plain"
+                      },
+                      "key": "source_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A string that identifies this transaction as part of a group. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "transfer_group",
                       "value": "<string>"
                     }
                   ]
@@ -851,43 +508,26 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer\",\n  \"amount\": 7690,\n  \"amount_reversed\": 9915,\n  \"created\": 2523,\n  \"currency\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"reversals\": {},\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
+              "body": "{\n  \"amount\": 7869,\n  \"amount_reversed\": 5973,\n  \"created\": 3855,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"object\": \"transfer\",\n  \"reversals\": {\n    \"data\": [\n      {\n        \"amount\": 1530,\n        \"created\": 6193,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      },\n      {\n        \"amount\": 3613,\n        \"created\": 3642,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      }\n    ],\n    \"has_more\": true,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "9bd75b1b-2ff8-4684-af12-45b9665be86d",
+              "id": "a123f74e-7326-422b-a317-98356fb77181",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
                   "path": [
                     "v1",
-                    "transfers",
-                    ":transfer"
+                    "transfers"
                   ],
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "transfer",
-                      "description": "(Required) "
-                    }
-                  ]
+                  "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -899,17 +539,92 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "(Required) 3-letter [ISO code for currency](https://stripe.com/docs/payouts).",
+                        "type": "text/plain"
+                      },
+                      "key": "currency",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The ID of a connected Stripe account. <a href=\"/docs/connect/separate-charges-and-transfers\">See the Connect documentation</a> for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A positive integer in cents (or local equivalent) representing how much to transfer.",
+                        "type": "text/plain"
+                      },
+                      "key": "amount",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string attached to the object. Often useful for displaying to users.",
+                        "type": "text/plain"
+                      },
                       "key": "description",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "You can use this parameter to transfer funds from a charge before they are added to your available balance. A pending balance will transfer immediately but the funds will not become available until the original charge becomes available. [See the Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-availability) for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "source_transaction",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The source balance to use for this transfer. One of `bank_account`, `card`, or `fpx`. For most users, this will default to `card`.",
+                        "type": "text/plain"
+                      },
+                      "key": "source_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A string that identifies this transaction as part of a group. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details.",
+                        "type": "text/plain"
+                      },
+                      "key": "transfer_group",
                       "value": "<string>"
                     }
                   ]
@@ -923,7 +638,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -934,12 +649,12 @@
           }
         },
         {
-          "id": "9ff4e086-b164-4f22-b35d-888117132432",
-          "name": "Stripe List Transfer Reversals",
+          "id": "9b99e1f8-8532-4c46-a0bb-0dae0129acad",
+          "name": "Get Transfers Id Reversals",
           "request": {
-            "name": "Stripe List Transfer Reversals",
+            "name": "Get Transfers Id Reversals",
             "description": {
-              "content": "<p>You can see a list of the reversals belonging to a specific transfer.</p>",
+              "content": "<p>You can see a list of the reversals belonging to a specific transfer. Note that the 10 most recent reversals are always available by default on the transfer object. If you need more than those 10, you can use this API method and the <code>limit</code> and <code>starting_after</code> parameters to page through additional reversals.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -956,17 +671,32 @@
                 {
                   "disabled": false,
                   "key": "ending_before",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "limit",
-                  "value": "<integer>"
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
                 },
                 {
                   "disabled": false,
                   "key": "starting_after",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": [
@@ -981,16 +711,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "9230f769-1b6d-46f8-a1ae-a9654afbb91c",
+              "id": "f606d49b-6571-4ec0-8af9-009a09ee16ff",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1009,6 +747,14 @@
                       "value": "<string>"
                     },
                     {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
                       "key": "limit",
                       "value": "<integer>"
                     },
@@ -1029,20 +775,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -1052,12 +793,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"transfer_reversal\",\n      \"amount\": 4287,\n      \"created\": 8797,\n      \"currency\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"transfer\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"destination_payment_refund\": \"string\",\n      \"source_refund\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"transfer_reversal\",\n      \"amount\": 8899,\n      \"created\": 7607,\n      \"currency\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"transfer\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"destination_payment_refund\": \"string\",\n      \"source_refund\": \"string\"\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"amount\": 8495,\n      \"created\": 4568,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"transfer_reversal\",\n      \"transfer\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"destination_payment_refund\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"source_refund\": \"string\"\n    },\n    {\n      \"amount\": 7632,\n      \"created\": 8562,\n      \"currency\": \"string\",\n      \"id\": \"string\",\n      \"object\": \"transfer_reversal\",\n      \"transfer\": \"string\",\n      \"balance_transaction\": \"string\",\n      \"destination_payment_refund\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"source_refund\": \"string\"\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "684ecdfc-d397-4b8d-bd8f-31e91fc508d2",
+              "id": "5e7d75d8-f20d-4a07-a59a-a40293772918",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1076,6 +817,14 @@
                       "value": "<string>"
                     },
                     {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
                       "key": "limit",
                       "value": "<integer>"
                     },
@@ -1096,20 +845,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -1119,7 +863,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1130,12 +874,12 @@
           }
         },
         {
-          "id": "2a526e83-80b5-4388-ae2d-0b5d9505af93",
-          "name": "Stripe Create Transfer Reversal",
+          "id": "ecef8bdc-2670-45f3-8e2a-1fc1a65252fe",
+          "name": "Post Transfers Id Reversals",
           "request": {
-            "name": "Stripe Create Transfer Reversal",
+            "name": "Post Transfers Id Reversals",
             "description": {
-              "content": "<p>When you create a new reversal, you must specify a transfer to create it on.</p>",
+              "content": "<p>When you create a new reversal, you must specify a transfer to create it on.</p>\n\n<p>When reversing transfers, you can optionally reverse part of the transfer. You can do so as many times as you wish until the entire transfer has been reversed.</p>\n\n<p>Once entirely reversed, a transfer can’t be reversed again. This method will return an error when called on an already-reversed transfer, or when trying to reverse more money than is left on a transfer.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -1177,34 +921,51 @@
                 {
                   "disabled": false,
                   "key": "amount",
-                  "value": "<integer>"
+                  "value": "<integer>",
+                  "description": "A positive integer in cents (or local equivalent) representing how much of this transfer to reverse. Can only reverse up to the unreversed amount remaining of the transfer. Partial transfer reversals are only allowed for transfers to Stripe Accounts. Defaults to the entire transfer amount."
                 },
                 {
                   "disabled": false,
                   "key": "description",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "An arbitrary string which you can attach to a reversal object. It is displayed alongside the reversal in the Dashboard. This will be unset if you POST an empty value."
                 },
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_1]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
                   "key": "refund_application_fee",
-                  "value": "<boolean>"
+                  "value": "<boolean>",
+                  "description": "Boolean indicating whether the application fee should be refunded when reversing this transfer. If a full transfer reversal is given, the full application fee will be refunded. Otherwise, the application fee will be refunded with an amount proportional to the amount of the transfer reversed."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "c2f160d9-8881-4380-91f5-a58815ff186c",
+              "id": "3744f194-9500-4bba-824e-880f8e46477e",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1230,14 +991,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1248,26 +1001,64 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "A positive integer in cents (or local equivalent) representing how much of this transfer to reverse. Can only reverse up to the unreversed amount remaining of the transfer. Partial transfer reversals are only allowed for transfers to Stripe Accounts. Defaults to the entire transfer amount.",
+                        "type": "text/plain"
+                      },
                       "key": "amount",
                       "value": "<integer>"
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string which you can attach to a reversal object. It is displayed alongside the reversal in the Dashboard. This will be unset if you POST an empty value.",
+                        "type": "text/plain"
+                      },
                       "key": "description",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Boolean indicating whether the application fee should be refunded when reversing this transfer. If a full transfer reversal is given, the full application fee will be refunded. Otherwise, the application fee will be refunded with an amount proportional to the amount of the transfer reversed.",
+                        "type": "text/plain"
+                      },
                       "key": "refund_application_fee",
                       "value": "<boolean>"
                     }
@@ -1282,12 +1073,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"amount\": 8504,\n  \"created\": 7303,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"source_refund\": \"string\"\n}",
+              "body": "{\n  \"amount\": 4922,\n  \"created\": 3417,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"source_refund\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "49a479ed-aca2-40b2-ac25-3f24c107a08d",
+              "id": "1540f326-0835-480f-bb54-a4da0e9125db",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1313,14 +1104,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1331,26 +1114,64 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "A positive integer in cents (or local equivalent) representing how much of this transfer to reverse. Can only reverse up to the unreversed amount remaining of the transfer. Partial transfer reversals are only allowed for transfers to Stripe Accounts. Defaults to the entire transfer amount.",
+                        "type": "text/plain"
+                      },
                       "key": "amount",
                       "value": "<integer>"
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string which you can attach to a reversal object. It is displayed alongside the reversal in the Dashboard. This will be unset if you POST an empty value.",
+                        "type": "text/plain"
+                      },
                       "key": "description",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Boolean indicating whether the application fee should be refunded when reversing this transfer. If a full transfer reversal is given, the full application fee will be refunded. Otherwise, the application fee will be refunded with an amount proportional to the amount of the transfer reversed.",
+                        "type": "text/plain"
+                      },
                       "key": "refund_application_fee",
                       "value": "<boolean>"
                     }
@@ -1365,7 +1186,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1376,69 +1197,88 @@
           }
         },
         {
-          "id": "21d24e95-736f-4f94-aa57-7134e07b32fc",
-          "name": "Stripe Retrieve Transfer Reversal",
+          "id": "fc1332c8-3468-426b-af97-7d20f416f586",
+          "name": "Get Transfers Transfer",
           "request": {
-            "name": "Stripe Retrieve Transfer Reversal",
+            "name": "Get Transfers Transfer",
             "description": {
-              "content": "<p>Retrieves the details of an existing transfer reversal.</p>",
+              "content": "<p>Retrieves the details of an existing transfer. Supply the unique transfer ID from either a transfer creation request or the transfer list, and Stripe will return the corresponding transfer information.</p>",
               "type": "text/plain"
             },
             "url": {
               "path": [
                 "v1",
                 "transfers",
-                ":transfer",
-                "reversals",
-                ":id"
+                ":transfer"
               ],
               "host": [
                 "{{baseUrl}}"
               ],
-              "query": [],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
               "variable": [
                 {
                   "disabled": false,
                   "type": "any",
                   "value": "<string>",
                   "key": "transfer",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "id",
                   "description": "(Required) "
                 }
               ]
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "0a091310-5b88-435c-830b-2e8cca7a0000",
+              "id": "3df8033a-eee4-46b6-8a4f-85741990b574",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
                   "path": [
                     "v1",
                     "transfers",
-                    ":transfer",
-                    "reversals",
-                    ":id"
+                    ":transfer"
                   ],
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
                   "variable": [
                     {
                       "disabled": false,
@@ -1446,32 +1286,20 @@
                       "value": "<string>",
                       "key": "transfer",
                       "description": "(Required) "
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) "
                     }
                   ]
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -1481,26 +1309,33 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"amount\": 8504,\n  \"created\": 7303,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"source_refund\": \"string\"\n}",
+              "body": "{\n  \"amount\": 7869,\n  \"amount_reversed\": 5973,\n  \"created\": 3855,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"object\": \"transfer\",\n  \"reversals\": {\n    \"data\": [\n      {\n        \"amount\": 1530,\n        \"created\": 6193,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      },\n      {\n        \"amount\": 3613,\n        \"created\": 3642,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      }\n    ],\n    \"has_more\": true,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e30e4817-d024-43a3-8cff-8936ec15ad59",
+              "id": "1f7108c4-141d-442b-98f0-a092bd7d76d0",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
                   "path": [
                     "v1",
                     "transfers",
-                    ":transfer",
-                    "reversals",
-                    ":id"
+                    ":transfer"
                   ],
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
                   "variable": [
                     {
                       "disabled": false,
@@ -1508,32 +1343,20 @@
                       "value": "<string>",
                       "key": "transfer",
                       "description": "(Required) "
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) "
                     }
                   ]
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -1543,7 +1366,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1554,21 +1377,19 @@
           }
         },
         {
-          "id": "5dc5a976-6a4e-4002-9a1b-2febf2732d6f",
-          "name": "Stripe Update Transfer Reversal",
+          "id": "0bfb1ee7-db1b-44f5-a7c5-1f3db6d4834f",
+          "name": "Post Transfers Transfer",
           "request": {
-            "name": "Stripe Update Transfer Reversal",
+            "name": "Post Transfers Transfer",
             "description": {
-              "content": "<p>Updates the specified reversal by setting the values of the parameters passed.</p>",
+              "content": "<p>Updates the specified transfer by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>\n\n<p>This request accepts only metadata as an argument.</p>",
               "type": "text/plain"
             },
             "url": {
               "path": [
                 "v1",
                 "transfers",
-                ":transfer",
-                "reversals",
-                ":id"
+                ":transfer"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -1580,13 +1401,6 @@
                   "type": "any",
                   "value": "<string>",
                   "key": "transfer",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "id",
                   "description": "(Required) "
                 }
               ]
@@ -1608,20 +1422,504 @@
               "urlencoded": [
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "description",
+                  "value": "<string>",
+                  "description": "An arbitrary string attached to the object. Often useful for displaying to users."
                 },
                 {
                   "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_1]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_2]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "edbfa6e5-10bd-4d34-9772-df993bb042b7",
+              "id": "99eb7e80-36d9-4767-81aa-15c52d980ed2",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transfers",
+                    ":transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transfer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string attached to the object. Often useful for displaying to users.",
+                        "type": "text/plain"
+                      },
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 7869,\n  \"amount_reversed\": 5973,\n  \"created\": 3855,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"object\": \"transfer\",\n  \"reversals\": {\n    \"data\": [\n      {\n        \"amount\": 1530,\n        \"created\": 6193,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      },\n      {\n        \"amount\": 3613,\n        \"created\": 3642,\n        \"currency\": \"string\",\n        \"id\": \"string\",\n        \"object\": \"transfer_reversal\",\n        \"transfer\": \"string\",\n        \"balance_transaction\": \"string\",\n        \"destination_payment_refund\": \"string\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"source_refund\": \"string\"\n      }\n    ],\n    \"has_more\": true,\n    \"object\": \"list\",\n    \"url\": \"string\"\n  },\n  \"reversed\": false,\n  \"balance_transaction\": \"string\",\n  \"description\": \"string\",\n  \"destination\": \"string\",\n  \"destination_payment\": \"string\",\n  \"source_transaction\": \"string\",\n  \"source_type\": \"string\",\n  \"transfer_group\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c8d9511-d9de-46dc-97d8-a95b2aa6fe19",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transfers",
+                    ":transfer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transfer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "An arbitrary string attached to the object. Often useful for displaying to users.",
+                        "type": "text/plain"
+                      },
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e582fd4f-4b0d-456d-98c0-92363747948c",
+          "name": "Get Transfers Transfer Reversals Id",
+          "request": {
+            "name": "Get Transfers Transfer Reversals Id",
+            "description": {
+              "content": "<p>By default, you can see the 10 most recent reversals stored directly on the transfer object, but you can also retrieve details about a specific reversal stored on the transfer.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "transfers",
+                ":transfer",
+                "reversals",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transfer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "06a7e4dd-f544-40b1-8d90-5f52c559957e",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transfers",
+                    ":transfer",
+                    "reversals",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transfer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 4922,\n  \"created\": 3417,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"source_refund\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01181ecf-da0d-4b8d-a1de-cf634205a7f1",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transfers",
+                    ":transfer",
+                    "reversals",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transfer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9bedafc2-5c97-412c-831b-e35601fe614e",
+          "name": "Post Transfers Transfer Reversals Id",
+          "request": {
+            "name": "Post Transfers Transfer Reversals Id",
+            "description": {
+              "content": "<p>Updates the specified reversal by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>\n\n<p>This request only accepts metadata and description as arguments.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "transfers",
+                ":transfer",
+                "reversals",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transfer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fe700083-25bb-4eb3-8eeb-788b2ed97f0e",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1641,27 +1939,19 @@
                       "disabled": false,
                       "type": "any",
                       "value": "<string>",
-                      "key": "transfer",
+                      "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
                       "value": "<string>",
-                      "key": "id",
+                      "key": "transfer",
                       "description": "(Required) "
                     }
                   ]
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1673,12 +1963,29 @@
                   "urlencoded": [
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     }
                   ]
@@ -1692,12 +1999,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"amount\": 8504,\n  \"created\": 7303,\n  \"currency\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": \"string\"\n  },\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"source_refund\": \"string\"\n}",
+              "body": "{\n  \"amount\": 4922,\n  \"created\": 3417,\n  \"currency\": \"string\",\n  \"id\": \"string\",\n  \"object\": \"transfer_reversal\",\n  \"transfer\": \"string\",\n  \"balance_transaction\": \"string\",\n  \"destination_payment_refund\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"source_refund\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8c767702-1aba-4ac9-8109-ede50069cfa9",
+              "id": "9a822c37-45c7-4869-8c63-9c6a3f6e36fc",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1717,27 +2024,19 @@
                       "disabled": false,
                       "type": "any",
                       "value": "<string>",
-                      "key": "transfer",
+                      "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
                       "value": "<string>",
-                      "key": "id",
+                      "key": "transfer",
                       "description": "(Required) "
                     }
                   ]
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1749,12 +2048,29 @@
                   "urlencoded": [
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     }
                   ]
@@ -1768,7 +2084,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1790,25 +2106,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "3e856139-cbe1-4a10-8f94-add55706bd7c",
-    "name": "Stripe Transfers API",
+    "_postman_id": "d6d3cc23-3311-46d0-b61d-9b160e20f6f3",
+    "name": "Stripe Accounts Account Transfers API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "A Transfer object is created when you move funds between Stripe accounts as part of Connect.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

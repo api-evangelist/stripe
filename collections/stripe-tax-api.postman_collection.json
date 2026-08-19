@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "b069aa7a-ab92-4def-86d3-460cabd1ac19",
+      "id": "aa948c41-202b-4454-a2aa-f5e11862ec63",
       "name": "Tax",
       "description": {
         "content": "",
@@ -9,7 +9,866 @@
       },
       "item": [
         {
-          "id": "2d001a6e-da3b-4058-9ae8-662cd04fbf4c",
+          "id": "5fba72b0-848d-4765-9baf-e8c803dfbeb9",
+          "name": "Stripe Get   Customers Customer Tax Ids",
+          "request": {
+            "name": "Stripe Get   Customers Customer Tax Ids",
+            "description": {
+              "content": "<p>Returns a list of tax IDs for a customer.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer",
+                "tax_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "7ef69fb2-9391-41a3-bd15-47a14379f34f",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"created\": 8545,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"tax_id\",\n      \"type\": \"tr_tin\",\n      \"value\": \"string\",\n      \"country\": \"string\",\n      \"customer\": \"string\",\n      \"verification\": {\n        \"value\": \"reference #/components/schemas/tax_id_verification not found in the OpenAPI spec\"\n      }\n    },\n    {\n      \"created\": 4080,\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"object\": \"tax_id\",\n      \"type\": \"ca_pst_mb\",\n      \"value\": \"string\",\n      \"country\": \"string\",\n      \"customer\": \"string\",\n      \"verification\": {\n        \"value\": \"reference #/components/schemas/tax_id_verification not found in the OpenAPI spec\"\n      }\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "211d4476-d556-4477-9a8e-44bcdbdf0aa4",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a6da917-1bf8-439c-833d-d298a919c62f",
+          "name": "Stripe Post   Customers Customer Tax Ids",
+          "request": {
+            "name": "Stripe Post   Customers Customer Tax Ids",
+            "description": {
+              "content": "<p>Creates a new <code>tax_id</code> object for a customer.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer",
+                "tax_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "(Required) Type of the tax ID, one of `ad_nrt`, `ae_trn`, `ar_cuit`, `au_abn`, `au_arn`, `bg_uic`, `bo_tin`, `br_cnpj`, `br_cpf`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `ch_vat`, `cl_tin`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `eu_oss_vat`, `eu_vat`, `gb_vat`, `ge_vat`, `hk_br`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`, `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kr_brn`, `li_uid`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `no_vat`, `nz_gst`, `pe_ruc`, `ph_tin`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sv_nit`, `th_vat`, `tr_tin`, `tw_vat`, `ua_vat`, `us_ein`, `uy_ruc`, `ve_rif`, `vn_tin`, or `za_vat`"
+                },
+                {
+                  "disabled": false,
+                  "key": "value",
+                  "value": "<string>",
+                  "description": "(Required) Value of the tax ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3f305009-81c6-4325-bb39-8dc3d535ff15",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Type of the tax ID, one of `ad_nrt`, `ae_trn`, `ar_cuit`, `au_abn`, `au_arn`, `bg_uic`, `bo_tin`, `br_cnpj`, `br_cpf`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `ch_vat`, `cl_tin`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `eu_oss_vat`, `eu_vat`, `gb_vat`, `ge_vat`, `hk_br`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`, `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kr_brn`, `li_uid`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `no_vat`, `nz_gst`, `pe_ruc`, `ph_tin`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sv_nit`, `th_vat`, `tr_tin`, `tw_vat`, `ua_vat`, `us_ein`, `uy_ruc`, `ve_rif`, `vn_tin`, or `za_vat`",
+                        "type": "text/plain"
+                      },
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Value of the tax ID.",
+                        "type": "text/plain"
+                      },
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 8240,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"tax_id\",\n  \"type\": \"eg_tin\",\n  \"value\": \"string\",\n  \"country\": \"string\",\n  \"customer\": \"string\",\n  \"verification\": {\n    \"value\": \"reference #/components/schemas/tax_id_verification not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0db0e9e-60b1-4c76-96e8-db1a57b1d828",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Type of the tax ID, one of `ad_nrt`, `ae_trn`, `ar_cuit`, `au_abn`, `au_arn`, `bg_uic`, `bo_tin`, `br_cnpj`, `br_cpf`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `ch_vat`, `cl_tin`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `eu_oss_vat`, `eu_vat`, `gb_vat`, `ge_vat`, `hk_br`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`, `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kr_brn`, `li_uid`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `no_vat`, `nz_gst`, `pe_ruc`, `ph_tin`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sv_nit`, `th_vat`, `tr_tin`, `tw_vat`, `ua_vat`, `us_ein`, `uy_ruc`, `ve_rif`, `vn_tin`, or `za_vat`",
+                        "type": "text/plain"
+                      },
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Value of the tax ID.",
+                        "type": "text/plain"
+                      },
+                      "key": "value",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ffe14913-0bb1-478b-b63d-2029b66d12ba",
+          "name": "Stripe Delete   Customers Customer Tax Ids Id",
+          "request": {
+            "name": "Stripe Delete   Customers Customer Tax Ids Id",
+            "description": {
+              "content": "<p>Deletes an existing <code>tax_id</code> object.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer",
+                "tax_ids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customer",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "5828d92d-dc67-46db-9c89-e25640066925",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"string\",\n  \"object\": \"tax_id\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0a4dc3c-acb7-4e2c-9b66-121479db92f6",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e537bb03-57c4-4a37-bf3d-c8fa03966957",
+          "name": "Stripe Get   Customers Customer Tax Ids Id",
+          "request": {
+            "name": "Stripe Get   Customers Customer Tax Ids Id",
+            "description": {
+              "content": "<p>Retrieves the <code>tax_id</code> object with the given identifier.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "customers",
+                ":customer",
+                "tax_ids",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "customer",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "e0ba3f91-6df9-4044-a13e-f336d974914d",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 8240,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"tax_id\",\n  \"type\": \"eg_tin\",\n  \"value\": \"string\",\n  \"country\": \"string\",\n  \"customer\": \"string\",\n  \"verification\": {\n    \"value\": \"reference #/components/schemas/tax_id_verification not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d02cfb10-ae67-4f2b-baa6-7df40e1864b0",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "customers",
+                    ":customer",
+                    "tax_ids",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "customer",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73908347-a1d4-485a-8656-4feb246c492d",
           "name": "Stripe Create Tax Calculation",
           "request": {
             "name": "Stripe Create Tax Calculation",
@@ -117,7 +976,7 @@
           },
           "response": [
             {
-              "id": "b5e5b179-5b66-42b0-9fd5-3054ea12e67a",
+              "id": "4349eb9a-7a60-4f4e-99a9-2f8e2b4c6089",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -133,14 +992,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -238,12 +1089,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"tax.calculation\",\n  \"amount_total\": 6589,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": false,\n  \"tax_amount_exclusive\": 7885,\n  \"tax_amount_inclusive\": 1079,\n  \"tax_date\": 1203,\n  \"id\": \"string\",\n  \"customer\": \"string\",\n  \"expires_at\": 9460,\n  \"line_items\": {},\n  \"shipping_cost\": {}\n}",
+              "body": "{\n  \"object\": \"tax.calculation\",\n  \"amount_total\": 5687,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": true,\n  \"tax_amount_exclusive\": 5330,\n  \"tax_amount_inclusive\": 2173,\n  \"tax_date\": 5164,\n  \"id\": null,\n  \"customer\": null,\n  \"expires_at\": 9026,\n  \"line_items\": {},\n  \"shipping_cost\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3f0a0d72-aa34-49cb-a658-821c6fb19841",
+              "id": "a3238b85-f776-435e-bfa0-e3accd586152",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -259,14 +1110,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -375,7 +1218,7 @@
           }
         },
         {
-          "id": "7bbd814b-ac51-4936-89d7-04a3072305c7",
+          "id": "c869ecb5-d1a4-4a36-b963-9dcfd2b5834f",
           "name": "Stripe List Tax Calculation Line Items",
           "request": {
             "name": "Stripe List Tax Calculation Line Items",
@@ -432,7 +1275,7 @@
           },
           "response": [
             {
-              "id": "311256df-7956-40af-b280-d831d622899d",
+              "id": "3e1ead68-e30c-415b-9b3e-cb2953dcd5d3",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -472,14 +1315,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -500,7 +1335,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a2f68eef-56f0-478c-8316-4b6192272a07",
+              "id": "f69e1fdc-a4b5-4931-a90b-7c61c9e64c51",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -540,14 +1375,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -574,7 +1401,7 @@
           }
         },
         {
-          "id": "3a2a89c9-562a-4f12-a5dd-b342aa53d11c",
+          "id": "7f8d3273-7e6b-4b2d-9644-75f6eceda797",
           "name": "Stripe Create Tax Transaction from Calculation",
           "request": {
             "name": "Stripe Create Tax Transaction from Calculation",
@@ -626,28 +1453,13 @@
                   "disabled": false,
                   "key": "key_0",
                   "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_1",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_2",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "key_3",
-                  "value": "<string>"
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "ef246b70-06b7-4cd2-bb27-c6cb1b77ab96",
+              "id": "ac109e66-4642-40fe-9407-300b050f4b52",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -665,14 +1477,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -708,6 +1512,11 @@
                       "disabled": false,
                       "key": "key_1",
                       "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "key_2",
+                      "value": "<string>"
                     }
                   ]
                 }
@@ -720,12 +1529,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 5866,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": false,\n  \"reference\": \"string\",\n  \"tax_date\": 3165,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"reversal\": {},\n  \"shipping_cost\": {}\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 9511,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": true,\n  \"reference\": \"string\",\n  \"tax_date\": 1010,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": null,\n  \"reversal\": {},\n  \"shipping_cost\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "31f9967c-48dc-4588-95cd-390d1931aa67",
+              "id": "926251d0-9043-48ad-8719-cf2a6f22fae8",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -743,14 +1552,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -785,6 +1586,11 @@
                     {
                       "disabled": false,
                       "key": "key_1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "key_2",
                       "value": "<string>"
                     }
                   ]
@@ -809,7 +1615,7 @@
           }
         },
         {
-          "id": "03bb8bb3-ff15-4f67-aca7-dc13f2f87d1b",
+          "id": "26b2de79-8f3c-4cba-b0bd-ed48b984f9f8",
           "name": "Stripe Create Tax Transaction Reversal",
           "request": {
             "name": "Stripe Create Tax Transaction Reversal",
@@ -893,7 +1699,7 @@
           },
           "response": [
             {
-              "id": "3506a09a-dabd-4a80-99fc-67186e451b00",
+              "id": "2d143a38-e94c-4283-9f83-9a6f5884afdf",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -911,14 +1717,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -973,6 +1771,11 @@
                       "disabled": false,
                       "key": "key_1",
                       "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "key_2",
+                      "value": "<string>"
                     }
                   ]
                 }
@@ -985,12 +1788,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 5866,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": false,\n  \"reference\": \"string\",\n  \"tax_date\": 3165,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"reversal\": {},\n  \"shipping_cost\": {}\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 9511,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": true,\n  \"reference\": \"string\",\n  \"tax_date\": 1010,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": null,\n  \"reversal\": {},\n  \"shipping_cost\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "10eca29e-6229-4a04-a86b-3479542362a1",
+              "id": "fa50b1a2-af8e-4b22-8372-7b39f54092e3",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1008,14 +1811,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1069,6 +1864,11 @@
                     {
                       "disabled": false,
                       "key": "key_1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "key_2",
                       "value": "<string>"
                     }
                   ]
@@ -1093,7 +1893,7 @@
           }
         },
         {
-          "id": "5e32fd9e-1931-4734-9b00-ebb559416b8d",
+          "id": "83a841f1-fc0a-4514-a712-c7ebb16bd174",
           "name": "Stripe Retrieve Tax Transaction",
           "request": {
             "name": "Stripe Retrieve Tax Transaction",
@@ -1144,7 +1944,7 @@
           },
           "response": [
             {
-              "id": "2eaee750-12de-4c6f-bb83-af58dc297cd7",
+              "id": "24b12936-f0cd-4251-9279-0fb4094468c1",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1179,14 +1979,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1202,12 +1994,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 5866,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": false,\n  \"reference\": \"string\",\n  \"tax_date\": 3165,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"reversal\": {},\n  \"shipping_cost\": {}\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.transaction\",\n  \"created\": 9511,\n  \"currency\": \"string\",\n  \"customer_details\": {},\n  \"livemode\": true,\n  \"reference\": \"string\",\n  \"tax_date\": 1010,\n  \"type\": \"transaction\",\n  \"customer\": \"string\",\n  \"line_items\": {},\n  \"metadata\": null,\n  \"reversal\": {},\n  \"shipping_cost\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5572a5b6-229b-4470-920b-a4ab72524712",
+              "id": "441ee740-ef40-42c1-84a0-6f28f96b546c",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1242,14 +2034,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1276,7 +2060,7 @@
           }
         },
         {
-          "id": "71d43032-0c5c-4b94-988e-63a1d66687f7",
+          "id": "a035de61-aae3-4bb1-b3d4-459702c97db0",
           "name": "Stripe List Tax Registrations",
           "request": {
             "name": "Stripe List Tax Registrations",
@@ -1328,7 +2112,7 @@
           },
           "response": [
             {
-              "id": "ac85ac15-6358-49b7-bcf6-df7aa9a11a0e",
+              "id": "859babe0-0fdc-4fbc-8b7d-73e4929aacfb",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1362,14 +2146,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1385,12 +2161,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"tax.registration\",\n      \"active_from\": 6903,\n      \"country\": \"string\",\n      \"country_options\": {},\n      \"created\": 1732,\n      \"livemode\": false,\n      \"status\": \"expired\",\n      \"expires_at\": 5196\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"tax.registration\",\n      \"active_from\": 6926,\n      \"country\": \"string\",\n      \"country_options\": {},\n      \"created\": 8732,\n      \"livemode\": false,\n      \"status\": \"expired\",\n      \"expires_at\": 939\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"tax.registration\",\n      \"active_from\": 8542,\n      \"country\": \"string\",\n      \"country_options\": {},\n      \"created\": 4026,\n      \"livemode\": false,\n      \"status\": \"scheduled\",\n      \"expires_at\": null\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"tax.registration\",\n      \"active_from\": 4872,\n      \"country\": \"string\",\n      \"country_options\": {},\n      \"created\": 8818,\n      \"livemode\": true,\n      \"status\": \"scheduled\",\n      \"expires_at\": 3623\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "de342827-1b69-45cf-9434-c37a30af8c33",
+              "id": "a109314b-123f-467e-918b-354f5fa0fc26",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1424,14 +2200,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1458,7 +2226,7 @@
           }
         },
         {
-          "id": "60f1a707-d99d-4a5a-aa13-1dcfaa5fbbd2",
+          "id": "3d904a39-6f63-4e95-aca9-12616c096b2e",
           "name": "Stripe Create Tax Registration",
           "request": {
             "name": "Stripe Create Tax Registration",
@@ -1521,7 +2289,7 @@
           },
           "response": [
             {
-              "id": "1a99306a-987f-48df-bde8-92c1e6625878",
+              "id": "8721765a-e2e1-4c24-bb43-6e3d623a43f7",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1537,14 +2305,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1597,12 +2357,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.registration\",\n  \"active_from\": 9050,\n  \"country\": \"string\",\n  \"country_options\": {},\n  \"created\": 4550,\n  \"livemode\": false,\n  \"status\": \"scheduled\",\n  \"expires_at\": 6443\n}",
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"tax.registration\",\n  \"active_from\": 9443,\n  \"country\": \"string\",\n  \"country_options\": {},\n  \"created\": 5719,\n  \"livemode\": false,\n  \"status\": \"scheduled\",\n  \"expires_at\": null\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6678048d-f996-4813-9b2c-bd42e3e14afb",
+              "id": "a93309f2-bf42-40e7-b4d7-ff629487edb5",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1618,14 +2378,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1689,7 +2441,7 @@
           }
         },
         {
-          "id": "0eafa652-3172-4705-8505-f42ca1eaf325",
+          "id": "37a81ae0-f8e8-4b39-b18d-c985f98f3e11",
           "name": "Stripe Retrieve Tax Settings",
           "request": {
             "name": "Stripe Retrieve Tax Settings",
@@ -1720,7 +2472,7 @@
           },
           "response": [
             {
-              "id": "24c81bb1-8da9-4bcf-86ce-6ff897b60055",
+              "id": "6b27bcef-a4a4-45dc-bc08-edc4c8852337",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1737,14 +2489,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -1760,12 +2504,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"tax.settings\",\n  \"defaults\": {},\n  \"livemode\": true,\n  \"status\": \"pending\",\n  \"status_details\": {},\n  \"head_office\": {}\n}",
+              "body": "{\n  \"object\": \"tax.settings\",\n  \"defaults\": {},\n  \"livemode\": false,\n  \"status\": \"active\",\n  \"status_details\": {},\n  \"head_office\": {}\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "74d24c5d-6e96-41e5-a7fa-4fe12eb2a442",
+              "id": "a7936cf7-3a45-40d7-971e-d10805615a71",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1781,14 +2525,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1816,7 +2552,7 @@
           }
         },
         {
-          "id": "e9bd8e11-803e-4b37-a52e-6b2b39d9fbc5",
+          "id": "e3804dba-32f0-4048-87b2-04e4a7c950de",
           "name": "Stripe Update Tax Settings",
           "request": {
             "name": "Stripe Update Tax Settings",
@@ -1871,7 +2607,7 @@
           },
           "response": [
             {
-              "id": "5c93beea-43f8-483f-9873-1f636d55e180",
+              "id": "7de7d531-ad1a-4221-b7ea-1f474b70495a",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -1887,14 +2623,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -1930,12 +2658,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"tax.settings\",\n  \"defaults\": {},\n  \"livemode\": true,\n  \"status\": \"pending\",\n  \"status_details\": {},\n  \"head_office\": {}\n}",
+              "body": "{\n  \"object\": \"tax.settings\",\n  \"defaults\": {},\n  \"livemode\": false,\n  \"status\": \"active\",\n  \"status_details\": {},\n  \"head_office\": {}\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d926f268-f196-4d2f-b90b-8645174f616f",
+              "id": "44cd281f-9b4a-4730-9020-ec7f80a16c39",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -1951,14 +2679,6 @@
                   "variable": []
                 },
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
@@ -2003,6 +2723,437 @@
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
+        },
+        {
+          "id": "f821865f-0d67-44dd-b634-66c3329bb006",
+          "name": "Post Tax Registrations Id",
+          "request": {
+            "name": "Post Tax Registrations Id",
+            "description": {
+              "content": "<p>Updates an existing Tax <code>Registration</code> object.</p>\n\n<p>A registration cannot be deleted after it has been created. If you wish to end a registration you may do so by setting <code>expires_at</code>.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "tax",
+                "registrations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0e64426a-7a76-4b32-8454-d0042021b879",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tax",
+                    "registrations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"active_from\": 5916,\n  \"country\": \"string\",\n  \"country_options\": {\n    \"value\": \"reference #/components/schemas/tax_product_registrations_resource_country_options not found in the OpenAPI spec\"\n  },\n  \"created\": 7576,\n  \"id\": \"string\",\n  \"livemode\": false,\n  \"object\": \"tax.registration\",\n  \"status\": \"expired\",\n  \"expires_at\": 2218\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4bca4d9-5a8a-44a5-8d47-f2d1158114db",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tax",
+                    "registrations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6501e841-3f49-414f-9389-93adedcb7f99",
+          "name": "Get Tax Transactions Transaction Line Items",
+          "request": {
+            "name": "Get Tax Transactions Transaction Line Items",
+            "description": {
+              "content": "<p>Retrieves the line items of a committed standalone transaction as a collection.</p>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "tax",
+                "transactions",
+                ":transaction",
+                "line_items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transaction",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
+          },
+          "response": [
+            {
+              "id": "8ca0641f-19bf-4507-a590-af046d92db88",
+              "name": "Successful response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tax",
+                    "transactions",
+                    ":transaction",
+                    "line_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"value\": \"reference #/components/schemas/tax.transaction_line_item not found in the OpenAPI spec\"\n    },\n    {\n      \"value\": \"reference #/components/schemas/tax.transaction_line_item not found in the OpenAPI spec\"\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"/v1/tax/transactions/x:)z::zU\\\"Y/line_items\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0babe81c-2d6c-44e3-ab3b-3327003f8321",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tax",
+                    "transactions",
+                    ":transaction",
+                    "line_items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transaction",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         }
       ],
       "event": []
@@ -2016,25 +3167,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "d4b74a3e-3434-4997-9fbf-e493e9695725",
-    "name": "Stripe Tax API",
+    "_postman_id": "eff54408-20a6-40be-abe8-65120769d5e0",
+    "name": "Stripe Accounts Account Tax API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "Automate sales tax, VAT, and GST compliance on all your transactions - low or no code integrations available.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

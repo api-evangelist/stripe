@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "bd265195-ce94-4f56-b319-83324048ac6d",
+      "id": "f21c8d57-f540-4348-854e-8f6b83661983",
       "name": "Promotion Codes",
       "description": {
         "content": "",
@@ -9,10 +9,10 @@
       },
       "item": [
         {
-          "id": "e2282ec8-d045-460f-a8da-a042293aff29",
-          "name": "Stripe List Promotion Codes",
+          "id": "e3b655aa-1c52-42b7-ba52-3e07de9de538",
+          "name": "Get Promotion Codes",
           "request": {
-            "name": "Stripe List Promotion Codes",
+            "name": "Get Promotion Codes",
             "description": {
               "content": "<p>Returns a list of your promotion codes.</p>",
               "type": "text/plain"
@@ -46,6 +46,30 @@
                 },
                 {
                   "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>",
+                  "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>",
+                  "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>",
+                  "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>",
+                  "description": "A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options."
+                },
+                {
+                  "disabled": false,
                   "key": "customer",
                   "value": "<string>",
                   "description": "Only return promotion codes that are restricted to this customer."
@@ -54,7 +78,7 @@
                   "disabled": false,
                   "key": "ending_before",
                   "value": "<string>",
-                  "description": "A cursor for use in pagination. ending_before is an object ID that defines your place in the list."
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
                 },
                 {
                   "disabled": false,
@@ -72,29 +96,37 @@
                   "disabled": false,
                   "key": "limit",
                   "value": "<integer>",
-                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100."
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
                 },
                 {
                   "disabled": false,
                   "key": "starting_after",
                   "value": "<string>",
-                  "description": "A cursor for use in pagination. starting_after is an object ID that defines your place in the list."
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "f2305e67-2a66-4dba-9a3f-fdfea13acfe4",
+              "id": "8e12af21-9e5c-4f51-8de0-458edf068729",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -119,6 +151,22 @@
                       "value": "<string>"
                     },
                     {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
                       "key": "customer",
                       "value": "<string>"
                     },
@@ -147,20 +195,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -170,12 +213,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"promotion_code\",\n      \"active\": true,\n      \"code\": \"string\",\n      \"coupon\": {},\n      \"created\": 5473,\n      \"livemode\": false,\n      \"times_redeemed\": 8093,\n      \"customer\": \"string\",\n      \"expires_at\": 955,\n      \"max_redemptions\": 253,\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"restrictions\": {\n        \"first_time_transaction\": true,\n        \"minimum_amount\": 8735,\n        \"minimum_amount_currency\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"promotion_code\",\n      \"active\": true,\n      \"code\": \"string\",\n      \"coupon\": {},\n      \"created\": 1061,\n      \"livemode\": true,\n      \"times_redeemed\": 7299,\n      \"customer\": \"string\",\n      \"expires_at\": 7550,\n      \"max_redemptions\": 7001,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      },\n      \"restrictions\": {\n        \"first_time_transaction\": true,\n        \"minimum_amount\": 5896,\n        \"minimum_amount_currency\": \"string\"\n      }\n    }\n  ],\n  \"has_more\": true,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"active\": true,\n      \"code\": \"string\",\n      \"coupon\": {\n        \"value\": \"reference #/components/schemas/coupon not found in the OpenAPI spec\"\n      },\n      \"created\": 8401,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"promotion_code\",\n      \"restrictions\": {\n        \"value\": \"reference #/components/schemas/promotion_codes_resource_restrictions not found in the OpenAPI spec\"\n      },\n      \"times_redeemed\": 4110,\n      \"customer\": \"string\",\n      \"expires_at\": 8366,\n      \"max_redemptions\": 9636,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      }\n    },\n    {\n      \"active\": true,\n      \"code\": \"string\",\n      \"coupon\": {\n        \"value\": \"reference #/components/schemas/coupon not found in the OpenAPI spec\"\n      },\n      \"created\": 7014,\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"object\": \"promotion_code\",\n      \"restrictions\": {\n        \"value\": \"reference #/components/schemas/promotion_codes_resource_restrictions not found in the OpenAPI spec\"\n      },\n      \"times_redeemed\": 9218,\n      \"customer\": \"string\",\n      \"expires_at\": 9546,\n      \"max_redemptions\": 1666,\n      \"metadata\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"/v1/promotion_codes\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f6e0fbb1-6571-4d03-86b4-78d7b2fd1d28",
+              "id": "32d48c4a-c038-452d-9466-a0d4df8d6b45",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -200,6 +243,22 @@
                       "value": "<string>"
                     },
                     {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
                       "key": "customer",
                       "value": "<string>"
                     },
@@ -228,20 +287,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -251,7 +305,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -262,10 +316,10 @@
           }
         },
         {
-          "id": "143e8302-cceb-491c-8f31-b781bbedbb61",
-          "name": "Stripe Create Promotion Code",
+          "id": "b63cf952-7d6d-4e17-9233-171b3a13756a",
+          "name": "Post Promotion Codes",
           "request": {
-            "name": "Stripe Create Promotion Code",
+            "name": "Post Promotion Codes",
             "description": {
               "content": "<p>A promotion code points to a coupon. You can optionally restrict the code to a specific customer, redemption limit, and expiration date.</p>",
               "type": "text/plain"
@@ -304,60 +358,82 @@
                 },
                 {
                   "disabled": false,
-                  "key": "code",
-                  "value": "<string>",
-                  "description": "The customer-facing code. If not provided, Stripe will generate one."
-                },
-                {
-                  "disabled": false,
                   "key": "active",
                   "value": "<boolean>",
                   "description": "Whether the promotion code is currently active."
                 },
                 {
                   "disabled": false,
+                  "key": "code",
+                  "value": "<string>",
+                  "description": "The customer-facing code. Regardless of case, this code must be unique across all active promotion codes for a specific customer. If left blank, we will generate one automatically."
+                },
+                {
+                  "disabled": false,
                   "key": "customer",
                   "value": "<string>",
-                  "description": "The customer that this promotion code can be used by."
+                  "description": "The customer that this promotion code can be used by. If not set, the promotion code can be used by all customers."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expires_at",
-                  "value": "<integer>",
-                  "description": "The timestamp at which this promotion code will expire."
+                  "value": "<unix-time>",
+                  "description": "The timestamp at which this promotion code will expire. If the coupon has specified a `redeems_by`, then this value cannot be after the coupon's `redeems_by`."
                 },
                 {
                   "disabled": false,
                   "key": "max_redemptions",
                   "value": "<integer>",
-                  "description": "A positive integer specifying the number of times the promotion code can be redeemed."
+                  "description": "A positive integer specifying the number of times the promotion code can be redeemed. If the coupon has specified a `max_redemptions`, then this value cannot be greater than the coupon's `max_redemptions`."
                 },
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
                 },
                 {
                   "disabled": false,
-                  "key": "first_time_transaction",
-                  "value": "<boolean>"
+                  "key": "restrictions[currency_options][key_0][minimum_amount]",
+                  "value": "<integer>",
+                  "description": "Settings that restrict the redemption of the promotion code."
                 },
                 {
                   "disabled": false,
-                  "key": "minimum_amount",
-                  "value": "<integer>"
+                  "key": "restrictions[first_time_transaction]",
+                  "value": "<boolean>",
+                  "description": "Settings that restrict the redemption of the promotion code."
                 },
                 {
                   "disabled": false,
-                  "key": "minimum_amount_currency",
-                  "value": "<string>"
+                  "key": "restrictions[minimum_amount]",
+                  "value": "<integer>",
+                  "description": "Settings that restrict the redemption of the promotion code."
+                },
+                {
+                  "disabled": false,
+                  "key": "restrictions[minimum_amount_currency]",
+                  "value": "<string>",
+                  "description": "Settings that restrict the redemption of the promotion code."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "8ba267db-3814-4ac5-bcd4-b549fca8a361",
+              "id": "7e511a3b-532e-470e-8ab3-e1b9d84ae502",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -373,14 +449,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -401,15 +469,6 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The customer-facing code. If not provided, Stripe will generate one.",
-                        "type": "text/plain"
-                      },
-                      "key": "code",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
                         "content": "Whether the promotion code is currently active.",
                         "type": "text/plain"
                       },
@@ -419,7 +478,16 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The customer that this promotion code can be used by.",
+                        "content": "The customer-facing code. Regardless of case, this code must be unique across all active promotion codes for a specific customer. If left blank, we will generate one automatically.",
+                        "type": "text/plain"
+                      },
+                      "key": "code",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The customer that this promotion code can be used by. If not set, the promotion code can be used by all customers.",
                         "type": "text/plain"
                       },
                       "key": "customer",
@@ -428,16 +496,34 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The timestamp at which this promotion code will expire.",
+                        "content": "Specifies which fields in the response should be expanded.",
                         "type": "text/plain"
                       },
-                      "key": "expires_at",
-                      "value": "<integer>"
+                      "key": "expand[0]",
+                      "value": "<string>"
                     },
                     {
                       "disabled": false,
                       "description": {
-                        "content": "A positive integer specifying the number of times the promotion code can be redeemed.",
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The timestamp at which this promotion code will expire. If the coupon has specified a `redeems_by`, then this value cannot be after the coupon's `redeems_by`.",
+                        "type": "text/plain"
+                      },
+                      "key": "expires_at",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A positive integer specifying the number of times the promotion code can be redeemed. If the coupon has specified a `max_redemptions`, then this value cannot be greater than the coupon's `max_redemptions`.",
                         "type": "text/plain"
                       },
                       "key": "max_redemptions",
@@ -445,27 +531,47 @@
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "first_time_transaction",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "minimum_amount",
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_0][minimum_amount]",
                       "value": "<integer>"
                     },
                     {
                       "disabled": false,
-                      "key": "minimum_amount_currency",
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[first_time_transaction]",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[minimum_amount]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[minimum_amount_currency]",
                       "value": "<string>"
                     }
                   ]
@@ -479,12 +585,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"promotion_code\",\n  \"active\": true,\n  \"code\": \"string\",\n  \"coupon\": {},\n  \"created\": 2735,\n  \"livemode\": true,\n  \"times_redeemed\": 3406,\n  \"customer\": \"string\",\n  \"expires_at\": 3547,\n  \"max_redemptions\": 1652,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"restrictions\": {\n    \"first_time_transaction\": false,\n    \"minimum_amount\": 8872,\n    \"minimum_amount_currency\": \"string\"\n  }\n}",
+              "body": "{\n  \"active\": false,\n  \"code\": \"string\",\n  \"coupon\": {\n    \"value\": \"reference #/components/schemas/coupon not found in the OpenAPI spec\"\n  },\n  \"created\": 8833,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"promotion_code\",\n  \"restrictions\": {\n    \"value\": \"reference #/components/schemas/promotion_codes_resource_restrictions not found in the OpenAPI spec\"\n  },\n  \"times_redeemed\": 9069,\n  \"customer\": \"string\",\n  \"expires_at\": 2761,\n  \"max_redemptions\": 8900,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c907a6a4-19ec-468f-bce2-2f485475e436",
+              "id": "15373fa1-db39-4578-be9b-c977c6e59581",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -500,14 +606,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -528,15 +626,6 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The customer-facing code. If not provided, Stripe will generate one.",
-                        "type": "text/plain"
-                      },
-                      "key": "code",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
                         "content": "Whether the promotion code is currently active.",
                         "type": "text/plain"
                       },
@@ -546,7 +635,16 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The customer that this promotion code can be used by.",
+                        "content": "The customer-facing code. Regardless of case, this code must be unique across all active promotion codes for a specific customer. If left blank, we will generate one automatically.",
+                        "type": "text/plain"
+                      },
+                      "key": "code",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The customer that this promotion code can be used by. If not set, the promotion code can be used by all customers.",
                         "type": "text/plain"
                       },
                       "key": "customer",
@@ -555,16 +653,34 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "The timestamp at which this promotion code will expire.",
+                        "content": "Specifies which fields in the response should be expanded.",
                         "type": "text/plain"
                       },
-                      "key": "expires_at",
-                      "value": "<integer>"
+                      "key": "expand[0]",
+                      "value": "<string>"
                     },
                     {
                       "disabled": false,
                       "description": {
-                        "content": "A positive integer specifying the number of times the promotion code can be redeemed.",
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The timestamp at which this promotion code will expire. If the coupon has specified a `redeems_by`, then this value cannot be after the coupon's `redeems_by`.",
+                        "type": "text/plain"
+                      },
+                      "key": "expires_at",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A positive integer specifying the number of times the promotion code can be redeemed. If the coupon has specified a `max_redemptions`, then this value cannot be greater than the coupon's `max_redemptions`.",
                         "type": "text/plain"
                       },
                       "key": "max_redemptions",
@@ -572,27 +688,47 @@
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_1",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "first_time_transaction",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "minimum_amount",
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_0][minimum_amount]",
                       "value": "<integer>"
                     },
                     {
                       "disabled": false,
-                      "key": "minimum_amount_currency",
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[first_time_transaction]",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[minimum_amount]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[minimum_amount_currency]",
                       "value": "<string>"
                     }
                   ]
@@ -606,7 +742,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -617,12 +753,12 @@
           }
         },
         {
-          "id": "03ad0c3a-4958-4c84-b7b1-7b11988fbc89",
-          "name": "Stripe Retrieve Promotion Code",
+          "id": "0749ff73-1721-4995-9665-e401b937dda0",
+          "name": "Get Promotion Codes Promotion Code",
           "request": {
-            "name": "Stripe Retrieve Promotion Code",
+            "name": "Get Promotion Codes Promotion Code",
             "description": {
-              "content": "<p>Retrieves the promotion code with the given ID.</p>",
+              "content": "<p>Retrieves the promotion code with the given ID. In order to retrieve a promotion code by the customer-facing <code>code</code> use <a href=\"/docs/api/promotion_codes/list\">list</a> with the desired <code>code</code>.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -660,16 +796,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "ee50c54f-2207-4693-8563-391c8ade9323",
+              "id": "2160fbd7-fc86-4ac1-b65f-b0d6b9f71aa1",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -703,20 +847,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -726,12 +865,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"promotion_code\",\n  \"active\": true,\n  \"code\": \"string\",\n  \"coupon\": {},\n  \"created\": 2735,\n  \"livemode\": true,\n  \"times_redeemed\": 3406,\n  \"customer\": \"string\",\n  \"expires_at\": 3547,\n  \"max_redemptions\": 1652,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"restrictions\": {\n    \"first_time_transaction\": false,\n    \"minimum_amount\": 8872,\n    \"minimum_amount_currency\": \"string\"\n  }\n}",
+              "body": "{\n  \"active\": false,\n  \"code\": \"string\",\n  \"coupon\": {\n    \"value\": \"reference #/components/schemas/coupon not found in the OpenAPI spec\"\n  },\n  \"created\": 8833,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"promotion_code\",\n  \"restrictions\": {\n    \"value\": \"reference #/components/schemas/promotion_codes_resource_restrictions not found in the OpenAPI spec\"\n  },\n  \"times_redeemed\": 9069,\n  \"customer\": \"string\",\n  \"expires_at\": 2761,\n  \"max_redemptions\": 8900,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2502289b-723d-4eb5-8bac-138e73699359",
+              "id": "d2a5fe8f-652f-487c-bf1a-729a148c5048",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -765,20 +904,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -788,7 +922,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -799,12 +933,12 @@
           }
         },
         {
-          "id": "cfaa3b73-caac-499d-812f-c213c320822e",
-          "name": "Stripe Update Promotion Code",
+          "id": "a2b49873-3e26-4e6a-a131-8ad8f0e1917d",
+          "name": "Post Promotion Codes Promotion Code",
           "request": {
-            "name": "Stripe Update Promotion Code",
+            "name": "Post Promotion Codes Promotion Code",
             "description": {
-              "content": "<p>Updates the specified promotion code by setting the values of the parameters passed.</p>",
+              "content": "<p>Updates the specified promotion code by setting the values of the parameters passed. Most fields are, by design, not editable.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -845,24 +979,39 @@
                 {
                   "disabled": false,
                   "key": "active",
-                  "value": "<boolean>"
+                  "value": "<boolean>",
+                  "description": "Whether the promotion code is currently active. A promotion code can only be reactivated when the coupon is still valid and the promotion code is otherwise redeemable."
                 },
                 {
                   "disabled": false,
-                  "key": "key_0",
-                  "value": "<string>"
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "currency_options",
-                  "value": "<object>"
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "metadata[key_0]",
+                  "value": "<string>",
+                  "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+                },
+                {
+                  "disabled": false,
+                  "key": "restrictions[currency_options][key_0][minimum_amount]",
+                  "value": "<integer>",
+                  "description": "Settings that restrict the redemption of the promotion code."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "d65509b0-be8a-40bf-b9b3-8b4c305a1c9f",
+              "id": "0ce7b55d-3227-42c8-9c09-ede5bd8915dd",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -887,14 +1036,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -905,18 +1046,57 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Whether the promotion code is currently active. A promotion code can only be reactivated when the coupon is still valid and the promotion code is otherwise redeemable.",
+                        "type": "text/plain"
+                      },
                       "key": "active",
                       "value": "<boolean>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "currency_options",
-                      "value": "<object>"
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_0][minimum_amount]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_1][minimum_amount]",
+                      "value": "<integer>"
                     }
                   ]
                 }
@@ -929,12 +1109,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"promotion_code\",\n  \"active\": true,\n  \"code\": \"string\",\n  \"coupon\": {},\n  \"created\": 2735,\n  \"livemode\": true,\n  \"times_redeemed\": 3406,\n  \"customer\": \"string\",\n  \"expires_at\": 3547,\n  \"max_redemptions\": 1652,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"restrictions\": {\n    \"first_time_transaction\": false,\n    \"minimum_amount\": 8872,\n    \"minimum_amount_currency\": \"string\"\n  }\n}",
+              "body": "{\n  \"active\": false,\n  \"code\": \"string\",\n  \"coupon\": {\n    \"value\": \"reference #/components/schemas/coupon not found in the OpenAPI spec\"\n  },\n  \"created\": 8833,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"promotion_code\",\n  \"restrictions\": {\n    \"value\": \"reference #/components/schemas/promotion_codes_resource_restrictions not found in the OpenAPI spec\"\n  },\n  \"times_redeemed\": 9069,\n  \"customer\": \"string\",\n  \"expires_at\": 2761,\n  \"max_redemptions\": 8900,\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7fffb38d-f9ba-4154-87bf-37a8e0794434",
+              "id": "310a1e05-56fc-4f8c-9d0c-274b44a0b933",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -959,14 +1139,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -977,18 +1149,57 @@
                   "urlencoded": [
                     {
                       "disabled": false,
+                      "description": {
+                        "content": "Whether the promotion code is currently active. A promotion code can only be reactivated when the coupon is still valid and the promotion code is otherwise redeemable.",
+                        "type": "text/plain"
+                      },
                       "key": "active",
                       "value": "<boolean>"
                     },
                     {
                       "disabled": false,
-                      "key": "key_0",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "currency_options",
-                      "value": "<object>"
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.",
+                        "type": "text/plain"
+                      },
+                      "key": "metadata[key_0]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_0][minimum_amount]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Settings that restrict the redemption of the promotion code.",
+                        "type": "text/plain"
+                      },
+                      "key": "restrictions[currency_options][key_1][minimum_amount]",
+                      "value": "<integer>"
                     }
                   ]
                 }
@@ -1001,7 +1212,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1023,25 +1234,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "7b4f006e-a533-48fb-82bc-915fbcea4487",
-    "name": "Stripe Promotion Codes API",
+    "_postman_id": "ff42f766-729d-4709-8a70-ef5a372375ec",
+    "name": "Stripe Accounts Account Promotion Codes API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "A Promotion Code represents a customer-redeemable code for a coupon. It can be used to create multiple codes for a single coupon.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

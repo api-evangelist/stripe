@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "679c1919-3b67-4232-98fe-8468d767bc2a",
+      "id": "1555a415-ea6b-4da7-a699-dfabf415611d",
       "name": "Reporting",
       "description": {
         "content": "",
@@ -9,12 +9,12 @@
       },
       "item": [
         {
-          "id": "70b84077-e0ef-4461-b045-668870c9a5cd",
-          "name": "Stripe List Report Runs",
+          "id": "acd1cfad-f375-4512-95a5-0bea1ae54b4d",
+          "name": "Get Reporting Report Runs",
           "request": {
-            "name": "Stripe List Report Runs",
+            "name": "Get Reporting Report Runs",
             "description": {
-              "content": "<p>Returns a list of Report Runs.</p>",
+              "content": "<p>Returns a list of Report Runs, with the most recent appearing first.</p>",
               "type": "text/plain"
             },
             "url": {
@@ -29,44 +29,77 @@
               "query": [
                 {
                   "disabled": false,
-                  "key": "ending_before",
-                  "value": "<string>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
+                  "key": "created[gt]",
                   "value": "<integer>"
                 },
                 {
                   "disabled": false,
-                  "key": "starting_after",
-                  "value": "<string>"
+                  "key": "created[gte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list."
                 },
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "dc8668cb-cd4b-4154-a465-4d10bf034fdb",
+              "id": "ad3f73d9-bec6-45d9-8dd7-a245dffd5e74",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -80,15 +113,23 @@
                   ],
                   "query": [
                     {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -98,26 +139,29 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -127,12 +171,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"reporting.report_run\",\n      \"created\": 9718,\n      \"livemode\": false,\n      \"parameters\": {},\n      \"report_type\": \"string\",\n      \"status\": \"string\",\n      \"error\": \"string\",\n      \"result\": {},\n      \"succeeded_at\": 7621\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"reporting.report_run\",\n      \"created\": 4745,\n      \"livemode\": false,\n      \"parameters\": {},\n      \"report_type\": \"string\",\n      \"status\": \"string\",\n      \"error\": \"string\",\n      \"result\": {},\n      \"succeeded_at\": 7904\n    }\n  ],\n  \"has_more\": true,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"created\": 1358,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"object\": \"reporting.report_run\",\n      \"parameters\": {\n        \"value\": \"reference #/components/schemas/financial_reporting_finance_report_run_run_parameters not found in the OpenAPI spec\"\n      },\n      \"report_type\": \"string\",\n      \"status\": \"string\",\n      \"error\": \"string\",\n      \"result\": {\n        \"value\": \"reference #/components/schemas/file not found in the OpenAPI spec\"\n      },\n      \"succeeded_at\": 7472\n    },\n    {\n      \"created\": 9109,\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"object\": \"reporting.report_run\",\n      \"parameters\": {\n        \"value\": \"reference #/components/schemas/financial_reporting_finance_report_run_run_parameters not found in the OpenAPI spec\"\n      },\n      \"report_type\": \"string\",\n      \"status\": \"string\",\n      \"error\": \"string\",\n      \"result\": {\n        \"value\": \"reference #/components/schemas/file not found in the OpenAPI spec\"\n      },\n      \"succeeded_at\": 7551\n    }\n  ],\n  \"has_more\": false,\n  \"object\": \"list\",\n  \"url\": \"/v1/reporting/report_runs\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e41325b6-b5d5-47db-b458-a447446e0313",
+              "id": "b38c31ab-435e-45a0-8be7-705dafebe79a",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -146,15 +190,23 @@
                   ],
                   "query": [
                     {
-                      "key": "ending_before",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "limit",
+                      "key": "created[gt]",
                       "value": "<integer>"
                     },
                     {
-                      "key": "starting_after",
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
                       "value": "<string>"
                     },
                     {
@@ -164,26 +216,29 @@
                     {
                       "key": "expand[1]",
                       "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
                     }
                   ],
                   "variable": []
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -193,7 +248,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -204,12 +259,12 @@
           }
         },
         {
-          "id": "729b0a6e-2cdb-453f-a760-257b1226b6bf",
-          "name": "Stripe Create Report Run",
+          "id": "af306c00-2780-4d0c-8b04-aa86180529ad",
+          "name": "Post Reporting Report Runs",
           "request": {
-            "name": "Stripe Create Report Run",
+            "name": "Post Reporting Report Runs",
             "description": {
-              "content": "<p>Creates a new object and begin running the report.</p>",
+              "content": "<p>Creates a new object and begin running the report. (Certain report types require a <a href=\"https://stripe.com/docs/keys#test-live-modes\">live-mode API key</a>.)</p>",
               "type": "text/plain"
             },
             "url": {
@@ -243,49 +298,80 @@
                   "disabled": false,
                   "key": "report_type",
                   "value": "<string>",
-                  "description": "(Required) The ID of the report type to run."
+                  "description": "(Required) The ID of the [report type](https://stripe.com/docs/reporting/statements/api#report-types) to run, such as `\"balance.summary.1\"`."
                 },
                 {
                   "disabled": false,
-                  "key": "interval_start",
-                  "value": "<integer>"
+                  "key": "expand[0]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "interval_end",
-                  "value": "<integer>"
+                  "key": "expand[1]",
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
-                  "key": "columns",
-                  "value": "[\"<string>\",\"<string>\"]"
+                  "key": "parameters[columns][0]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
                 },
                 {
                   "disabled": false,
-                  "key": "connected_account",
-                  "value": "<string>"
+                  "key": "parameters[columns][1]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
                 },
                 {
                   "disabled": false,
-                  "key": "currency",
-                  "value": "<string>"
+                  "key": "parameters[connected_account]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
                 },
                 {
                   "disabled": false,
-                  "key": "reporting_category",
-                  "value": "<string>"
+                  "key": "parameters[currency]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
                 },
                 {
                   "disabled": false,
-                  "key": "timezone",
-                  "value": "<string>"
+                  "key": "parameters[interval_end]",
+                  "value": "<unix-time>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
+                },
+                {
+                  "disabled": false,
+                  "key": "parameters[interval_start]",
+                  "value": "<unix-time>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
+                },
+                {
+                  "disabled": false,
+                  "key": "parameters[payout]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
+                },
+                {
+                  "disabled": false,
+                  "key": "parameters[reporting_category]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
+                },
+                {
+                  "disabled": false,
+                  "key": "parameters[timezone]",
+                  "value": "<string>",
+                  "description": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation."
                 }
               ]
             }
           },
           "response": [
             {
-              "id": "4711d181-e497-4fa8-935f-574c0275de59",
+              "id": "71b52b0a-ae65-4b46-9b21-0382bfccc025",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -302,14 +388,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -321,7 +399,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) The ID of the report type to run.",
+                        "content": "(Required) The ID of the [report type](https://stripe.com/docs/reporting/statements/api#report-types) to run, such as `\"balance.summary.1\"`.",
                         "type": "text/plain"
                       },
                       "key": "report_type",
@@ -329,37 +407,101 @@
                     },
                     {
                       "disabled": false,
-                      "key": "interval_start",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "interval_end",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "columns",
-                      "value": "[\"<string>\",\"<string>\"]"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "connected_account",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "currency",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "reporting_category",
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[columns][0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "timezone",
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[columns][1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[connected_account]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[currency]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[interval_end]",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[interval_start]",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[payout]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[reporting_category]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[timezone]",
                       "value": "<string>"
                     }
                   ]
@@ -373,12 +515,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"reporting.report_run\",\n  \"created\": 6111,\n  \"livemode\": true,\n  \"parameters\": {},\n  \"report_type\": \"string\",\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"result\": {},\n  \"succeeded_at\": 6576\n}",
+              "body": "{\n  \"created\": 4923,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"reporting.report_run\",\n  \"parameters\": {\n    \"value\": \"reference #/components/schemas/financial_reporting_finance_report_run_run_parameters not found in the OpenAPI spec\"\n  },\n  \"report_type\": \"string\",\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"result\": {\n    \"value\": \"reference #/components/schemas/file not found in the OpenAPI spec\"\n  },\n  \"succeeded_at\": 3049\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "65c519b8-ab6f-485e-8cac-b0ec819af466",
+              "id": "49cceae2-e3b0-49c3-9b69-f72a74c136a7",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -395,14 +537,6 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
@@ -414,7 +548,7 @@
                     {
                       "disabled": false,
                       "description": {
-                        "content": "(Required) The ID of the report type to run.",
+                        "content": "(Required) The ID of the [report type](https://stripe.com/docs/reporting/statements/api#report-types) to run, such as `\"balance.summary.1\"`.",
                         "type": "text/plain"
                       },
                       "key": "report_type",
@@ -422,37 +556,101 @@
                     },
                     {
                       "disabled": false,
-                      "key": "interval_start",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "interval_end",
-                      "value": "<integer>"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "columns",
-                      "value": "[\"<string>\",\"<string>\"]"
-                    },
-                    {
-                      "disabled": false,
-                      "key": "connected_account",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "currency",
+                      "description": {
+                        "content": "Specifies which fields in the response should be expanded.",
+                        "type": "text/plain"
+                      },
+                      "key": "expand[1]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "reporting_category",
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[columns][0]",
                       "value": "<string>"
                     },
                     {
                       "disabled": false,
-                      "key": "timezone",
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[columns][1]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[connected_account]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[currency]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[interval_end]",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[interval_start]",
+                      "value": "<unix-time>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[payout]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[reporting_category]",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Parameters specifying how the report should be run. Different Report Types have different required and optional parameters, listed in the [API Access to Reports](https://stripe.com/docs/reporting/statements/api) documentation.",
+                        "type": "text/plain"
+                      },
+                      "key": "parameters[timezone]",
                       "value": "<string>"
                     }
                   ]
@@ -466,7 +664,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -477,10 +675,10 @@
           }
         },
         {
-          "id": "a6dd2aac-6da9-481d-8f9e-144bcd0e27d0",
-          "name": "Stripe Retrieve Report Run",
+          "id": "5c5cc7cc-9ced-45bd-86b5-2df319d7ec67",
+          "name": "Get Reporting Report Runs Report Run",
           "request": {
-            "name": "Stripe Retrieve Report Run",
+            "name": "Get Reporting Report Runs Report Run",
             "description": {
               "content": "<p>Retrieves the details of an existing Report Run.</p>",
               "type": "text/plain"
@@ -499,12 +697,14 @@
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 }
               ],
               "variable": [
@@ -519,16 +719,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "59e4b9f3-dbbb-4381-851a-ab428ea72ab0",
+              "id": "bc4634c8-8707-4065-a957-6fc59092aa55",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -563,20 +771,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -586,12 +789,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"reporting.report_run\",\n  \"created\": 6111,\n  \"livemode\": true,\n  \"parameters\": {},\n  \"report_type\": \"string\",\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"result\": {},\n  \"succeeded_at\": 6576\n}",
+              "body": "{\n  \"created\": 4923,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"object\": \"reporting.report_run\",\n  \"parameters\": {\n    \"value\": \"reference #/components/schemas/financial_reporting_finance_report_run_run_parameters not found in the OpenAPI spec\"\n  },\n  \"report_type\": \"string\",\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"result\": {\n    \"value\": \"reference #/components/schemas/file not found in the OpenAPI spec\"\n  },\n  \"succeeded_at\": 3049\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "672f71b4-2204-403a-96a4-1a6a3e49ab10",
+              "id": "cd45dc1f-8032-4281-a127-b6fcb65fbd92",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -626,20 +829,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -649,7 +847,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -660,10 +858,10 @@
           }
         },
         {
-          "id": "0f38b3b5-bb80-4913-8472-58ae709a57b8",
-          "name": "Stripe List Report Types",
+          "id": "635e36fd-b7e0-4d87-9b54-4a89d63c8cf5",
+          "name": "Get Reporting Report Types",
           "request": {
-            "name": "Stripe List Report Types",
+            "name": "Get Reporting Report Types",
             "description": {
               "content": "<p>Returns a full list of Report Types.</p>",
               "type": "text/plain"
@@ -681,28 +879,38 @@
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 }
               ],
               "variable": []
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "eb6789d8-b33f-4a8a-8722-023e1093c6ae",
+              "id": "0a3400cc-f2ee-4c86-8b7a-cc6ada4e722f",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -728,20 +936,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -751,12 +954,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"reporting.report_type\",\n      \"data_available_end\": 1955,\n      \"data_available_start\": 4109,\n      \"livemode\": true,\n      \"name\": \"string\",\n      \"updated\": 519,\n      \"version\": 4600,\n      \"default_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"reporting.report_type\",\n      \"data_available_end\": 2532,\n      \"data_available_start\": 1172,\n      \"livemode\": true,\n      \"name\": \"string\",\n      \"updated\": 9325,\n      \"version\": 2894,\n      \"default_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"has_more\": false,\n  \"url\": \"string\"\n}",
+              "body": "{\n  \"data\": [\n    {\n      \"data_available_end\": 8982,\n      \"data_available_start\": 6353,\n      \"id\": \"string\",\n      \"livemode\": false,\n      \"name\": \"string\",\n      \"object\": \"reporting.report_type\",\n      \"updated\": 691,\n      \"version\": 1242,\n      \"default_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"data_available_end\": 7416,\n      \"data_available_start\": 8754,\n      \"id\": \"string\",\n      \"livemode\": true,\n      \"name\": \"string\",\n      \"object\": \"reporting.report_type\",\n      \"updated\": 2768,\n      \"version\": 2274,\n      \"default_columns\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"has_more\": true,\n  \"object\": \"list\",\n  \"url\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5fec868b-35e9-458f-b83a-82ccd712871f",
+              "id": "670392d8-fcfb-4418-8fee-b7499dca05e1",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -782,20 +985,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -805,7 +1003,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -816,12 +1014,12 @@
           }
         },
         {
-          "id": "2e6637db-6d10-445e-a064-b6f2d3dfd32d",
-          "name": "Stripe Retrieve Report Type",
+          "id": "b421cd6f-a781-4bc4-9327-b929286aef3f",
+          "name": "Get Reporting Report Types Report Type",
           "request": {
-            "name": "Stripe Retrieve Report Type",
+            "name": "Get Reporting Report Types Report Type",
             "description": {
-              "content": "<p>Retrieves the details of a Report Type.</p>",
+              "content": "<p>Retrieves the details of a Report Type. (Certain report types require a <a href=\"https://stripe.com/docs/keys#test-live-modes\">live-mode API key</a>.)</p>",
               "type": "text/plain"
             },
             "url": {
@@ -838,12 +1036,14 @@
                 {
                   "disabled": false,
                   "key": "expand[0]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 },
                 {
                   "disabled": false,
                   "key": "expand[1]",
-                  "value": "<string>"
+                  "value": "<string>",
+                  "description": "Specifies which fields in the response should be expanded."
                 }
               ],
               "variable": [
@@ -858,16 +1058,24 @@
             },
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
             "method": "GET",
-            "auth": null
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            }
           },
           "response": [
             {
-              "id": "e679b767-d9bb-439f-ac81-c67f4430765d",
+              "id": "68896bcf-8c4b-47bf-ae61-98bee8c41f50",
               "name": "Successful response.",
               "originalRequest": {
                 "url": {
@@ -902,20 +1110,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "OK",
               "code": 200,
@@ -925,12 +1128,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"string\",\n  \"object\": \"reporting.report_type\",\n  \"data_available_end\": 8902,\n  \"data_available_start\": 7290,\n  \"livemode\": true,\n  \"name\": \"string\",\n  \"updated\": 9898,\n  \"version\": 513,\n  \"default_columns\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "body": "{\n  \"data_available_end\": 369,\n  \"data_available_start\": 4547,\n  \"id\": \"string\",\n  \"livemode\": true,\n  \"name\": \"string\",\n  \"object\": \"reporting.report_type\",\n  \"updated\": 5737,\n  \"version\": 5418,\n  \"default_columns\": [\n    \"string\",\n    \"string\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3a1d1856-bb45-48e3-90e2-cab4e99325b5",
+              "id": "a89d69b5-b892-462f-ab4f-b437fc753886",
               "name": "Error response.",
               "originalRequest": {
                 "url": {
@@ -965,20 +1168,15 @@
                 },
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: basic",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Basic <credentials>"
-                  },
-                  {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
                 "method": "GET",
-                "body": {}
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": []
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
@@ -988,7 +1186,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"type\": \"string\",\n    \"message\": \"string\",\n    \"code\": \"string\",\n    \"param\": \"string\"\n  }\n}",
+              "body": "{\n  \"error\": {\n    \"value\": \"reference #/components/schemas/api_errors not found in the OpenAPI spec\"\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1010,25 +1208,12 @@
       "key": "baseUrl"
     }
   ],
-  "auth": {
-    "type": "basic",
-    "basic": [
-      {
-        "key": "username",
-        "value": "{{basicAuthUsername}}"
-      },
-      {
-        "key": "password",
-        "value": "{{basicAuthPassword}}"
-      }
-    ]
-  },
   "info": {
-    "_postman_id": "3648d6ec-7a2c-4ef6-a038-9b0398bdf859",
-    "name": "Stripe Reporting API",
+    "_postman_id": "d430fcf8-d4ae-4186-a7cc-dba268e4248e",
+    "name": "Stripe Accounts Account Reporting API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
-      "content": "The financial reports in the Dashboard provide downloadable reports in CSV format for a variety of accounting and reconciliation tasks. These reports are also available through the API.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
+      "content": "This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.\n\nContact Support:\n Name: Stripe Dev Platform Team\n Email: dev-platform@stripe.com",
       "type": "text/plain"
     }
   }

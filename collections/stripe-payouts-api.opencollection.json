@@ -1,26 +1,19 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Payouts API",
+    "name": "Stripe Accounts Account Payouts API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Get",
+        "name": "Payouts",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "Stripe Get   Payouts",
+            "name": "GetPayouts",
             "type": "http"
           },
           "http": {
@@ -83,7 +76,22 @@
         },
         {
           "info": {
-            "name": "Stripe Get   Payouts",
+            "name": "PostPayouts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payouts",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>To send funds to your own bank account, create a new payout object. Your <a href=\"#balance\">Stripe balance</a> must cover the payout amount. If it doesn’t, you receive an “Insufficient Funds” error.</p>\n\n<p>If your API key is in test mode, money won’t actually be sent, though every other action occurs as if you’re in live mode.</p>\n\n<p>If you create a manual payout on a Stripe account that uses multiple payment source types, you need to specify the source type balance that the payout draws fr"
+        },
+        {
+          "info": {
+            "name": "GetPayoutsPayout",
             "type": "http"
           },
           "http": {
@@ -108,33 +116,10 @@
             }
           },
           "docs": "<p>Retrieves the details of an existing payout. Supply the unique payout ID from either a payout creation request or the payout list. Stripe returns the corresponding payout information.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Payouts",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Payouts",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payouts",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>To send funds to your own bank account, create a new payout object. Your <a href=\"#balance\">Stripe balance</a> must cover the payout amount. If it doesn’t, you receive an “Insufficient Funds” error.</p>\n\n<p>If your API key is in test mode, money won’t actually be sent, though every other action occurs as if you’re in live mode.</p>\n\n<p>If you create a manual payout on a Stripe account that uses multiple payment source types, you need to specify the source type balance that the payout draws fr"
         },
         {
           "info": {
-            "name": "Stripe Post   Payouts",
+            "name": "PostPayoutsPayout",
             "type": "http"
           },
           "http": {
@@ -156,37 +141,7 @@
         },
         {
           "info": {
-            "name": "Stripe Post   Payouts Reverse",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/payouts/:payout/reverse",
-            "params": [
-              {
-                "name": "payout",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Reverses a payout by debiting the destination bank account. At this time, you can only reverse payouts for connected accounts to US bank accounts. If the payout is in the <code>pending</code> status, use <code>/v1/payouts/:id/cancel</code> instead.</p>\n\n<p>By requesting a reversal through <code>/v1/payouts/:id/reverse</code>, you confirm that the authorized signatory of the selected bank account authorizes the debit on the bank account and that no other authorization is required.</p>"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Cancel",
-        "type": "folder"
-      },
-      "items": [
-        {
-          "info": {
-            "name": "Stripe Post   Payouts Cancel",
+            "name": "PostPayoutsPayoutCancel",
             "type": "http"
           },
           "http": {
@@ -205,6 +160,28 @@
             }
           },
           "docs": "<p>You can cancel a previously created payout if it hasn’t been paid out yet. Stripe refunds the funds to your available balance. You can’t cancel automatic Stripe payouts.</p>"
+        },
+        {
+          "info": {
+            "name": "PostPayoutsPayoutReverse",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stripe.com/v1/payouts/:payout/reverse",
+            "params": [
+              {
+                "name": "payout",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "<p>Reverses a payout by debiting the destination bank account. At this time, you can only reverse payouts for connected accounts to US bank accounts. If the payout is in the <code>pending</code> status, use <code>/v1/payouts/:id/cancel</code> instead.</p>\n\n<p>By requesting a reversal through <code>/v1/payouts/:id/reverse</code>, you confirm that the authorized signatory of the selected bank account authorizes the debit on the bank account and that no other authorization is required.</p>"
         }
       ]
     }

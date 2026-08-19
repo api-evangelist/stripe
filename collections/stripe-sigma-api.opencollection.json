@@ -1,135 +1,24 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "Stripe Sources API",
+    "name": "Stripe Accounts Account Sigma API",
     "version": "2023-10-16"
-  },
-  "request": {
-    "auth": {
-      "type": "basic",
-      "username": "{{username}}",
-      "password": "{{password}}"
-    }
   },
   "items": [
     {
       "info": {
-        "name": "Sources",
+        "name": "Sigma",
         "type": "folder"
       },
       "items": [
         {
           "info": {
-            "name": "PostSources",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/sources",
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Creates a new source object.</p>"
-        },
-        {
-          "info": {
-            "name": "GetSourcesSource",
+            "name": "GetSigmaScheduledQueryRuns",
             "type": "http"
           },
           "http": {
             "method": "GET",
-            "url": "https://api.stripe.com/v1/sources/:source",
-            "params": [
-              {
-                "name": "client_secret",
-                "value": "",
-                "type": "query",
-                "description": "The client secret of the source. Required if a publishable key is used to retrieve the source."
-              },
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Retrieves an existing source object. Supply the unique source ID from a source creation request and Stripe will return the corresponding up-to-date source object information.</p>"
-        },
-        {
-          "info": {
-            "name": "PostSourcesSource",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/sources/:source",
-            "params": [
-              {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Updates the specified source by setting the values of the parameters passed. Any parameters not provided will be left unchanged.</p>\n\n<p>This request accepts the <code>metadata</code> and <code>owner</code> as arguments. It is also possible to update type specific information for selected payment methods. Please refer to our <a href=\"/docs/sources\">payment method guides</a> for more detail.</p>"
-        },
-        {
-          "info": {
-            "name": "GetSourcesSourceMandateNotificationsMandateNotification",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/sources/:source/mandate_notifications/:mandate_notification",
-            "params": [
-              {
-                "name": "expand",
-                "value": "",
-                "type": "query",
-                "description": "Specifies which fields in the response should be expanded."
-              },
-              {
-                "name": "mandate_notification",
-                "value": "",
-                "type": "path"
-              },
-              {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Retrieves a new Source MandateNotification.</p>"
-        },
-        {
-          "info": {
-            "name": "GetSourcesSourceSourceTransactions",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "https://api.stripe.com/v1/sources/:source/source_transactions",
+            "url": "https://api.stripe.com/v1/sigma/scheduled_query_runs",
             "params": [
               {
                 "name": "ending_before",
@@ -150,11 +39,6 @@
                 "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10."
               },
               {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              },
-              {
                 "name": "starting_after",
                 "value": "",
                 "type": "query",
@@ -166,16 +50,16 @@
               "data": []
             }
           },
-          "docs": "<p>List source transactions for a given source.</p>"
+          "docs": "<p>Returns a list of scheduled query runs.</p>"
         },
         {
           "info": {
-            "name": "GetSourcesSourceSourceTransactionsSourceTransaction",
+            "name": "GetSigmaScheduledQueryRunsScheduledQueryRun",
             "type": "http"
           },
           "http": {
             "method": "GET",
-            "url": "https://api.stripe.com/v1/sources/:source/source_transactions/:source_transaction",
+            "url": "https://api.stripe.com/v1/sigma/scheduled_query_runs/:scheduled_query_run",
             "params": [
               {
                 "name": "expand",
@@ -184,12 +68,7 @@
                 "description": "Specifies which fields in the response should be expanded."
               },
               {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              },
-              {
-                "name": "source_transaction",
+                "name": "scheduled_query_run",
                 "value": "",
                 "type": "path"
               }
@@ -199,29 +78,7 @@
               "data": []
             }
           },
-          "docs": "<p>Retrieve an existing source transaction object. Supply the unique source ID from a source creation request and the source transaction ID and Stripe will return the corresponding up-to-date source object information.</p>"
-        },
-        {
-          "info": {
-            "name": "PostSourcesSourceVerify",
-            "type": "http"
-          },
-          "http": {
-            "method": "POST",
-            "url": "https://api.stripe.com/v1/sources/:source/verify",
-            "params": [
-              {
-                "name": "source",
-                "value": "",
-                "type": "path"
-              }
-            ],
-            "body": {
-              "type": "form-urlencoded",
-              "data": []
-            }
-          },
-          "docs": "<p>Verify a given source.</p>"
+          "docs": "<p>Retrieves the details of an scheduled query run.</p>"
         }
       ]
     }
