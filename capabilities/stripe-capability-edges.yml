@@ -4,7 +4,6 @@ generated_by: planning/capability-mapping/scripts/classify_capabilities.py
 model: claude-opus-5
 frame:
 - Banking & Capital Markets
-- Software & Technology
 min_confidence: 0.7
 capability_model:
   source: https://github.com/vincentmakes/turbo-ea-capabilities
@@ -12,470 +11,438 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 47
+edge_count: 43
 edges:
-- tag: Authorization
-  spec_file: stripe-authorization-api-openapi.yml
-  capability_id: BC-1340.70
-  capability_id_l1: BC-1340
-  capability_name: Card Transaction Processing Management
-  confidence: 0.9
-  evidence: 'GET /v1/issuing/authorizations, POST .../approve, POST .../decline, POST /v1/payment_intents/{intent}/increment_authorization;
-    schemas: issuing.authorization, issuing.card, issuing.cardholder, issuing.transaction'
-  reason: Operations list, approve, decline and increment card authorisations for issued cards — the authorisation
-    leg of card transaction processing. No other reading of these issuing.* endpoints fits.
-- tag: Subscriptions
-  spec_file: stripe-subscriptions-api-openapi.yml
-  capability_id: BC-4240
-  capability_id_l1: BC-4240
-  capability_name: Subscription Lifecycle Management
-  confidence: 0.9
-  evidence: POST /v1/customers/{customer}/subscriptions, DELETE /v1/subscriptions/{subscription_exposed_id},
-    PostSubscriptionsSubscriptionResumeRequest
-  reason: Full create/read/update/cancel/resume lifecycle over the subscription object for customers —
-    recurring subscription contracting, modification and cancellation. L2 left null because the operations
-    span provisioning, modification and termination equally.
 - tag: Approve
   spec_file: stripe-approve-api-openapi.yml
   capability_id: BC-1340.70
   capability_id_l1: BC-1340
   capability_name: Card Transaction Processing Management
-  confidence: 0.85
-  evidence: 'POST /v1/issuing/authorizations/{authorization}/approve — "Stripe Post Issuing Authorizations
-    Approve"; schemas: issuing.authorization, issuing.card, issuing.transaction, issuing.dispute'
-  reason: Approving an issuing authorization is real-time card authorisation decisioning on issued cards;
-    the issuing.* schemas (card, authorization, dispute) place it squarely in card transaction processing
-    rather than a generic approval workflow.
+  confidence: 0.9
+  evidence: POST /v1/issuing/authorizations/{authorization}/approve 'Stripe Post Issuing Authorizations
+    Approve'; schemas 'issuing.authorization', 'issuing.card', 'issuing.dispute'
+  reason: Approving an issued-card authorisation is card transaction authorisation processing; the issuing.*
+    schemas (card, cardholder, transaction, dispute) confirm the card-processing reading.
 - tag: Billing Meters
   spec_file: stripe-billing-meters-api-openapi.yml
   capability_id: BC-4250.10
   capability_id_l1: BC-4250
   capability_name: Usage Metering
+  confidence: 0.9
+  evidence: POST /v1/billing/meter_events  Stripe Create Meter Event; GET /v1/billing/meters/{id}/event_summaries  List
+    Meter Event Summaries
+  reason: Operations create and aggregate usage meter events that feed billing — usage metering for subscription/usage-based
+    billing.
+- tag: Authorization
+  spec_file: stripe-authorization-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.88
+  evidence: POST /v1/issuing/authorizations/{authorization}/decline 'Post Issuing Authorizations Decline';
+    POST /v1/payment_intents/{intent}/increment_authorization
+  reason: Retrieving, approving, declining and incrementing card authorisations is authorisation handling
+    within card transaction processing; supporting schemas include issuing.authorization, issuing.card
+    and issuing.dispute.
+- tag: Payments
+  spec_file: stripe-payments-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.88
+  evidence: POST /v1/payment_intents/{intent}/confirm; POST /v1/payment_intents/{intent}/capture; POST
+    /v1/payment_intents/{intent}/increment_authorization
+  reason: Payment intent creation, confirmation, authorisation increment, capture and cancellation is
+    plainly payment instruction capture, validation and authorisation.
+- tag: Card
+  spec_file: stripe-card-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
   confidence: 0.85
-  evidence: '"Stripe Create Billing Meter", "Stripe List Meter Event Summaries", "Stripe Create Meter
-    Event"; schemas: billing.meter, billing.meter_event, billing.meter_event_summary'
-  reason: Meters and meter events ingest and aggregate usage that feeds rating and invoicing — exactly
-    usage metering for consumption-based billing.
-- tag: Intents
-  spec_file: stripe-intents-api-openapi.yml
+  evidence: GET /v1/issuing/cards/{card}; schemas issuing.card, issuing.cardholder
+  reason: Stripe Issuing card objects — retrieving and updating issued cards and cardholders is card issuance
+    management.
+- tag: Confirm
+  spec_file: stripe-confirm-api-openapi.yml
   capability_id: BC-1340.10
   capability_id_l1: BC-1340
   capability_name: Payment Initiation Management
   confidence: 0.85
-  evidence: POST /v1/payment_intents/{intent}/confirm, .../capture, .../cancel; schema payment_intent
-  reason: Payment intents are Stripe's payment instruction object; create/confirm/capture/cancel/authorise
-    operations are payment instruction capture, validation and authorisation.
+  evidence: POST /v1/payment_intents/{intent}/confirm  postPaymentIntentsIntentConfirm; schema payment_intent
+  reason: Confirming a PaymentIntent submits the payment instruction for authorisation, which is Payment
+    Initiation Management (instruction capture, validation, authorisation). Title reference to accounts
+    is spurious.
 - tag: Payment Intents
   spec_file: stripe-payment-intents-api-openapi.yml
   capability_id: BC-1340.10
   capability_id_l1: BC-1340
   capability_name: Payment Initiation Management
   confidence: 0.85
-  evidence: POST /v1/payment_intents/{intent}/confirm; /capture; /cancel; /increment_authorization; schema
-    payment_intent
-  reason: Creation, confirmation, authorisation increment and capture of payment intents is payment instruction
-    capture, validation and authorisation.
-- tag: Webhook Endpoints
-  spec_file: stripe-webhook-endpoints-api-openapi.yml
-  capability_id: BC-4270.80
-  capability_id_l1: BC-4270
-  capability_name: Webhook & Event Subscription Management
+  evidence: POST /v1/payment_intents/{intent}/confirm; POST /v1/payment_intents/{intent}/capture; POST
+    /v1/payment_intents/{intent}/increment_authorization; schema payment_intent
+  reason: The PaymentIntent lifecycle — create, confirm, authorise, capture, cancel — is the capture,
+    validation and authorisation of payment instructions. Unambiguously payment initiation; slight overlap
+    with card transaction processing (authorisation/capture) prevents a 0.95.
+- tag: Subscriptions
+  spec_file: stripe-subscriptions-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
   confidence: 0.85
-  evidence: POST /v1/webhook_endpoints; schemas webhook_endpoint, NotificationWebhookEndpointList
-  reason: CRUD over outbound webhook endpoint registrations — lifecycle of webhook/event subscriptions
-    on a developer platform.
-- tag: Payments
-  spec_file: stripe-payments-api-openapi.yml
-  capability_id: BC-1340.10
-  capability_id_l1: BC-1340
-  capability_name: Payment Initiation Management
-  confidence: 0.82
-  evidence: POST /v1/payment_intents ... postPaymentIntentsIntentConfirm, postPaymentIntentsIntentCapture,
-    postPaymentIntentsIntentIncrementAuthorization
-  reason: Operations create, confirm, capture, authorise and cancel payment intents and manage customer
-    payment methods — payment instruction capture, validation and authorisation. Sub-capability could
-    also touch card transaction processing, hence not 0.95.
-- tag: Promotion Codes
-  spec_file: stripe-promotion-codes-api-openapi.yml
+  evidence: POST /v1/customers/{customer}/subscriptions, DELETE /v1/subscriptions/{subscription_exposed_id},
+    schema "subscription"
+  reason: 'Full recurring-subscription lifecycle: create, retrieve, update, cancel, resume, plus discounts.
+    Clearly Subscription Lifecycle Management; spans provisioning, modification and cancellation so L1
+    only.'
+- tag: Coupon
+  spec_file: stripe-coupon-api-openapi.yml
   capability_id: BC-440.30
   capability_id_l1: BC-440
   capability_name: Discount & Promotion Management
   confidence: 0.82
-  evidence: 'POST /v1/promotion_codes, schemas: promotion_code, PromotionCodesResourcePromotionCodeList'
-  reason: Creation and maintenance of promotion codes (customer-facing discount codes) is Discount & Promotion
-    Management.
-- tag: Card
-  spec_file: stripe-card-api-openapi.yml
-  capability_id: BC-1340.60
+  evidence: GET /v1/coupons/{coupon}  getCouponsCoupon; schemas coupon, deleted_coupon
+  reason: CRUD over coupon objects, i.e. discount instruments applied to customer charges/invoices — Discount
+    & Promotion Management. Title's 'Accounts Account' framing is an artefact of spec splitting.
+- tag: Coupons
+  spec_file: stripe-coupons-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.82
+  evidence: POST /v1/coupons  PostCoupons; schema CouponsResourceCouponList
+  reason: Create, list, update and delete discount coupons — discount and promotional offer management.
+    Same surface as the singular Coupon tag.
+- tag: Reviews
+  spec_file: stripe-reviews-api-openapi.yml
+  capability_id: BC-1400.30
+  capability_id_l1: BC-1400
+  capability_name: Fraud Detection & Investigation Management
+  confidence: 0.82
+  evidence: schemas 'RadarReviewList', 'review'; POST /v1/reviews/{review}/approve
+  reason: Stripe Radar reviews are payments flagged for potential fraud that a human approves or rejects,
+    which is fraud detection and investigation. Sub-capability chosen over generic financial-crime because
+    the object is a fraud review queue rather than AML monitoring or sanctions.
+- tag: Charges
+  spec_file: stripe-charges-api-openapi.yml
+  capability_id: BC-1340.70
   capability_id_l1: BC-1340
-  capability_name: Card Issuance Management
+  capability_name: Card Transaction Processing Management
   confidence: 0.8
-  evidence: 'GET /v1/issuing/cards/{card}; schemas: issuing.card, issuing.cardholder'
-  reason: Operations manage Stripe Issuing cards and cardholders — card issuance and card lifecycle, matching
-    Card Issuance Management.
+  evidence: POST /v1/charges/{charge}/capture; GET /v1/charges/{charge}/dispute; POST /v1/charges/{charge}/refund
+  reason: Charge creation, capture, refunds and dispute (chargeback) handling are card transaction processing
+    operations.
 - tag: Climate
   spec_file: stripe-climate-api-openapi.yml
   capability_id: BC-740.20
   capability_id_l1: BC-740
   capability_name: Climate & Carbon Management
   confidence: 0.8
-  evidence: 'POST /v1/climate/orders; schemas: climate.product, climate.supplier, ClimateRemovalsOrdersList'
-  reason: Stripe Climate orders/reservations purchase carbon removal from suppliers — carbon/climate management
-    (procurement of carbon removals), best matched by Climate & Carbon Management.
-- tag: Disputes
-  spec_file: stripe-disputes-api-openapi.yml
-  capability_id: BC-1340.70
+  evidence: schemas climate.product, climate.supplier, ClimateRemovalsOrdersList; POST /v1/climate/orders
+  reason: Ordering and reserving carbon removal from climate suppliers is carbon/decarbonisation purchasing,
+    i.e. Climate & Carbon Management for the buyer.
+- tag: Intents
+  spec_file: stripe-intents-api-openapi.yml
+  capability_id: BC-1340.10
   capability_id_l1: BC-1340
-  capability_name: Card Transaction Processing Management
+  capability_name: Payment Initiation Management
   confidence: 0.8
-  evidence: 'GET /v1/disputes; POST /v1/issuing/disputes  ''Stripe Post Issuing Disputes''; schemas: dispute,
-    issuing.dispute'
-  reason: Lists, creates and updates both acquiring disputes and issuing disputes — chargeback/dispute
-    processing for card transactions.
-- tag: Methods
-  spec_file: stripe-methods-api-openapi.yml
-  capability_id: BC-1340
-  capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
+  evidence: POST /v1/payment_intents/{intent}/confirm, POST /v1/payment_intents/{intent}/capture, POST
+    /v1/payment_intents/{intent}/cancel
+  reason: PaymentIntents create, confirm, capture, cancel and authorise payment instructions — payment
+    instruction capture, validation and authorisation. Clearly payments; L2 Payment Initiation is the
+    best fit though some capture/settlement aspects touch processing.
+- tag: Invoices
+  spec_file: stripe-invoices-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
   confidence: 0.8
-  evidence: POST /v1/payment_methods/{payment_method}/attach ... detach; schema 'payment_method', 'card',
-    'bank_account'
-  reason: Creation, retrieval and attachment of payment instruments (cards, bank accounts) to customers
-    is core payments/card instrument management; L2 ambiguous between initiation and card handling.
-- tag: Payment Methods
-  spec_file: stripe-payment-methods-api-openapi.yml
-  capability_id: BC-1340
-  capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
+  evidence: POST /v1/invoices/{invoice}/finalize, POST /v1/invoices/{invoice}/mark_uncollectible, PostInvoicesInvoiceSendRequest,
+    PostInvoicesInvoicePayRequest, PostInvoicesInvoiceVoidRequest
+  reason: Full invoice lifecycle — create, finalize, send, pay, void, mark uncollectible — for Stripe's
+    subscription/billing product. This is invoice generation, delivery and adjustment, i.e. invoicing
+    & statement management.
+- tag: Promotion Codes
+  spec_file: stripe-promotion-codes-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
   confidence: 0.8
-  evidence: POST /v1/payment_methods/{payment_method}/attach; schema PaymentFlowsPaymentMethodList
-  reason: Lifecycle of payment instruments (create, update, attach/detach to customers) is core payments
-    capability; L2 ambiguous between initiation and card processing.
-- tag: Refunds
-  spec_file: stripe-refunds-api-openapi.yml
-  capability_id: BC-1340
-  capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
-  confidence: 0.8
-  evidence: POST /v1/refunds, POST /v1/refunds/{refund}/cancel; schema `refund`
-  reason: Full CRUD plus cancel over payment refunds — creating, updating and cancelling reversals of
-    processed payments. Clearly payments processing; ambiguity remains over which sub-capability (processing
-    vs card transaction handling), so L2 is left null.
-- tag: Reviews
-  spec_file: stripe-reviews-api-openapi.yml
+  evidence: POST /v1/promotion_codes; schema promotion_code, PromotionCodesResourcePromotionCodeList
+  reason: Operations create and manage customer-facing promotion codes applied to coupons/discounts, which
+    is discount and promotion administration.
+- tag: Radar
+  spec_file: stripe-radar-api-openapi.yml
   capability_id: BC-1400.30
   capability_id_l1: BC-1400
   capability_name: Fraud Detection & Investigation Management
   confidence: 0.8
-  evidence: 'POST /v1/reviews/{review}/approve ... schemas: RadarReviewList, review'
-  reason: Stripe Radar reviews are payments flagged as potentially fraudulent that a user lists and approves
-    — fraud detection and manual fraud review, not product reviews.
+  evidence: GET /v1/radar/early_fraud_warnings; schemas radar.early_fraud_warning, radar.value_list_item
+  reason: 'Radar is Stripe''s fraud tooling: early fraud warnings and block/allow value lists used to
+    screen payments, i.e. fraud detection on payment transactions.'
 - tag: Subscription Schedules
   spec_file: stripe-subscription-schedules-api-openapi.yml
   capability_id: BC-4240
   capability_id_l1: BC-4240
   capability_name: Subscription Lifecycle Management
   confidence: 0.8
-  evidence: POST /v1/subscription_schedules, POST /v1/subscription_schedules/{schedule}/cancel, POST /v1/subscription_schedules/{schedule}/release;
-    schemas subscription_schedule, subscription
-  reason: Creating, amending, cancelling and releasing phased subscription schedules is squarely the SaaS
-    subscription commercial lifecycle. Left at L1 because the phases surface spans provisioning, modification,
-    renewal and cancellation rather than naming one narrower sub-capability.
+  evidence: POST /v1/subscription_schedules/{schedule}/cancel, POST /v1/subscription_schedules/{schedule}/release,
+    schema "subscription_schedule"
+  reason: Creates and manages phased subscription schedules including cancel and release — commercial
+    subscription lifecycle control. L1 asserted; the operations span provisioning, modification and cancellation
+    so no single L2 is claimed.
 - tag: Decline
   spec_file: stripe-decline-api-openapi.yml
   capability_id: BC-1340.70
   capability_id_l1: BC-1340
   capability_name: Card Transaction Processing Management
   confidence: 0.78
-  evidence: 'POST /v1/issuing/authorizations/{authorization}/decline  ''Stripe Post Issuing Authorizations
-    Decline''; schemas: issuing.authorization, issuing.card'
-  reason: The single operation declines a card authorisation on an issued card — authorisation decisioning
-    in card transaction processing. Not a generic 'decline' status field.
-- tag: Radar
-  spec_file: stripe-radar-api-openapi.yml
-  capability_id: BC-1400.30
-  capability_id_l1: BC-1400
-  capability_name: Fraud Detection & Investigation Management
+  evidence: POST /v1/issuing/authorizations/{authorization}/decline, schemas issuing.authorization, issuing.card,
+    issuing.transaction
+  reason: Real-time decline of a card authorisation in Stripe Issuing — card transaction authorisation
+    processing. Verb-style tag but the single operation and issuing.* schemas are unambiguous.
+- tag: Disputes
+  spec_file: stripe-disputes-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
   confidence: 0.78
-  evidence: 'GET /v1/radar/early_fraud_warnings, schemas: radar.early_fraud_warning, radar.value_list_item'
-  reason: Radar surfaces early fraud warnings and allow/block value lists used to screen payments — fraud
-    detection on payment transactions. Could alternatively be filed under card transaction fraud screening.
-- tag: Secrets
-  spec_file: stripe-secrets-api-openapi.yml
-  capability_id: BC-4210.60
-  capability_id_l1: BC-4210
-  capability_name: Configuration & Secrets Management
+  evidence: GET /v1/disputes, POST /v1/disputes/{dispute}/close, GET /v1/issuing/disputes, schemas dispute,
+    issuing.dispute
+  reason: Chargeback/dispute lifecycle for both acquired payments and issued cards, matching card transaction
+    processing including chargebacks.
+- tag: Sigma
+  spec_file: stripe-sigma-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
   confidence: 0.78
-  evidence: GET/POST /v1/apps/secrets, POST /v1/apps/secrets/delete, schema apps.secret
-  reason: Store and retrieve secrets for Stripe Apps — runtime configuration and secrets storage for application
-    code.
+  evidence: GET /v1/sigma/scheduled_query_runs, schema "scheduled_query_run"
+  reason: Sigma exposes scheduled SQL query runs over the account's Stripe data — a reporting/BI surface.
+    Maps to Analytics & BI Management; only two read operations so confidence is tempered.
+- tag: Tax
+  spec_file: stripe-tax-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.78
+  evidence: Stripe Create Tax Calculation, Stripe Create Tax Transaction Reversal, Stripe List Tax Registrations,
+    schemas "tax.calculation", "tax.registration"
+  reason: Stripe Tax calculates transaction-level sales tax/VAT, records tax transactions and reversals,
+    and manages tax registrations and customer tax IDs — indirect tax determination and compliance.
 - tag: Capture
   spec_file: stripe-capture-api-openapi.yml
-  capability_id: BC-1340
+  capability_id: BC-1340.10
   capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
+  capability_name: Payment Initiation Management
   confidence: 0.75
-  evidence: 'POST /v1/payment_intents/{intent}/capture — schemas: payment_intent'
-  reason: Capturing an authorised PaymentIntent is core payment processing/authorisation execution. L1
-    Payments & Card Management is safe; the split between initiation and processing sub-capabilities is
-    unclear from a single capture operation.
+  evidence: POST /v1/payment_intents/{intent}/capture  Stripe Post Payment Intents Capture
+  reason: Capturing an authorised PaymentIntent is the settlement step of payment authorisation/initiation.
+    Single-operation verb tag, so confidence tempered.
 - tag: Cards
   spec_file: stripe-cards-api-openapi.yml
-  capability_id: BC-1340
+  capability_id: BC-1340.60
   capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
+  capability_name: Card Issuance Management
   confidence: 0.75
-  evidence: 'POST /v1/issuing/cards ... GET /v1/customers/{customer}/cards; schemas: issuing.card, card,
-    payment_method'
-  reason: 'Mixed surface: issuing cards (issuance) and customer stored cards as payment methods. Clearly
-    Payments & Card Management at L1, but evidence spans issuance and transaction/payment-method handling,
-    so no single L2.'
+  evidence: GET /v1/issuing/cards  Stripe Get Issuing Cards; POST /v1/customers/{customer}/cards
+  reason: Mixes Issuing card creation/management (card issuance) with customer stored card payment sources;
+    issuing operations dominate the specific sub-capability, hence moderate confidence.
 - tag: Checkout
   spec_file: stripe-checkout-api-openapi.yml
   capability_id: BC-1340.10
   capability_id_l1: BC-1340
   capability_name: Payment Initiation Management
   confidence: 0.75
-  evidence: 'POST /v1/checkout/sessions; schemas: checkout.session, PaymentPagesCheckoutSessionListLineItems'
-  reason: Checkout Sessions capture a customer's payment instruction via a hosted payment page — payment
-    initiation/capture and authorisation.
+  evidence: POST /v1/checkout/sessions; schema checkout.session, PaymentPagesCheckoutSessionListLineItems
+  reason: Hosted checkout sessions capture the payment instruction and line items and drive payment authorisation
+    — payment initiation. Some e-commerce order-capture overlap, so moderate confidence.
+- tag: Entitlements
+  spec_file: stripe-entitlements-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.75
+  evidence: GET /v1/entitlements/features  Stripe List Features; POST /v1/entitlements/features  Stripe
+    Create Feature; GET /v1/entitlements/active_entitlements  Stripe List Active Entitlements
+  reason: Stripe Entitlements defines product features and resolves which customers actively hold them
+    — the entitlement side of the subscription lifecycle. Evidence spans both feature/plan entitlement
+    design and runtime entitlement resolution, so only the L1 is asserted.
+- tag: Increment
+  spec_file: stripe-increment-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: POST /v1/payment_intents/{intent}/increment_authorization  Stripe Post Payment Intents Increment
+    Authorization
+  reason: Single operation increases the authorised amount on an existing payment authorisation — squarely
+    payments/card authorisation. Kept at L1 because the evidence does not distinguish payment initiation
+    from card transaction processing.
+- tag: Terminal
+  spec_file: stripe-terminal-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: Stripe Create Terminal Reader, PostTerminalReadersReaderProcessPaymentIntentRequest, PostTerminalReadersReaderRefundPaymentRequest
+  reason: Manages in-person card acceptance estate — reader devices, locations, configurations — and drives
+    payment intent processing and refunds on those readers. Card/payment acceptance capability; splits
+    between card transaction processing and channel operations so L1 only.
 - tag: Dispute
   spec_file: stripe-dispute-api-openapi.yml
   capability_id: BC-1340.70
   capability_id_l1: BC-1340
   capability_name: Card Transaction Processing Management
-  confidence: 0.75
-  evidence: 'GET /v1/disputes/{dispute}, POST /v1/disputes/{dispute}, POST /v1/disputes/{dispute}/close;
-    schema: dispute'
-  reason: Retrieving, updating and closing payment disputes is chargeback handling on card transactions,
-    which sits in card transaction processing.
-- tag: Invoices
-  spec_file: stripe-invoices-api-openapi.yml
-  capability_id: BC-4250.30
-  capability_id_l1: BC-4250
-  capability_name: Invoicing & Statement Management
-  confidence: 0.75
-  evidence: GET /v1/invoices/upcoming, POST /v1/invoices/{invoice}/finalize, PostInvoicesInvoicePayRequest,
-    PostInvoicesInvoiceMarkUncollectibleRequest
-  reason: Full invoice lifecycle — create, list, upcoming preview, finalise, send, pay, void, mark uncollectible
-    — which is invoice generation, delivery and adjustment for recurring billing.
-- tag: Issuing
-  spec_file: stripe-issuing-api-openapi.yml
-  capability_id: BC-1340.60
-  capability_id_l1: BC-1340
-  capability_name: Card Issuance Management
-  confidence: 0.75
-  evidence: POST /v1/issuing/cardholders, POST /v1/issuing/cards, POST /v1/issuing/authorizations/{authorization}/approve
-  reason: 'Card issuing surface: creating cardholders and cards (issuance) plus authorisation approve/decline,
-    disputes and settlements. Primary reading is card issuance; the authorisation/dispute operations also
-    touch card transaction processing, hence 0.75 rather than higher.'
-- tag: Method
-  spec_file: stripe-method-api-openapi.yml
+  confidence: 0.72
+  evidence: GET /v1/disputes/{dispute}, POST /v1/disputes/{dispute}/close, schema dispute
+  reason: Payment card disputes (chargebacks) retrieval, evidence submission and closure; chargebacks
+    are explicitly part of card transaction processing. Moderate-high confidence.
+- tag: Quotes
+  spec_file: stripe-quotes-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.72
+  evidence: POST /v1/quotes/{quote}/finalize, POST /v1/quotes/{quote}/accept, GET /v1/quotes/{quote}/line_items,
+    GET /v1/quotes/{quote}/pdf
+  reason: Full quote lifecycle — create, finalise, accept, line items, PDF — is configure-price-quote
+    functionality in the lead-to-order motion.
+- tag: Sources
+  spec_file: stripe-sources-api-openapi.yml
   capability_id: BC-1340
   capability_id_l1: BC-1340
   capability_name: Payments & Card Management
-  confidence: 0.75
-  evidence: GET /v1/customers/{customer}/payment_methods/{payment_method}; POST /v1/payment_method_configurations;
-    POST /v1/payment_method_domains/{payment_method_domain}/validate
-  reason: Operations manage customer payment instruments and the configuration/validation of accepted
-    payment methods for a payment processor — payments capability at L1; no single L2 fits the mix of
-    instrument storage plus acceptance configuration.
-- tag: Payouts
-  spec_file: stripe-payouts-api-openapi.yml
-  capability_id: BC-1340
-  capability_id_l1: BC-1340
-  capability_name: Payments & Card Management
-  confidence: 0.75
-  evidence: POST /v1/payouts PostPayouts, POST /v1/payouts/{payout}/cancel, POST /v1/payouts/{payout}/reverse,
-    schema `payout`
-  reason: Payout creation, cancellation and reversal is outbound payment execution, clearly within Payments
-    & Card Management; which sub-capability (initiation vs processing/settlement) is not determinable
-    from the surface.
-- tag: Coupon
-  spec_file: stripe-coupon-api-openapi.yml
-  capability_id: BC-440.30
-  capability_id_l1: BC-440
-  capability_name: Discount & Promotion Management
   confidence: 0.72
-  evidence: GET/POST/DELETE /v1/coupons/{coupon}; schemas "coupon", "deleted_coupon"
-  reason: CRUD over discount coupons applied to charges/invoices — directly Discount & Promotion Management.
-    Slight ambiguity with subscription rating/discount application.
-- tag: Coupons
-  spec_file: stripe-coupons-api-openapi.yml
-  capability_id: BC-440.30
-  capability_id_l1: BC-440
-  capability_name: Discount & Promotion Management
+  evidence: POST /v1/customers/{customer}/sources/{id}/verify, schemas "source", "source_mandate_notification",
+    "bank_account", "card"
+  reason: Manages payment instruments (cards, bank accounts, mandates) attached to customers plus their
+    source transactions — payment method/instrument management within payment acceptance. L1 Payments
+    & Card Management; evidence spans initiation and card handling so no single L2 is named.
+- tag: Webhook Endpoints
+  spec_file: stripe-webhook-endpoints-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
   confidence: 0.72
-  evidence: GET /v1/coupons, POST /v1/coupons; schema "CouponsResourceCouponList"
-  reason: Full lifecycle of discount coupons (create, list, update, delete) — Discount & Promotion Management.
-- tag: Entitlements
-  spec_file: stripe-entitlements-api-openapi.yml
-  capability_id: BC-4240.10
-  capability_id_l1: BC-4240
-  capability_name: Plan & Entitlement Design
-  confidence: 0.72
-  evidence: '''Stripe Create Feature'' POST /v1/entitlements/features; ''Stripe List Active Entitlements''
-    GET /v1/entitlements/active_entitlements; schemas: entitlements.feature, entitlements.active_entitlement'
-  reason: Defines product features and exposes the entitlements a customer actively holds — plan and entitlement
-    design for a subscription model. Some ambiguity with Entitlement Enforcement (BC-4240.70), hence not
-    higher.
-- tag: Sigma
-  spec_file: stripe-sigma-api-openapi.yml
-  capability_id: BC-610.50
-  capability_id_l1: BC-610
-  capability_name: Analytics & BI Management
-  confidence: 0.72
-  evidence: GET /v1/sigma/scheduled_query_runs; schema scheduled_query_run, SigmaScheduledQueryRunList
-  reason: Stripe Sigma scheduled SQL query runs over the account's data — reporting/analytics delivery.
-- tag: Charges
-  spec_file: stripe-charges-api-openapi.yml
-  capability_id: BC-1340.20
-  capability_id_l1: BC-1340
-  capability_name: Payment Processing Management
+  evidence: GET/POST/DELETE /v1/webhook_endpoints ; schema webhook_endpoint, NotificationWebhookEndpointList
+  reason: CRUD over outbound webhook endpoint subscriptions — exactly the Webhook & Event Subscription
+    Management capability in the developer-platform L1. It is integration plumbing, but the frame names
+    this capability explicitly.
+- tag: Finalize
+  spec_file: stripe-finalize-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
   confidence: 0.7
-  evidence: 'POST /v1/charges; POST /v1/charges/{charge}/capture; POST /v1/charges/{charge}/refund; schemas:
-    charge, refund, dispute'
-  reason: Creating, capturing, refunding and disputing charges is the processing of card/payment transactions.
-    L2 Payment Processing fits best, though refund/dispute operations also touch card transaction processing.
-- tag: Confirm
-  spec_file: stripe-confirm-api-openapi.yml
-  capability_id: BC-1340.10
-  capability_id_l1: BC-1340
-  capability_name: Payment Initiation Management
-  confidence: 0.7
-  evidence: 'POST /v1/payment_intents/{intent}/confirm; schemas: payment_intent'
-  reason: Confirming a PaymentIntent submits and authorises the payment instruction, matching Payment
-    Initiation Management (capture, validation, authorisation). Single operation, so moderate confidence.
-- tag: Identity
-  spec_file: stripe-identity-api-openapi.yml
-  capability_id: BC-1300
-  capability_id_l1: BC-1300
-  capability_name: Banking Customer Management
-  confidence: 0.7
-  evidence: POST /v1/identity/verification_sessions; schemas identity.verification_report, identity.verification_session
-  reason: Operations create and manage identity verification sessions and reports — document/ID verification
-    of end users. That is customer identity verification (onboarding/KYC territory); the two candidate
-    sub-capabilities (onboarding identity verification vs KYC/CDD) are both plausible, so only L1 is asserted.
-- tag: Invoice
-  spec_file: stripe-invoice-api-openapi.yml
-  capability_id: BC-4250.30
-  capability_id_l1: BC-4250
-  capability_name: Invoicing & Statement Management
-  confidence: 0.7
-  evidence: POST /v1/invoices/{invoice}/finalize, POST /v1/invoices/{invoice}/mark_uncollectible, PostInvoicesInvoiceSendRequest,
-    PostInvoicesInvoiceVoidRequest
-  reason: Operations generate, finalise, send, void and adjust invoices and their line items — invoicing
-    and statement management on a billing platform. Some ambiguity versus generic accounts-receivable
-    invoicing, hence 0.7.
+  evidence: 'POST /v1/invoices/{invoice}/finalize  Stripe Post Invoices Invoice Finalize; schemas: invoice,
+    line_item, invoiceitem'
+  reason: Finalising a draft invoice for issuance to a customer is customer invoicing within Accounts
+    Receivable. Only one operation is exposed, and a subscription-billing reading is also possible, so
+    confidence is moderate.
 - tag: Invoiceitems
   spec_file: stripe-invoiceitems-api-openapi.yml
   capability_id: BC-4250.30
   capability_id_l1: BC-4250
   capability_name: Invoicing & Statement Management
   confidence: 0.7
-  evidence: POST /v1/invoiceitems; schemas invoiceitem, line_item, InvoicesItemsList
-  reason: CRUD over pending invoice line items that are billed on the customer's next invoice — invoice
-    generation and adjustment. Could alternatively be read as generic AR invoicing, so 0.7.
-- tag: Reporting
-  spec_file: stripe-reporting-api-openapi.yml
-  capability_id: BC-200.60
-  capability_id_l1: BC-200
-  capability_name: Financial Reporting Management
+  evidence: POST /v1/invoiceitems, DELETE /v1/invoiceitems/{invoiceitem}; schemas invoiceitem, InvoicesItemsList,
+    invoice, line_item
+  reason: Operations create and manage pending charge items that are attached to a customer's next invoice
+    — invoice construction/adjustment within Stripe's billing engine. Maps to invoicing and statement
+    management; some ambiguity vs. general accounts receivable invoicing.
+- tag: Issuing
+  spec_file: stripe-issuing-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
   confidence: 0.7
-  evidence: POST /v1/reporting/report_runs; schemas `FinancialReportingFinanceReportRunList`, `FinancialReportingFinanceReportTypeList`
-  reason: Operations create and retrieve runs of predefined financial report types over account activity.
-    The schema names explicitly denote financial reporting, so this maps to internal financial reporting
-    rather than generic BI; moderate confidence because it could also be read as analytics delivery.
-- tag: Reports
-  spec_file: stripe-reports-api-openapi.yml
-  capability_id: BC-1300
-  capability_id_l1: BC-1300
-  capability_name: Banking Customer Management
+  evidence: POST /v1/issuing/cards, POST /v1/issuing/cardholders, POST /v1/issuing/authorizations/{authorization}/approve,
+    schemas issuing.cardholder, issuing.transaction, issuing.settlement
+  reason: Stripe Issuing creates cardholders and payment cards and handles authorisations, transactions,
+    disputes and settlements — plainly card issuance and card transaction processing. L2 set to Card Issuance
+    since card/cardholder creation dominates, though authorisation/dispute operations also touch BC-1340.70.
+- tag: Links
+  spec_file: stripe-links-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
   confidence: 0.7
-  evidence: GET /v1/identity/verification_reports; schema `identity.verification_report`, `GelatoVerificationReportList`
-  reason: Retrieval of identity verification reports — the outcome records of document/identity checks
-    on customers. This supports customer identity verification and due diligence; ambiguity between onboarding
-    verification (.10) and KYC/CDD (.20) means only the L1 is asserted.
+  evidence: POST /v1/payment_links  postPaymentLinks  Stripe Post Payment Links; schema payment_link,
+    PaymentLinksResourceListLineItems
+  reason: Operations create and manage Stripe Payment Links — hosted instruments for capturing a payment
+    instruction from a payer. This is payment initiation, not the account object the (unreliable) title
+    suggests. Some ambiguity as payment links are also a commerce/checkout construct, hence moderate confidence.
+- tag: Methods
+  spec_file: stripe-methods-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: POST /v1/payment_methods/{payment_method}/attach  Stripe Post Payment Methods Attach; schemas
+    payment_method, card, bank_account
+  reason: CRUD and attach/detach of customer payment instruments (cards, bank accounts) used to take payments.
+    Sits squarely in payments/card management; sub-capability split between initiation and card issuance
+    is unclear, so L2 withheld.
+- tag: Payment Methods
+  spec_file: stripe-payment-methods-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: POST /v1/payment_methods/{payment_method}/attach; schemas payment_method, card
+  reason: Creation and attachment/detachment of payment instruments (cards etc.) to customers — payment
+    instrument management inside the payments and cards family. No single L2 cleanly covers instrument
+    storage, so L1 only.
+- tag: Prices
+  spec_file: stripe-prices-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.7
+  evidence: POST /v1/prices  PostPrices; schemas price, PriceList, GetPricesSearchRequest
+  reason: CRUD and search over price objects that define what products cost — maintenance of the price
+    book/list prices.
 - tag: Revenue Recognition
   spec_file: stripe-revenue-recognition-api-openapi.yml
   capability_id: BC-4250.50
   capability_id_l1: BC-4250
   capability_name: Subscription Revenue Recognition
   confidence: 0.7
-  evidence: POST /v1/reporting/report_runs  PostRevenueRecognitionReportRuns  Stripe Create Revenue Recognition
-    Report; schema `credit_note`
-  reason: Generates revenue recognition reports and lists credit notes feeding those schedules, which
-    is the ASC 606 revenue-recognition motion over Stripe's recurring billing data. Could alternatively
-    be read as general financial reporting, hence 0.7.
-- tag: Subscription Items
-  spec_file: stripe-subscription-items-api-openapi.yml
-  capability_id: BC-4240.40
-  capability_id_l1: BC-4240
-  capability_name: Subscription Modification
-  confidence: 0.7
-  evidence: POST /v1/subscription_items, DELETE /v1/subscription_items/{item}, POST /v1/subscription_items/{subscription_item}/usage_records
-  reason: Operations add, update and delete items on an existing subscription (schemas subscription_item,
-    deleted_subscription_item), which is in-life change to active subscriptions — Subscription Modification.
-    Sub-capability is somewhat ambiguous because usage_record endpoints also touch usage metering (BC-4250.10),
-    hence 0.7.
-- tag: Tax
-  spec_file: stripe-tax-api-openapi.yml
-  capability_id: BC-220.20
-  capability_id_l1: BC-220
-  capability_name: Indirect Tax Management
-  confidence: 0.7
-  evidence: Stripe Create Tax Calculation, Stripe Create Tax Transaction from Calculation, Stripe List
-    Tax Registrations; schemas tax.calculation, tax.registration, tax_id
-  reason: Operations calculate transaction tax, record tax transactions and reversals, manage tax registrations
-    and customer tax IDs — indirect (sales/VAT/GST) tax determination and compliance. Could alternatively
-    be read as subscription tax handling (BC-4250.60) since it serves billing, hence 0.7 rather than higher.
+  evidence: POST /v1/reporting/report_runs 'Stripe Create Revenue Recognition Report'; GET /v1/credit_notes
+    'Stripe List Credit Notes'
+  reason: The operations generate revenue recognition reports over invoiced/credit-noted revenue, matching
+    revenue-schedule management under ASC 606/IFRS 15. Moderate confidence because it could alternatively
+    be read as general financial reporting rather than specifically subscription revenue recognition.
 - tag: Tax Rates
   spec_file: stripe-tax-rates-api-openapi.yml
   capability_id: BC-220.20
   capability_id_l1: BC-220
   capability_name: Indirect Tax Management
   confidence: 0.7
-  evidence: POST /v1/tax_rates, POST /v1/tax_rates/{tax_rate}; schemas tax_rate, TaxRatesList
-  reason: Creating and maintaining tax rate objects applied to invoices and subscriptions is indirect
-    tax (VAT/GST/sales tax) rate configuration. Some ambiguity with subscription tax management as the
-    rates feed billing, so 0.7.
-- tag: Terminal
-  spec_file: stripe-terminal-api-openapi.yml
+  evidence: POST /v1/tax_rates, schema "tax_rate", "TaxRatesList"
+  reason: Creation and maintenance of tax rate objects applied to invoices and subscriptions — configuration
+    of indirect tax (VAT/sales tax) rates.
+- tag: Transfers
+  spec_file: stripe-transfers-api-openapi.yml
   capability_id: BC-1340
   capability_id_l1: BC-1340
   capability_name: Payments & Card Management
   confidence: 0.7
-  evidence: Stripe Create Terminal Reader, PostTerminalReadersReaderProcessPaymentIntentRequest, PostTerminalReadersReaderRefundPaymentRequest
-  reason: Surface manages in-person card acceptance devices (readers, locations, configurations) and drives
-    payment intent processing and refunds through them — card-present payment acceptance. L2 left null
-    as the operations mix device fleet configuration with card transaction processing.
-- tag: Transfers
-  spec_file: stripe-transfers-api-openapi.yml
-  capability_id: BC-1340.10
-  capability_id_l1: BC-1340
-  capability_name: Payment Initiation Management
-  confidence: 0.7
-  evidence: POST /v1/transfers  PostTransfers; schemas transfer, transfer_reversal, TransferReversalList
-  reason: Creating and reversing fund transfers between accounts is payment instruction initiation/execution
-    within a payments platform.
-- tag: Treasury
-  spec_file: stripe-treasury-api-openapi.yml
-  capability_id: BC-1340.10
-  capability_id_l1: BC-1340
-  capability_name: Payment Initiation Management
-  confidence: 0.7
-  evidence: POST /v1/treasury/outbound_payments  Stripe Create Outbound Payment; POST /v1/treasury/inbound_transfers  Stripe
-    Create Inbound Transfer; POST /v1/treasury/financial_accounts  Stripe Create Financial Account
-  reason: Despite the 'Treasury' name, the operations create financial accounts and initiate outbound
-    payments/inbound transfers with received credits/debits and reversals — banking-as-a-service payment
-    initiation and account operations, not corporate treasury/ALM.
+  evidence: 'POST /v1/transfers, POST /v1/transfers/{id}/reversals; schemas: transfer, transfer_reversal,
+    TransferList'
+  reason: Creation, retrieval and reversal of transfers moving funds between the platform and connected
+    accounts — instruction capture and processing of payments. Sub-capability ambiguous between initiation
+    and processing, so only L1 is given.
 - tag: Verification
   spec_file: stripe-verification-api-openapi.yml
-  capability_id: BC-1300.20
+  capability_id: BC-1300
   capability_id_l1: BC-1300
-  capability_name: KYC & Customer Due Diligence Management
+  capability_name: Banking Customer Management
   confidence: 0.7
-  evidence: POST /v1/identity/verification_sessions; schemas identity.verification_report, identity.verification_session
-  reason: Stripe Identity operations perform document/identity verification of individuals, producing
-    verification reports — identity verification / due diligence. Could also be read as onboarding identity
-    verification, hence moderate confidence on the sub-capability.
+  evidence: 'POST /v1/identity/verification_sessions; schemas: identity.verification_session, identity.verification_report'
+  reason: Stripe Identity operations create and manage identity verification sessions and their resulting
+    reports, i.e. verifying who a customer/user is. That is banking customer identity management; the
+    evidence does not distinguish between onboarding identity verification and KYC/CDD due diligence,
+    so no L2 is asserted.
