@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 43
+edge_count: 49
 edges:
 - tag: Approve
   spec_file: stripe-approve-api-openapi.yml
@@ -181,6 +181,17 @@ edges:
   evidence: GET /v1/radar/early_fraud_warnings; schemas radar.early_fraud_warning, radar.value_list_item
   reason: 'Radar is Stripe''s fraud tooling: early fraud warnings and block/allow value lists used to
     screen payments, i.e. fraud detection on payment transactions.'
+- tag: Refunds
+  spec_file: stripe-refunds-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.8
+  evidence: POST /v1/refunds, POST /v1/refunds/{refund}/cancel; schema `refund`
+  reason: Full CRUD plus cancel over payment refunds — creating, updating and cancelling reversals of
+    processed payments. Clearly payments processing; ambiguity remains over which sub-capability (processing
+    vs card transaction handling), so L2 is left null.
+  recovered_from: capability-edges-sweep.json
 - tag: Subscription Schedules
   spec_file: stripe-subscription-schedules-api-openapi.yml
   capability_id: BC-4240
@@ -280,6 +291,18 @@ edges:
   reason: Single operation increases the authorised amount on an existing payment authorisation — squarely
     payments/card authorisation. Kept at L1 because the evidence does not distinguish payment initiation
     from card transaction processing.
+- tag: Payouts
+  spec_file: stripe-payouts-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: POST /v1/payouts PostPayouts, POST /v1/payouts/{payout}/cancel, POST /v1/payouts/{payout}/reverse,
+    schema `payout`
+  reason: Payout creation, cancellation and reversal is outbound payment execution, clearly within Payments
+    & Card Management; which sub-capability (initiation vs processing/settlement) is not determinable
+    from the surface.
+  recovered_from: capability-edges-sweep.json
 - tag: Terminal
   spec_file: stripe-terminal-api-openapi.yml
   capability_id: BC-1340
@@ -341,6 +364,17 @@ edges:
   reason: Finalising a draft invoice for issuance to a customer is customer invoicing within Accounts
     Receivable. Only one operation is exposed, and a subscription-billing reading is also possible, so
     confidence is moderate.
+- tag: Identity
+  spec_file: stripe-identity-api-openapi.yml
+  capability_id: BC-1300
+  capability_id_l1: BC-1300
+  capability_name: Banking Customer Management
+  confidence: 0.7
+  evidence: POST /v1/identity/verification_sessions; schemas identity.verification_report, identity.verification_session
+  reason: Operations create and manage identity verification sessions and reports — document/ID verification
+    of end users. That is customer identity verification (onboarding/KYC territory); the two candidate
+    sub-capabilities (onboarding identity verification vs KYC/CDD) are both plausible, so only L1 is asserted.
+  recovered_from: capability-edges-sweep.json
 - tag: Invoiceitems
   spec_file: stripe-invoice-items-api-openapi.yml
   reanchored_from: stripe-invoiceitems-api-openapi.yml
@@ -405,6 +439,17 @@ edges:
   evidence: POST /v1/prices  PostPrices; schemas price, PriceList, GetPricesSearchRequest
   reason: CRUD and search over price objects that define what products cost — maintenance of the price
     book/list prices.
+- tag: Reporting
+  spec_file: stripe-reporting-api-openapi.yml
+  capability_id: BC-200.60
+  capability_id_l1: BC-200
+  capability_name: Financial Reporting Management
+  confidence: 0.7
+  evidence: POST /v1/reporting/report_runs; schemas `FinancialReportingFinanceReportRunList`, `FinancialReportingFinanceReportTypeList`
+  reason: Operations create and retrieve runs of predefined financial report types over account activity.
+    The schema names explicitly denote financial reporting, so this maps to internal financial reporting
+    rather than generic BI; moderate confidence because it could also be read as analytics delivery.
+  recovered_from: capability-edges-sweep.json
 - tag: Revenue Recognition
   spec_file: stripe-revenue-recognition-api-openapi.yml
   capability_id: BC-4250.50
@@ -416,6 +461,18 @@ edges:
   reason: The operations generate revenue recognition reports over invoiced/credit-noted revenue, matching
     revenue-schedule management under ASC 606/IFRS 15. Moderate confidence because it could alternatively
     be read as general financial reporting rather than specifically subscription revenue recognition.
+- tag: Subscription Items
+  spec_file: stripe-subscription-items-api-openapi.yml
+  capability_id: BC-4240.40
+  capability_id_l1: BC-4240
+  capability_name: Subscription Modification
+  confidence: 0.7
+  evidence: POST /v1/subscription_items, DELETE /v1/subscription_items/{item}, POST /v1/subscription_items/{subscription_item}/usage_records
+  reason: Operations add, update and delete items on an existing subscription (schemas subscription_item,
+    deleted_subscription_item), which is in-life change to active subscriptions — Subscription Modification.
+    Sub-capability is somewhat ambiguous because usage_record endpoints also touch usage metering (BC-4250.10),
+    hence 0.7.
+  recovered_from: capability-edges-sweep.json
 - tag: Tax Rates
   spec_file: stripe-tax-rates-api-openapi.yml
   capability_id: BC-220.20
@@ -436,6 +493,18 @@ edges:
   reason: Creation, retrieval and reversal of transfers moving funds between the platform and connected
     accounts — instruction capture and processing of payments. Sub-capability ambiguous between initiation
     and processing, so only L1 is given.
+- tag: Treasury
+  spec_file: stripe-treasury-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /v1/treasury/outbound_payments  Stripe Create Outbound Payment; POST /v1/treasury/inbound_transfers  Stripe
+    Create Inbound Transfer; POST /v1/treasury/financial_accounts  Stripe Create Financial Account
+  reason: Despite the 'Treasury' name, the operations create financial accounts and initiate outbound
+    payments/inbound transfers with received credits/debits and reversals — banking-as-a-service payment
+    initiation and account operations, not corporate treasury/ALM.
+  recovered_from: capability-edges-sweep.json
 - tag: Verification
   spec_file: stripe-verification-api-openapi.yml
   capability_id: BC-1300
