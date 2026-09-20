@@ -1,0 +1,63 @@
+# ESTIMATES computed by API Evangelist — not published by the provider. See `note` and `replace_by`.
+generated: '2026-09-20'
+method: estimated
+estimator: 'planning/api-economics/estimate_prices.py — design: ESTIMATION.md'
+note: ESTIMATES, not quotes. Computed by API Evangelist from the prices this provider publishes on https://stripe.com/pricing
+  (transcribed in plans/stripe-plans-pricing.yml). Nothing here overrides a published price. Each estimate
+  names the figure it came from, the formula, any assumption, and the field the provider can publish to
+  replace it — publish that and the estimate is retired.
+audience_of_source_pricing: business-product
+pricing_basis: ad-valorem
+estimate_count: 4
+estimates:
+- kind: entry_cost
+  grade: A
+  grade_meaning: quoted — the page states this figure
+  usd_per_month: 10.0
+  meaning: the cheapest published paid tier — a floor on the cost of getting in, NOT the price of the
+    API alone
+  inputs:
+  - file: plans/stripe-plans-pricing.yml
+    plan: Custom domain
+    price_text: $10.00 per month
+  replace_by: 'API Commons Plans — plans[].entries[] with type: fee, a numeric `price`, `timeFrame: month`
+    and the tier that includes API access stated in `elements`'
+- kind: marginal_cost
+  grade: A
+  grade_meaning: quoted — the page states this figure
+  usd: 0.5
+  per: transaction
+  formula: quoted price / quoted unit count
+  inputs:
+  - file: plans/stripe-plans-pricing.yml
+    plan: Tax Basic (API)
+    price_text: $0.50 per transaction, where you’re registered to collect taxes
+  replace_by: 'API Commons Plans — plans[].entries[] with type: metered, `metric` (request | token | transaction
+    | message), `unit` and a numeric `price`; and FinOps `primaryUnit` + `meters[]`'
+- kind: take_rate
+  grade: A
+  grade_meaning: quoted — the page states this figure
+  percent: 0.2
+  fixed_usd: 0.0
+  cap_usd: null
+  inputs:
+  - file: plans/stripe-plans-pricing.yml
+    plan: Authorization Boost (custom pricing accounts)
+    price_text: 0.2% per successful online card transaction for accounts with custom payments pricing
+  replace_by: 'API Commons Plans — plans[].entries[] with type: percentage, `price` as "<percent>% + <fixed>"
+    and `cap` where one applies'
+- kind: per_operation_scenarios
+  grade: C
+  grade_meaning: depends on a stated prior — see `priors`
+  formula: 'C3: rate x transaction value + fixed, capped where stated'
+  usd_by_transaction_value:
+    '10': 0.02
+    '100': 0.2
+    '1000': 2.0
+  priors:
+    transaction_value_usd:
+    - 10
+    - 100
+    - 1000
+  replace_by: the same take-rate entry — a published rate makes the scenarios exact arithmetic instead
+    of an estimate
