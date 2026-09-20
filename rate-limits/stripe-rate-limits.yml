@@ -1,63 +1,114 @@
-specification: API Commons Rate Limits
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
-provider: Stripe
-providerId: stripe
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-reconciled: true
-tags:
-  - Rate Limiting
-  - Payments
-description: Stripe API rate limits enforced per-account in live and test modes separately. Limits are
-  not published per-tier; raise via support for high-volume needs.
+# Rate limits transcribed from the provider's own documentation — see provenance. Quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://docs.stripe.com/rate-limits
 sources:
-  - https://stripe.com/pricing
-  - https://docs.stripe.com/rate-limits
-headers:
-  requestId: Request-Id
-responseCodes:
-  throttled: 429
-  lockTimeout: 429
+- https://docs.stripe.com/rate-limits
+provenance:
+  tool: planning/api-economics/harvest_ratelimits.py
+  run: 20260920T133210
+  grounding: every limit_text was found verbatim in the fetched page text
+published: true
+note: Page also notes write API requests have no allocation limit; lock timeouts also return 429 with
+  code lock_timeout.
+limit_count: 16
 limits:
-  - name: Read requests (live mode)
-    scope: account
-    metric: requests_per_second
-    limit: 100
-    timeFrame: second
-  - name: Write requests (live mode)
-    scope: account
-    metric: requests_per_second
-    limit: 100
-    timeFrame: second
-  - name: Read requests (test mode)
-    scope: account
-    metric: requests_per_second
-    limit: 25
-    timeFrame: second
-  - name: Write requests (test mode)
-    scope: account
-    metric: requests_per_second
-    limit: 25
-    timeFrame: second
-  - name: Search API
-    scope: account
-    metric: requests_per_second
-    limit: 20
-    timeFrame: second
-  - name: Files API uploads
-    scope: account
-    metric: requests_per_second
-    limit: 20
-    timeFrame: second
-policies:
-  - name: Lock contention
-    description: Concurrent writes to the same object can return 429 with a 'lock_timeout' error; retry
-      with backoff.
-  - name: Idempotency
-    description: Use Idempotency-Key header for safe retries on POST/DELETE.
-  - name: Live vs test
-    description: Test mode has lower limits; do not load-test in test mode.
+- name: Global API rate limit (live mode)
+  limit_text: 'Live mode : 100 requests per second'
+  limit: 100
+  window: second
+  scope: account
+  plan: Live mode
+- name: Global API rate limit (sandbox)
+  limit_text: 'Sandbox : 25 requests per second'
+  limit: 25
+  window: second
+  scope: account
+  plan: Sandbox
+- name: Individual API endpoints
+  limit_text: 25 requests per second
+  limit: 25
+  window: second
+  scope: endpoint
+  endpoint: Individual API endpoints (unless otherwise noted)
+- name: Payment Intents API
+  limit_text: 1000 update requests per PaymentIntent object, per hour
+  limit: 1000
+  window: hour
+  scope: endpoint
+  endpoint: Payment Intents API
+- name: Subscriptions invoices per minute
+  limit_text: 10 new invoices per subscription, per minute
+  limit: 10
+  window: minute
+  scope: endpoint
+  endpoint: Subscriptions API
+- name: Subscriptions invoices per day
+  limit_text: 20 new invoices per subscription, per day
+  limit: 20
+  window: day
+  scope: endpoint
+  endpoint: Subscriptions API
+- name: Subscriptions quantity updates
+  limit_text: 200 quantity updates per subscription, per hour
+  limit: 200
+  window: hour
+  scope: endpoint
+  endpoint: Subscriptions API
+- name: Files API reads
+  limit_text: 20 read requests per second
+  limit: 20
+  window: second
+  scope: endpoint
+  endpoint: Files API
+- name: Files API writes
+  limit_text: 20 write requests per second
+  limit: 20
+  window: second
+  scope: endpoint
+  endpoint: Files API
+- name: Payouts API creates
+  limit_text: 15 create requests per second
+  limit: 15
+  window: second
+  scope: endpoint
+  endpoint: Payouts API
+- name: Payouts API concurrency
+  limit_text: 30 concurrent requests per business
+  limit: 30
+  scope: account
+  endpoint: Payouts API
+- name: Connect account creation (live)
+  limit_text: 'Live mode : Create 30 accounts per second'
+  limit: 30
+  window: second
+  scope: account
+  plan: Live mode
+  endpoint: Connect accounts (Accounts v2, Accounts v1)
+- name: Connect account creation (sandbox)
+  limit_text: 'Sandbox : Create 5 accounts per second'
+  limit: 5
+  window: second
+  scope: account
+  plan: Sandbox
+  endpoint: Connect accounts (Accounts v2, Accounts v1)
+- name: Search API
+  limit_text: 20 read requests per second
+  limit: 20
+  window: second
+  scope: endpoint
+  endpoint: Search API
+- name: Read request allocation per transaction
+  limit_text: 500 requests per transaction
+  limit: 500
+  scope: account
+  endpoint: read (GET) API requests
+- name: Minimum read allocation
+  limit_text: minimum allocation of 10,000 read requests per month
+  limit: 10000
+  window: month
+  scope: account
+  endpoint: read (GET) API requests
+headers:
+- Stripe-Rate-Limited-Reason
+exceeded_status: 429
