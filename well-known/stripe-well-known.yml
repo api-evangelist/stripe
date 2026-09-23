@@ -1,81 +1,99 @@
-generated: '2026-06-20'
+generated: '2026-09-19'
 method: searched
-description: >-
-  Results of probing the /.well-known/ discovery surface for every base host in
-  apis.yml (baseURL) and the OpenAPI servers[] (https://api.stripe.com). Status
-  is the HTTP code observed at fetch time. Only documents that returned a real,
-  correctly-typed payload were saved verbatim; dashboard.stripe.com answers 200
-  with a text/html SPA shell for every /.well-known/ path, so those are recorded
-  as present-but-not-a-real-document and not saved.
+description: Results of probing the /.well-known/ discovery surface for every base host in apis.yml (baseURL)
+  and the OpenAPI servers[] (https://api.stripe.com). Status is the HTTP code observed at fetch time.
+  Only documents that returned a real, correctly-typed payload were saved verbatim; dashboard.stripe.com
+  answers 200 with a text/html SPA shell for every /.well-known/ path, so those are recorded as present-but-not-a-real-document
+  and not saved.
 hosts:
-  - host: https://api.stripe.com
-    documents:
-      - path: /.well-known/security.txt
-        status: 404
-      - path: /.well-known/openid-configuration
-        status: 404
-      - path: /.well-known/oauth-authorization-server
-        status: 404
-      - path: /.well-known/api-catalog
-        status: 404
-      - path: /.well-known/ai-plugin.json
-        status: 404
-  - host: https://stripe.com
-    documents:
-      - path: /.well-known/security.txt
-        status: 200
-        type: text/plain
-        file: stripe-security.txt
-      - path: /.well-known/openid-configuration
-        status: 404
-      - path: /.well-known/oauth-authorization-server
-        status: 404
-      - path: /.well-known/api-catalog
-        status: 404
-      - path: /.well-known/ai-plugin.json
-        status: 404
-  - host: https://docs.stripe.com
-    documents:
-      - path: /.well-known/security.txt
-        status: 404
-      - path: /.well-known/openid-configuration
-        status: 404
-      - path: /.well-known/oauth-authorization-server
-        status: 404
-      - path: /.well-known/api-catalog
-        status: 404
-      - path: /.well-known/ai-plugin.json
-        status: 404
-  - host: https://dashboard.stripe.com
-    documents:
-      - path: /.well-known/security.txt
-        status: 200
-        type: text/html
-        note: SPA shell, not a real security.txt; not saved.
-      - path: /.well-known/openid-configuration
-        status: 200
-        type: text/html
-        note: SPA shell, not a real OIDC discovery document; not saved.
-      - path: /.well-known/oauth-authorization-server
-        status: 200
-        type: text/html
-        note: SPA shell, not a real document; not saved.
-      - path: /.well-known/api-catalog
-        status: 200
-        type: text/html
-        note: SPA shell, not a real API catalog; not saved.
-      - path: /.well-known/ai-plugin.json
-        status: 200
-        type: text/html
-        note: SPA shell, not a real ai-plugin manifest; not saved.
-  - host: https://mcp.stripe.com
-    documents:
-      - path: /.well-known/oauth-protected-resource
-        status: 200
-        type: application/json
-        file: stripe-mcp-oauth-protected-resource.json
-        note: RFC 9728 OAuth protected-resource metadata for the hosted MCP server.
-      - path: /.well-known/oauth-authorization-server
-        status: 200
-        type: application/json
-        note: Present; delegates to https://access.stripe.com/mcp (not saved).
+- host: https://api.stripe.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://stripe.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    type: text/plain
+    file: stripe-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.stripe.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://dashboard.stripe.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    type: text/html
+    note: SPA shell, not a real security.txt; not saved.
+  - path: /.well-known/openid-configuration
+    status: 200
+    type: text/html
+    note: SPA shell, not a real OIDC discovery document; not saved.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    type: text/html
+    note: SPA shell, not a real document; not saved.
+  - path: /.well-known/api-catalog
+    status: 200
+    type: text/html
+    note: SPA shell, not a real API catalog; not saved.
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    type: text/html
+    note: SPA shell, not a real ai-plugin manifest; not saved.
+- host: https://mcp.stripe.com
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    type: application/json
+    file: stripe-mcp-oauth-protected-resource.json
+    note: RFC 9728 OAuth protected-resource metadata for the hosted MCP server.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    type: application/json
+    note: Present; delegates to https://access.stripe.com/mcp (not saved).
+- host: https://access.stripe.com
+  documents:
+  - path: /.well-known/oauth-authorization-server/mcp
+    status: 200
+    file: stripe-access-oauth-authorization-server.json
+    bytes: 672
+  path_echo_control: passed
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://access.stripe.com
+    path: /.well-known/oauth-authorization-server/mcp
+    file: stripe-access-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

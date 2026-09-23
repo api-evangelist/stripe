@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Reporting API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Reporting API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/reporting/report_runs:
     get:
-      description: <p>Returns a list of Report Runs, with the most recent appearing first.</p>
+      description: Returns a list of Report Runs, with the most recent appearing first.
       operationId: GetReportingReportRuns
       parameters:
       - explode: true
@@ -101,8 +101,10 @@ paths:
           description: Error response.
       tags:
       - Reporting
+      summary: Get reporting report runs
+      x-summary-source: derived
     post:
-      description: <p>Creates a new object and begin running the report. (Certain report types require a <a href="https://stripe.com/docs/keys#test-live-modes">live-mode API key</a>.)</p>
+      description: Creates a new object and begin running the report. (Certain report types require a live-mode API key.)
       operationId: PostReportingReportRuns
       requestBody:
         content:
@@ -133,9 +135,11 @@ paths:
           description: Error response.
       tags:
       - Reporting
+      summary: Post reporting report runs
+      x-summary-source: derived
   /v1/reporting/report_runs/{report_run}:
     get:
-      description: <p>Retrieves the details of an existing Report Run.</p>
+      description: Retrieves the details of an existing Report Run.
       operationId: GetReportingReportRunsReportRun
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -179,9 +183,11 @@ paths:
           description: Error response.
       tags:
       - Reporting
+      summary: Get reporting report runs report run
+      x-summary-source: derived
   /v1/reporting/report_types:
     get:
-      description: <p>Returns a full list of Report Types.</p>
+      description: Returns a full list of Report Types.
       operationId: GetReportingReportTypes
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -221,9 +227,11 @@ paths:
           description: Error response.
       tags:
       - Reporting
+      summary: Get reporting report types
+      x-summary-source: derived
   /v1/reporting/report_types/{report_type}:
     get:
-      description: <p>Retrieves the details of a Report Type. (Certain report types require a <a href="https://stripe.com/docs/keys#test-live-modes">live-mode API key</a>.)</p>
+      description: Retrieves the details of a Report Type. (Certain report types require a live-mode API key.)
       operationId: GetReportingReportTypesReportType
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -266,25 +274,10 @@ paths:
           description: Error response.
       tags:
       - Reporting
+      summary: Get reporting report types report type
+      x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetReportingReportRunsReportRunRequest:
-      type: object
-      properties: {}
-    GetReportingReportTypesRequest:
-      type: object
-      properties: {}
-    GetReportingReportTypesReportTypeRequest:
-      type: object
-      properties: {}
     FinancialReportingFinanceReportRunList:
       type: object
       required:
@@ -310,6 +303,44 @@ components:
           maxLength: 5000
           pattern: ^/v1/reporting/report_runs
           type: string
+    GetReportingReportTypesReportTypeRequest:
+      type: object
+      properties: {}
+    FinancialReportingFinanceReportTypeList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/reporting.report_type'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetReportingReportRunsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     reporting.report_run:
       description: 'The Report Run object represents an instance of a report type generated with
 
@@ -333,8 +364,9 @@ components:
         error:
           description: "If something should go wrong during the run, a message about the failure (populated when\n `status=failed`)."
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -357,7 +389,6 @@ components:
           anyOf:
           - $ref: '#/components/schemas/file'
           description: "The file object representing the result of the report run (populated when\n `status=succeeded`)."
-          nullable: true
         status:
           description: "Status of this report run. This will be `pending` when the run is initially created.\n When the run finishes, this will be set to `succeeded` and the `result` field will be populated.\n Rarely, we may encounter an error, at which point this will be set to `failed` and the `error` field will be populated."
           maxLength: 5000
@@ -365,8 +396,9 @@ components:
         succeeded_at:
           description: "Timestamp at which this run successfully finished (populated when\n `status=succeeded`). Measured in seconds since the Unix epoch."
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
       required:
       - created
       - id
@@ -381,6 +413,9 @@ components:
       - parameters
       - result
       x-resourceId: reporting.report_run
+    GetReportingReportTypesRequest:
+      type: object
+      properties: {}
     reporting.report_type:
       description: 'The Report Type resource corresponds to a particular type of report, such as
 
@@ -410,8 +445,9 @@ components:
           items:
             maxLength: 5000
             type: string
-          nullable: true
-          type: array
+          type:
+          - array
+          - 'null'
         id:
           description: The [ID of the Report Type](https://stripe.com/docs/reporting/statements/api#available-report-types), such as `balance.summary.1`.
           maxLength: 5000
@@ -1129,30 +1165,16 @@ components:
         report_type:
           description: The ID of the [report type](https://stripe.com/docs/reporting/statements/api#report-types) to run, such as `"balance.summary.1"`.
           type: string
-    GetReportingReportRunsRequest:
+    GetReportingReportRunsReportRunRequest:
       type: object
       properties: {}
-    FinancialReportingFinanceReportTypeList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/reporting.report_type'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

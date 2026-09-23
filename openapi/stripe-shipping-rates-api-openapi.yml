@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Stripe Accounts Account Shipping Rates API
   description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/shipping_rates:
     get:
-      description: <p>Returns a list of your shipping rates.</p>
+      description: Returns a list of your shipping rates.
       operationId: GetShippingRates
       parameters:
       - description: Only return shipping rates that are active or inactive.
@@ -141,8 +141,10 @@ paths:
           description: Error response.
       tags:
       - Shipping Rates
+      summary: Get shipping rates
+      x-summary-source: derived
     post:
-      description: <p>Creates a new shipping rate object.</p>
+      description: Creates a new shipping rate object.
       operationId: PostShippingRates
       requestBody:
         content:
@@ -279,9 +281,11 @@ paths:
           description: Error response.
       tags:
       - Shipping Rates
+      summary: Post shipping rates
+      x-summary-source: derived
   /v1/shipping_rates/{shipping_rate_token}:
     get:
-      description: <p>Returns the shipping rate object with the given ID.</p>
+      description: Returns the shipping rate object with the given ID.
       operationId: GetShippingRatesShippingRateToken
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -326,8 +330,10 @@ paths:
           description: Error response.
       tags:
       - Shipping Rates
+      summary: Get shipping rates shipping rate token
+      x-summary-source: derived
     post:
-      description: <p>Updates an existing shipping rate object.</p>
+      description: Updates an existing shipping rate object.
       operationId: PostShippingRatesShippingRateToken
       parameters:
       - in: path
@@ -414,6 +420,8 @@ paths:
           description: Error response.
       tags:
       - Shipping Rates
+      summary: Post shipping rates shipping rate token
+      x-summary-source: derived
 components:
   schemas:
     shipping_rate:
@@ -432,12 +440,12 @@ components:
           anyOf:
           - $ref: '#/components/schemas/shipping_rate_delivery_estimate'
           description: The estimated range for how long shipping will take, meant to be displayable to the customer. This will appear on CheckoutSessions.
-          nullable: true
         display_name:
           description: The name of the shipping rate, meant to be displayable to the customer. This will appear on CheckoutSessions.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         fixed_amount:
           $ref: '#/components/schemas/shipping_rate_fixed_amount'
         id:
@@ -464,15 +472,15 @@ components:
           - exclusive
           - inclusive
           - unspecified
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         tax_code:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/tax_code'
           description: A [tax code](https://stripe.com/docs/tax/tax-categories) ID. The Shipping tax code is `txcd_92010001`.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/tax_code'

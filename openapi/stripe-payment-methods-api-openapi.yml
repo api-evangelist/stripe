@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Payment Methods API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Payment Method Payment Methods API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/payment_methods:
     get:
-      description: <p>Returns a list of PaymentMethods for Treasury flows. If you want to list the PaymentMethods attached to a Customer for payments, you should use the <a href="/docs/api/payment_methods/customer_list">List a Customer’s PaymentMethods</a> API instead.</p>
+      description: Returns a list of PaymentMethods for Treasury flows. If you want to list the PaymentMethods attached to a Customer for payments, you should use the List a Customer’s PaymentMethods API instead.
       operationId: GetPaymentMethods
       parameters:
       - description: The ID of the customer whose PaymentMethods will be retrieved.
@@ -129,11 +129,13 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Get payment methods
+      x-summary-source: derived
     post:
-      description: '<p>Creates a PaymentMethod object. Read the <a href="/docs/stripe-js/reference#stripe-create-payment-method">Stripe.js reference</a> to learn how to create PaymentMethods via Stripe.js.</p>
+      description: 'Creates a PaymentMethod object. Read the Stripe.js reference to learn how to create PaymentMethods via Stripe.js.
 
 
-        <p>Instead of creating a PaymentMethod directly, we recommend using the <a href="/docs/payments/accept-a-payment">PaymentIntents</a> API to accept a payment immediately or the <a href="/docs/payments/save-and-reuse">SetupIntent</a> API to collect payment method details ahead of a future payment.</p>'
+        Instead of creating a PaymentMethod directly, we recommend using the PaymentIntents API to accept a payment immediately or the SetupIntent API to collect payment method details ahead of a future payment.'
       operationId: PostPaymentMethods
       requestBody:
         content:
@@ -269,9 +271,11 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Post payment methods
+      x-summary-source: derived
   /v1/payment_methods/{payment_method}:
     get:
-      description: <p>Retrieves a PaymentMethod object attached to the StripeAccount. To retrieve a payment method attached to a Customer, you should use <a href="/docs/api/payment_methods/customer">Retrieve a Customer’s PaymentMethods</a></p>
+      description: Retrieves a PaymentMethod object attached to the StripeAccount. To retrieve a payment method attached to a Customer, you should use Retrieve a Customer’s PaymentMethods
       operationId: GetPaymentMethodsPaymentMethod
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -315,8 +319,10 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Get payment methods payment method
+      x-summary-source: derived
     post:
-      description: <p>Updates a PaymentMethod object. A PaymentMethod must be attached a customer to be updated.</p>
+      description: Updates a PaymentMethod object. A PaymentMethod must be attached a customer to be updated.
       operationId: PostPaymentMethodsPaymentMethod
       parameters:
       - in: path
@@ -367,31 +373,33 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Post payment methods payment method
+      x-summary-source: derived
   /v1/payment_methods/{payment_method}/attach:
     post:
-      description: '<p>Attaches a PaymentMethod object to a Customer.</p>
+      description: 'Attaches a PaymentMethod object to a Customer.
 
 
-        <p>To attach a new PaymentMethod to a customer for future payments, we recommend you use a <a href="/docs/api/setup_intents">SetupIntent</a>
+        To attach a new PaymentMethod to a customer for future payments, we recommend you use a SetupIntent
 
-        or a PaymentIntent with <a href="/docs/api/payment_intents/create#create_payment_intent-setup_future_usage">setup_future_usage</a>.
+        or a PaymentIntent with setup_future_usage.
 
-        These approaches will perform any necessary steps to set up the PaymentMethod for future payments. Using the <code>/v1/payment_methods/:id/attach</code>
+        These approaches will perform any necessary steps to set up the PaymentMethod for future payments. Using the /v1/payment_methods/:id/attach
 
-        endpoint without first using a SetupIntent or PaymentIntent with <code>setup_future_usage</code> does not optimize the PaymentMethod for
+        endpoint without first using a SetupIntent or PaymentIntent with setup_future_usage does not optimize the PaymentMethod for
 
         future use, which makes later declines and payment friction more likely.
 
-        See <a href="/docs/payments/payment-intents#future-usage">Optimizing cards for future payments</a> for more information about setting up
+        See Optimizing cards for future payments for more information about setting up
 
-        future payments.</p>
+        future payments.
 
 
-        <p>To use this PaymentMethod as the default for invoice or subscription payments,
+        To use this PaymentMethod as the default for invoice or subscription payments,
 
-        set <a href="/docs/api/customers/update#update_customer-invoice_settings-default_payment_method"><code>invoice_settings.default_payment_method</code></a>,
+        set invoice_settings.default_payment_method,
 
-        on the Customer to the PaymentMethod’s ID.</p>'
+        on the Customer to the PaymentMethod’s ID.'
       operationId: PostPaymentMethodsPaymentMethodAttach
       parameters:
       - in: path
@@ -427,9 +435,11 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Post payment methods payment method attach
+      x-summary-source: derived
   /v1/payment_methods/{payment_method}/detach:
     post:
-      description: <p>Detaches a PaymentMethod object from a Customer. After a PaymentMethod is detached, it can no longer be used for a payment or re-attached to a Customer.</p>
+      description: Detaches a PaymentMethod object from a Customer. After a PaymentMethod is detached, it can no longer be used for a payment or re-attached to a Customer.
       operationId: PostPaymentMethodsPaymentMethodDetach
       parameters:
       - in: path
@@ -465,17 +475,13 @@ paths:
           description: Error response.
       tags:
       - Payment Methods
+      summary: Post payment methods payment method detach
+      x-summary-source: derived
 components:
   schemas:
-    PostPaymentMethodsPaymentMethodDetachRequest:
+    GetPaymentMethodsRequest:
       type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
+      properties: {}
     error:
       description: An error response from the Stripe API
       properties:
@@ -484,9 +490,6 @@ components:
       required:
       - error
       type: object
-    GetPaymentMethodsRequest:
-      type: object
-      properties: {}
     PostPaymentMethodsPaymentMethodRequest:
       type: object
       properties:
@@ -605,226 +608,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/payment_methods
           type: string
-    GetPaymentMethodsPaymentMethodRequest:
-      type: object
-      properties: {}
-    PostPaymentMethodsPaymentMethodAttachRequest:
-      type: object
-      required:
-      - customer
-      properties:
-        customer:
-          description: The ID of the customer to which to attach the PaymentMethod.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    payment_method:
-      description: 'PaymentMethod objects represent your customer''s payment instruments.
-
-        You can use them with [PaymentIntents](https://stripe.com/docs/payments/payment-intents) to collect payments or save them to
-
-        Customer objects to store instrument details for future payments.
-
-
-        Related guides: [Payment Methods](https://stripe.com/docs/payments/payment-methods) and [More Payment Scenarios](https://stripe.com/docs/payments/more-payment-scenarios).'
-      properties:
-        acss_debit:
-          $ref: '#/components/schemas/payment_method_acss_debit'
-        affirm:
-          $ref: '#/components/schemas/payment_method_affirm'
-        afterpay_clearpay:
-          $ref: '#/components/schemas/payment_method_afterpay_clearpay'
-        alipay:
-          $ref: '#/components/schemas/payment_flows_private_payment_methods_alipay'
-        au_becs_debit:
-          $ref: '#/components/schemas/payment_method_au_becs_debit'
-        bacs_debit:
-          $ref: '#/components/schemas/payment_method_bacs_debit'
-        bancontact:
-          $ref: '#/components/schemas/payment_method_bancontact'
-        billing_details:
-          $ref: '#/components/schemas/billing_details'
-        blik:
-          $ref: '#/components/schemas/payment_method_blik'
-        boleto:
-          $ref: '#/components/schemas/payment_method_boleto'
-        card:
-          $ref: '#/components/schemas/payment_method_card'
-        card_present:
-          $ref: '#/components/schemas/payment_method_card_present'
-        cashapp:
-          $ref: '#/components/schemas/payment_method_cashapp'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        customer:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/customer'
-          description: The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved to a Customer.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/customer'
-        customer_balance:
-          $ref: '#/components/schemas/payment_method_customer_balance'
-        eps:
-          $ref: '#/components/schemas/payment_method_eps'
-        fpx:
-          $ref: '#/components/schemas/payment_method_fpx'
-        giropay:
-          $ref: '#/components/schemas/payment_method_giropay'
-        grabpay:
-          $ref: '#/components/schemas/payment_method_grabpay'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        ideal:
-          $ref: '#/components/schemas/payment_method_ideal'
-        interac_present:
-          $ref: '#/components/schemas/payment_method_interac_present'
-        klarna:
-          $ref: '#/components/schemas/payment_method_klarna'
-        konbini:
-          $ref: '#/components/schemas/payment_method_konbini'
-        link:
-          $ref: '#/components/schemas/payment_method_link'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          nullable: true
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - payment_method
-          type: string
-        oxxo:
-          $ref: '#/components/schemas/payment_method_oxxo'
-        p24:
-          $ref: '#/components/schemas/payment_method_p24'
-        paynow:
-          $ref: '#/components/schemas/payment_method_paynow'
-        paypal:
-          $ref: '#/components/schemas/payment_method_paypal'
-        pix:
-          $ref: '#/components/schemas/payment_method_pix'
-        promptpay:
-          $ref: '#/components/schemas/payment_method_promptpay'
-        radar_options:
-          $ref: '#/components/schemas/radar_radar_options'
-        revolut_pay:
-          $ref: '#/components/schemas/payment_method_revolut_pay'
-        sepa_debit:
-          $ref: '#/components/schemas/payment_method_sepa_debit'
-        sofort:
-          $ref: '#/components/schemas/payment_method_sofort'
-        type:
-          description: The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
-          enum:
-          - acss_debit
-          - affirm
-          - afterpay_clearpay
-          - alipay
-          - au_becs_debit
-          - bacs_debit
-          - bancontact
-          - blik
-          - boleto
-          - card
-          - card_present
-          - cashapp
-          - customer_balance
-          - eps
-          - fpx
-          - giropay
-          - grabpay
-          - ideal
-          - interac_present
-          - klarna
-          - konbini
-          - link
-          - oxxo
-          - p24
-          - paynow
-          - paypal
-          - pix
-          - promptpay
-          - revolut_pay
-          - sepa_debit
-          - sofort
-          - us_bank_account
-          - wechat_pay
-          - zip
-          type: string
-          x-stripeBypassValidation: true
-        us_bank_account:
-          $ref: '#/components/schemas/payment_method_us_bank_account'
-        wechat_pay:
-          $ref: '#/components/schemas/payment_method_wechat_pay'
-        zip:
-          $ref: '#/components/schemas/payment_method_zip'
-      required:
-      - billing_details
-      - created
-      - id
-      - livemode
-      - object
-      - type
-      title: PaymentMethod
-      type: object
-      x-expandableFields:
-      - acss_debit
-      - affirm
-      - afterpay_clearpay
-      - alipay
-      - au_becs_debit
-      - bacs_debit
-      - bancontact
-      - billing_details
-      - blik
-      - boleto
-      - card
-      - card_present
-      - cashapp
-      - customer
-      - customer_balance
-      - eps
-      - fpx
-      - giropay
-      - grabpay
-      - ideal
-      - interac_present
-      - klarna
-      - konbini
-      - link
-      - oxxo
-      - p24
-      - paynow
-      - paypal
-      - pix
-      - promptpay
-      - radar_options
-      - revolut_pay
-      - sepa_debit
-      - sofort
-      - us_bank_account
-      - wechat_pay
-      - zip
-      x-resourceId: payment_method
     PostPaymentMethodsRequest:
       type: object
       properties:
@@ -1323,3 +1106,242 @@ components:
           properties: {}
           title: param
           type: object
+    payment_method:
+      description: 'PaymentMethod objects represent your customer''s payment instruments.
+
+        You can use them with [PaymentIntents](https://stripe.com/docs/payments/payment-intents) to collect payments or save them to
+
+        Customer objects to store instrument details for future payments.
+
+
+        Related guides: [Payment Methods](https://stripe.com/docs/payments/payment-methods) and [More Payment Scenarios](https://stripe.com/docs/payments/more-payment-scenarios).'
+      properties:
+        acss_debit:
+          $ref: '#/components/schemas/payment_method_acss_debit'
+        affirm:
+          $ref: '#/components/schemas/payment_method_affirm'
+        afterpay_clearpay:
+          $ref: '#/components/schemas/payment_method_afterpay_clearpay'
+        alipay:
+          $ref: '#/components/schemas/payment_flows_private_payment_methods_alipay'
+        au_becs_debit:
+          $ref: '#/components/schemas/payment_method_au_becs_debit'
+        bacs_debit:
+          $ref: '#/components/schemas/payment_method_bacs_debit'
+        bancontact:
+          $ref: '#/components/schemas/payment_method_bancontact'
+        billing_details:
+          $ref: '#/components/schemas/billing_details'
+        blik:
+          $ref: '#/components/schemas/payment_method_blik'
+        boleto:
+          $ref: '#/components/schemas/payment_method_boleto'
+        card:
+          $ref: '#/components/schemas/payment_method_card'
+        card_present:
+          $ref: '#/components/schemas/payment_method_card_present'
+        cashapp:
+          $ref: '#/components/schemas/payment_method_cashapp'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          description: The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved to a Customer.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+        customer_balance:
+          $ref: '#/components/schemas/payment_method_customer_balance'
+        eps:
+          $ref: '#/components/schemas/payment_method_eps'
+        fpx:
+          $ref: '#/components/schemas/payment_method_fpx'
+        giropay:
+          $ref: '#/components/schemas/payment_method_giropay'
+        grabpay:
+          $ref: '#/components/schemas/payment_method_grabpay'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        ideal:
+          $ref: '#/components/schemas/payment_method_ideal'
+        interac_present:
+          $ref: '#/components/schemas/payment_method_interac_present'
+        klarna:
+          $ref: '#/components/schemas/payment_method_klarna'
+        konbini:
+          $ref: '#/components/schemas/payment_method_konbini'
+        link:
+          $ref: '#/components/schemas/payment_method_link'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type:
+          - object
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - payment_method
+          type: string
+        oxxo:
+          $ref: '#/components/schemas/payment_method_oxxo'
+        p24:
+          $ref: '#/components/schemas/payment_method_p24'
+        paynow:
+          $ref: '#/components/schemas/payment_method_paynow'
+        paypal:
+          $ref: '#/components/schemas/payment_method_paypal'
+        pix:
+          $ref: '#/components/schemas/payment_method_pix'
+        promptpay:
+          $ref: '#/components/schemas/payment_method_promptpay'
+        radar_options:
+          $ref: '#/components/schemas/radar_radar_options'
+        revolut_pay:
+          $ref: '#/components/schemas/payment_method_revolut_pay'
+        sepa_debit:
+          $ref: '#/components/schemas/payment_method_sepa_debit'
+        sofort:
+          $ref: '#/components/schemas/payment_method_sofort'
+        type:
+          description: The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
+          enum:
+          - acss_debit
+          - affirm
+          - afterpay_clearpay
+          - alipay
+          - au_becs_debit
+          - bacs_debit
+          - bancontact
+          - blik
+          - boleto
+          - card
+          - card_present
+          - cashapp
+          - customer_balance
+          - eps
+          - fpx
+          - giropay
+          - grabpay
+          - ideal
+          - interac_present
+          - klarna
+          - konbini
+          - link
+          - oxxo
+          - p24
+          - paynow
+          - paypal
+          - pix
+          - promptpay
+          - revolut_pay
+          - sepa_debit
+          - sofort
+          - us_bank_account
+          - wechat_pay
+          - zip
+          type: string
+          x-stripeBypassValidation: true
+        us_bank_account:
+          $ref: '#/components/schemas/payment_method_us_bank_account'
+        wechat_pay:
+          $ref: '#/components/schemas/payment_method_wechat_pay'
+        zip:
+          $ref: '#/components/schemas/payment_method_zip'
+      required:
+      - billing_details
+      - created
+      - id
+      - livemode
+      - object
+      - type
+      title: PaymentMethod
+      type: object
+      x-expandableFields:
+      - acss_debit
+      - affirm
+      - afterpay_clearpay
+      - alipay
+      - au_becs_debit
+      - bacs_debit
+      - bancontact
+      - billing_details
+      - blik
+      - boleto
+      - card
+      - card_present
+      - cashapp
+      - customer
+      - customer_balance
+      - eps
+      - fpx
+      - giropay
+      - grabpay
+      - ideal
+      - interac_present
+      - klarna
+      - konbini
+      - link
+      - oxxo
+      - p24
+      - paynow
+      - paypal
+      - pix
+      - promptpay
+      - radar_options
+      - revolut_pay
+      - sepa_debit
+      - sofort
+      - us_bank_account
+      - wechat_pay
+      - zip
+      x-resourceId: payment_method
+    PostPaymentMethodsPaymentMethodAttachRequest:
+      type: object
+      required:
+      - customer
+      properties:
+        customer:
+          description: The ID of the customer to which to attach the PaymentMethod.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostPaymentMethodsPaymentMethodDetachRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetPaymentMethodsPaymentMethodRequest:
+      type: object
+      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

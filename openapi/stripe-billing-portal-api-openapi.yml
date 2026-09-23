@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Billing Portal API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Billing Billing Portal API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/billing_portal/configurations:
     get:
-      description: <p>Returns a list of configurations that describe the functionality of the customer portal.</p>
+      description: Returns a list of configurations that describe the functionality of the customer portal.
       operationId: GetBillingPortalConfigurations
       parameters:
       - description: Only return configurations that are active or inactive (e.g., pass `true` to only list active configurations).
@@ -96,8 +96,10 @@ paths:
           description: Error response.
       tags:
       - Billing Portal
+      summary: Get billing portal configurations
+      x-summary-source: derived
     post:
-      description: <p>Creates a configuration that describes the functionality and behavior of a PortalSession</p>
+      description: Creates a configuration that describes the functionality and behavior of a PortalSession
       operationId: PostBillingPortalConfigurations
       requestBody:
         content:
@@ -140,9 +142,11 @@ paths:
           description: Error response.
       tags:
       - Billing Portal
+      summary: Post billing portal configurations
+      x-summary-source: derived
   /v1/billing_portal/configurations/{configuration}:
     get:
-      description: <p>Retrieves a configuration that describes the functionality of the customer portal.</p>
+      description: Retrieves a configuration that describes the functionality of the customer portal.
       operationId: GetBillingPortalConfigurationsConfiguration
       parameters:
       - in: path
@@ -186,8 +190,10 @@ paths:
           description: Error response.
       tags:
       - Billing Portal
+      summary: Get billing portal configurations configuration
+      x-summary-source: derived
     post:
-      description: <p>Updates a configuration that describes the functionality of the customer portal.</p>
+      description: Updates a configuration that describes the functionality of the customer portal.
       operationId: PostBillingPortalConfigurationsConfiguration
       parameters:
       - in: path
@@ -238,9 +244,11 @@ paths:
           description: Error response.
       tags:
       - Billing Portal
+      summary: Post billing portal configurations configuration
+      x-summary-source: derived
   /v1/billing_portal/sessions:
     post:
-      description: <p>Creates a session of the customer portal.</p>
+      description: Creates a session of the customer portal.
       operationId: PostBillingPortalSessions
       requestBody:
         content:
@@ -271,8 +279,24 @@ paths:
           description: Error response.
       tags:
       - Billing Portal
+      summary: Post billing portal sessions
+      x-summary-source: derived
 components:
   schemas:
+    GetBillingPortalConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
+    GetBillingPortalConfigurationsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PortalPublicResourceConfigurationList:
       type: object
       required:
@@ -298,210 +322,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/billing_portal/configurations
           type: string
-    GetBillingPortalConfigurationsRequest:
-      type: object
-      properties: {}
-    PostBillingPortalSessionsRequest:
-      type: object
-      required:
-      - customer
-      properties:
-        configuration:
-          description: The ID of an existing [configuration](https://stripe.com/docs/api/customer_portal/configuration) to use for this session, describing its functionality and features. If not specified, the session uses the default configuration.
-          maxLength: 5000
-          type: string
-        customer:
-          description: The ID of an existing customer.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        flow_data:
-          description: Information about a specific flow for the customer to go through. See the [docs](https://stripe.com/docs/customer-management/portal-deep-links) to learn more about using customer portal deep links and flows.
-          properties:
-            after_completion:
-              properties:
-                hosted_confirmation:
-                  properties:
-                    custom_message:
-                      maxLength: 500
-                      type: string
-                  title: after_completion_hosted_confirmation_param
-                  type: object
-                redirect:
-                  properties:
-                    return_url:
-                      type: string
-                  required:
-                  - return_url
-                  title: after_completion_redirect_param
-                  type: object
-                type:
-                  enum:
-                  - hosted_confirmation
-                  - portal_homepage
-                  - redirect
-                  type: string
-              required:
-              - type
-              title: flow_data_after_completion_param
-              type: object
-            subscription_cancel:
-              properties:
-                retention:
-                  properties:
-                    coupon_offer:
-                      properties:
-                        coupon:
-                          maxLength: 5000
-                          type: string
-                      required:
-                      - coupon
-                      title: coupon_offer_param
-                      type: object
-                    type:
-                      enum:
-                      - coupon_offer
-                      type: string
-                  required:
-                  - coupon_offer
-                  - type
-                  title: retention_param
-                  type: object
-                subscription:
-                  maxLength: 5000
-                  type: string
-              required:
-              - subscription
-              title: flow_data_subscription_cancel_param
-              type: object
-            subscription_update:
-              properties:
-                subscription:
-                  maxLength: 5000
-                  type: string
-              required:
-              - subscription
-              title: flow_data_subscription_update_param
-              type: object
-            subscription_update_confirm:
-              properties:
-                discounts:
-                  items:
-                    properties:
-                      coupon:
-                        maxLength: 5000
-                        type: string
-                      promotion_code:
-                        maxLength: 5000
-                        type: string
-                    title: subscription_update_confirm_discount_params
-                    type: object
-                  type: array
-                items:
-                  items:
-                    properties:
-                      id:
-                        maxLength: 5000
-                        type: string
-                      price:
-                        maxLength: 5000
-                        type: string
-                      quantity:
-                        type: integer
-                    required:
-                    - id
-                    title: subscription_update_confirm_item_params
-                    type: object
-                  type: array
-                subscription:
-                  maxLength: 5000
-                  type: string
-              required:
-              - items
-              - subscription
-              title: flow_data_subscription_update_confirm_param
-              type: object
-            type:
-              enum:
-              - payment_method_update
-              - subscription_cancel
-              - subscription_update
-              - subscription_update_confirm
-              type: string
-          required:
-          - type
-          title: flow_data_param
-          type: object
-        locale:
-          description: The IETF language tag of the locale customer portal is displayed in. If blank or auto, the customer’s `preferred_locales` or browser’s locale is used.
-          enum:
-          - auto
-          - bg
-          - cs
-          - da
-          - de
-          - el
-          - en
-          - en-AU
-          - en-CA
-          - en-GB
-          - en-IE
-          - en-IN
-          - en-NZ
-          - en-SG
-          - es
-          - es-419
-          - et
-          - fi
-          - fil
-          - fr
-          - fr-CA
-          - hr
-          - hu
-          - id
-          - it
-          - ja
-          - ko
-          - lt
-          - lv
-          - ms
-          - mt
-          - nb
-          - nl
-          - pl
-          - pt
-          - pt-BR
-          - ro
-          - ru
-          - sk
-          - sl
-          - sv
-          - th
-          - tr
-          - vi
-          - zh
-          - zh-HK
-          - zh-TW
-          type: string
-        on_behalf_of:
-          description: The `on_behalf_of` account to use for this session. When specified, only subscriptions and invoices with this `on_behalf_of` account appear in the portal. For more information, see the [docs](https://stripe.com/docs/connect/separate-charges-and-transfers#on-behalf-of). Use the [Accounts API](https://stripe.com/docs/api/accounts/object#account_object-settings-branding) to modify the `on_behalf_of` account's branding settings, which the portal displays.
-          type: string
-        return_url:
-          description: The default URL to redirect customers to when they click on the portal's link to return to your website.
-          type: string
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     billing_portal.session:
       description: 'The Billing customer portal is a Stripe-hosted UI for subscription and
 
@@ -549,7 +369,6 @@ components:
           anyOf:
           - $ref: '#/components/schemas/portal_flows_flow'
           description: Information about a specific flow for the customer to go through. See the [docs](https://stripe.com/docs/customer-management/portal-deep-links) to learn more about using customer portal deep links and flows.
-          nullable: true
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -607,8 +426,9 @@ components:
           - zh
           - zh-HK
           - zh-TW
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
@@ -617,13 +437,15 @@ components:
         on_behalf_of:
           description: The account for which the session was created on behalf of. When specified, only subscriptions and invoices with this `on_behalf_of` account appear in the portal. For more information, see the [docs](https://stripe.com/docs/connect/separate-charges-and-transfers#on-behalf-of). Use the [Accounts API](https://stripe.com/docs/api/accounts/object#account_object-settings-branding) to modify the `on_behalf_of` account's branding settings, which the portal displays.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         return_url:
           description: The URL to redirect customers to when they click on the portal's link to return to your website.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         url:
           description: The short-lived URL of the session that gives customers access to the customer portal.
           maxLength: 5000
@@ -642,6 +464,85 @@ components:
       - configuration
       - flow
       x-resourceId: billing_portal.session
+    billing_portal.configuration:
+      description: A portal configuration describes the functionality and behavior of a portal session.
+      properties:
+        active:
+          description: Whether the configuration is active and can be used to create portal sessions.
+          type: boolean
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          - $ref: '#/components/schemas/deleted_application'
+          description: ID of the Connect Application that created the configuration.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+            - $ref: '#/components/schemas/deleted_application'
+        business_profile:
+          $ref: '#/components/schemas/portal_business_profile'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        default_return_url:
+          description: The default URL to redirect customers to when they click on the portal's link to return to your website. This can be [overriden](https://stripe.com/docs/api/customer_portal/sessions/create#create_portal_session-return_url) when creating the session.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        features:
+          $ref: '#/components/schemas/portal_features'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        is_default:
+          description: Whether the configuration is the default. If `true`, this configuration can be managed in the Dashboard and portal sessions will use this configuration unless it is overriden when creating the session.
+          type: boolean
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        login_page:
+          $ref: '#/components/schemas/portal_login_page'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type:
+          - object
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - billing_portal.configuration
+          type: string
+        updated:
+          description: Time at which the object was last updated. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+      required:
+      - active
+      - business_profile
+      - created
+      - features
+      - id
+      - is_default
+      - livemode
+      - login_page
+      - object
+      - updated
+      title: PortalConfiguration
+      type: object
+      x-expandableFields:
+      - application
+      - business_profile
+      - features
+      - login_page
+      x-resourceId: billing_portal.configuration
     PostBillingPortalConfigurationsRequest:
       type: object
       required:
@@ -1031,84 +932,206 @@ components:
             - ''
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-    GetBillingPortalConfigurationsConfigurationRequest:
+    PostBillingPortalSessionsRequest:
       type: object
-      properties: {}
-    billing_portal.configuration:
-      description: A portal configuration describes the functionality and behavior of a portal session.
-      properties:
-        active:
-          description: Whether the configuration is active and can be used to create portal sessions.
-          type: boolean
-        application:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/application'
-          - $ref: '#/components/schemas/deleted_application'
-          description: ID of the Connect Application that created the configuration.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/application'
-            - $ref: '#/components/schemas/deleted_application'
-        business_profile:
-          $ref: '#/components/schemas/portal_business_profile'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        default_return_url:
-          description: The default URL to redirect customers to when they click on the portal's link to return to your website. This can be [overriden](https://stripe.com/docs/api/customer_portal/sessions/create#create_portal_session-return_url) when creating the session.
-          maxLength: 5000
-          nullable: true
-          type: string
-        features:
-          $ref: '#/components/schemas/portal_features'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        is_default:
-          description: Whether the configuration is the default. If `true`, this configuration can be managed in the Dashboard and portal sessions will use this configuration unless it is overriden when creating the session.
-          type: boolean
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        login_page:
-          $ref: '#/components/schemas/portal_login_page'
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          nullable: true
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - billing_portal.configuration
-          type: string
-        updated:
-          description: Time at which the object was last updated. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
       required:
-      - active
-      - business_profile
-      - created
-      - features
-      - id
-      - is_default
-      - livemode
-      - login_page
-      - object
-      - updated
-      title: PortalConfiguration
-      type: object
-      x-expandableFields:
-      - application
-      - business_profile
-      - features
-      - login_page
-      x-resourceId: billing_portal.configuration
+      - customer
+      properties:
+        configuration:
+          description: The ID of an existing [configuration](https://stripe.com/docs/api/customer_portal/configuration) to use for this session, describing its functionality and features. If not specified, the session uses the default configuration.
+          maxLength: 5000
+          type: string
+        customer:
+          description: The ID of an existing customer.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        flow_data:
+          description: Information about a specific flow for the customer to go through. See the [docs](https://stripe.com/docs/customer-management/portal-deep-links) to learn more about using customer portal deep links and flows.
+          properties:
+            after_completion:
+              properties:
+                hosted_confirmation:
+                  properties:
+                    custom_message:
+                      maxLength: 500
+                      type: string
+                  title: after_completion_hosted_confirmation_param
+                  type: object
+                redirect:
+                  properties:
+                    return_url:
+                      type: string
+                  required:
+                  - return_url
+                  title: after_completion_redirect_param
+                  type: object
+                type:
+                  enum:
+                  - hosted_confirmation
+                  - portal_homepage
+                  - redirect
+                  type: string
+              required:
+              - type
+              title: flow_data_after_completion_param
+              type: object
+            subscription_cancel:
+              properties:
+                retention:
+                  properties:
+                    coupon_offer:
+                      properties:
+                        coupon:
+                          maxLength: 5000
+                          type: string
+                      required:
+                      - coupon
+                      title: coupon_offer_param
+                      type: object
+                    type:
+                      enum:
+                      - coupon_offer
+                      type: string
+                  required:
+                  - coupon_offer
+                  - type
+                  title: retention_param
+                  type: object
+                subscription:
+                  maxLength: 5000
+                  type: string
+              required:
+              - subscription
+              title: flow_data_subscription_cancel_param
+              type: object
+            subscription_update:
+              properties:
+                subscription:
+                  maxLength: 5000
+                  type: string
+              required:
+              - subscription
+              title: flow_data_subscription_update_param
+              type: object
+            subscription_update_confirm:
+              properties:
+                discounts:
+                  items:
+                    properties:
+                      coupon:
+                        maxLength: 5000
+                        type: string
+                      promotion_code:
+                        maxLength: 5000
+                        type: string
+                    title: subscription_update_confirm_discount_params
+                    type: object
+                  type: array
+                items:
+                  items:
+                    properties:
+                      id:
+                        maxLength: 5000
+                        type: string
+                      price:
+                        maxLength: 5000
+                        type: string
+                      quantity:
+                        type: integer
+                    required:
+                    - id
+                    title: subscription_update_confirm_item_params
+                    type: object
+                  type: array
+                subscription:
+                  maxLength: 5000
+                  type: string
+              required:
+              - items
+              - subscription
+              title: flow_data_subscription_update_confirm_param
+              type: object
+            type:
+              enum:
+              - payment_method_update
+              - subscription_cancel
+              - subscription_update
+              - subscription_update_confirm
+              type: string
+          required:
+          - type
+          title: flow_data_param
+          type: object
+        locale:
+          description: The IETF language tag of the locale customer portal is displayed in. If blank or auto, the customer’s `preferred_locales` or browser’s locale is used.
+          enum:
+          - auto
+          - bg
+          - cs
+          - da
+          - de
+          - el
+          - en
+          - en-AU
+          - en-CA
+          - en-GB
+          - en-IE
+          - en-IN
+          - en-NZ
+          - en-SG
+          - es
+          - es-419
+          - et
+          - fi
+          - fil
+          - fr
+          - fr-CA
+          - hr
+          - hu
+          - id
+          - it
+          - ja
+          - ko
+          - lt
+          - lv
+          - ms
+          - mt
+          - nb
+          - nl
+          - pl
+          - pt
+          - pt-BR
+          - ro
+          - ru
+          - sk
+          - sl
+          - sv
+          - th
+          - tr
+          - vi
+          - zh
+          - zh-HK
+          - zh-TW
+          type: string
+        on_behalf_of:
+          description: The `on_behalf_of` account to use for this session. When specified, only subscriptions and invoices with this `on_behalf_of` account appear in the portal. For more information, see the [docs](https://stripe.com/docs/connect/separate-charges-and-transfers#on-behalf-of). Use the [Accounts API](https://stripe.com/docs/api/accounts/object#account_object-settings-branding) to modify the `on_behalf_of` account's branding settings, which the portal displays.
+          type: string
+        return_url:
+          description: The default URL to redirect customers to when they click on the portal's link to return to your website.
+          type: string
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

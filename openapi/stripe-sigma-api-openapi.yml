@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Sigma API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Sigma API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/sigma/scheduled_query_runs:
     get:
-      description: <p>Returns a list of scheduled query runs.</p>
+      description: Returns a list of scheduled query runs.
       operationId: GetSigmaScheduledQueryRuns
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -82,9 +82,11 @@ paths:
           description: Error response.
       tags:
       - Sigma
+      summary: Get sigma scheduled query runs
+      x-summary-source: derived
   /v1/sigma/scheduled_query_runs/{scheduled_query_run}:
     get:
-      description: <p>Retrieves the details of an scheduled query run.</p>
+      description: Retrieves the details of an scheduled query run.
       operationId: GetSigmaScheduledQueryRunsScheduledQueryRun
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -128,16 +130,10 @@ paths:
           description: Error response.
       tags:
       - Sigma
+      summary: Get sigma scheduled query runs scheduled query run
+      x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     SigmaScheduledQueryRunList:
       type: object
       required:
@@ -163,7 +159,18 @@ components:
           maxLength: 5000
           pattern: ^/v1/sigma/scheduled_query_runs
           type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     GetSigmaScheduledQueryRunsScheduledQueryRunRequest:
+      type: object
+      properties: {}
+    GetSigmaScheduledQueryRunsRequest:
       type: object
       properties: {}
     scheduled_query_run:
@@ -189,7 +196,6 @@ components:
           anyOf:
           - $ref: '#/components/schemas/file'
           description: The file object representing the results of the query.
-          nullable: true
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -234,6 +240,13 @@ components:
       - error
       - file
       x-resourceId: scheduled_query_run
-    GetSigmaScheduledQueryRunsRequest:
-      type: object
-      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

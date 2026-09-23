@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Reviews API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Reviews API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/reviews:
     get:
-      description: <p>Returns a list of <code>Review</code> objects that have <code>open</code> set to <code>true</code>. The objects are sorted in descending order by creation date, with the most recently created object appearing first.</p>
+      description: Returns a list of Review objects that have open set to true. The objects are sorted in descending order by creation date, with the most recently created object appearing first.
       operationId: GetReviews
       parameters:
       - explode: true
@@ -101,9 +101,11 @@ paths:
           description: Error response.
       tags:
       - Reviews
+      summary: Get reviews
+      x-summary-source: derived
   /v1/reviews/{review}:
     get:
-      description: <p>Retrieves a <code>Review</code> object.</p>
+      description: Retrieves a Review object.
       operationId: GetReviewsReview
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -147,9 +149,11 @@ paths:
           description: Error response.
       tags:
       - Reviews
+      summary: Get reviews review
+      x-summary-source: derived
   /v1/reviews/{review}/approve:
     post:
-      description: <p>Approves a <code>Review</code> object, closing it and removing it from the list of reviews.</p>
+      description: Approves a Review object, closing it and removing it from the list of reviews.
       operationId: PostReviewsReviewApprove
       parameters:
       - in: path
@@ -185,46 +189,10 @@ paths:
           description: Error response.
       tags:
       - Reviews
+      summary: Post reviews review approve
+      x-summary-source: derived
 components:
   schemas:
-    GetReviewsRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetReviewsReviewRequest:
-      type: object
-      properties: {}
-    RadarReviewList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/review'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     review:
       description: 'Reviews can be used to supplement automated fraud detection with human expertise.
 
@@ -236,15 +204,15 @@ components:
         billing_zip:
           description: The ZIP or postal code of the card used, if applicable.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         charge:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/charge'
           description: The charge associated with this review.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/charge'
@@ -256,8 +224,9 @@ components:
           - redacted
           - refunded
           - refunded_as_fraud
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         created:
           description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
@@ -269,13 +238,13 @@ components:
         ip_address:
           description: The IP address where the payment originated.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         ip_address_location:
           anyOf:
           - $ref: '#/components/schemas/radar_review_resource_location'
           description: Information related to the location of the payment. Note that this information is an approximation and attempts to locate the nearest population center - it should not be used to determine a specific address.
-          nullable: true
         livemode:
           description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
           type: boolean
@@ -310,7 +279,6 @@ components:
           anyOf:
           - $ref: '#/components/schemas/radar_review_resource_session'
           description: Information related to the browsing session of the user who initiated the payment.
-          nullable: true
       required:
       - created
       - id
@@ -327,6 +295,44 @@ components:
       - payment_intent
       - session
       x-resourceId: review
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetReviewsRequest:
+      type: object
+      properties: {}
+    GetReviewsReviewRequest:
+      type: object
+      properties: {}
+    RadarReviewList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/review'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
     PostReviewsReviewApproveRequest:
       type: object
       properties:
@@ -336,3 +342,13 @@ components:
             maxLength: 5000
             type: string
           type: array
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

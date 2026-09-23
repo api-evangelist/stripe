@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Climate API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Climate API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,9 +19,9 @@ tags:
 paths:
   /v1/climate/orders:
     get:
-      description: '<p>Lists all Climate order objects. The orders are returned sorted by creation date, with the
+      description: 'Lists all Climate order objects. The orders are returned sorted by creation date, with the
 
-        most recently created orders appearing first.</p>'
+        most recently created orders appearing first.'
       operationId: GetClimateOrders
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -84,10 +84,12 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate orders
+      x-summary-source: derived
     post:
-      description: '<p>Creates a Climate order object for a given Climate product. The order will be processed immediately
+      description: 'Creates a Climate order object for a given Climate product. The order will be processed immediately
 
-        after creation and payment will be deducted your Stripe balance.</p>'
+        after creation and payment will be deducted your Stripe balance.'
       operationId: PostClimateOrders
       requestBody:
         content:
@@ -121,9 +123,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate orders
+      x-summary-source: derived
   /v1/climate/orders/{order}:
     get:
-      description: <p>Retrieves the details of a Climate order object with the given ID.</p>
+      description: Retrieves the details of a Climate order object with the given ID.
       operationId: GetClimateOrdersOrder
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -168,8 +172,10 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate orders order
+      x-summary-source: derived
     post:
-      description: <p>Updates the specified order by setting the values of the parameters passed.</p>
+      description: Updates the specified order by setting the values of the parameters passed.
       operationId: PostClimateOrdersOrder
       parameters:
       - description: Unique identifier of the order.
@@ -212,15 +218,17 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate orders order
+      x-summary-source: derived
   /v1/climate/orders/{order}/cancel:
     post:
-      description: '<p>Cancels a Climate order. You can cancel an order within 30 days of creation. Stripe refunds the
+      description: 'Cancels a Climate order. You can cancel an order within 30 days of creation. Stripe refunds the
 
-        reservation <code>amount_subtotal</code>, but not the <code>amount_fees</code> for user-triggered cancellations. Frontier
+        reservation amount_subtotal, but not the amount_fees for user-triggered cancellations. Frontier
 
         might cancel reservations if suppliers fail to deliver. If Frontier cancels the reservation, Stripe
 
-        provides 90 days advance notice and refunds the <code>amount_total</code>.</p>'
+        provides 90 days advance notice and refunds the amount_total.'
       operationId: PostClimateOrdersOrderCancel
       parameters:
       - description: Unique identifier of the order.
@@ -257,9 +265,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate orders order cancel
+      x-summary-source: derived
   /v1/climate/products:
     get:
-      description: <p>Lists all available Climate product objects.</p>
+      description: Lists all available Climate product objects.
       operationId: GetClimateProducts
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -322,9 +332,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate products
+      x-summary-source: derived
   /v1/climate/products/{product}:
     get:
-      description: <p>Retrieves the details of a Climate product with the given ID.</p>
+      description: Retrieves the details of a Climate product with the given ID.
       operationId: GetClimateProductsProduct
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -368,11 +380,13 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate products product
+      x-summary-source: derived
   /v1/climate/reservations:
     get:
-      description: '<p>Lists all Climate order objects. The orders are returned sorted by creation date, with the
+      description: 'Lists all Climate order objects. The orders are returned sorted by creation date, with the
 
-        most recently created orders appearing first.</p>'
+        most recently created orders appearing first.'
       operationId: GetClimateReservations
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -435,10 +449,12 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate reservations
+      x-summary-source: derived
     post:
-      description: '<p>Creates a Climate order object for a given Climate product. The order will be processed immediately
+      description: 'Creates a Climate order object for a given Climate product. The order will be processed immediately
 
-        after creation and payment will be deducted your Stripe balance.</p>'
+        after creation and payment will be deducted your Stripe balance.'
       operationId: PostClimateReservations
       requestBody:
         content:
@@ -472,9 +488,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate reservations
+      x-summary-source: derived
   /v1/climate/reservations/{order}:
     get:
-      description: <p>Retrieves the details of a Climate order object with the given ID.</p>
+      description: Retrieves the details of a Climate order object with the given ID.
       operationId: GetClimateReservationsOrder
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -519,8 +537,10 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate reservations order
+      x-summary-source: derived
     post:
-      description: <p>Updates the specified order by setting the values of the parameters passed.</p>
+      description: Updates the specified order by setting the values of the parameters passed.
       operationId: PostClimateReservationsOrder
       parameters:
       - description: Unique identifier of the order.
@@ -563,15 +583,17 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate reservations order
+      x-summary-source: derived
   /v1/climate/reservations/{order}/cancel:
     post:
-      description: '<p>Cancels a Climate order. You can cancel an order within 30 days of creation. Stripe refunds the
+      description: 'Cancels a Climate order. You can cancel an order within 30 days of creation. Stripe refunds the
 
-        reservation <code>amount_subtotal</code>, but not the <code>amount_fees</code> for user-triggered cancellations. Frontier
+        reservation amount_subtotal, but not the amount_fees for user-triggered cancellations. Frontier
 
         might cancel reservations if suppliers fail to deliver. If Frontier cancels the reservation, Stripe
 
-        provides 90 days advance notice and refunds the <code>amount_total</code>.</p>'
+        provides 90 days advance notice and refunds the amount_total.'
       operationId: PostClimateReservationsOrderCancel
       parameters:
       - description: Unique identifier of the order.
@@ -608,11 +630,13 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate reservations order cancel
+      x-summary-source: derived
   /v1/climate/reservations/{order}/confirm:
     post:
-      description: '<p>Confirms a Climate order. When you confirm your order, we immediately deduct the funds from your
+      description: 'Confirms a Climate order. When you confirm your order, we immediately deduct the funds from your
 
-        Stripe balance.</p>'
+        Stripe balance.'
       operationId: PostClimateReservationsOrderConfirm
       parameters:
       - description: Unique identifier of the order.
@@ -649,9 +673,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Post climate reservations order confirm
+      x-summary-source: derived
   /v1/climate/suppliers:
     get:
-      description: <p>Lists all available Climate supplier objects.</p>
+      description: Lists all available Climate supplier objects.
       operationId: GetClimateSuppliers
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -714,9 +740,11 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate suppliers
+      x-summary-source: derived
   /v1/climate/suppliers/{supplier}:
     get:
-      description: <p>Retrieves a Climate supplier object.</p>
+      description: Retrieves a Climate supplier object.
       operationId: GetClimateSuppliersSupplier
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -760,85 +788,23 @@ paths:
           description: Error response.
       tags:
       - Climate
+      summary: Get climate suppliers supplier
+      x-summary-source: derived
 components:
   schemas:
-    PostClimateReservationsOrderRequest:
-      type: object
-      properties:
-        beneficiary:
-          anyOf:
-          - properties:
-              public_name:
-                anyOf:
-                - maxLength: 5000
-                  type: string
-                - enum:
-                  - ''
-                  type: string
-            required:
-            - public_name
-            title: beneficiary_params
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-    PostClimateReservationsOrderConfirmRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostClimateOrdersOrderRequest:
-      type: object
-      properties:
-        beneficiary:
-          anyOf:
-          - properties:
-              public_name:
-                anyOf:
-                - maxLength: 5000
-                  type: string
-                - enum:
-                  - ''
-                  type: string
-            required:
-            - public_name
-            title: beneficiary_params
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-    GetClimateOrdersRequest:
+    GetClimateOrdersOrderRequest:
       type: object
       properties: {}
-    GetClimateOrdersOrderRequest:
+    PostClimateReservationsOrderCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetClimateSuppliersSupplierRequest:
       type: object
       properties: {}
     climate.order:
@@ -860,27 +826,31 @@ components:
         canceled_at:
           description: Time at which the order was canceled. Measured in seconds since the Unix epoch.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         cancellation_reason:
           description: Reason for the cancellation of this order.
           enum:
           - expired
           - product_unavailable
           - requested
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
           x-stripeBypassValidation: true
         certificate:
           description: For delivered orders, a URL to a delivery certificate for the order.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         confirmed_at:
           description: Time at which the order was confirmed. Measured in seconds since the Unix epoch.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         created:
           description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
@@ -892,13 +862,15 @@ components:
         delayed_at:
           description: Time at which the order's expected_delivery_year was delayed. Measured in seconds since the Unix epoch.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         delivered_at:
           description: Time at which the order was delivered. Measured in seconds since the Unix epoch.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         delivery_details:
           description: Details about the delivery of carbon removal for this order.
           items:
@@ -941,8 +913,9 @@ components:
         product_substituted_at:
           description: Time at which the order's product was substituted for a different product. Measured in seconds since the Unix epoch.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         status:
           description: The current status of this order.
           enum:
@@ -974,40 +947,18 @@ components:
       - delivery_details
       - product
       x-resourceId: climate.order
-    GetClimateSuppliersSupplierRequest:
-      type: object
-      properties: {}
-    GetClimateSuppliersRequest:
-      type: object
-      properties: {}
     GetClimateReservationsRequest:
       type: object
       properties: {}
-    ClimateRemovalsSuppliersList:
+    PostClimateReservationsOrderConfirmRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
       properties:
-        data:
+        expand:
+          description: Specifies which fields in the response should be expanded.
           items:
-            $ref: '#/components/schemas/climate.supplier'
+            maxLength: 5000
+            type: string
           type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/climate/suppliers
-          type: string
     PostClimateOrdersRequest:
       type: object
       required:
@@ -1049,18 +1000,17 @@ components:
           description: Unique identifier of the Climate product.
           maxLength: 5000
           type: string
-    PostClimateReservationsOrderCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetClimateReservationsOrderRequest:
+    GetClimateProductsRequest:
       type: object
       properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     climate.product:
       description: 'A Climate product represents a type of carbon removal unit available for reservation.
 
@@ -1077,8 +1027,9 @@ components:
           type: object
         delivery_year:
           description: The year in which the carbon removal is expected to be delivered.
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         id:
           description: 'Unique identifier for the object. For convenience, Climate product IDs are human-readable strings
 
@@ -1123,15 +1074,31 @@ components:
       - current_prices_per_metric_ton
       - suppliers
       x-resourceId: climate.product
-    PostClimateOrdersOrderCancelRequest:
+    ClimateRemovalsProductsList:
       type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
       properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
+        data:
           items:
-            maxLength: 5000
-            type: string
+            $ref: '#/components/schemas/climate.product'
           type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/climate/products
+          type: string
     climate.supplier:
       description: A supplier of carbon removal.
       properties:
@@ -1180,6 +1147,31 @@ components:
       x-expandableFields:
       - locations
       x-resourceId: climate.supplier
+    ClimateRemovalsSuppliersList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/climate.supplier'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/climate/suppliers
+          type: string
     PostClimateReservationsRequest:
       type: object
       required:
@@ -1221,17 +1213,38 @@ components:
           description: Unique identifier of the Climate product.
           maxLength: 5000
           type: string
-    error:
-      description: An error response from the Stripe API
+    PostClimateReservationsOrderRequest:
+      type: object
       properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetClimateProductsProductRequest:
-      type: object
-      properties: {}
+        beneficiary:
+          anyOf:
+          - properties:
+              public_name:
+                anyOf:
+                - maxLength: 5000
+                  type: string
+                - enum:
+                  - ''
+                  type: string
+            required:
+            - public_name
+            title: beneficiary_params
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
     ClimateRemovalsOrdersList:
       type: object
       required:
@@ -1257,31 +1270,66 @@ components:
           maxLength: 5000
           pattern: ^/v1/climate/orders
           type: string
-    ClimateRemovalsProductsList:
+    PostClimateOrdersOrderRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
       properties:
-        data:
+        beneficiary:
+          anyOf:
+          - properties:
+              public_name:
+                anyOf:
+                - maxLength: 5000
+                  type: string
+                - enum:
+                  - ''
+                  type: string
+            required:
+            - public_name
+            title: beneficiary_params
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
+        expand:
+          description: Specifies which fields in the response should be expanded.
           items:
-            $ref: '#/components/schemas/climate.product'
+            maxLength: 5000
+            type: string
           type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/climate/products
-          type: string
-    GetClimateProductsRequest:
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+    GetClimateOrdersRequest:
       type: object
       properties: {}
+    GetClimateReservationsOrderRequest:
+      type: object
+      properties: {}
+    GetClimateProductsProductRequest:
+      type: object
+      properties: {}
+    PostClimateOrdersOrderCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetClimateSuppliersRequest:
+      type: object
+      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

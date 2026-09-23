@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Exchange Rates API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Exchange Rates API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/exchange_rates:
     get:
-      description: <p>Returns a list of objects that contain the rates at which foreign currencies are converted to one another. Only shows the currencies for which Stripe supports.</p>
+      description: Returns a list of objects that contain the rates at which foreign currencies are converted to one another. Only shows the currencies for which Stripe supports.
       operationId: GetExchangeRates
       parameters:
       - description: A cursor for use in pagination. `ending_before` is the currency that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with the exchange rate for currency X your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -82,9 +82,11 @@ paths:
           description: Error response.
       tags:
       - Exchange Rates
+      summary: Get exchange rates
+      x-summary-source: derived
   /v1/exchange_rates/{rate_id}:
     get:
-      description: <p>Retrieves the exchange rates from the given currency to every supported currency.</p>
+      description: Retrieves the exchange rates from the given currency to every supported currency.
       operationId: GetExchangeRatesRateId
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -128,33 +130,10 @@ paths:
           description: Error response.
       tags:
       - Exchange Rates
+      summary: Get exchange rates rate id
+      x-summary-source: derived
 components:
   schemas:
-    ExchangeRateList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/exchange_rate'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/exchange_rates
-          type: string
     error:
       description: An error response from the Stripe API
       properties:
@@ -163,9 +142,6 @@ components:
       required:
       - error
       type: object
-    GetExchangeRatesRateIdRequest:
-      type: object
-      properties: {}
     GetExchangeRatesRequest:
       type: object
       properties: {}
@@ -237,3 +213,41 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: exchange_rate
+    ExchangeRateList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/exchange_rate'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/exchange_rates
+          type: string
+    GetExchangeRatesRateIdRequest:
+      type: object
+      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

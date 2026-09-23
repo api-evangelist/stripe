@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Webhook Endpoints API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Webhook Webhook Endpoints API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/webhook_endpoints:
     get:
-      description: <p>Returns a list of your webhook endpoints.</p>
+      description: Returns a list of your webhook endpoints.
       operationId: GetWebhookEndpoints
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -82,8 +82,10 @@ paths:
           description: Error response.
       tags:
       - Webhook Endpoints
+      summary: Get webhook endpoints
+      x-summary-source: derived
     post:
-      description: <p>A webhook endpoint must have a <code>url</code> and a list of <code>enabled_events</code>. You may optionally specify the Boolean <code>connect</code> parameter. If set to true, then a Connect webhook endpoint that notifies the specified <code>url</code> about events from all connected accounts is created; otherwise an account webhook endpoint that notifies the specified <code>url</code> only about events from your account is created. You can also create webhook endpoints in the <a href="https://dashboard.stripe.com/account/webhooks">webhooks settings</a> section of the Dashboard.</p>
+      description: A webhook endpoint must have a url and a list of enabled_events. You may optionally specify the Boolean connect parameter. If set to true, then a Connect webhook endpoint that notifies the specified url about events from all connected accounts is created; otherwise an account webhook endpoint that notifies the specified url only about events from your account is created. You can also create webhook endpoints in the webhooks settings section of the Dashboard.
       operationId: PostWebhookEndpoints
       requestBody:
         content:
@@ -120,9 +122,11 @@ paths:
           description: Error response.
       tags:
       - Webhook Endpoints
+      summary: Post webhook endpoints
+      x-summary-source: derived
   /v1/webhook_endpoints/{webhook_endpoint}:
     delete:
-      description: <p>You can also delete webhook endpoints via the <a href="https://dashboard.stripe.com/account/webhooks">webhook endpoint management</a> page of the Stripe dashboard.</p>
+      description: You can also delete webhook endpoints via the webhook endpoint management page of the Stripe dashboard.
       operationId: DeleteWebhookEndpointsWebhookEndpoint
       parameters:
       - in: path
@@ -155,8 +159,10 @@ paths:
           description: Error response.
       tags:
       - Webhook Endpoints
+      summary: Delete webhook endpoints webhook endpoint
+      x-summary-source: derived
     get:
-      description: <p>Retrieves the webhook endpoint with the given ID.</p>
+      description: Retrieves the webhook endpoint with the given ID.
       operationId: GetWebhookEndpointsWebhookEndpoint
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -200,8 +206,10 @@ paths:
           description: Error response.
       tags:
       - Webhook Endpoints
+      summary: Get webhook endpoints webhook endpoint
+      x-summary-source: derived
     post:
-      description: <p>Updates the webhook endpoint. You may edit the <code>url</code>, the list of <code>enabled_events</code>, and the status of your endpoint.</p>
+      description: Updates the webhook endpoint. You may edit the url, the list of enabled_events, and the status of your endpoint.
       operationId: PostWebhookEndpointsWebhookEndpoint
       parameters:
       - in: path
@@ -246,6 +254,8 @@ paths:
           description: Error response.
       tags:
       - Webhook Endpoints
+      summary: Post webhook endpoints webhook endpoint
+      x-summary-source: derived
 components:
   schemas:
     webhook_endpoint:
@@ -264,13 +274,15 @@ components:
         api_version:
           description: The API version events are rendered as for this webhook endpoint.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         application:
           description: The ID of the associated Connect application.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         created:
           description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
@@ -278,8 +290,9 @@ components:
         description:
           description: An optional description of what the webhook is used for.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         enabled_events:
           description: The list of events to enable for this endpoint. `['*']` indicates that all events are enabled, except those that require explicit selection.
           items:
@@ -340,6 +353,31 @@ components:
     GetWebhookEndpointsRequest:
       type: object
       properties: {}
+    deleted_webhook_endpoint:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - webhook_endpoint
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: NotificationWebhookEndpointDeleted
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_webhook_endpoint
     DeleteWebhookEndpointsWebhookEndpointRequest:
       type: object
       properties: {}
@@ -1010,28 +1048,13 @@ components:
         url:
           description: The URL of the webhook endpoint.
           type: string
-    deleted_webhook_endpoint:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - webhook_endpoint
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: NotificationWebhookEndpointDeleted
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_webhook_endpoint
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

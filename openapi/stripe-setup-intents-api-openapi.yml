@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Setup Intents API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Setup Setup Intents API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/setup_intents:
     get:
-      description: <p>Returns a list of SetupIntents.</p>
+      description: Returns a list of SetupIntents.
       operationId: GetSetupIntents
       parameters:
       - description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
@@ -128,13 +128,15 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Get setup intents
+      x-summary-source: derived
     post:
-      description: '<p>Creates a SetupIntent object.</p>
+      description: 'Creates a SetupIntent object.
 
 
-        <p>After you create the SetupIntent, attach a payment method and <a href="/docs/api/setup_intents/confirm">confirm</a>
+        After you create the SetupIntent, attach a payment method and confirm
 
-        it to collect any required permissions to charge the payment method later.</p>'
+        it to collect any required permissions to charge the payment method later.'
       operationId: PostSetupIntents
       requestBody:
         content:
@@ -186,15 +188,17 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Post setup intents
+      x-summary-source: derived
   /v1/setup_intents/{intent}:
     get:
-      description: '<p>Retrieves the details of a SetupIntent that has previously been created. </p>
+      description: 'Retrieves the details of a SetupIntent that has previously been created.
 
 
-        <p>Client-side retrieval using a publishable key is allowed when the <code>client_secret</code> is provided in the query string. </p>
+        Client-side retrieval using a publishable key is allowed when the client_secret is provided in the query string.
 
 
-        <p>When retrieved with a publishable key, only a subset of properties will be returned. Please refer to the <a href="#setup_intent_object">SetupIntent</a> object reference for more details.</p>'
+        When retrieved with a publishable key, only a subset of properties will be returned. Please refer to the SetupIntent object reference for more details.'
       operationId: GetSetupIntentsIntent
       parameters:
       - description: The client secret of the SetupIntent. We require this string if you use a publishable key to retrieve the SetupIntent.
@@ -246,8 +250,10 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Get setup intents intent
+      x-summary-source: derived
     post:
-      description: <p>Updates a SetupIntent object.</p>
+      description: Updates a SetupIntent object.
       operationId: PostSetupIntentsIntent
       parameters:
       - in: path
@@ -298,12 +304,14 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Post setup intents intent
+      x-summary-source: derived
   /v1/setup_intents/{intent}/cancel:
     post:
-      description: '<p>You can cancel a SetupIntent object when it’s in one of these statuses: <code>requires_payment_method</code>, <code>requires_confirmation</code>, or <code>requires_action</code>. </p>
+      description: 'You can cancel a SetupIntent object when it’s in one of these statuses: requires_payment_method, requires_confirmation, or requires_action.
 
 
-        <p>After you cancel it, setup is abandoned and any operations on the SetupIntent fail with an error.</p>'
+        After you cancel it, setup is abandoned and any operations on the SetupIntent fail with an error.'
       operationId: PostSetupIntentsIntentCancel
       parameters:
       - in: path
@@ -339,33 +347,35 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Post setup intents intent cancel
+      x-summary-source: derived
   /v1/setup_intents/{intent}/confirm:
     post:
-      description: '<p>Confirm that your customer intends to set up the current or
+      description: 'Confirm that your customer intends to set up the current or
 
         provided payment method. For example, you would confirm a SetupIntent
 
         when a customer hits the “Save” button on a payment method management
 
-        page on your website.</p>
+        page on your website.
 
 
-        <p>If the selected payment method does not require any additional
+        If the selected payment method does not require any additional
 
         steps from the customer, the SetupIntent will transition to the
 
-        <code>succeeded</code> status.</p>
+        succeeded status.
 
 
-        <p>Otherwise, it will transition to the <code>requires_action</code> status and
+        Otherwise, it will transition to the requires_action status and
 
-        suggest additional actions via <code>next_action</code>. If setup fails,
+        suggest additional actions via next_action. If setup fails,
 
         the SetupIntent will transition to the
 
-        <code>requires_payment_method</code> status or the <code>canceled</code> status if the
+        requires_payment_method status or the canceled status if the
 
-        confirmation limit is reached.</p>'
+        confirmation limit is reached.'
       operationId: PostSetupIntentsIntentConfirm
       parameters:
       - in: path
@@ -410,9 +420,11 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
+      summary: Post setup intents intent confirm
+      x-summary-source: derived
   /v1/setup_intents/{intent}/verify_microdeposits:
     post:
-      description: <p>Verifies microdeposits on a SetupIntent object.</p>
+      description: Verifies microdeposits on a SetupIntent object.
       operationId: PostSetupIntentsIntentVerifyMicrodeposits
       parameters:
       - in: path
@@ -451,65 +463,85 @@ paths:
           description: Error response.
       tags:
       - Setup Intents
-  /v1/setup_attempts:
-    get:
-      summary: List Setup Attempts
-      description: <p>Returns a list of SetupAttempts that associate with a provided SetupIntent.</p>
-      operationId: GetSetupAttempts
-      parameters:
-      - name: setup_intent
-        in: query
-        required: true
-        schema:
-          type: string
-          maxLength: 5000
-      - name: ending_before
-        in: query
-        required: false
-        schema:
-          type: string
-          maxLength: 5000
-      - name: limit
-        in: query
-        required: false
-        schema:
-          type: integer
-      - name: starting_after
-        in: query
-        required: false
-        schema:
-          type: string
-          maxLength: 5000
-      responses:
-        '200':
-          description: Successful response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  object:
-                    type: string
-                    enum:
-                    - list
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/setup_attempt'
-                  has_more:
-                    type: boolean
-                  url:
-                    type: string
-        default:
-          description: Error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error_2'
-      tags:
-      - Setup Intents
+      summary: Post setup intents intent verify microdeposits
+      x-summary-source: derived
 components:
   schemas:
+    PaymentFlowsSetupIntentList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/setup_intent'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/setup_intents
+          type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetSetupIntentsIntentRequest:
+      type: object
+      properties: {}
+    PostSetupIntentsIntentVerifyMicrodepositsRequest:
+      type: object
+      properties:
+        amounts:
+          description: Two positive integers, in *cents*, equal to the values of the microdeposits sent to the bank account.
+          items:
+            type: integer
+          type: array
+        client_secret:
+          description: The client secret of the SetupIntent.
+          maxLength: 5000
+          type: string
+        descriptor_code:
+          description: A six-character code starting with SM present in the microdeposit sent to the bank account.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostSetupIntentsIntentCancelRequest:
+      type: object
+      properties:
+        cancellation_reason:
+          description: 'Reason for canceling this SetupIntent. Possible values are: `abandoned`, `requested_by_customer`, or `duplicate`'
+          enum:
+          - abandoned
+          - duplicate
+          - requested_by_customer
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
     PostSetupIntentsRequest:
       type: object
       properties:
@@ -1343,29 +1375,25 @@ components:
         use_stripe_sdk:
           description: Set to `true` when confirming server-side and using Stripe.js, iOS, or Android client-side SDKs to handle the next actions.
           type: boolean
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    PostSetupIntentsIntentVerifyMicrodepositsRequest:
+    PostSetupIntentsIntentRequest:
       type: object
       properties:
-        amounts:
-          description: Two positive integers, in *cents*, equal to the values of the microdeposits sent to the bank account.
-          items:
-            type: integer
-          type: array
-        client_secret:
-          description: The client secret of the SetupIntent.
+        attach_to_self:
+          description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
+
+
+            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
+          type: boolean
+        customer:
+          description: 'ID of the Customer this SetupIntent belongs to, if one exists.
+
+
+            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
           maxLength: 5000
           type: string
-        descriptor_code:
-          description: A six-character code starting with SM present in the microdeposit sent to the bank account.
-          maxLength: 5000
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 1000
           type: string
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -1373,94 +1401,734 @@ components:
             maxLength: 5000
             type: string
           type: array
-    setup_attempt:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-          - setup_attempt
-        application:
-          type:
-          - string
-          - 'null'
-        attach_to_self:
-          type: boolean
-        created:
-          type: integer
-        customer:
-          type:
-          - string
-          - 'null'
-        livemode:
-          type: boolean
-        on_behalf_of:
-          type:
-          - string
-          - 'null'
-        payment_method:
-          type: string
-        setup_error:
-          type:
-          - object
-          - 'null'
-        setup_intent:
-          type: string
-        status:
-          type: string
-        usage:
-          type: string
-      required:
-      - id
-      - object
-      - created
-      - livemode
-      - payment_method
-      - setup_intent
-      - status
-      - usage
-    error_2:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-            message:
-              type: string
-            code:
-              type: string
-            param:
-              type: string
-    PaymentFlowsSetupIntentList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
+        flow_directions:
+          description: 'Indicates the directions of money movement for which this payment method is intended to be used.
+
+
+            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
           items:
-            $ref: '#/components/schemas/setup_intent'
+            enum:
+            - inbound
+            - outbound
+            type: string
           type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        payment_method:
+          description: ID of the payment method (a PaymentMethod, Card, or saved Source object) to attach to this SetupIntent.
           maxLength: 5000
-          pattern: ^/v1/setup_intents
           type: string
+        payment_method_configuration:
+          description: The ID of the payment method configuration to use with this SetupIntent.
+          maxLength: 100
+          type: string
+        payment_method_data:
+          description: 'When included, this hash creates a PaymentMethod that is set as the [`payment_method`](https://stripe.com/docs/api/setup_intents/object#setup_intent_object-payment_method)
+
+            value in the SetupIntent.'
+          properties:
+            acss_debit:
+              properties:
+                account_number:
+                  maxLength: 5000
+                  type: string
+                institution_number:
+                  maxLength: 5000
+                  type: string
+                transit_number:
+                  maxLength: 5000
+                  type: string
+              required:
+              - account_number
+              - institution_number
+              - transit_number
+              title: payment_method_param
+              type: object
+            affirm:
+              properties: {}
+              title: param
+              type: object
+            afterpay_clearpay:
+              properties: {}
+              title: param
+              type: object
+            alipay:
+              properties: {}
+              title: param
+              type: object
+            au_becs_debit:
+              properties:
+                account_number:
+                  maxLength: 5000
+                  type: string
+                bsb_number:
+                  maxLength: 5000
+                  type: string
+              required:
+              - account_number
+              - bsb_number
+              title: param
+              type: object
+            bacs_debit:
+              properties:
+                account_number:
+                  maxLength: 5000
+                  type: string
+                sort_code:
+                  maxLength: 5000
+                  type: string
+              title: param
+              type: object
+            bancontact:
+              properties: {}
+              title: param
+              type: object
+            billing_details:
+              properties:
+                address:
+                  anyOf:
+                  - properties:
+                      city:
+                        maxLength: 5000
+                        type: string
+                      country:
+                        maxLength: 5000
+                        type: string
+                      line1:
+                        maxLength: 5000
+                        type: string
+                      line2:
+                        maxLength: 5000
+                        type: string
+                      postal_code:
+                        maxLength: 5000
+                        type: string
+                      state:
+                        maxLength: 5000
+                        type: string
+                    title: billing_details_address
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                email:
+                  anyOf:
+                  - type: string
+                  - enum:
+                    - ''
+                    type: string
+                name:
+                  anyOf:
+                  - maxLength: 5000
+                    type: string
+                  - enum:
+                    - ''
+                    type: string
+                phone:
+                  anyOf:
+                  - maxLength: 5000
+                    type: string
+                  - enum:
+                    - ''
+                    type: string
+              title: billing_details_inner_params
+              type: object
+            blik:
+              properties: {}
+              title: param
+              type: object
+            boleto:
+              properties:
+                tax_id:
+                  maxLength: 5000
+                  type: string
+              required:
+              - tax_id
+              title: param
+              type: object
+            cashapp:
+              properties: {}
+              title: param
+              type: object
+            customer_balance:
+              properties: {}
+              title: param
+              type: object
+            eps:
+              properties:
+                bank:
+                  enum:
+                  - arzte_und_apotheker_bank
+                  - austrian_anadi_bank_ag
+                  - bank_austria
+                  - bankhaus_carl_spangler
+                  - bankhaus_schelhammer_und_schattera_ag
+                  - bawag_psk_ag
+                  - bks_bank_ag
+                  - brull_kallmus_bank_ag
+                  - btv_vier_lander_bank
+                  - capital_bank_grawe_gruppe_ag
+                  - deutsche_bank_ag
+                  - dolomitenbank
+                  - easybank_ag
+                  - erste_bank_und_sparkassen
+                  - hypo_alpeadriabank_international_ag
+                  - hypo_bank_burgenland_aktiengesellschaft
+                  - hypo_noe_lb_fur_niederosterreich_u_wien
+                  - hypo_oberosterreich_salzburg_steiermark
+                  - hypo_tirol_bank_ag
+                  - hypo_vorarlberg_bank_ag
+                  - marchfelder_bank
+                  - oberbank_ag
+                  - raiffeisen_bankengruppe_osterreich
+                  - schoellerbank_ag
+                  - sparda_bank_wien
+                  - volksbank_gruppe
+                  - volkskreditbank_ag
+                  - vr_bank_braunau
+                  maxLength: 5000
+                  type: string
+              title: param
+              type: object
+            fpx:
+              properties:
+                bank:
+                  enum:
+                  - affin_bank
+                  - agrobank
+                  - alliance_bank
+                  - ambank
+                  - bank_islam
+                  - bank_muamalat
+                  - bank_of_china
+                  - bank_rakyat
+                  - bsn
+                  - cimb
+                  - deutsche_bank
+                  - hong_leong_bank
+                  - hsbc
+                  - kfh
+                  - maybank2e
+                  - maybank2u
+                  - ocbc
+                  - pb_enterprise
+                  - public_bank
+                  - rhb
+                  - standard_chartered
+                  - uob
+                  maxLength: 5000
+                  type: string
+                  x-stripeBypassValidation: true
+              required:
+              - bank
+              title: param
+              type: object
+            giropay:
+              properties: {}
+              title: param
+              type: object
+            grabpay:
+              properties: {}
+              title: param
+              type: object
+            ideal:
+              properties:
+                bank:
+                  enum:
+                  - abn_amro
+                  - asn_bank
+                  - bunq
+                  - handelsbanken
+                  - ing
+                  - knab
+                  - moneyou
+                  - n26
+                  - rabobank
+                  - regiobank
+                  - revolut
+                  - sns_bank
+                  - triodos_bank
+                  - van_lanschot
+                  - yoursafe
+                  maxLength: 5000
+                  type: string
+              title: param
+              type: object
+            interac_present:
+              properties: {}
+              title: param
+              type: object
+            klarna:
+              properties:
+                dob:
+                  properties:
+                    day:
+                      type: integer
+                    month:
+                      type: integer
+                    year:
+                      type: integer
+                  required:
+                  - day
+                  - month
+                  - year
+                  title: date_of_birth
+                  type: object
+              title: param
+              type: object
+            konbini:
+              properties: {}
+              title: param
+              type: object
+            link:
+              properties: {}
+              title: param
+              type: object
+            metadata:
+              additionalProperties:
+                type: string
+              type: object
+            oxxo:
+              properties: {}
+              title: param
+              type: object
+            p24:
+              properties:
+                bank:
+                  enum:
+                  - alior_bank
+                  - bank_millennium
+                  - bank_nowy_bfg_sa
+                  - bank_pekao_sa
+                  - banki_spbdzielcze
+                  - blik
+                  - bnp_paribas
+                  - boz
+                  - citi_handlowy
+                  - credit_agricole
+                  - envelobank
+                  - etransfer_pocztowy24
+                  - getin_bank
+                  - ideabank
+                  - ing
+                  - inteligo
+                  - mbank_mtransfer
+                  - nest_przelew
+                  - noble_pay
+                  - pbac_z_ipko
+                  - plus_bank
+                  - santander_przelew24
+                  - tmobile_usbugi_bankowe
+                  - toyota_bank
+                  - volkswagen_bank
+                  type: string
+                  x-stripeBypassValidation: true
+              title: param
+              type: object
+            paynow:
+              properties: {}
+              title: param
+              type: object
+            paypal:
+              properties: {}
+              title: param
+              type: object
+            pix:
+              properties: {}
+              title: param
+              type: object
+            promptpay:
+              properties: {}
+              title: param
+              type: object
+            radar_options:
+              properties:
+                session:
+                  maxLength: 5000
+                  type: string
+              title: radar_options
+              type: object
+            revolut_pay:
+              properties: {}
+              title: param
+              type: object
+            sepa_debit:
+              properties:
+                iban:
+                  maxLength: 5000
+                  type: string
+              required:
+              - iban
+              title: param
+              type: object
+            sofort:
+              properties:
+                country:
+                  enum:
+                  - AT
+                  - BE
+                  - DE
+                  - ES
+                  - IT
+                  - NL
+                  type: string
+              required:
+              - country
+              title: param
+              type: object
+            type:
+              enum:
+              - acss_debit
+              - affirm
+              - afterpay_clearpay
+              - alipay
+              - au_becs_debit
+              - bacs_debit
+              - bancontact
+              - blik
+              - boleto
+              - cashapp
+              - customer_balance
+              - eps
+              - fpx
+              - giropay
+              - grabpay
+              - ideal
+              - klarna
+              - konbini
+              - link
+              - oxxo
+              - p24
+              - paynow
+              - paypal
+              - pix
+              - promptpay
+              - revolut_pay
+              - sepa_debit
+              - sofort
+              - us_bank_account
+              - wechat_pay
+              - zip
+              type: string
+              x-stripeBypassValidation: true
+            us_bank_account:
+              properties:
+                account_holder_type:
+                  enum:
+                  - company
+                  - individual
+                  type: string
+                account_number:
+                  maxLength: 5000
+                  type: string
+                account_type:
+                  enum:
+                  - checking
+                  - savings
+                  type: string
+                financial_connections_account:
+                  maxLength: 5000
+                  type: string
+                routing_number:
+                  maxLength: 5000
+                  type: string
+              title: payment_method_param
+              type: object
+            wechat_pay:
+              properties: {}
+              title: param
+              type: object
+            zip:
+              properties: {}
+              title: param
+              type: object
+          required:
+          - type
+          title: payment_method_data_params
+          type: object
+        payment_method_options:
+          description: Payment method-specific configuration for this SetupIntent.
+          properties:
+            acss_debit:
+              properties:
+                currency:
+                  enum:
+                  - cad
+                  - usd
+                  type: string
+                mandate_options:
+                  properties:
+                    custom_mandate_url:
+                      anyOf:
+                      - type: string
+                      - enum:
+                        - ''
+                        type: string
+                    default_for:
+                      items:
+                        enum:
+                        - invoice
+                        - subscription
+                        type: string
+                      type: array
+                    interval_description:
+                      maxLength: 500
+                      type: string
+                    payment_schedule:
+                      enum:
+                      - combined
+                      - interval
+                      - sporadic
+                      type: string
+                    transaction_type:
+                      enum:
+                      - business
+                      - personal
+                      type: string
+                  title: setup_intent_payment_method_options_mandate_options_param
+                  type: object
+                verification_method:
+                  enum:
+                  - automatic
+                  - instant
+                  - microdeposits
+                  type: string
+                  x-stripeBypassValidation: true
+              title: setup_intent_payment_method_options_param
+              type: object
+            card:
+              properties:
+                mandate_options:
+                  properties:
+                    amount:
+                      type: integer
+                    amount_type:
+                      enum:
+                      - fixed
+                      - maximum
+                      type: string
+                    currency:
+                      type: string
+                    description:
+                      maxLength: 200
+                      type: string
+                    end_date:
+                      format: unix-time
+                      type: integer
+                    interval:
+                      enum:
+                      - day
+                      - month
+                      - sporadic
+                      - week
+                      - year
+                      type: string
+                    interval_count:
+                      type: integer
+                    reference:
+                      maxLength: 80
+                      type: string
+                    start_date:
+                      format: unix-time
+                      type: integer
+                    supported_types:
+                      items:
+                        enum:
+                        - india
+                        type: string
+                      type: array
+                  required:
+                  - amount
+                  - amount_type
+                  - currency
+                  - interval
+                  - reference
+                  - start_date
+                  title: setup_intent_mandate_options_param
+                  type: object
+                network:
+                  enum:
+                  - amex
+                  - cartes_bancaires
+                  - diners
+                  - discover
+                  - eftpos_au
+                  - interac
+                  - jcb
+                  - mastercard
+                  - unionpay
+                  - unknown
+                  - visa
+                  maxLength: 5000
+                  type: string
+                  x-stripeBypassValidation: true
+                request_three_d_secure:
+                  enum:
+                  - any
+                  - automatic
+                  - challenge
+                  type: string
+                  x-stripeBypassValidation: true
+                three_d_secure:
+                  properties:
+                    ares_trans_status:
+                      enum:
+                      - A
+                      - C
+                      - I
+                      - N
+                      - R
+                      - U
+                      - Y
+                      type: string
+                    cryptogram:
+                      maxLength: 5000
+                      type: string
+                    electronic_commerce_indicator:
+                      enum:
+                      - '01'
+                      - '02'
+                      - '05'
+                      - '06'
+                      - '07'
+                      type: string
+                      x-stripeBypassValidation: true
+                    network_options:
+                      properties:
+                        cartes_bancaires:
+                          properties:
+                            cb_avalgo:
+                              enum:
+                              - '0'
+                              - '1'
+                              - '2'
+                              - '3'
+                              - '4'
+                              - A
+                              type: string
+                            cb_exemption:
+                              maxLength: 4
+                              type: string
+                            cb_score:
+                              type: integer
+                          required:
+                          - cb_avalgo
+                          title: cartes_bancaires_network_options_param
+                          type: object
+                      title: network_options_param
+                      type: object
+                    requestor_challenge_indicator:
+                      maxLength: 2
+                      type: string
+                    transaction_id:
+                      maxLength: 5000
+                      type: string
+                    version:
+                      enum:
+                      - 1.0.2
+                      - 2.1.0
+                      - 2.2.0
+                      type: string
+                      x-stripeBypassValidation: true
+                  title: setup_intent_payment_method_options_param
+                  type: object
+              title: setup_intent_param
+              type: object
+            link:
+              properties: {}
+              title: setup_intent_payment_method_options_param
+              type: object
+            paypal:
+              properties:
+                billing_agreement_id:
+                  maxLength: 5000
+                  type: string
+              title: payment_method_options_param
+              type: object
+            sepa_debit:
+              properties:
+                mandate_options:
+                  properties: {}
+                  title: payment_method_options_mandate_options_param
+                  type: object
+              title: setup_intent_payment_method_options_param
+              type: object
+            us_bank_account:
+              properties:
+                financial_connections:
+                  properties:
+                    permissions:
+                      items:
+                        enum:
+                        - balances
+                        - ownership
+                        - payment_method
+                        - transactions
+                        maxLength: 5000
+                        type: string
+                        x-stripeBypassValidation: true
+                      type: array
+                    prefetch:
+                      items:
+                        enum:
+                        - balances
+                        - transactions
+                        type: string
+                        x-stripeBypassValidation: true
+                      type: array
+                    return_url:
+                      maxLength: 5000
+                      type: string
+                  title: linked_account_options_param
+                  type: object
+                mandate_options:
+                  properties:
+                    collection_method:
+                      enum:
+                      - ''
+                      - paper
+                      type: string
+                      x-stripeBypassValidation: true
+                  title: mandate_options_param
+                  type: object
+                networks:
+                  properties:
+                    requested:
+                      items:
+                        enum:
+                        - ach
+                        - us_domestic_wire
+                        type: string
+                      type: array
+                  title: networks_options_param
+                  type: object
+                verification_method:
+                  enum:
+                  - automatic
+                  - instant
+                  - microdeposits
+                  type: string
+                  x-stripeBypassValidation: true
+              title: setup_intent_payment_method_options_param
+              type: object
+          title: payment_method_options_param
+          type: object
+        payment_method_types:
+          description: The list of payment method types (for example, card) that this SetupIntent can set up. If you don't provide this array, it defaults to ["card"].
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetSetupIntentsRequest:
+      type: object
+      properties: {}
     PostSetupIntentsIntentConfirmRequest:
       type: object
       properties:
@@ -2247,12 +2915,6 @@ components:
         use_stripe_sdk:
           description: Set to `true` when confirming server-side and using Stripe.js, iOS, or Android client-side SDKs to handle the next actions.
           type: boolean
-    GetSetupIntentsIntentRequest:
-      type: object
-      properties: {}
-    GetSetupIntentsRequest:
-      type: object
-      properties: {}
     setup_intent:
       description: 'A SetupIntent guides you through the process of setting up and saving a customer''s payment credentials for future payments.
 
@@ -2298,7 +2960,6 @@ components:
             type: string
           - $ref: '#/components/schemas/application'
           description: ID of the Connect application that created the SetupIntent.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/application'
@@ -2312,23 +2973,24 @@ components:
           anyOf:
           - $ref: '#/components/schemas/payment_flows_automatic_payment_methods_setup_intent'
           description: Settings for dynamic payment methods compatible with this Setup Intent
-          nullable: true
         cancellation_reason:
           description: Reason for cancellation of this SetupIntent, one of `abandoned`, `requested_by_customer`, or `duplicate`.
           enum:
           - abandoned
           - duplicate
           - requested_by_customer
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         client_secret:
           description: 'The client secret of this SetupIntent. Used for client-side retrieval using a publishable key.
 
 
             The client secret can be used to complete payment setup from your frontend. It should not be stored, logged, or exposed to anyone other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.'
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         created:
           description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
@@ -2343,7 +3005,6 @@ components:
 
 
             If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
@@ -2351,8 +3012,9 @@ components:
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         flow_directions:
           description: 'Indicates the directions of money movement for which this payment method is intended to be used.
 
@@ -2363,8 +3025,9 @@ components:
             - inbound
             - outbound
             type: string
-          nullable: true
-          type: array
+          type:
+          - array
+          - 'null'
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -2373,14 +3036,12 @@ components:
           anyOf:
           - $ref: '#/components/schemas/api_errors'
           description: The error encountered in the previous SetupIntent confirmation.
-          nullable: true
         latest_attempt:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/setup_attempt'
           description: The most recent SetupAttempt for this SetupIntent.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/setup_attempt'
@@ -2393,7 +3054,6 @@ components:
             type: string
           - $ref: '#/components/schemas/mandate'
           description: ID of the multi use Mandate generated by the SetupIntent.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/mandate'
@@ -2402,13 +3062,13 @@ components:
             maxLength: 500
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          nullable: true
-          type: object
+          type:
+          - object
+          - 'null'
         next_action:
           anyOf:
           - $ref: '#/components/schemas/setup_intent_next_action'
           description: If present, this property tells you what actions you need to take in order for your customer to continue payment setup.
-          nullable: true
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
@@ -2420,7 +3080,6 @@ components:
             type: string
           - $ref: '#/components/schemas/account'
           description: The account (if any) for which the setup is intended.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
@@ -2430,7 +3089,6 @@ components:
             type: string
           - $ref: '#/components/schemas/payment_method'
           description: ID of the payment method used with this SetupIntent.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/payment_method'
@@ -2438,12 +3096,10 @@ components:
           anyOf:
           - $ref: '#/components/schemas/payment_method_config_biz_payment_method_configuration_details'
           description: Information about the payment method configuration used for this Setup Intent.
-          nullable: true
         payment_method_options:
           anyOf:
           - $ref: '#/components/schemas/setup_intent_payment_method_options'
           description: Payment method-specific configuration for this SetupIntent.
-          nullable: true
         payment_method_types:
           description: The list of payment method types (e.g. card) that this SetupIntent is allowed to set up.
           items:
@@ -2456,7 +3112,6 @@ components:
             type: string
           - $ref: '#/components/schemas/mandate'
           description: ID of the single_use Mandate generated by the SetupIntent.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/mandate'
@@ -2501,771 +3156,13 @@ components:
       - payment_method_options
       - single_use_mandate
       x-resourceId: setup_intent
-    PostSetupIntentsIntentCancelRequest:
-      type: object
-      properties:
-        cancellation_reason:
-          description: 'Reason for canceling this SetupIntent. Possible values are: `abandoned`, `requested_by_customer`, or `duplicate`'
-          enum:
-          - abandoned
-          - duplicate
-          - requested_by_customer
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostSetupIntentsIntentRequest:
-      type: object
-      properties:
-        attach_to_self:
-          description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
-
-
-            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
-          type: boolean
-        customer:
-          description: 'ID of the Customer this SetupIntent belongs to, if one exists.
-
-
-            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
-          maxLength: 5000
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 1000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        flow_directions:
-          description: 'Indicates the directions of money movement for which this payment method is intended to be used.
-
-
-            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
-          items:
-            enum:
-            - inbound
-            - outbound
-            type: string
-          type: array
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        payment_method:
-          description: ID of the payment method (a PaymentMethod, Card, or saved Source object) to attach to this SetupIntent.
-          maxLength: 5000
-          type: string
-        payment_method_configuration:
-          description: The ID of the payment method configuration to use with this SetupIntent.
-          maxLength: 100
-          type: string
-        payment_method_data:
-          description: 'When included, this hash creates a PaymentMethod that is set as the [`payment_method`](https://stripe.com/docs/api/setup_intents/object#setup_intent_object-payment_method)
-
-            value in the SetupIntent.'
-          properties:
-            acss_debit:
-              properties:
-                account_number:
-                  maxLength: 5000
-                  type: string
-                institution_number:
-                  maxLength: 5000
-                  type: string
-                transit_number:
-                  maxLength: 5000
-                  type: string
-              required:
-              - account_number
-              - institution_number
-              - transit_number
-              title: payment_method_param
-              type: object
-            affirm:
-              properties: {}
-              title: param
-              type: object
-            afterpay_clearpay:
-              properties: {}
-              title: param
-              type: object
-            alipay:
-              properties: {}
-              title: param
-              type: object
-            au_becs_debit:
-              properties:
-                account_number:
-                  maxLength: 5000
-                  type: string
-                bsb_number:
-                  maxLength: 5000
-                  type: string
-              required:
-              - account_number
-              - bsb_number
-              title: param
-              type: object
-            bacs_debit:
-              properties:
-                account_number:
-                  maxLength: 5000
-                  type: string
-                sort_code:
-                  maxLength: 5000
-                  type: string
-              title: param
-              type: object
-            bancontact:
-              properties: {}
-              title: param
-              type: object
-            billing_details:
-              properties:
-                address:
-                  anyOf:
-                  - properties:
-                      city:
-                        maxLength: 5000
-                        type: string
-                      country:
-                        maxLength: 5000
-                        type: string
-                      line1:
-                        maxLength: 5000
-                        type: string
-                      line2:
-                        maxLength: 5000
-                        type: string
-                      postal_code:
-                        maxLength: 5000
-                        type: string
-                      state:
-                        maxLength: 5000
-                        type: string
-                    title: billing_details_address
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                email:
-                  anyOf:
-                  - type: string
-                  - enum:
-                    - ''
-                    type: string
-                name:
-                  anyOf:
-                  - maxLength: 5000
-                    type: string
-                  - enum:
-                    - ''
-                    type: string
-                phone:
-                  anyOf:
-                  - maxLength: 5000
-                    type: string
-                  - enum:
-                    - ''
-                    type: string
-              title: billing_details_inner_params
-              type: object
-            blik:
-              properties: {}
-              title: param
-              type: object
-            boleto:
-              properties:
-                tax_id:
-                  maxLength: 5000
-                  type: string
-              required:
-              - tax_id
-              title: param
-              type: object
-            cashapp:
-              properties: {}
-              title: param
-              type: object
-            customer_balance:
-              properties: {}
-              title: param
-              type: object
-            eps:
-              properties:
-                bank:
-                  enum:
-                  - arzte_und_apotheker_bank
-                  - austrian_anadi_bank_ag
-                  - bank_austria
-                  - bankhaus_carl_spangler
-                  - bankhaus_schelhammer_und_schattera_ag
-                  - bawag_psk_ag
-                  - bks_bank_ag
-                  - brull_kallmus_bank_ag
-                  - btv_vier_lander_bank
-                  - capital_bank_grawe_gruppe_ag
-                  - deutsche_bank_ag
-                  - dolomitenbank
-                  - easybank_ag
-                  - erste_bank_und_sparkassen
-                  - hypo_alpeadriabank_international_ag
-                  - hypo_bank_burgenland_aktiengesellschaft
-                  - hypo_noe_lb_fur_niederosterreich_u_wien
-                  - hypo_oberosterreich_salzburg_steiermark
-                  - hypo_tirol_bank_ag
-                  - hypo_vorarlberg_bank_ag
-                  - marchfelder_bank
-                  - oberbank_ag
-                  - raiffeisen_bankengruppe_osterreich
-                  - schoellerbank_ag
-                  - sparda_bank_wien
-                  - volksbank_gruppe
-                  - volkskreditbank_ag
-                  - vr_bank_braunau
-                  maxLength: 5000
-                  type: string
-              title: param
-              type: object
-            fpx:
-              properties:
-                bank:
-                  enum:
-                  - affin_bank
-                  - agrobank
-                  - alliance_bank
-                  - ambank
-                  - bank_islam
-                  - bank_muamalat
-                  - bank_of_china
-                  - bank_rakyat
-                  - bsn
-                  - cimb
-                  - deutsche_bank
-                  - hong_leong_bank
-                  - hsbc
-                  - kfh
-                  - maybank2e
-                  - maybank2u
-                  - ocbc
-                  - pb_enterprise
-                  - public_bank
-                  - rhb
-                  - standard_chartered
-                  - uob
-                  maxLength: 5000
-                  type: string
-                  x-stripeBypassValidation: true
-              required:
-              - bank
-              title: param
-              type: object
-            giropay:
-              properties: {}
-              title: param
-              type: object
-            grabpay:
-              properties: {}
-              title: param
-              type: object
-            ideal:
-              properties:
-                bank:
-                  enum:
-                  - abn_amro
-                  - asn_bank
-                  - bunq
-                  - handelsbanken
-                  - ing
-                  - knab
-                  - moneyou
-                  - n26
-                  - rabobank
-                  - regiobank
-                  - revolut
-                  - sns_bank
-                  - triodos_bank
-                  - van_lanschot
-                  - yoursafe
-                  maxLength: 5000
-                  type: string
-              title: param
-              type: object
-            interac_present:
-              properties: {}
-              title: param
-              type: object
-            klarna:
-              properties:
-                dob:
-                  properties:
-                    day:
-                      type: integer
-                    month:
-                      type: integer
-                    year:
-                      type: integer
-                  required:
-                  - day
-                  - month
-                  - year
-                  title: date_of_birth
-                  type: object
-              title: param
-              type: object
-            konbini:
-              properties: {}
-              title: param
-              type: object
-            link:
-              properties: {}
-              title: param
-              type: object
-            metadata:
-              additionalProperties:
-                type: string
-              type: object
-            oxxo:
-              properties: {}
-              title: param
-              type: object
-            p24:
-              properties:
-                bank:
-                  enum:
-                  - alior_bank
-                  - bank_millennium
-                  - bank_nowy_bfg_sa
-                  - bank_pekao_sa
-                  - banki_spbdzielcze
-                  - blik
-                  - bnp_paribas
-                  - boz
-                  - citi_handlowy
-                  - credit_agricole
-                  - envelobank
-                  - etransfer_pocztowy24
-                  - getin_bank
-                  - ideabank
-                  - ing
-                  - inteligo
-                  - mbank_mtransfer
-                  - nest_przelew
-                  - noble_pay
-                  - pbac_z_ipko
-                  - plus_bank
-                  - santander_przelew24
-                  - tmobile_usbugi_bankowe
-                  - toyota_bank
-                  - volkswagen_bank
-                  type: string
-                  x-stripeBypassValidation: true
-              title: param
-              type: object
-            paynow:
-              properties: {}
-              title: param
-              type: object
-            paypal:
-              properties: {}
-              title: param
-              type: object
-            pix:
-              properties: {}
-              title: param
-              type: object
-            promptpay:
-              properties: {}
-              title: param
-              type: object
-            radar_options:
-              properties:
-                session:
-                  maxLength: 5000
-                  type: string
-              title: radar_options
-              type: object
-            revolut_pay:
-              properties: {}
-              title: param
-              type: object
-            sepa_debit:
-              properties:
-                iban:
-                  maxLength: 5000
-                  type: string
-              required:
-              - iban
-              title: param
-              type: object
-            sofort:
-              properties:
-                country:
-                  enum:
-                  - AT
-                  - BE
-                  - DE
-                  - ES
-                  - IT
-                  - NL
-                  type: string
-              required:
-              - country
-              title: param
-              type: object
-            type:
-              enum:
-              - acss_debit
-              - affirm
-              - afterpay_clearpay
-              - alipay
-              - au_becs_debit
-              - bacs_debit
-              - bancontact
-              - blik
-              - boleto
-              - cashapp
-              - customer_balance
-              - eps
-              - fpx
-              - giropay
-              - grabpay
-              - ideal
-              - klarna
-              - konbini
-              - link
-              - oxxo
-              - p24
-              - paynow
-              - paypal
-              - pix
-              - promptpay
-              - revolut_pay
-              - sepa_debit
-              - sofort
-              - us_bank_account
-              - wechat_pay
-              - zip
-              type: string
-              x-stripeBypassValidation: true
-            us_bank_account:
-              properties:
-                account_holder_type:
-                  enum:
-                  - company
-                  - individual
-                  type: string
-                account_number:
-                  maxLength: 5000
-                  type: string
-                account_type:
-                  enum:
-                  - checking
-                  - savings
-                  type: string
-                financial_connections_account:
-                  maxLength: 5000
-                  type: string
-                routing_number:
-                  maxLength: 5000
-                  type: string
-              title: payment_method_param
-              type: object
-            wechat_pay:
-              properties: {}
-              title: param
-              type: object
-            zip:
-              properties: {}
-              title: param
-              type: object
-          required:
-          - type
-          title: payment_method_data_params
-          type: object
-        payment_method_options:
-          description: Payment method-specific configuration for this SetupIntent.
-          properties:
-            acss_debit:
-              properties:
-                currency:
-                  enum:
-                  - cad
-                  - usd
-                  type: string
-                mandate_options:
-                  properties:
-                    custom_mandate_url:
-                      anyOf:
-                      - type: string
-                      - enum:
-                        - ''
-                        type: string
-                    default_for:
-                      items:
-                        enum:
-                        - invoice
-                        - subscription
-                        type: string
-                      type: array
-                    interval_description:
-                      maxLength: 500
-                      type: string
-                    payment_schedule:
-                      enum:
-                      - combined
-                      - interval
-                      - sporadic
-                      type: string
-                    transaction_type:
-                      enum:
-                      - business
-                      - personal
-                      type: string
-                  title: setup_intent_payment_method_options_mandate_options_param
-                  type: object
-                verification_method:
-                  enum:
-                  - automatic
-                  - instant
-                  - microdeposits
-                  type: string
-                  x-stripeBypassValidation: true
-              title: setup_intent_payment_method_options_param
-              type: object
-            card:
-              properties:
-                mandate_options:
-                  properties:
-                    amount:
-                      type: integer
-                    amount_type:
-                      enum:
-                      - fixed
-                      - maximum
-                      type: string
-                    currency:
-                      type: string
-                    description:
-                      maxLength: 200
-                      type: string
-                    end_date:
-                      format: unix-time
-                      type: integer
-                    interval:
-                      enum:
-                      - day
-                      - month
-                      - sporadic
-                      - week
-                      - year
-                      type: string
-                    interval_count:
-                      type: integer
-                    reference:
-                      maxLength: 80
-                      type: string
-                    start_date:
-                      format: unix-time
-                      type: integer
-                    supported_types:
-                      items:
-                        enum:
-                        - india
-                        type: string
-                      type: array
-                  required:
-                  - amount
-                  - amount_type
-                  - currency
-                  - interval
-                  - reference
-                  - start_date
-                  title: setup_intent_mandate_options_param
-                  type: object
-                network:
-                  enum:
-                  - amex
-                  - cartes_bancaires
-                  - diners
-                  - discover
-                  - eftpos_au
-                  - interac
-                  - jcb
-                  - mastercard
-                  - unionpay
-                  - unknown
-                  - visa
-                  maxLength: 5000
-                  type: string
-                  x-stripeBypassValidation: true
-                request_three_d_secure:
-                  enum:
-                  - any
-                  - automatic
-                  - challenge
-                  type: string
-                  x-stripeBypassValidation: true
-                three_d_secure:
-                  properties:
-                    ares_trans_status:
-                      enum:
-                      - A
-                      - C
-                      - I
-                      - N
-                      - R
-                      - U
-                      - Y
-                      type: string
-                    cryptogram:
-                      maxLength: 5000
-                      type: string
-                    electronic_commerce_indicator:
-                      enum:
-                      - '01'
-                      - '02'
-                      - '05'
-                      - '06'
-                      - '07'
-                      type: string
-                      x-stripeBypassValidation: true
-                    network_options:
-                      properties:
-                        cartes_bancaires:
-                          properties:
-                            cb_avalgo:
-                              enum:
-                              - '0'
-                              - '1'
-                              - '2'
-                              - '3'
-                              - '4'
-                              - A
-                              type: string
-                            cb_exemption:
-                              maxLength: 4
-                              type: string
-                            cb_score:
-                              type: integer
-                          required:
-                          - cb_avalgo
-                          title: cartes_bancaires_network_options_param
-                          type: object
-                      title: network_options_param
-                      type: object
-                    requestor_challenge_indicator:
-                      maxLength: 2
-                      type: string
-                    transaction_id:
-                      maxLength: 5000
-                      type: string
-                    version:
-                      enum:
-                      - 1.0.2
-                      - 2.1.0
-                      - 2.2.0
-                      type: string
-                      x-stripeBypassValidation: true
-                  title: setup_intent_payment_method_options_param
-                  type: object
-              title: setup_intent_param
-              type: object
-            link:
-              properties: {}
-              title: setup_intent_payment_method_options_param
-              type: object
-            paypal:
-              properties:
-                billing_agreement_id:
-                  maxLength: 5000
-                  type: string
-              title: payment_method_options_param
-              type: object
-            sepa_debit:
-              properties:
-                mandate_options:
-                  properties: {}
-                  title: payment_method_options_mandate_options_param
-                  type: object
-              title: setup_intent_payment_method_options_param
-              type: object
-            us_bank_account:
-              properties:
-                financial_connections:
-                  properties:
-                    permissions:
-                      items:
-                        enum:
-                        - balances
-                        - ownership
-                        - payment_method
-                        - transactions
-                        maxLength: 5000
-                        type: string
-                        x-stripeBypassValidation: true
-                      type: array
-                    prefetch:
-                      items:
-                        enum:
-                        - balances
-                        - transactions
-                        type: string
-                        x-stripeBypassValidation: true
-                      type: array
-                    return_url:
-                      maxLength: 5000
-                      type: string
-                  title: linked_account_options_param
-                  type: object
-                mandate_options:
-                  properties:
-                    collection_method:
-                      enum:
-                      - ''
-                      - paper
-                      type: string
-                      x-stripeBypassValidation: true
-                  title: mandate_options_param
-                  type: object
-                networks:
-                  properties:
-                    requested:
-                      items:
-                        enum:
-                        - ach
-                        - us_domestic_wire
-                        type: string
-                      type: array
-                  title: networks_options_param
-                  type: object
-                verification_method:
-                  enum:
-                  - automatic
-                  - instant
-                  - microdeposits
-                  type: string
-                  x-stripeBypassValidation: true
-              title: setup_intent_payment_method_options_param
-              type: object
-          title: payment_method_options_param
-          type: object
-        payment_method_types:
-          description: The list of payment method types (for example, card) that this SetupIntent can set up. If you don't provide this array, it defaults to ["card"].
-          items:
-            maxLength: 5000
-            type: string
-          type: array
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

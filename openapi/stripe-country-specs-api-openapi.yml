@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Country Specs API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Country Country Specs API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/country_specs:
     get:
-      description: <p>Lists all Country Spec objects available in the API.</p>
+      description: Lists all Country Spec objects available in the API.
       operationId: GetCountrySpecs
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -82,9 +82,11 @@ paths:
           description: Error response.
       tags:
       - Country Specs
+      summary: Get country specs
+      x-summary-source: derived
   /v1/country_specs/{country}:
     get:
-      description: <p>Returns a Country Spec for a given Country code.</p>
+      description: Returns a Country Spec for a given Country code.
       operationId: GetCountrySpecsCountry
       parameters:
       - in: path
@@ -128,6 +130,8 @@ paths:
           description: Error response.
       tags:
       - Country Specs
+      summary: Get country specs country
+      x-summary-source: derived
 components:
   schemas:
     country_spec:
@@ -205,9 +209,6 @@ components:
       required:
       - error
       type: object
-    GetCountrySpecsCountryRequest:
-      type: object
-      properties: {}
     CountrySpecList:
       type: object
       required:
@@ -233,6 +234,19 @@ components:
           maxLength: 5000
           pattern: ^/v1/country_specs
           type: string
+    GetCountrySpecsCountryRequest:
+      type: object
+      properties: {}
     GetCountrySpecsRequest:
       type: object
       properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

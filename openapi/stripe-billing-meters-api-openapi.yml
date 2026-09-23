@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Stripe Accounts Account Billing Meters API
   description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
@@ -20,7 +20,7 @@ paths:
   /v1/billing/meters:
     get:
       summary: Stripe List Billing Meters
-      description: <p>Retrieve a list of billing meters.</p>
+      description: Retrieve a list of billing meters.
       operationId: GetBillingMeters
       parameters:
       - name: status
@@ -79,7 +79,7 @@ paths:
       - Billing Meters
     post:
       summary: Stripe Create Billing Meter
-      description: <p>Creates a billing meter.</p>
+      description: Creates a billing meter.
       operationId: PostBillingMeters
       requestBody:
         required: true
@@ -142,7 +142,7 @@ paths:
   /v1/billing/meters/{id}:
     get:
       summary: Stripe Retrieve Billing Meter
-      description: <p>Retrieves a billing meter given an ID.</p>
+      description: Retrieves a billing meter given an ID.
       operationId: GetBillingMetersId
       parameters:
       - name: id
@@ -168,7 +168,7 @@ paths:
       - Billing Meters
     post:
       summary: Stripe Update Billing Meter
-      description: <p>Updates a billing meter.</p>
+      description: Updates a billing meter.
       operationId: PostBillingMetersId
       parameters:
       - name: id
@@ -204,7 +204,7 @@ paths:
   /v1/billing/meters/{id}/deactivate:
     post:
       summary: Stripe Deactivate Billing Meter
-      description: <p>Deactivates a billing meter.</p>
+      description: Deactivates a billing meter.
       operationId: PostBillingMetersIdDeactivate
       parameters:
       - name: id
@@ -231,7 +231,7 @@ paths:
   /v1/billing/meters/{id}/reactivate:
     post:
       summary: Stripe Reactivate Billing Meter
-      description: <p>Reactivates a billing meter.</p>
+      description: Reactivates a billing meter.
       operationId: PostBillingMetersIdReactivate
       parameters:
       - name: id
@@ -258,7 +258,7 @@ paths:
   /v1/billing/meters/{id}/event_summaries:
     get:
       summary: Stripe List Meter Event Summaries
-      description: <p>Retrieve a list of billing meter event summaries.</p>
+      description: Retrieve a list of billing meter event summaries.
       operationId: GetBillingMetersIdEventSummaries
       parameters:
       - name: id
@@ -337,7 +337,7 @@ paths:
   /v1/billing/meter_events:
     post:
       summary: Stripe Create Meter Event
-      description: <p>Creates a billing meter event.</p>
+      description: Creates a billing meter event.
       operationId: PostBillingMeterEvents
       requestBody:
         required: true
@@ -381,20 +381,34 @@ paths:
       - Billing Meters
 components:
   schemas:
-    error:
+    billing.meter_event_summary:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-            message:
-              type: string
-            code:
-              type: string
-            param:
-              type: string
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - billing.meter_event_summary
+        aggregated_value:
+          type: number
+        end_time:
+          type: integer
+        livemode:
+          type: boolean
+        meter:
+          type: string
+        start_time:
+          type: integer
+      required:
+      - id
+      - object
+      - aggregated_value
+      - end_time
+      - livemode
+      - meter
+      - start_time
     billing.meter_event:
       type: object
       properties:
@@ -425,34 +439,20 @@ components:
       - livemode
       - payload
       - timestamp
-    billing.meter_event_summary:
+    error:
       type: object
       properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-          - billing.meter_event_summary
-        aggregated_value:
-          type: number
-        end_time:
-          type: integer
-        livemode:
-          type: boolean
-        meter:
-          type: string
-        start_time:
-          type: integer
-      required:
-      - id
-      - object
-      - aggregated_value
-      - end_time
-      - livemode
-      - meter
-      - start_time
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+            message:
+              type: string
+            code:
+              type: string
+            param:
+              type: string
     billing.meter:
       type: object
       properties:

@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Payment Method Configurations API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Payment Method Payment Method Configurations API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/payment_method_configurations:
     get:
-      description: <p>List payment method configurations</p>
+      description: List payment method configurations
       operationId: GetPaymentMethodConfigurations
       parameters:
       - description: The Connect application to filter by.
@@ -72,8 +72,10 @@ paths:
           description: Error response.
       tags:
       - Payment Method Configurations
+      summary: Get payment method configurations
+      x-summary-source: derived
     post:
-      description: <p>Creates a payment method configuration</p>
+      description: Creates a payment method configuration
       operationId: PostPaymentMethodConfigurations
       requestBody:
         content:
@@ -203,9 +205,11 @@ paths:
           description: Error response.
       tags:
       - Payment Method Configurations
+      summary: Post payment method configurations
+      x-summary-source: derived
   /v1/payment_method_configurations/{configuration}:
     get:
-      description: <p>Retrieve payment method configuration</p>
+      description: Retrieve payment method configuration
       operationId: GetPaymentMethodConfigurationsConfiguration
       parameters:
       - in: path
@@ -249,8 +253,10 @@ paths:
           description: Error response.
       tags:
       - Payment Method Configurations
+      summary: Get payment method configurations configuration
+      x-summary-source: derived
     post:
-      description: <p>Update payment method configuration</p>
+      description: Update payment method configuration
       operationId: PostPaymentMethodConfigurationsConfiguration
       parameters:
       - in: path
@@ -388,8 +394,48 @@ paths:
           description: Error response.
       tags:
       - Payment Method Configurations
+      summary: Post payment method configurations configuration
+      x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetPaymentMethodConfigurationsRequest:
+      type: object
+      properties: {}
+    PaymentMethodConfigResourcePaymentMethodConfigurationsList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/payment_method_configuration'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetPaymentMethodConfigurationsConfigurationRequest:
+      type: object
+      properties: {}
     payment_method_configuration:
       description: 'PaymentMethodConfigurations control which payment methods are displayed to your customers when you don''t explicitly specify payment method types. You can have multiple configurations with different sets of payment methods for different scenarios.
 
@@ -430,8 +476,9 @@ components:
         application:
           description: For child configs, the Connect application associated with the configuration.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         au_becs_debit:
           $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
         bacs_debit:
@@ -494,8 +541,9 @@ components:
         parent:
           description: For child configs, the configuration's parent configuration.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         paynow:
           $ref: '#/components/schemas/payment_method_config_resource_payment_method_properties'
         paypal:
@@ -556,44 +604,6 @@ components:
       - us_bank_account
       - wechat_pay
       x-resourceId: payment_method_configuration
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetPaymentMethodConfigurationsConfigurationRequest:
-      type: object
-      properties: {}
-    PaymentMethodConfigResourcePaymentMethodConfigurationsList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/payment_method_configuration'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetPaymentMethodConfigurationsRequest:
-      type: object
-      properties: {}
     PostPaymentMethodConfigurationsRequest:
       type: object
       properties:
@@ -1647,3 +1657,13 @@ components:
               type: object
           title: payment_method_param
           type: object
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

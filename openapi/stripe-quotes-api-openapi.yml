@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Quotes API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Quotes API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/quotes:
     get:
-      description: <p>Returns a list of your quotes.</p>
+      description: Returns a list of your quotes.
       operationId: GetQuotes
       parameters:
       - description: The ID of the customer whose quotes will be retrieved.
@@ -111,8 +111,10 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Get quotes
+      x-summary-source: derived
     post:
-      description: <p>A quote models prices and services for a customer. Default options for <code>header</code>, <code>description</code>, <code>footer</code>, and <code>expires_at</code> can be set in the dashboard via the <a href="https://dashboard.stripe.com/settings/billing/quote">quote template</a>.</p>
+      description: A quote models prices and services for a customer. Default options for header, description, footer, and expires_at can be set in the dashboard via the quote template.
       operationId: PostQuotes
       requestBody:
         content:
@@ -185,9 +187,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Post quotes
+      x-summary-source: derived
   /v1/quotes/{quote}:
     get:
-      description: <p>Retrieves the quote with the given ID.</p>
+      description: Retrieves the quote with the given ID.
       operationId: GetQuotesQuote
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -231,8 +235,10 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Get quotes quote
+      x-summary-source: derived
     post:
-      description: <p>A quote models prices and services for a customer.</p>
+      description: A quote models prices and services for a customer.
       operationId: PostQuotesQuote
       parameters:
       - in: path
@@ -310,9 +316,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Post quotes quote
+      x-summary-source: derived
   /v1/quotes/{quote}/accept:
     post:
-      description: <p>Accepts the specified quote.</p>
+      description: Accepts the specified quote.
       operationId: PostQuotesQuoteAccept
       parameters:
       - in: path
@@ -348,9 +356,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Post quotes quote accept
+      x-summary-source: derived
   /v1/quotes/{quote}/cancel:
     post:
-      description: <p>Cancels the quote.</p>
+      description: Cancels the quote.
       operationId: PostQuotesQuoteCancel
       parameters:
       - in: path
@@ -386,9 +396,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Post quotes quote cancel
+      x-summary-source: derived
   /v1/quotes/{quote}/computed_upfront_line_items:
     get:
-      description: <p>When retrieving a quote, there is an includable <a href="https://stripe.com/docs/api/quotes/object#quote_object-computed-upfront-line_items"><strong>computed.upfront.line_items</strong></a> property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of upfront line items.</p>
+      description: When retrieving a quote, there is an includable computed.upfront.line_items property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of upfront line items.
       operationId: GetQuotesQuoteComputedUpfrontLineItems
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -458,9 +470,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Get quotes quote computed upfront line items
+      x-summary-source: derived
   /v1/quotes/{quote}/finalize:
     post:
-      description: <p>Finalizes the quote.</p>
+      description: Finalizes the quote.
       operationId: PostQuotesQuoteFinalize
       parameters:
       - in: path
@@ -496,9 +510,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Post quotes quote finalize
+      x-summary-source: derived
   /v1/quotes/{quote}/line_items:
     get:
-      description: <p>When retrieving a quote, there is an includable <strong>line_items</strong> property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+      description: When retrieving a quote, there is an includable line_items property containing the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.
       operationId: GetQuotesQuoteLineItems
       parameters:
       - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
@@ -568,9 +584,11 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Get quotes quote line items
+      x-summary-source: derived
   /v1/quotes/{quote}/pdf:
     get:
-      description: <p>Download the PDF for a finalized quote</p>
+      description: Download the PDF for a finalized quote
       operationId: GetQuotesQuotePdf
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -615,17 +633,36 @@ paths:
           description: Error response.
       tags:
       - Quotes
+      summary: Get quotes quote pdf
+      x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
+    QuotesResourceQuoteList:
       type: object
-    PostQuotesQuoteFinalizeRequest:
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/quote'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/quotes
+          type: string
+    PostQuotesQuoteCancelRequest:
       type: object
       properties:
         expand:
@@ -634,16 +671,320 @@ components:
             maxLength: 5000
             type: string
           type: array
-        expires_at:
-          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
+    QuotesResourceListLineItems:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    quote:
+      description: 'A Quote is a way to model prices that you''d like to provide to a customer.
+
+        Once accepted, it will automatically create an invoice, subscription or subscription schedule.'
+      properties:
+        amount_subtotal:
+          description: Total before any discounts or taxes are applied.
+          type: integer
+        amount_total:
+          description: Total after discounts and taxes are applied.
+          type: integer
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          - $ref: '#/components/schemas/deleted_application'
+          description: ID of the Connect Application that created the quote.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+            - $ref: '#/components/schemas/deleted_application'
+        application_fee_amount:
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. Only applicable if there are no line items with recurring prices on the quote.
+          type:
+          - integer
+          - 'null'
+        application_fee_percent:
+          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. Only applicable if there are line items with recurring prices on the quote.
+          type:
+          - number
+          - 'null'
+        automatic_tax:
+          $ref: '#/components/schemas/quotes_resource_automatic_tax'
+        collection_method:
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay invoices at the end of the subscription cycle or on finalization using the default payment method attached to the subscription or customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
+          enum:
+          - charge_automatically
+          - send_invoice
+          type: string
+        computed:
+          $ref: '#/components/schemas/quotes_resource_computed'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
           type: integer
-    GetQuotesQuoteLineItemsRequest:
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: The customer which this quote belongs to. A customer is required before finalizing the quote. Once specified, it cannot be changed.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        default_tax_rates:
+          description: The tax rates applied to this quote.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/tax_rate'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/tax_rate'
+          type: array
+        description:
+          description: A description that will be displayed on the quote PDF.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        discounts:
+          description: The discounts applied to this quote.
+          items:
+            anyOf:
+            - maxLength: 5000
+              type: string
+            - $ref: '#/components/schemas/discount'
+            x-expansionResources:
+              oneOf:
+              - $ref: '#/components/schemas/discount'
+          type: array
+        expires_at:
+          description: The date on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        footer:
+          description: A footer that will be displayed on the quote PDF.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        from_quote:
+          anyOf:
+          - $ref: '#/components/schemas/quotes_resource_from_quote'
+          description: Details of the quote that was cloned. See the [cloning documentation](https://stripe.com/docs/quotes/clone) for more details.
+        header:
+          description: A header that will be displayed on the quote PDF.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        invoice:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/invoice'
+          - $ref: '#/components/schemas/deleted_invoice'
+          description: The invoice that was created from this quote.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/invoice'
+            - $ref: '#/components/schemas/deleted_invoice'
+        invoice_settings:
+          $ref: '#/components/schemas/invoice_setting_quote_setting'
+        line_items:
+          description: A list of items the customer is being quoted for.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/item'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: QuotesResourceListLineItems
+          type: object
+          x-expandableFields:
+          - data
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        number:
+          description: A unique number that identifies this particular quote. This number is assigned once the quote is [finalized](https://stripe.com/docs/quotes/overview#finalize).
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - quote
+          type: string
+        on_behalf_of:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: The account on behalf of which to charge. See the [Connect documentation](https://support.stripe.com/questions/sending-invoices-on-behalf-of-connected-accounts) for details.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        status:
+          description: The status of the quote.
+          enum:
+          - accepted
+          - canceled
+          - draft
+          - open
+          type: string
+          x-stripeBypassValidation: true
+        status_transitions:
+          $ref: '#/components/schemas/quotes_resource_status_transitions'
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: The subscription that was created or updated from this quote.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        subscription_data:
+          $ref: '#/components/schemas/quotes_resource_subscription_data_subscription_data'
+        subscription_schedule:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription_schedule'
+          description: The subscription schedule that was created or updated from this quote.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription_schedule'
+        test_clock:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/test_helpers.test_clock'
+          description: ID of the test clock this quote belongs to.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/test_helpers.test_clock'
+        total_details:
+          $ref: '#/components/schemas/quotes_resource_total_details'
+        transfer_data:
+          anyOf:
+          - $ref: '#/components/schemas/quotes_resource_transfer_data'
+          description: The account (if any) the payments will be attributed to for tax reporting, and where funds from each payment will be transferred to for each of the invoices.
+      required:
+      - amount_subtotal
+      - amount_total
+      - automatic_tax
+      - collection_method
+      - computed
+      - created
+      - discounts
+      - expires_at
+      - id
+      - invoice_settings
+      - livemode
+      - metadata
+      - object
+      - status
+      - status_transitions
+      - subscription_data
+      - total_details
+      title: Quote
       type: object
-      properties: {}
-    GetQuotesQuoteComputedUpfrontLineItemsRequest:
+      x-expandableFields:
+      - application
+      - automatic_tax
+      - computed
+      - customer
+      - default_tax_rates
+      - discounts
+      - from_quote
+      - invoice
+      - invoice_settings
+      - line_items
+      - on_behalf_of
+      - status_transitions
+      - subscription
+      - subscription_data
+      - subscription_schedule
+      - test_clock
+      - total_details
+      - transfer_data
+      x-resourceId: quote
+    PostQuotesQuoteAcceptRequest:
       type: object
-      properties: {}
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PostQuotesQuoteRequest:
       type: object
       properties:
@@ -872,10 +1213,10 @@ components:
             - ''
             type: string
           description: The data with which to automatically create a Transfer for each of the invoices.
-    GetQuotesQuoteRequest:
+    GetQuotesQuoteLineItemsRequest:
       type: object
       properties: {}
-    PostQuotesQuoteAcceptRequest:
+    PostQuotesQuoteFinalizeRequest:
       type: object
       properties:
         expand:
@@ -884,34 +1225,16 @@ components:
             maxLength: 5000
             type: string
           type: array
+        expires_at:
+          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+    GetQuotesQuoteRequest:
+      type: object
+      properties: {}
     GetQuotesQuotePdfRequest:
       type: object
       properties: {}
-    QuotesResourceQuoteList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/quote'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/quotes
-          type: string
     PostQuotesRequest:
       type: object
       properties:
@@ -1149,314 +1472,19 @@ components:
             - ''
             type: string
           description: The data with which to automatically create a Transfer for each of the invoices.
-    PostQuotesQuoteCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
     GetQuotesRequest:
       type: object
       properties: {}
-    QuotesResourceListLineItems:
+    GetQuotesQuoteComputedUpfrontLineItemsRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    quote:
-      description: 'A Quote is a way to model prices that you''d like to provide to a customer.
-
-        Once accepted, it will automatically create an invoice, subscription or subscription schedule.'
-      properties:
-        amount_subtotal:
-          description: Total before any discounts or taxes are applied.
-          type: integer
-        amount_total:
-          description: Total after discounts and taxes are applied.
-          type: integer
-        application:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/application'
-          - $ref: '#/components/schemas/deleted_application'
-          description: ID of the Connect Application that created the quote.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/application'
-            - $ref: '#/components/schemas/deleted_application'
-        application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. Only applicable if there are no line items with recurring prices on the quote.
-          nullable: true
-          type: integer
-        application_fee_percent:
-          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. Only applicable if there are line items with recurring prices on the quote.
-          nullable: true
-          type: number
-        automatic_tax:
-          $ref: '#/components/schemas/quotes_resource_automatic_tax'
-        collection_method:
-          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay invoices at the end of the subscription cycle or on finalization using the default payment method attached to the subscription or customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
-          enum:
-          - charge_automatically
-          - send_invoice
-          type: string
-        computed:
-          $ref: '#/components/schemas/quotes_resource_computed'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          maxLength: 5000
-          nullable: true
-          type: string
-        customer:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/customer'
-          - $ref: '#/components/schemas/deleted_customer'
-          description: The customer which this quote belongs to. A customer is required before finalizing the quote. Once specified, it cannot be changed.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/customer'
-            - $ref: '#/components/schemas/deleted_customer'
-        default_tax_rates:
-          description: The tax rates applied to this quote.
-          items:
-            anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/tax_rate'
-            x-expansionResources:
-              oneOf:
-              - $ref: '#/components/schemas/tax_rate'
-          type: array
-        description:
-          description: A description that will be displayed on the quote PDF.
-          maxLength: 5000
-          nullable: true
-          type: string
-        discounts:
-          description: The discounts applied to this quote.
-          items:
-            anyOf:
-            - maxLength: 5000
-              type: string
-            - $ref: '#/components/schemas/discount'
-            x-expansionResources:
-              oneOf:
-              - $ref: '#/components/schemas/discount'
-          type: array
-        expires_at:
-          description: The date on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        footer:
-          description: A footer that will be displayed on the quote PDF.
-          maxLength: 5000
-          nullable: true
-          type: string
-        from_quote:
-          anyOf:
-          - $ref: '#/components/schemas/quotes_resource_from_quote'
-          description: Details of the quote that was cloned. See the [cloning documentation](https://stripe.com/docs/quotes/clone) for more details.
-          nullable: true
-        header:
-          description: A header that will be displayed on the quote PDF.
-          maxLength: 5000
-          nullable: true
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        invoice:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/invoice'
-          - $ref: '#/components/schemas/deleted_invoice'
-          description: The invoice that was created from this quote.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/invoice'
-            - $ref: '#/components/schemas/deleted_invoice'
-        invoice_settings:
-          $ref: '#/components/schemas/invoice_setting_quote_setting'
-        line_items:
-          description: A list of items the customer is being quoted for.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/item'
-              type: array
-            has_more:
-              description: True if this list has another page of items after this one that can be fetched.
-              type: boolean
-            object:
-              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-              enum:
-              - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              type: string
-          required:
-          - data
-          - has_more
-          - object
-          - url
-          title: QuotesResourceListLineItems
-          type: object
-          x-expandableFields:
-          - data
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        number:
-          description: A unique number that identifies this particular quote. This number is assigned once the quote is [finalized](https://stripe.com/docs/quotes/overview#finalize).
-          maxLength: 5000
-          nullable: true
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - quote
-          type: string
-        on_behalf_of:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/account'
-          description: The account on behalf of which to charge. See the [Connect documentation](https://support.stripe.com/questions/sending-invoices-on-behalf-of-connected-accounts) for details.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/account'
-        status:
-          description: The status of the quote.
-          enum:
-          - accepted
-          - canceled
-          - draft
-          - open
-          type: string
-          x-stripeBypassValidation: true
-        status_transitions:
-          $ref: '#/components/schemas/quotes_resource_status_transitions'
-        subscription:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/subscription'
-          description: The subscription that was created or updated from this quote.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/subscription'
-        subscription_data:
-          $ref: '#/components/schemas/quotes_resource_subscription_data_subscription_data'
-        subscription_schedule:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/subscription_schedule'
-          description: The subscription schedule that was created or updated from this quote.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/subscription_schedule'
-        test_clock:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/test_helpers.test_clock'
-          description: ID of the test clock this quote belongs to.
-          nullable: true
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/test_helpers.test_clock'
-        total_details:
-          $ref: '#/components/schemas/quotes_resource_total_details'
-        transfer_data:
-          anyOf:
-          - $ref: '#/components/schemas/quotes_resource_transfer_data'
-          description: The account (if any) the payments will be attributed to for tax reporting, and where funds from each payment will be transferred to for each of the invoices.
-          nullable: true
-      required:
-      - amount_subtotal
-      - amount_total
-      - automatic_tax
-      - collection_method
-      - computed
-      - created
-      - discounts
-      - expires_at
-      - id
-      - invoice_settings
-      - livemode
-      - metadata
-      - object
-      - status
-      - status_transitions
-      - subscription_data
-      - total_details
-      title: Quote
-      type: object
-      x-expandableFields:
-      - application
-      - automatic_tax
-      - computed
-      - customer
-      - default_tax_rates
-      - discounts
-      - from_quote
-      - invoice
-      - invoice_settings
-      - line_items
-      - on_behalf_of
-      - status_transitions
-      - subscription
-      - subscription_data
-      - subscription_schedule
-      - test_clock
-      - total_details
-      - transfer_data
-      x-resourceId: quote
+      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

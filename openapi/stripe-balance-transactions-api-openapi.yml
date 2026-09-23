@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Balance Transactions API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Balance Balance Transactions API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,10 +19,10 @@ tags:
 paths:
   /v1/balance_transactions:
     get:
-      description: '<p>Returns a list of transactions that have contributed to the Stripe account balance (e.g., charges, transfers, and so forth). The transactions are returned in sorted order, with the most recent transactions appearing first.</p>
+      description: 'Returns a list of transactions that have contributed to the Stripe account balance (e.g., charges, transfers, and so forth). The transactions are returned in sorted order, with the most recent transactions appearing first.
 
 
-        <p>Note that this endpoint was previously called “Balance history” and used the path <code>/v1/balance/history</code>.</p>'
+        Note that this endpoint was previously called “Balance history” and used the path /v1/balance/history.'
       operationId: GetBalanceTransactions
       parameters:
       - explode: true
@@ -135,12 +135,14 @@ paths:
           description: Error response.
       tags:
       - Balance Transactions
+      summary: Get balance transactions
+      x-summary-source: derived
   /v1/balance_transactions/{id}:
     get:
-      description: '<p>Retrieves the balance transaction with the given ID.</p>
+      description: 'Retrieves the balance transaction with the given ID.
 
 
-        <p>Note that this endpoint previously used the path <code>/v1/balance/history/:id</code>.</p>'
+        Note that this endpoint previously used the path /v1/balance/history/:id.'
       operationId: GetBalanceTransactionsId
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -184,8 +186,21 @@ paths:
           description: Error response.
       tags:
       - Balance Transactions
+      summary: Get balance transactions id
+      x-summary-source: derived
 components:
   schemas:
+    GetBalanceTransactionsIdRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     BalanceTransactionsList:
       type: object
       required:
@@ -211,14 +226,9 @@ components:
           maxLength: 5000
           pattern: ^/v1/balance_transactions
           type: string
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
+    GetBalanceTransactionsRequest:
       type: object
+      properties: {}
     balance_transaction:
       description: 'Balance transactions represent funds moving through your Stripe account.
 
@@ -244,12 +254,14 @@ components:
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         exchange_rate:
           description: If applicable, this transaction uses an exchange rate. If money converts from currency A to currency B, then the `amount` in currency A, multipled by the `exchange_rate`, equals the `amount` in currency B. For example, if you charge a customer 10.00 EUR, the PaymentIntent's `amount` is `1000` and `currency` is `eur`. If this converts to 12.34 USD in your Stripe account, the BalanceTransaction's `amount` is `1234`, its `currency` is `usd`, and the `exchange_rate` is `1.234`.
-          nullable: true
-          type: number
+          type:
+          - number
+          - 'null'
         fee:
           description: Fees (in cents (or local equivalent)) paid for this transaction. Represented as a positive integer when assessed.
           type: integer
@@ -296,7 +308,6 @@ components:
           - $ref: '#/components/schemas/transfer'
           - $ref: '#/components/schemas/transfer_reversal'
           description: This transaction relates to the Stripe object.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/application_fee'
@@ -388,9 +399,13 @@ components:
       - fee_details
       - source
       x-resourceId: balance_transaction
-    GetBalanceTransactionsRequest:
-      type: object
-      properties: {}
-    GetBalanceTransactionsIdRequest:
-      type: object
-      properties: {}
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http

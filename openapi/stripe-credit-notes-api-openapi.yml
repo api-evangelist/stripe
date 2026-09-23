@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Stripe Accounts Account Credit Notes API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  title: Stripe Credit Notes API
+  description: Needs description.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +19,7 @@ tags:
 paths:
   /v1/credit_notes:
     get:
-      description: <p>Returns a list of credit notes.</p>
+      description: Returns a list of credit notes.
       operationId: GetCreditNotes
       parameters:
       - description: Only return credit notes for the customer specified by this customer ID.
@@ -98,31 +98,31 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Get credit notes
+      x-summary-source: derived
     post:
-      description: '<p>Issue a credit note to adjust the amount of a finalized invoice. For a <code>status=open</code> invoice, a credit note reduces
+      description: 'Issue a credit note to adjust the amount of a finalized invoice. For a status=open invoice, a credit note reduces
 
-        its <code>amount_due</code>. For a <code>status=paid</code> invoice, a credit note does not affect its <code>amount_due</code>. Instead, it can result
+        its amount_due. For a status=paid invoice, a credit note does not affect its amount_due. Instead, it can result
 
-        in any combination of the following:</p>
-
-
-        <ul>
-
-        <li>Refund: create a new refund (using <code>refund_amount</code>) or link an existing refund (using <code>refund</code>).</li>
-
-        <li>Customer balance credit: credit the customer’s balance (using <code>credit_amount</code>) which will be automatically applied to their next invoice when it’s finalized.</li>
-
-        <li>Outside of Stripe credit: record the amount that is or will be credited outside of Stripe (using <code>out_of_band_amount</code>).</li>
-
-        </ul>
+        in any combination of the following:
 
 
-        <p>For post-payment credit notes the sum of the refund, credit and outside of Stripe amounts must equal the credit note total.</p>
+        Refund: create a new refund (using refund_amount) or link an existing refund (using refund).
 
 
-        <p>You may issue multiple credit notes for an invoice. Each credit note will increment the invoice’s <code>pre_payment_credit_notes_amount</code>
+        Customer balance credit: credit the customer’s balance (using credit_amount) which will be automatically applied to their next invoice when it’s finalized.
 
-        or <code>post_payment_credit_notes_amount</code> depending on its <code>status</code> at the time of credit note creation.</p>'
+
+        Outside of Stripe credit: record the amount that is or will be credited outside of Stripe (using out_of_band_amount).
+
+
+        For post-payment credit notes the sum of the refund, credit and outside of Stripe amounts must equal the credit note total.
+
+
+        You may issue multiple credit notes for an invoice. Each credit note will increment the invoice’s pre_payment_credit_notes_amount
+
+        or post_payment_credit_notes_amount depending on its status at the time of credit note creation.'
       operationId: PostCreditNotes
       requestBody:
         content:
@@ -159,9 +159,11 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Post credit notes
+      x-summary-source: derived
   /v1/credit_notes/preview:
     get:
-      description: <p>Get a preview of a credit note without creating it.</p>
+      description: Get a preview of a credit note without creating it.
       operationId: GetCreditNotesPreview
       parameters:
       - description: The integer amount in cents (or local equivalent) representing the total amount of the credit note.
@@ -356,9 +358,11 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Get credit notes preview
+      x-summary-source: derived
   /v1/credit_notes/preview/lines:
     get:
-      description: <p>When retrieving a credit note preview, you’ll get a <strong>lines</strong> property containing the first handful of those items. This URL you can retrieve the full (paginated) list of line items.</p>
+      description: When retrieving a credit note preview, you’ll get a lines property containing the first handful of those items. This URL you can retrieve the full (paginated) list of line items.
       operationId: GetCreditNotesPreviewLines
       parameters:
       - description: The integer amount in cents (or local equivalent) representing the total amount of the credit note.
@@ -579,9 +583,11 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Get credit notes preview lines
+      x-summary-source: derived
   /v1/credit_notes/{credit_note}/lines:
     get:
-      description: <p>When retrieving a credit note, you’ll get a <strong>lines</strong> property containing the the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.</p>
+      description: When retrieving a credit note, you’ll get a lines property containing the the first handful of those items. There is also a URL where you can retrieve the full (paginated) list of line items.
       operationId: GetCreditNotesCreditNoteLines
       parameters:
       - in: path
@@ -651,9 +657,11 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Get credit notes credit note lines
+      x-summary-source: derived
   /v1/credit_notes/{id}:
     get:
-      description: <p>Retrieves the credit note object with the given identifier.</p>
+      description: Retrieves the credit note object with the given identifier.
       operationId: GetCreditNotesId
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -697,8 +705,10 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Get credit notes id
+      x-summary-source: derived
     post:
-      description: <p>Updates an existing credit note.</p>
+      description: Updates an existing credit note.
       operationId: PostCreditNotesId
       parameters:
       - in: path
@@ -737,9 +747,11 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Post credit notes id
+      x-summary-source: derived
   /v1/credit_notes/{id}/void:
     post:
-      description: <p>Marks a credit note as void. Learn more about <a href="/docs/billing/invoices/credit-notes#voiding">voiding credit notes</a>.</p>
+      description: Marks a credit note as void. Learn more about voiding credit notes.
       operationId: PostCreditNotesIdVoid
       parameters:
       - in: path
@@ -775,16 +787,10 @@ paths:
           description: Error response.
       tags:
       - Credit Notes
+      summary: Post credit notes id void
+      x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     credit_note:
       description: 'Issue a credit note to adjust an invoice''s amount after the invoice is finalized.
 
@@ -821,7 +827,6 @@ components:
             type: string
           - $ref: '#/components/schemas/customer_balance_transaction'
           description: Customer balance transaction related to this credit note.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer_balance_transaction'
@@ -836,8 +841,9 @@ components:
         effective_at:
           description: The date when this credit note is in effect. Same as `created` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the credit note PDF.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -886,15 +892,17 @@ components:
         memo:
           description: Customer-facing text that appears on the credit note PDF.
           maxLength: 5000
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         metadata:
           additionalProperties:
             maxLength: 500
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          nullable: true
-          type: object
+          type:
+          - object
+          - 'null'
         number:
           description: A unique number that identifies this particular credit note and appears on the PDF of the credit note and its associated invoice.
           maxLength: 5000
@@ -906,8 +914,9 @@ components:
           type: string
         out_of_band_amount:
           description: Amount that was credited outside of Stripe.
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         pdf:
           description: The link to download the PDF of the credit note.
           maxLength: 5000
@@ -919,15 +928,15 @@ components:
           - fraudulent
           - order_change
           - product_unsatisfactory
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         refund:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/refund'
           description: Refund related to this credit note.
-          nullable: true
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/refund'
@@ -935,7 +944,6 @@ components:
           anyOf:
           - $ref: '#/components/schemas/invoices_shipping_cost'
           description: The details of the cost of shipping, including the ShippingRate applied to the invoice.
-          nullable: true
         status:
           description: Status of this credit note, one of `issued` or `void`. Learn more about [voiding credit notes](https://stripe.com/docs/billing/invoices/credit-notes#voiding).
           enum:
@@ -947,8 +955,9 @@ components:
           type: integer
         subtotal_excluding_tax:
           description: The integer amount in cents (or local equivalent) representing the amount of the credit note, excluding all tax and invoice level discounts.
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         tax_amounts:
           description: The aggregate amounts calculated per tax rate for all line items.
           items:
@@ -959,8 +968,9 @@ components:
           type: integer
         total_excluding_tax:
           description: The integer amount in cents (or local equivalent) representing the total amount of the credit note, excluding tax, but including discounts.
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
         type:
           description: Type of this credit note, one of `pre_payment` or `post_payment`. A `pre_payment` credit note means it was issued when the invoice was open. A `post_payment` credit note means it was issued when the invoice was paid.
           enum:
@@ -970,8 +980,9 @@ components:
         voided_at:
           description: The time that the credit note was voided.
           format: unix-time
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
       required:
       - amount
       - amount_shipping
@@ -1004,12 +1015,102 @@ components:
       - shipping_cost
       - tax_amounts
       x-resourceId: credit_note
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetCreditNotesCreditNoteLinesRequest:
+      type: object
+      properties: {}
     GetCreditNotesPreviewLinesRequest:
       type: object
       properties: {}
+    PostCreditNotesIdRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        memo:
+          description: Credit note memo.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
     GetCreditNotesPreviewRequest:
       type: object
       properties: {}
+    GetCreditNotesRequest:
+      type: object
+      properties: {}
+    CreditNoteLinesList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/credit_note_line_item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    CreditNotesList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/credit_note'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostCreditNotesIdVoidRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
     PostCreditNotesRequest:
       type: object
       required:
@@ -1128,88 +1229,16 @@ components:
               type: string
           title: credit_note_shipping_cost
           type: object
-    PostCreditNotesIdVoidRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    CreditNoteLinesList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/credit_note_line_item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetCreditNotesCreditNoteLinesRequest:
-      type: object
-      properties: {}
-    GetCreditNotesRequest:
-      type: object
-      properties: {}
-    CreditNotesList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/credit_note'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     GetCreditNotesIdRequest:
       type: object
       properties: {}
-    PostCreditNotesIdRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        memo:
-          description: Credit note memo.
-          maxLength: 5000
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
+  securitySchemes:
+    basicAuth:
+      description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
+      scheme: basic
+      type: http
+    bearerAuth:
+      bearerFormat: auth-scheme
+      description: 'Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>'
+      scheme: bearer
+      type: http
