@@ -116,7 +116,7 @@ paths:
     - url: https://api.stripe.com/
     delete:
       description: Deletes an invoice item, removing it from an invoice. Deleting invoice items is only possible when they’re not attached to invoices, or if it’s attached to a draft invoice.
-      operationId: deleteInvoice ItemsInvoiceitem
+      operationId: deleteInvoiceItemsInvoiceitem
       parameters:
       - in: path
         name: invoiceitem
@@ -154,16 +154,10 @@ paths:
         ChooseTags: true
       tags:
       - Delete
+      x-operation-id-source: normalized
+      x-operation-id-original: deleteInvoice ItemsInvoiceitem
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     deleted_person:
       description: ''
       properties:
@@ -189,9 +183,14 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: deleted_person
-    DeleteInvoice_ItemsInvoiceitemRequest:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
       type: object
-      properties: {}
     deleted_invoiceitem:
       description: ''
       properties:
@@ -217,6 +216,9 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: deleted_invoiceitem
+    DeleteInvoice_ItemsInvoiceitemRequest:
+      type: object
+      properties: {}
 x-refined-from:
 - accounts-openapi-original.yml
 - stripe-delete-api-openapi.yml

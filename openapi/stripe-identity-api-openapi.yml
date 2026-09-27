@@ -534,6 +534,9 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    GetIdentityVerificationSessionsSessionRequest:
+      type: object
+      properties: {}
     error:
       description: An error response from the Stripe API
       properties:
@@ -542,221 +545,6 @@ components:
       required:
       - error
       type: object
-    PostIdentityVerificationSessionsSessionRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        options:
-          description: A set of options for the session’s verification checks.
-          properties:
-            document:
-              anyOf:
-              - properties:
-                  allowed_types:
-                    items:
-                      enum:
-                      - driving_license
-                      - id_card
-                      - passport
-                      type: string
-                    type: array
-                  require_id_number:
-                    type: boolean
-                  require_live_capture:
-                    type: boolean
-                  require_matching_selfie:
-                    type: boolean
-                title: document_options
-                type: object
-              - enum:
-                - ''
-                type: string
-          title: session_options_param
-          type: object
-        type:
-          description: The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.
-          enum:
-          - document
-          - id_number
-          type: string
-          x-stripeBypassValidation: true
-    PostIdentityVerificationSessionsSessionCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetIdentityVerificationSessionsRequest:
-      type: object
-      properties: {}
-    GetIdentityVerificationReportsReportRequest:
-      type: object
-      properties: {}
-    PostIdentityVerificationSessionsRequest:
-      type: object
-      required:
-      - type
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        options:
-          description: A set of options for the session’s verification checks.
-          properties:
-            document:
-              anyOf:
-              - properties:
-                  allowed_types:
-                    items:
-                      enum:
-                      - driving_license
-                      - id_card
-                      - passport
-                      type: string
-                    type: array
-                  require_id_number:
-                    type: boolean
-                  require_live_capture:
-                    type: boolean
-                  require_matching_selfie:
-                    type: boolean
-                title: document_options
-                type: object
-              - enum:
-                - ''
-                type: string
-          title: session_options_param
-          type: object
-        return_url:
-          description: The URL that the user will be redirected to upon completing the verification flow.
-          type: string
-        type:
-          description: The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.
-          enum:
-          - document
-          - id_number
-          type: string
-          x-stripeBypassValidation: true
-    identity.verification_report:
-      description: 'A VerificationReport is the result of an attempt to collect and verify data from a user.
-
-        The collection of verification checks performed is determined from the `type` and `options`
-
-        parameters used. You can find the result of each verification check performed in the
-
-        appropriate sub-resource: `document`, `id_number`, `selfie`.
-
-
-        Each VerificationReport contains a copy of any data collected by the user as well as
-
-        reference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)
-
-        API. To configure and create VerificationReports, use the
-
-        [VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.
-
-
-        Related guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).'
-      properties:
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        document:
-          $ref: '#/components/schemas/gelato_document_report'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        id_number:
-          $ref: '#/components/schemas/gelato_id_number_report'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - identity.verification_report
-          type: string
-        options:
-          $ref: '#/components/schemas/gelato_verification_report_options'
-        selfie:
-          $ref: '#/components/schemas/gelato_selfie_report'
-        type:
-          description: Type of report.
-          enum:
-          - document
-          - id_number
-          type: string
-          x-stripeBypassValidation: true
-        verification_session:
-          description: ID of the VerificationSession that created this report.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-      required:
-      - created
-      - id
-      - livemode
-      - object
-      title: GelatoVerificationReport
-      type: object
-      x-expandableFields:
-      - document
-      - id_number
-      - options
-      - selfie
-      x-resourceId: identity.verification_report
-    GelatoVerificationSessionList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/identity.verification_session'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/identity/verification_sessions
-          type: string
-    GetIdentityVerificationReportsRequest:
-      type: object
-      properties: {}
     GelatoVerificationReportList:
       type: object
       required:
@@ -782,15 +570,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/identity/verification_reports
           type: string
-    PostIdentityVerificationSessionsSessionRedactRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
     identity.verification_session:
       description: 'A VerificationSession guides you through the process of collecting and verifying the identities
 
@@ -904,9 +683,230 @@ components:
       - redaction
       - verified_outputs
       x-resourceId: identity.verification_session
-    GetIdentityVerificationSessionsSessionRequest:
+    PostIdentityVerificationSessionsSessionCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostIdentityVerificationSessionsRequest:
+      type: object
+      required:
+      - type
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        options:
+          description: A set of options for the session’s verification checks.
+          properties:
+            document:
+              anyOf:
+              - properties:
+                  allowed_types:
+                    items:
+                      enum:
+                      - driving_license
+                      - id_card
+                      - passport
+                      type: string
+                    type: array
+                  require_id_number:
+                    type: boolean
+                  require_live_capture:
+                    type: boolean
+                  require_matching_selfie:
+                    type: boolean
+                title: document_options
+                type: object
+              - enum:
+                - ''
+                type: string
+          title: session_options_param
+          type: object
+        return_url:
+          description: The URL that the user will be redirected to upon completing the verification flow.
+          type: string
+        type:
+          description: The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+    GetIdentityVerificationReportsReportRequest:
       type: object
       properties: {}
+    PostIdentityVerificationSessionsSessionRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        options:
+          description: A set of options for the session’s verification checks.
+          properties:
+            document:
+              anyOf:
+              - properties:
+                  allowed_types:
+                    items:
+                      enum:
+                      - driving_license
+                      - id_card
+                      - passport
+                      type: string
+                    type: array
+                  require_id_number:
+                    type: boolean
+                  require_live_capture:
+                    type: boolean
+                  require_matching_selfie:
+                    type: boolean
+                title: document_options
+                type: object
+              - enum:
+                - ''
+                type: string
+          title: session_options_param
+          type: object
+        type:
+          description: The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+    identity.verification_report:
+      description: 'A VerificationReport is the result of an attempt to collect and verify data from a user.
+
+        The collection of verification checks performed is determined from the `type` and `options`
+
+        parameters used. You can find the result of each verification check performed in the
+
+        appropriate sub-resource: `document`, `id_number`, `selfie`.
+
+
+        Each VerificationReport contains a copy of any data collected by the user as well as
+
+        reference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)
+
+        API. To configure and create VerificationReports, use the
+
+        [VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.
+
+
+        Related guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        document:
+          $ref: '#/components/schemas/gelato_document_report'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        id_number:
+          $ref: '#/components/schemas/gelato_id_number_report'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - identity.verification_report
+          type: string
+        options:
+          $ref: '#/components/schemas/gelato_verification_report_options'
+        selfie:
+          $ref: '#/components/schemas/gelato_selfie_report'
+        type:
+          description: Type of report.
+          enum:
+          - document
+          - id_number
+          type: string
+          x-stripeBypassValidation: true
+        verification_session:
+          description: ID of the VerificationSession that created this report.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+      required:
+      - created
+      - id
+      - livemode
+      - object
+      title: GelatoVerificationReport
+      type: object
+      x-expandableFields:
+      - document
+      - id_number
+      - options
+      - selfie
+      x-resourceId: identity.verification_report
+    GelatoVerificationSessionList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/identity.verification_session'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/identity/verification_sessions
+          type: string
+    GetIdentityVerificationReportsRequest:
+      type: object
+      properties: {}
+    GetIdentityVerificationSessionsRequest:
+      type: object
+      properties: {}
+    PostIdentityVerificationSessionsSessionRedactRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

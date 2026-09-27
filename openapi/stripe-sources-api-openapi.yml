@@ -406,6 +406,17 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetSourcesSourceSourceTransactionsRequest:
+      type: object
+      properties: {}
     PostSourcesSourceRequest:
       type: object
       properties:
@@ -612,163 +623,7 @@ components:
               type: object
           title: order_params
           type: object
-    source_mandate_notification:
-      description: 'Source mandate notifications should be created when a notification related to
-
-        a source mandate must be sent to the payer. They will trigger a webhook or
-
-        deliver an email to the customer.'
-      properties:
-        acss_debit:
-          $ref: '#/components/schemas/source_mandate_notification_acss_debit_data'
-        amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.
-          type:
-          - integer
-          - 'null'
-        bacs_debit:
-          $ref: '#/components/schemas/source_mandate_notification_bacs_debit_data'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - source_mandate_notification
-          type: string
-        reason:
-          description: The reason of the mandate notification. Valid reasons are `mandate_confirmed` or `debit_initiated`.
-          maxLength: 5000
-          type: string
-        sepa_debit:
-          $ref: '#/components/schemas/source_mandate_notification_sepa_debit_data'
-        source:
-          $ref: '#/components/schemas/source'
-        status:
-          description: The status of the mandate notification. Valid statuses are `pending` or `submitted`.
-          maxLength: 5000
-          type: string
-        type:
-          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.
-          maxLength: 5000
-          type: string
-      required:
-      - created
-      - id
-      - livemode
-      - object
-      - reason
-      - source
-      - status
-      - type
-      title: SourceMandateNotification
-      type: object
-      x-expandableFields:
-      - acss_debit
-      - bacs_debit
-      - sepa_debit
-      - source
-      x-resourceId: source_mandate_notification
-    GetSourcesSourceSourceTransactionsSourceTransactionRequest:
-      type: object
-      properties: {}
-    source_transaction:
-      description: 'Some payment methods have no required amount that a customer must send.
-
-        Customers can be instructed to send any amount, and it can be made up of
-
-        multiple transactions. As such, sources can have multiple associated
-
-        transactions.'
-      properties:
-        ach_credit_transfer:
-          $ref: '#/components/schemas/source_transaction_ach_credit_transfer_data'
-        amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount your customer has pushed to the receiver.
-          type: integer
-        chf_credit_transfer:
-          $ref: '#/components/schemas/source_transaction_chf_credit_transfer_data'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        gbp_credit_transfer:
-          $ref: '#/components/schemas/source_transaction_gbp_credit_transfer_data'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - source_transaction
-          type: string
-        paper_check:
-          $ref: '#/components/schemas/source_transaction_paper_check_data'
-        sepa_credit_transfer:
-          $ref: '#/components/schemas/source_transaction_sepa_credit_transfer_data'
-        source:
-          description: The ID of the source this transaction is attached to.
-          maxLength: 5000
-          type: string
-        status:
-          description: The status of the transaction, one of `succeeded`, `pending`, or `failed`.
-          maxLength: 5000
-          type: string
-        type:
-          description: The type of source this transaction is attached to.
-          enum:
-          - ach_credit_transfer
-          - ach_debit
-          - alipay
-          - bancontact
-          - card
-          - card_present
-          - eps
-          - giropay
-          - ideal
-          - klarna
-          - multibanco
-          - p24
-          - sepa_debit
-          - sofort
-          - three_d_secure
-          - wechat
-          type: string
-      required:
-      - amount
-      - created
-      - currency
-      - id
-      - livemode
-      - object
-      - source
-      - status
-      - type
-      title: SourceTransaction
-      type: object
-      x-expandableFields:
-      - ach_credit_transfer
-      - chf_credit_transfer
-      - gbp_credit_transfer
-      - paper_check
-      - sepa_credit_transfer
-      x-resourceId: source_transaction
-    GetSourcesSourceSourceTransactionsRequest:
+    GetSourcesSourceRequest:
       type: object
       properties: {}
     PostSourcesRequest:
@@ -1031,20 +886,6 @@ components:
           - single_use
           maxLength: 5000
           type: string
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetSourcesSourceMandateNotificationsMandateNotificationRequest:
-      type: object
-      properties: {}
-    GetSourcesSourceRequest:
-      type: object
-      properties: {}
     PostSourcesSourceVerifyRequest:
       type: object
       required:
@@ -1062,6 +903,100 @@ components:
             maxLength: 5000
             type: string
           type: array
+    GetSourcesSourceSourceTransactionsSourceTransactionRequest:
+      type: object
+      properties: {}
+    source_transaction:
+      description: 'Some payment methods have no required amount that a customer must send.
+
+        Customers can be instructed to send any amount, and it can be made up of
+
+        multiple transactions. As such, sources can have multiple associated
+
+        transactions.'
+      properties:
+        ach_credit_transfer:
+          $ref: '#/components/schemas/source_transaction_ach_credit_transfer_data'
+        amount:
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount your customer has pushed to the receiver.
+          type: integer
+        chf_credit_transfer:
+          $ref: '#/components/schemas/source_transaction_chf_credit_transfer_data'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        gbp_credit_transfer:
+          $ref: '#/components/schemas/source_transaction_gbp_credit_transfer_data'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - source_transaction
+          type: string
+        paper_check:
+          $ref: '#/components/schemas/source_transaction_paper_check_data'
+        sepa_credit_transfer:
+          $ref: '#/components/schemas/source_transaction_sepa_credit_transfer_data'
+        source:
+          description: The ID of the source this transaction is attached to.
+          maxLength: 5000
+          type: string
+        status:
+          description: The status of the transaction, one of `succeeded`, `pending`, or `failed`.
+          maxLength: 5000
+          type: string
+        type:
+          description: The type of source this transaction is attached to.
+          enum:
+          - ach_credit_transfer
+          - ach_debit
+          - alipay
+          - bancontact
+          - card
+          - card_present
+          - eps
+          - giropay
+          - ideal
+          - klarna
+          - multibanco
+          - p24
+          - sepa_debit
+          - sofort
+          - three_d_secure
+          - wechat
+          type: string
+      required:
+      - amount
+      - created
+      - currency
+      - id
+      - livemode
+      - object
+      - source
+      - status
+      - type
+      title: SourceTransaction
+      type: object
+      x-expandableFields:
+      - ach_credit_transfer
+      - chf_credit_transfer
+      - gbp_credit_transfer
+      - paper_check
+      - sepa_credit_transfer
+      x-resourceId: source_transaction
+    GetSourcesSourceMandateNotificationsMandateNotificationRequest:
+      type: object
+      properties: {}
     source:
       description: '`Source` objects allow you to accept a variety of payment methods. They
 
@@ -1232,6 +1167,71 @@ components:
       - redirect
       - source_order
       x-resourceId: source
+    source_mandate_notification:
+      description: 'Source mandate notifications should be created when a notification related to
+
+        a source mandate must be sent to the payer. They will trigger a webhook or
+
+        deliver an email to the customer.'
+      properties:
+        acss_debit:
+          $ref: '#/components/schemas/source_mandate_notification_acss_debit_data'
+        amount:
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.
+          type:
+          - integer
+          - 'null'
+        bacs_debit:
+          $ref: '#/components/schemas/source_mandate_notification_bacs_debit_data'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - source_mandate_notification
+          type: string
+        reason:
+          description: The reason of the mandate notification. Valid reasons are `mandate_confirmed` or `debit_initiated`.
+          maxLength: 5000
+          type: string
+        sepa_debit:
+          $ref: '#/components/schemas/source_mandate_notification_sepa_debit_data'
+        source:
+          $ref: '#/components/schemas/source'
+        status:
+          description: The status of the mandate notification. Valid statuses are `pending` or `submitted`.
+          maxLength: 5000
+          type: string
+        type:
+          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.
+          maxLength: 5000
+          type: string
+      required:
+      - created
+      - id
+      - livemode
+      - object
+      - reason
+      - source
+      - status
+      - type
+      title: SourceMandateNotification
+      type: object
+      x-expandableFields:
+      - acss_debit
+      - bacs_debit
+      - sepa_debit
+      - source
+      x-resourceId: source_mandate_notification
     ApmsSourcesSourceTransactionList:
       type: object
       required:

@@ -91,6 +91,23 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    DeleteEphemeralKeysKeyRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PostEphemeralKeysRequest:
       type: object
       properties:
@@ -116,23 +133,6 @@ components:
           description: The ID of the Identity VerificationSession you'd like to access using the resulting ephemeral key
           maxLength: 5000
           type: string
-    DeleteEphemeralKeysKeyRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     ephemeral_key:
       description: ''
       properties:

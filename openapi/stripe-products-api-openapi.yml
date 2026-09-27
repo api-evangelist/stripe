@@ -405,12 +405,119 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetProductsIdRequest:
+    PostProductsIdRequest:
       type: object
-      properties: {}
-    GetProductsSearchRequest:
-      type: object
-      properties: {}
+      properties:
+        active:
+          description: Whether the product is available for purchase.
+          type: boolean
+        default_price:
+          description: The ID of the [Price](https://stripe.com/docs/api/prices) object that is the default price for this product.
+          maxLength: 5000
+          type: string
+        description:
+          anyOf:
+          - maxLength: 40000
+            type: string
+          - enum:
+            - ''
+            type: string
+          description: The product's description, meant to be displayable to the customer. Use this field to optionally store a long form explanation of the product being sold for your own rendering purposes.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        features:
+          anyOf:
+          - items:
+              properties:
+                name:
+                  maxLength: 5000
+                  type: string
+              required:
+              - name
+              title: features
+              type: object
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: A list of up to 15 features for this product. These are displayed in [pricing tables](https://stripe.com/docs/payments/checkout/pricing-table).
+        images:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: A list of up to 8 URLs of images for this product, meant to be displayable to the customer.
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        name:
+          description: The product's name, meant to be displayable to the customer.
+          maxLength: 5000
+          type: string
+        package_dimensions:
+          anyOf:
+          - properties:
+              height:
+                type: number
+              length:
+                type: number
+              weight:
+                type: number
+              width:
+                type: number
+            required:
+            - height
+            - length
+            - weight
+            - width
+            title: package_dimensions_specs
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: The dimensions of this product for shipping purposes.
+        shippable:
+          description: Whether this product is shipped (i.e., physical goods).
+          type: boolean
+        statement_descriptor:
+          description: "An arbitrary string to be displayed on your customer's credit card or bank statement. While most banks display this information consistently, some may display it incorrectly or not at all.\n\nThis may be up to 22 characters. The statement description may not include `<`, `>`, `\\`, `\"`, `'` characters, and will appear on your customer's statement in capital letters. Non-ASCII characters are automatically stripped.\n It must contain at least one letter. May only be set if `type=service`."
+          maxLength: 22
+          type: string
+        tax_code:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: A [tax code](https://stripe.com/docs/tax/tax-categories) ID.
+        unit_label:
+          anyOf:
+          - maxLength: 12
+            type: string
+          - enum:
+            - ''
+            type: string
+          description: A label that represents units of this product. When set, this will be included in customers' receipts, invoices, Checkout, and the customer portal. May only be set if `type=service`.
+        url:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: A URL of a publicly-accessible webpage for this product.
     error:
       description: An error response from the Stripe API
       properties:
@@ -419,10 +526,68 @@ components:
       required:
       - error
       type: object
+    deleted_product:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - product
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedProduct
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_product
+    SearchResult:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/product'
+          type: array
+        has_more:
+          type: boolean
+        next_page:
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - search_result
+          type: string
+        total_count:
+          description: The total number of objects that match the query, only accurate up to 10,000.
+          type: integer
+        url:
+          maxLength: 5000
+          type: string
     DeleteProductsIdRequest:
       type: object
       properties: {}
-    GetProductsRequest:
+    GetProductsSearchRequest:
+      type: object
+      properties: {}
+    GetProductsIdRequest:
       type: object
       properties: {}
     product:
@@ -555,6 +720,9 @@ components:
       - package_dimensions
       - tax_code
       x-resourceId: product
+    GetProductsRequest:
+      type: object
+      properties: {}
     ProductList:
       type: object
       required:
@@ -580,149 +748,6 @@ components:
           description: The URL where this list can be accessed.
           maxLength: 5000
           pattern: ^/v1/products
-          type: string
-    PostProductsIdRequest:
-      type: object
-      properties:
-        active:
-          description: Whether the product is available for purchase.
-          type: boolean
-        default_price:
-          description: The ID of the [Price](https://stripe.com/docs/api/prices) object that is the default price for this product.
-          maxLength: 5000
-          type: string
-        description:
-          anyOf:
-          - maxLength: 40000
-            type: string
-          - enum:
-            - ''
-            type: string
-          description: The product's description, meant to be displayable to the customer. Use this field to optionally store a long form explanation of the product being sold for your own rendering purposes.
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        features:
-          anyOf:
-          - items:
-              properties:
-                name:
-                  maxLength: 5000
-                  type: string
-              required:
-              - name
-              title: features
-              type: object
-            type: array
-          - enum:
-            - ''
-            type: string
-          description: A list of up to 15 features for this product. These are displayed in [pricing tables](https://stripe.com/docs/payments/checkout/pricing-table).
-        images:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - enum:
-            - ''
-            type: string
-          description: A list of up to 8 URLs of images for this product, meant to be displayable to the customer.
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        name:
-          description: The product's name, meant to be displayable to the customer.
-          maxLength: 5000
-          type: string
-        package_dimensions:
-          anyOf:
-          - properties:
-              height:
-                type: number
-              length:
-                type: number
-              weight:
-                type: number
-              width:
-                type: number
-            required:
-            - height
-            - length
-            - weight
-            - width
-            title: package_dimensions_specs
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: The dimensions of this product for shipping purposes.
-        shippable:
-          description: Whether this product is shipped (i.e., physical goods).
-          type: boolean
-        statement_descriptor:
-          description: "An arbitrary string to be displayed on your customer's credit card or bank statement. While most banks display this information consistently, some may display it incorrectly or not at all.\n\nThis may be up to 22 characters. The statement description may not include `<`, `>`, `\\`, `\"`, `'` characters, and will appear on your customer's statement in capital letters. Non-ASCII characters are automatically stripped.\n It must contain at least one letter. May only be set if `type=service`."
-          maxLength: 22
-          type: string
-        tax_code:
-          anyOf:
-          - type: string
-          - enum:
-            - ''
-            type: string
-          description: A [tax code](https://stripe.com/docs/tax/tax-categories) ID.
-        unit_label:
-          anyOf:
-          - maxLength: 12
-            type: string
-          - enum:
-            - ''
-            type: string
-          description: A label that represents units of this product. When set, this will be included in customers' receipts, invoices, Checkout, and the customer portal. May only be set if `type=service`.
-        url:
-          anyOf:
-          - type: string
-          - enum:
-            - ''
-            type: string
-          description: A URL of a publicly-accessible webpage for this product.
-    SearchResult:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/product'
-          type: array
-        has_more:
-          type: boolean
-        next_page:
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - search_result
-          type: string
-        total_count:
-          description: The total number of objects that match the query, only accurate up to 10,000.
-          type: integer
-        url:
-          maxLength: 5000
           type: string
     PostProductsRequest:
       type: object
@@ -899,28 +924,3 @@ components:
           description: A URL of a publicly-accessible webpage for this product.
           maxLength: 5000
           type: string
-    deleted_product:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - product
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedProduct
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_product

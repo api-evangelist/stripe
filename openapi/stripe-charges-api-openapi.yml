@@ -823,57 +823,140 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PostChargesChargeDisputeCloseRequest:
-      type: object
+    error:
+      description: An error response from the Stripe API
       properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostChargesChargeCaptureRequest:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
       type: object
-      properties:
-        amount:
-          description: The amount to capture, which must be less than or equal to the original amount. Any additional amount will be automatically refunded.
-          type: integer
-        application_fee:
-          description: An application fee to add on to this charge.
-          type: integer
-        application_fee_amount:
-          description: An application fee amount to add on to this charge, which must be less than or equal to the original amount.
-          type: integer
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        receipt_email:
-          description: The email address to send this charge's receipt to. This will override the previously-specified email address for this charge, if one was set. Receipts will not be sent in test mode.
-          type: string
-        statement_descriptor:
-          description: For card charges, use `statement_descriptor_suffix` instead. Otherwise, you can use this value as the complete description of a charge on your customers’ statements. Must contain at least one letter, maximum 22 characters.
-          maxLength: 22
-          type: string
-        statement_descriptor_suffix:
-          description: Provides information about the charge that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
-          maxLength: 22
-          type: string
-        transfer_data:
-          description: An optional dictionary including the account to automatically transfer to as part of a destination charge. [See the Connect documentation](https://stripe.com/docs/connect/destination-charges) for details.
-          properties:
-            amount:
-              type: integer
-          title: transfer_data_specs
-          type: object
-        transfer_group:
-          description: A string that identifies this transaction as part of a group. `transfer_group` may only be provided if it has not been set. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details.
-          type: string
-    GetChargesChargeDisputeRequest:
+    GetChargesChargeRequest:
       type: object
       properties: {}
+    RefundList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/refund'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostChargesChargeDisputeRequest:
+      type: object
+      properties:
+        evidence:
+          description: Evidence to upload, to respond to a dispute. Updating any field in the hash will submit all fields in the hash for review. The combined character count of all fields is limited to 150,000.
+          properties:
+            access_activity_log:
+              maxLength: 20000
+              type: string
+            billing_address:
+              maxLength: 5000
+              type: string
+            cancellation_policy:
+              type: string
+            cancellation_policy_disclosure:
+              maxLength: 20000
+              type: string
+            cancellation_rebuttal:
+              maxLength: 20000
+              type: string
+            customer_communication:
+              type: string
+            customer_email_address:
+              maxLength: 5000
+              type: string
+            customer_name:
+              maxLength: 5000
+              type: string
+            customer_purchase_ip:
+              maxLength: 5000
+              type: string
+            customer_signature:
+              type: string
+            duplicate_charge_documentation:
+              type: string
+            duplicate_charge_explanation:
+              maxLength: 20000
+              type: string
+            duplicate_charge_id:
+              maxLength: 5000
+              type: string
+            product_description:
+              maxLength: 20000
+              type: string
+            receipt:
+              type: string
+            refund_policy:
+              type: string
+            refund_policy_disclosure:
+              maxLength: 20000
+              type: string
+            refund_refusal_explanation:
+              maxLength: 20000
+              type: string
+            service_date:
+              maxLength: 5000
+              type: string
+            service_documentation:
+              type: string
+            shipping_address:
+              maxLength: 5000
+              type: string
+            shipping_carrier:
+              maxLength: 5000
+              type: string
+            shipping_date:
+              maxLength: 5000
+              type: string
+            shipping_documentation:
+              type: string
+            shipping_tracking_number:
+              maxLength: 5000
+              type: string
+            uncategorized_file:
+              type: string
+            uncategorized_text:
+              maxLength: 20000
+              type: string
+          title: dispute_evidence_params
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        submit:
+          description: Whether to immediately submit evidence to the bank. If `false`, evidence is staged on the dispute. Staged evidence is visible in the API and Dashboard, and can be submitted to the bank by making another request with this attribute set to `true` (the default).
+          type: boolean
     PostChargesChargeRequest:
       type: object
       properties:
@@ -963,63 +1046,7 @@ components:
         transfer_group:
           description: A string that identifies this transaction as part of a group. `transfer_group` may only be provided if it has not been set. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details.
           type: string
-    PostChargesChargeRefundsRequest:
-      type: object
-      properties:
-        amount:
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        customer:
-          description: Customer whose customer balance to refund from.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        instructions_email:
-          description: For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.
-          type: string
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        origin:
-          description: Origin of the refund
-          enum:
-          - customer_balance
-          type: string
-        payment_intent:
-          description: The identifier of the PaymentIntent to refund.
-          maxLength: 5000
-          type: string
-        reason:
-          description: String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.
-          enum:
-          - duplicate
-          - fraudulent
-          - requested_by_customer
-          maxLength: 5000
-          type: string
-        refund_application_fee:
-          description: Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.
-          type: boolean
-        reverse_transfer:
-          description: Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.
-          type: boolean
-    GetChargesChargeRequest:
-      type: object
-      properties: {}
-    SearchResult:
+    ChargeList:
       type: object
       required:
       - data
@@ -1032,74 +1059,19 @@ components:
             $ref: '#/components/schemas/charge'
           type: array
         has_more:
+          description: True if this list has another page of items after this one that can be fetched.
           type: boolean
-        next_page:
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
         object:
-          description: String representing the object's type. Objects of the same type share the same value.
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
           enum:
-          - search_result
+          - list
           type: string
-        total_count:
-          description: The total number of objects that match the query, only accurate up to 10,000.
-          type: integer
         url:
+          description: The URL where this list can be accessed.
           maxLength: 5000
+          pattern: ^/v1/charges
           type: string
-    PostChargesChargeRefundRequest:
-      type: object
-      properties:
-        amount:
-          description: A positive integer in cents (or local equivalent) representing how much of this charge to refund. Can refund only up to the remaining, unrefunded amount of the charge.
-          type: integer
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        instructions_email:
-          description: For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.
-          type: string
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        payment_intent:
-          description: The identifier of the PaymentIntent to refund.
-          maxLength: 5000
-          type: string
-        reason:
-          description: String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.
-          enum:
-          - duplicate
-          - fraudulent
-          - requested_by_customer
-          maxLength: 5000
-          type: string
-        refund_application_fee:
-          description: Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.
-          type: boolean
-        reverse_transfer:
-          description: Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.
-          type: boolean
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetChargesChargeRefundsRefundRequest:
+    GetChargesRequest:
       type: object
       properties: {}
     refund:
@@ -1250,15 +1222,60 @@ components:
       - source_transfer_reversal
       - transfer_reversal
       x-resourceId: refund
-    PostChargesChargeRefundsRefundRequest:
+    GetChargesChargeRefundsRequest:
+      type: object
+      properties: {}
+    SearchResult:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/charge'
+          type: array
+        has_more:
+          type: boolean
+        next_page:
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - search_result
+          type: string
+        total_count:
+          description: The total number of objects that match the query, only accurate up to 10,000.
+          type: integer
+        url:
+          maxLength: 5000
+          type: string
+    PostChargesChargeRefundsRequest:
       type: object
       properties:
+        amount:
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          description: Customer whose customer balance to refund from.
+          maxLength: 5000
+          type: string
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
+        instructions_email:
+          description: For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.
+          type: string
         metadata:
           anyOf:
           - additionalProperties:
@@ -1267,7 +1284,37 @@ components:
           - enum:
             - ''
             type: string
-    GetChargesRequest:
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        origin:
+          description: Origin of the refund
+          enum:
+          - customer_balance
+          type: string
+        payment_intent:
+          description: The identifier of the PaymentIntent to refund.
+          maxLength: 5000
+          type: string
+        reason:
+          description: String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.
+          enum:
+          - duplicate
+          - fraudulent
+          - requested_by_customer
+          maxLength: 5000
+          type: string
+        refund_application_fee:
+          description: Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.
+          type: boolean
+        reverse_transfer:
+          description: Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.
+          type: boolean
+    GetChargesChargeDisputeRequest:
+      type: object
+      properties: {}
+    GetChargesChargeRefundsRefundRequest:
+      type: object
+      properties: {}
+    GetChargesSearchRequest:
       type: object
       properties: {}
     charge:
@@ -1598,55 +1645,44 @@ components:
       - transfer
       - transfer_data
       x-resourceId: charge
-    ChargeList:
+    PostChargesChargeCaptureRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
       properties:
-        data:
+        amount:
+          description: The amount to capture, which must be less than or equal to the original amount. Any additional amount will be automatically refunded.
+          type: integer
+        application_fee:
+          description: An application fee to add on to this charge.
+          type: integer
+        application_fee_amount:
+          description: An application fee amount to add on to this charge, which must be less than or equal to the original amount.
+          type: integer
+        expand:
+          description: Specifies which fields in the response should be expanded.
           items:
-            $ref: '#/components/schemas/charge'
+            maxLength: 5000
+            type: string
           type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
+        receipt_email:
+          description: The email address to send this charge's receipt to. This will override the previously-specified email address for this charge, if one was set. Receipts will not be sent in test mode.
           type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/charges
+        statement_descriptor:
+          description: For card charges, use `statement_descriptor_suffix` instead. Otherwise, you can use this value as the complete description of a charge on your customers’ statements. Must contain at least one letter, maximum 22 characters.
+          maxLength: 22
           type: string
-    RefundList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/refund'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
+        statement_descriptor_suffix:
+          description: Provides information about the charge that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
+          maxLength: 22
           type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
+        transfer_data:
+          description: An optional dictionary including the account to automatically transfer to as part of a destination charge. [See the Connect documentation](https://stripe.com/docs/connect/destination-charges) for details.
+          properties:
+            amount:
+              type: integer
+          title: transfer_data_specs
+          type: object
+        transfer_group:
+          description: A string that identifies this transaction as part of a group. `transfer_group` may only be provided if it has not been set. See the [Connect documentation](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options) for details.
           type: string
     dispute:
       description: 'A dispute occurs when a customer questions your charge with their card issuer.
@@ -1758,95 +1794,21 @@ components:
       - payment_intent
       - payment_method_details
       x-resourceId: dispute
-    GetChargesChargeRefundsRequest:
-      type: object
-      properties: {}
-    PostChargesChargeDisputeRequest:
+    PostChargesChargeRefundRequest:
       type: object
       properties:
-        evidence:
-          description: Evidence to upload, to respond to a dispute. Updating any field in the hash will submit all fields in the hash for review. The combined character count of all fields is limited to 150,000.
-          properties:
-            access_activity_log:
-              maxLength: 20000
-              type: string
-            billing_address:
-              maxLength: 5000
-              type: string
-            cancellation_policy:
-              type: string
-            cancellation_policy_disclosure:
-              maxLength: 20000
-              type: string
-            cancellation_rebuttal:
-              maxLength: 20000
-              type: string
-            customer_communication:
-              type: string
-            customer_email_address:
-              maxLength: 5000
-              type: string
-            customer_name:
-              maxLength: 5000
-              type: string
-            customer_purchase_ip:
-              maxLength: 5000
-              type: string
-            customer_signature:
-              type: string
-            duplicate_charge_documentation:
-              type: string
-            duplicate_charge_explanation:
-              maxLength: 20000
-              type: string
-            duplicate_charge_id:
-              maxLength: 5000
-              type: string
-            product_description:
-              maxLength: 20000
-              type: string
-            receipt:
-              type: string
-            refund_policy:
-              type: string
-            refund_policy_disclosure:
-              maxLength: 20000
-              type: string
-            refund_refusal_explanation:
-              maxLength: 20000
-              type: string
-            service_date:
-              maxLength: 5000
-              type: string
-            service_documentation:
-              type: string
-            shipping_address:
-              maxLength: 5000
-              type: string
-            shipping_carrier:
-              maxLength: 5000
-              type: string
-            shipping_date:
-              maxLength: 5000
-              type: string
-            shipping_documentation:
-              type: string
-            shipping_tracking_number:
-              maxLength: 5000
-              type: string
-            uncategorized_file:
-              type: string
-            uncategorized_text:
-              maxLength: 20000
-              type: string
-          title: dispute_evidence_params
-          type: object
+        amount:
+          description: A positive integer in cents (or local equivalent) representing how much of this charge to refund. Can refund only up to the remaining, unrefunded amount of the charge.
+          type: integer
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
+        instructions_email:
+          description: For payment methods without native refund support (e.g., Konbini, PromptPay), use this email from the customer to receive refund instructions.
+          type: string
         metadata:
           anyOf:
           - additionalProperties:
@@ -1856,8 +1818,23 @@ components:
             - ''
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        submit:
-          description: Whether to immediately submit evidence to the bank. If `false`, evidence is staged on the dispute. Staged evidence is visible in the API and Dashboard, and can be submitted to the bank by making another request with this attribute set to `true` (the default).
+        payment_intent:
+          description: The identifier of the PaymentIntent to refund.
+          maxLength: 5000
+          type: string
+        reason:
+          description: String indicating the reason for the refund. If set, possible values are `duplicate`, `fraudulent`, and `requested_by_customer`. If you believe the charge to be fraudulent, specifying `fraudulent` as the reason will add the associated card and email to your [block lists](https://stripe.com/docs/radar/lists), and will also help us improve our fraud detection algorithms.
+          enum:
+          - duplicate
+          - fraudulent
+          - requested_by_customer
+          maxLength: 5000
+          type: string
+        refund_application_fee:
+          description: Boolean indicating whether the application fee should be refunded when refunding this charge. If a full charge refund is given, the full application fee will be refunded. Otherwise, the application fee will be refunded in an amount proportional to the amount of the charge refunded. An application fee can be refunded only by the application that created the charge.
+          type: boolean
+        reverse_transfer:
+          description: Boolean indicating whether the transfer should be reversed when refunding this charge. The transfer will be reversed proportionally to the amount being refunded (either the entire or partial amount).<br><br>A transfer can be reversed only by the application that created the charge.
           type: boolean
     PostChargesRequest:
       type: object
@@ -2050,9 +2027,32 @@ components:
         transfer_group:
           description: A string that identifies this transaction as part of a group. For details, see [Grouping transactions](https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options).
           type: string
-    GetChargesSearchRequest:
+    PostChargesChargeDisputeCloseRequest:
       type: object
-      properties: {}
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostChargesChargeRefundsRefundRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

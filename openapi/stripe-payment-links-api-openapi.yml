@@ -383,6 +383,31 @@ components:
       required:
       - error
       type: object
+    PaymentLinksResourcePaymentLinkList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/payment_link'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/payment_links
+          type: string
     payment_link:
       description: 'A payment link is a shareable URL that will take your customers to a hosted payment page. A payment link can be shared and used multiple times.
 
@@ -640,7 +665,13 @@ components:
       - tax_id_collection
       - transfer_data
       x-resourceId: payment_link
+    GetPaymentLinksRequest:
+      type: object
+      properties: {}
     GetPaymentLinksPaymentLinkLineItemsRequest:
+      type: object
+      properties: {}
+    GetPaymentLinksPaymentLinkRequest:
       type: object
       properties: {}
     PostPaymentLinksRequest:
@@ -1404,9 +1435,31 @@ components:
           - destination
           title: transfer_data_params
           type: object
-    GetPaymentLinksPaymentLinkRequest:
+    PaymentLinksResourceListLineItems:
       type: object
-      properties: {}
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
     PostPaymentLinksPaymentLinkRequest:
       type: object
       properties:
@@ -2112,59 +2165,6 @@ components:
                 type: string
           title: subscription_data_update_params
           type: object
-    PaymentLinksResourceListLineItems:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    PaymentLinksResourcePaymentLinkList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/payment_link'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/payment_links
-          type: string
-    GetPaymentLinksRequest:
-      type: object
-      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

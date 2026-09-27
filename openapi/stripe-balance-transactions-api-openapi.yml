@@ -190,45 +190,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetBalanceTransactionsIdRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    BalanceTransactionsList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/balance_transaction'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/balance_transactions
-          type: string
-    GetBalanceTransactionsRequest:
-      type: object
-      properties: {}
     balance_transaction:
       description: 'Balance transactions represent funds moving through your Stripe account.
 
@@ -399,6 +360,45 @@ components:
       - fee_details
       - source
       x-resourceId: balance_transaction
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetBalanceTransactionsRequest:
+      type: object
+      properties: {}
+    BalanceTransactionsList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/balance_transaction'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/balance_transactions
+          type: string
+    GetBalanceTransactionsIdRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

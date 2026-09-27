@@ -134,6 +134,42 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    CountrySpecList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/country_spec'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/country_specs
+          type: string
+    GetCountrySpecsRequest:
+      type: object
+      properties: {}
     country_spec:
       description: 'Stripe needs to collect certain pieces of information about each account
 
@@ -201,43 +237,7 @@ components:
       x-expandableFields:
       - verification_fields
       x-resourceId: country_spec
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    CountrySpecList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/country_spec'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/country_specs
-          type: string
     GetCountrySpecsCountryRequest:
-      type: object
-      properties: {}
-    GetCountrySpecsRequest:
       type: object
       properties: {}
   securitySchemes:

@@ -1288,6 +1288,128 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostTestHelpersTestClocksTestClockAdvanceRequest:
+      type: object
+      required:
+      - frozen_time
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        frozen_time:
+          description: The time to advance the test clock. Must be after the test clock's current frozen time. Cannot be more than two intervals in the future from the shortest subscription in this test clock. If there are no subscriptions in this test clock, it cannot be more than two years in the future.
+          format: unix-time
+          type: integer
+    PostTestHelpersTreasuryReceivedDebitsRequest:
+      type: object
+      required:
+      - amount
+      - currency
+      - financial_account
+      - network
+      properties:
+        amount:
+          description: Amount (in cents) to be transferred.
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        financial_account:
+          description: The FinancialAccount to pull funds from.
+          type: string
+        initiating_payment_method_details:
+          description: Initiating payment method details for the object.
+          properties:
+            type:
+              enum:
+              - us_bank_account
+              type: string
+            us_bank_account:
+              properties:
+                account_holder_name:
+                  maxLength: 5000
+                  type: string
+                account_number:
+                  maxLength: 5000
+                  type: string
+                routing_number:
+                  maxLength: 5000
+                  type: string
+              title: us_bank_account_source_params
+              type: object
+          required:
+          - type
+          title: source_params
+          type: object
+        network:
+          description: The rails used for the object.
+          enum:
+          - ach
+          type: string
+    PostTestHelpersTreasuryInboundTransfersIdReturnRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostTestHelpersIssuingCardsCardShippingDeliverRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    BillingClocksResourceBillingClockList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/test_helpers.test_clock'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/test_helpers/test_clocks
+          type: string
     PostTestHelpersTreasuryOutboundTransfersOutboundTransferFailRequest:
       type: object
       properties:
@@ -1297,6 +1419,105 @@ components:
             maxLength: 5000
             type: string
           type: array
+    PostTestHelpersTreasuryInboundTransfersIdSucceedRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    test_helpers.test_clock:
+      description: 'A test clock enables deterministic control over objects in testmode. With a test clock, you can create
+
+        objects at a frozen time in the past or future, and advance to a specific future time to observe webhooks and state changes. After the clock advances,
+
+        you can either validate the current state of your scenario (and test your assumptions), change the current state of your scenario (and test more complex scenarios), or keep advancing forward in time.'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        deletes_after:
+          description: Time at which this clock is scheduled to auto delete.
+          format: unix-time
+          type: integer
+        frozen_time:
+          description: Time at which all objects belonging to this clock are frozen.
+          format: unix-time
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        name:
+          description: The custom name supplied at creation.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - test_helpers.test_clock
+          type: string
+        status:
+          description: The status of the Test Clock.
+          enum:
+          - advancing
+          - internal_failure
+          - ready
+          type: string
+      required:
+      - created
+      - deletes_after
+      - frozen_time
+      - id
+      - livemode
+      - object
+      - status
+      title: TestClock
+      type: object
+      x-expandableFields: []
+      x-resourceId: test_helpers.test_clock
+    PostTestHelpersTreasuryOutboundTransfersOutboundTransferPostRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    deleted_test_helpers.test_clock:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - test_helpers.test_clock
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedTestClock
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_test_helpers.test_clock
     PostTestHelpersTreasuryOutboundPaymentsIdReturnRequest:
       type: object
       properties:
@@ -1324,6 +1545,357 @@ components:
               type: string
           title: returned_details_params
           type: object
+    PostTestHelpersTerminalReadersReaderPresentPaymentMethodRequest:
+      type: object
+      properties:
+        amount_tip:
+          description: Simulated on-reader tip amount.
+          type: integer
+        card_present:
+          description: Simulated data for the card_present payment method.
+          properties:
+            number:
+              maxLength: 5000
+              type: string
+          title: card_present
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        interac_present:
+          description: Simulated data for the interac_present payment method.
+          properties:
+            number:
+              maxLength: 5000
+              type: string
+          title: interac_present
+          type: object
+        type:
+          description: Simulated payment type.
+          enum:
+          - card_present
+          - interac_present
+          type: string
+          x-stripeBypassValidation: true
+    treasury.inbound_transfer:
+      description: Use [InboundTransfers](https://stripe.com/docs/treasury/moving-money/financial-accounts/into/inbound-transfers) to add funds to your [FinancialAccount](https://stripe.com/docs/api#financial_accounts) via a PaymentMethod that is owned by you. The funds will be transferred via an ACH debit.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        cancelable:
+          description: Returns `true` if the InboundTransfer is able to be canceled.
+          type: boolean
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        failure_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_inbound_transfers_resource_failure_details'
+          description: Details about this InboundTransfer's failure. Only set when status is `failed`.
+        financial_account:
+          description: The FinancialAccount that received the funds.
+          maxLength: 5000
+          type: string
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        linked_flows:
+          $ref: '#/components/schemas/treasury_inbound_transfers_resource_inbound_transfer_resource_linked_flows'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.inbound_transfer
+          type: string
+        origin_payment_method:
+          description: The origin payment method to be debited for an InboundTransfer.
+          maxLength: 5000
+          type: string
+        origin_payment_method_details:
+          anyOf:
+          - $ref: '#/components/schemas/inbound_transfers'
+          description: Details about the PaymentMethod for an InboundTransfer.
+        returned:
+          description: Returns `true` if the funds for an InboundTransfer were returned after the InboundTransfer went to the `succeeded` state.
+          type:
+          - boolean
+          - 'null'
+        statement_descriptor:
+          description: Statement descriptor shown when funds are debited from the source. Not all payment networks support `statement_descriptor`.
+          maxLength: 5000
+          type: string
+        status:
+          description: 'Status of the InboundTransfer: `processing`, `succeeded`, `failed`, and `canceled`. An InboundTransfer is `processing` if it is created and pending. The status changes to `succeeded` once the funds have been "confirmed" and a `transaction` is created and posted. The status changes to `failed` if the transfer fails.'
+          enum:
+          - canceled
+          - failed
+          - processing
+          - succeeded
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_inbound_transfers_resource_inbound_transfer_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - cancelable
+      - created
+      - currency
+      - financial_account
+      - id
+      - linked_flows
+      - livemode
+      - metadata
+      - object
+      - origin_payment_method
+      - statement_descriptor
+      - status
+      - status_transitions
+      title: TreasuryInboundTransfersResourceInboundTransfer
+      type: object
+      x-expandableFields:
+      - failure_details
+      - linked_flows
+      - origin_payment_method_details
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.inbound_transfer
+    PostTestHelpersIssuingCardsCardShippingReturnRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostTestHelpersTreasuryOutboundPaymentsIdFailRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    issuing.transaction:
+      description: 'Any use of an [issued card](https://stripe.com/docs/issuing) that results in funds entering or leaving
+
+        your Stripe account, such as a completed purchase or refund, is represented by an Issuing
+
+        `Transaction` object.
+
+
+        Related guide: [Issued card transactions](https://stripe.com/docs/issuing/purchases/transactions)'
+      properties:
+        amount:
+          description: The transaction amount, which will be reflected in your balance. This amount is in your currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+        amount_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_amount_details'
+          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+        authorization:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.authorization'
+          description: The `Authorization` object that led to this transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.authorization'
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: ID of the [balance transaction](https://stripe.com/docs/api/balance_transactions) associated with this transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        card:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.card'
+          description: The card used to make this transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.card'
+        cardholder:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.cardholder'
+          description: The cardholder to whom this transaction belongs.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.cardholder'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        dispute:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.dispute'
+          description: If you've disputed the transaction, the ID of the dispute.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.dispute'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        merchant_amount:
+          description: The amount that the merchant will receive, denominated in `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). It will be different from `amount` if the merchant is taking payment in a different currency.
+          type: integer
+        merchant_currency:
+          description: The currency with which the merchant is taking payment.
+          type: string
+        merchant_data:
+          $ref: '#/components/schemas/issuing_authorization_merchant_data'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network_data:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_network_data'
+          description: Details about the transaction, such as processing dates, set by the card network.
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.transaction
+          type: string
+        purchase_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_purchase_details'
+          description: Additional purchase information that is optionally provided by the merchant.
+        token:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.token'
+          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this transaction. If a network token was not used for this transaction, this field will be null.'
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.token'
+        treasury:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_transaction_treasury'
+          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this transaction if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts'
+        type:
+          description: The nature of the transaction.
+          enum:
+          - capture
+          - refund
+          type: string
+          x-stripeBypassValidation: true
+        wallet:
+          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`.
+          enum:
+          - apple_pay
+          - google_pay
+          - samsung_pay
+          type:
+          - string
+          - 'null'
+      required:
+      - amount
+      - card
+      - created
+      - currency
+      - id
+      - livemode
+      - merchant_amount
+      - merchant_currency
+      - merchant_data
+      - metadata
+      - object
+      - type
+      title: IssuingTransaction
+      type: object
+      x-expandableFields:
+      - amount_details
+      - authorization
+      - balance_transaction
+      - card
+      - cardholder
+      - dispute
+      - merchant_data
+      - network_data
+      - purchase_details
+      - token
+      - treasury
+      x-resourceId: issuing.transaction
+    PostTestHelpersCustomersCustomerFundCashBalanceRequest:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          description: Amount to be used for this test cash balance transaction. A positive integer representing how much to fund in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to fund $1.00 or 100 to fund ¥100, a zero-decimal currency).
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        reference:
+          description: A description of the test funding. This simulates free-text references supplied by customers when making bank transfers to their cash balance. You can use this to test how Stripe's [reconciliation algorithm](https://stripe.com/docs/payments/customer-balance/reconciliation) applies to different user inputs.
+          maxLength: 5000
+          type: string
     PostTestHelpersIssuingAuthorizationsAuthorizationIncrementRequest:
       type: object
       required:
@@ -1341,6 +1913,939 @@ components:
         is_amount_controllable:
           description: If set `true`, you may provide [amount](https://stripe.com/docs/api/issuing/authorizations/approve#approve_issuing_authorization-amount) to control how much to hold for the authorization.
           type: boolean
+    treasury.received_credit:
+      description: ReceivedCredits represent funds sent to a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) (for example, via ACH or wire). These money movements are not initiated from the FinancialAccount.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        failure_code:
+          description: Reason for the failure. A ReceivedCredit might fail because the receiving FinancialAccount is closed or frozen.
+          enum:
+          - account_closed
+          - account_frozen
+          - other
+          type:
+          - string
+          - 'null'
+          x-stripeBypassValidation: true
+        financial_account:
+          description: The FinancialAccount that received the funds.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        initiating_payment_method_details:
+          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
+        linked_flows:
+          $ref: '#/components/schemas/treasury_received_credits_resource_linked_flows'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        network:
+          description: The rails used to send the funds.
+          enum:
+          - ach
+          - card
+          - stripe
+          - us_domestic_wire
+          type: string
+          x-stripeBypassValidation: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.received_credit
+          type: string
+        reversal_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_received_credits_resource_reversal_details'
+          description: Details describing when a ReceivedCredit may be reversed.
+        status:
+          description: Status of the ReceivedCredit. ReceivedCredits are created either `succeeded` (approved) or `failed` (declined). If a ReceivedCredit is declined, the failure reason can be found in the `failure_code` field.
+          enum:
+          - failed
+          - succeeded
+          type: string
+          x-stripeBypassValidation: true
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - created
+      - currency
+      - description
+      - id
+      - initiating_payment_method_details
+      - linked_flows
+      - livemode
+      - network
+      - object
+      - status
+      title: TreasuryReceivedCreditsResourceReceivedCredit
+      type: object
+      x-expandableFields:
+      - initiating_payment_method_details
+      - linked_flows
+      - reversal_details
+      - transaction
+      x-resourceId: treasury.received_credit
+    issuing.authorization:
+      description: 'When an [issued card](https://stripe.com/docs/issuing) is used to make a purchase, an Issuing `Authorization`
+
+        object is created. [Authorizations](https://stripe.com/docs/issuing/purchases/authorizations) must be approved for the
+
+        purchase to be completed successfully.
+
+
+        Related guide: [Issued card authorizations](https://stripe.com/docs/issuing/purchases/authorizations)'
+      properties:
+        amount:
+          description: The total amount that was authorized or rejected. This amount is in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `amount` should be the same as `merchant_amount`, unless `currency` and `merchant_currency` are different.
+          type: integer
+        amount_details:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_amount_details'
+          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+        approved:
+          description: Whether the authorization has been approved.
+          type: boolean
+        authorization_method:
+          description: How the card details were provided.
+          enum:
+          - chip
+          - contactless
+          - keyed_in
+          - online
+          - swipe
+          type: string
+        balance_transactions:
+          description: List of balance transactions associated with this authorization.
+          items:
+            $ref: '#/components/schemas/balance_transaction'
+          type: array
+        card:
+          $ref: '#/components/schemas/issuing.card'
+        cardholder:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.cardholder'
+          description: The cardholder to whom this authorization belongs.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.cardholder'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: The currency of the cardholder. This currency can be different from the currency presented at authorization and the `merchant_currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        merchant_amount:
+          description: The total amount that was authorized or rejected. This amount is in the `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `merchant_amount` should be the same as `amount`, unless `merchant_currency` and `currency` are different.
+          type: integer
+        merchant_currency:
+          description: The local currency that was presented to the cardholder for the authorization. This currency can be different from the cardholder currency and the `currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        merchant_data:
+          $ref: '#/components/schemas/issuing_authorization_merchant_data'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network_data:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_network_data'
+          description: Details about the authorization, such as identifiers, set by the card network.
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - issuing.authorization
+          type: string
+        pending_request:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_pending_request'
+          description: The pending authorization request. This field will only be non-null during an `issuing_authorization.request` webhook.
+        request_history:
+          description: History of every time a `pending_request` authorization was approved/declined, either by you directly or by Stripe (e.g. based on your spending_controls). If the merchant changes the authorization by performing an incremental authorization, you can look at this field to see the previous requests for the authorization. This field can be helpful in determining why a given authorization was approved/declined.
+          items:
+            $ref: '#/components/schemas/issuing_authorization_request'
+          type: array
+        status:
+          description: The current status of the authorization in its lifecycle.
+          enum:
+          - closed
+          - pending
+          - reversed
+          type: string
+        token:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/issuing.token'
+          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this authorization. If a network token was not used for this authorization, this field will be null.'
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/issuing.token'
+        transactions:
+          description: List of [transactions](https://stripe.com/docs/api/issuing/transactions) associated with this authorization.
+          items:
+            $ref: '#/components/schemas/issuing.transaction'
+          type: array
+        treasury:
+          anyOf:
+          - $ref: '#/components/schemas/issuing_authorization_treasury'
+          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this authorization if it was created on a [FinancialAccount](https://stripe.com/docs/api/treasury/financial_accounts).'
+        verification_data:
+          $ref: '#/components/schemas/issuing_authorization_verification_data'
+        wallet:
+          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`. Will populate as `null` when no digital wallet was utilized.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+      required:
+      - amount
+      - approved
+      - authorization_method
+      - balance_transactions
+      - card
+      - created
+      - currency
+      - id
+      - livemode
+      - merchant_amount
+      - merchant_currency
+      - merchant_data
+      - metadata
+      - object
+      - request_history
+      - status
+      - transactions
+      - verification_data
+      title: IssuingAuthorization
+      type: object
+      x-expandableFields:
+      - amount_details
+      - balance_transactions
+      - card
+      - cardholder
+      - merchant_data
+      - network_data
+      - pending_request
+      - request_history
+      - token
+      - transactions
+      - treasury
+      - verification_data
+      x-resourceId: issuing.authorization
+    PostTestHelpersIssuingCardsCardShippingShipRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostTestHelpersTreasuryOutboundTransfersOutboundTransferReturnRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        returned_details:
+          description: Details about a returned OutboundTransfer.
+          properties:
+            code:
+              enum:
+              - account_closed
+              - account_frozen
+              - bank_account_restricted
+              - bank_ownership_changed
+              - declined
+              - incorrect_account_holder_name
+              - invalid_account_number
+              - invalid_currency
+              - no_account
+              - other
+              type: string
+          title: returned_details_params
+          type: object
+    treasury.outbound_transfer:
+      description: 'Use OutboundTransfers to transfer funds from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) to a PaymentMethod belonging to the same entity. To send funds to a different party, use [OutboundPayments](https://stripe.com/docs/api#outbound_payments) instead. You can send funds over ACH rails or through a domestic wire transfer to a user''s own external bank account.
+
+
+        Simulate OutboundTransfer state changes with the `/v1/test_helpers/treasury/outbound_transfers` endpoints. These methods can only be called on test mode objects.'
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        cancelable:
+          description: Returns `true` if the object can be canceled, and `false` otherwise.
+          type: boolean
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method:
+          description: The PaymentMethod used as the payment instrument for an OutboundTransfer.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method_details:
+          $ref: '#/components/schemas/outbound_transfers_payment_method_details'
+        expected_arrival_date:
+          description: The date when funds are expected to arrive in the destination account.
+          format: unix-time
+          type: integer
+        financial_account:
+          description: The FinancialAccount that funds were pulled from.
+          maxLength: 5000
+          type: string
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.outbound_transfer
+          type: string
+        returned_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_outbound_transfers_resource_returned_details'
+          description: Details about a returned OutboundTransfer. Only set when the status is `returned`.
+        statement_descriptor:
+          description: Information about the OutboundTransfer to be sent to the recipient account.
+          maxLength: 5000
+          type: string
+        status:
+          description: 'Current status of the OutboundTransfer: `processing`, `failed`, `canceled`, `posted`, `returned`. An OutboundTransfer is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundTransfer has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundTransfer fails to arrive at its destination, its status will change to `returned`.'
+          enum:
+          - canceled
+          - failed
+          - posted
+          - processing
+          - returned
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_outbound_transfers_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - cancelable
+      - created
+      - currency
+      - destination_payment_method_details
+      - expected_arrival_date
+      - financial_account
+      - id
+      - livemode
+      - metadata
+      - object
+      - statement_descriptor
+      - status
+      - status_transitions
+      - transaction
+      title: TreasuryOutboundTransfersResourceOutboundTransfer
+      type: object
+      x-expandableFields:
+      - destination_payment_method_details
+      - returned_details
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.outbound_transfer
+    GetTestHelpersTestClocksRequest:
+      type: object
+      properties: {}
+    refund:
+      description: 'Refund objects allow you to refund a previously created charge that isn''t
+
+        refunded yet. Funds are refunded to the credit or debit card that''s
+
+        initially charged.
+
+
+        Related guide: [Refunds](https://stripe.com/docs/refunds)'
+      properties:
+        amount:
+          description: Amount, in cents (or local equivalent).
+          type: integer
+        balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: Balance transaction that describes the impact on your account balance.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        charge:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/charge'
+          description: ID of the charge that's refunded.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/charge'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. You can use this for displaying to users (available on non-card refunds only).
+          maxLength: 5000
+          type: string
+        destination_details:
+          $ref: '#/components/schemas/refund_destination_details'
+        failure_balance_transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/balance_transaction'
+          description: After the refund fails, this balance transaction describes the adjustment made on your account balance that reverses the initial balance transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/balance_transaction'
+        failure_reason:
+          description: 'Provides the reason for the refund failure. Possible values are: `lost_or_stolen_card`, `expired_or_canceled_card`, `charge_for_pending_refund_disputed`, `insufficient_funds`, `declined`, `merchant_request`, or `unknown`.'
+          maxLength: 5000
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        instructions_email:
+          description: For payment methods without native refund support (for example, Konbini, PromptPay), provide an email address for the customer to receive refund instructions.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type:
+          - object
+          - 'null'
+        next_action:
+          $ref: '#/components/schemas/refund_next_action'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - refund
+          type: string
+        payment_intent:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/payment_intent'
+          description: ID of the PaymentIntent that's refunded.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/payment_intent'
+        reason:
+          description: Reason for the refund, which is either user-provided (`duplicate`, `fraudulent`, or `requested_by_customer`) or generated by Stripe internally (`expired_uncaptured_charge`).
+          enum:
+          - duplicate
+          - expired_uncaptured_charge
+          - fraudulent
+          - requested_by_customer
+          type:
+          - string
+          - 'null'
+          x-stripeBypassValidation: true
+        receipt_number:
+          description: This is the transaction number that appears on email receipts sent for this refund.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        source_transfer_reversal:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/transfer_reversal'
+          description: The transfer reversal that's associated with the refund. Only present if the charge came from another Stripe account.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/transfer_reversal'
+        status:
+          description: Status of the refund. This can be `pending`, `requires_action`, `succeeded`, `failed`, or `canceled`. Learn more about [failed refunds](https://stripe.com/docs/refunds#failed-refunds).
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        transfer_reversal:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/transfer_reversal'
+          description: This refers to the transfer reversal object if the accompanying transfer reverses. This is only applicable if the charge was created using the destination parameter.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/transfer_reversal'
+      required:
+      - amount
+      - created
+      - currency
+      - id
+      - object
+      title: Refund
+      type: object
+      x-expandableFields:
+      - balance_transaction
+      - charge
+      - destination_details
+      - failure_balance_transaction
+      - next_action
+      - payment_intent
+      - source_transfer_reversal
+      - transfer_reversal
+      x-resourceId: refund
+    PostTestHelpersIssuingAuthorizationsAuthorizationReverseRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        reverse_amount:
+          description: The amount to reverse from the authorization. If not provided, the full amount of the authorization will be reversed. This amount is in the authorization currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+    PostTestHelpersTreasuryInboundTransfersIdFailRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        failure_details:
+          description: Details about a failed InboundTransfer.
+          properties:
+            code:
+              enum:
+              - account_closed
+              - account_frozen
+              - bank_account_restricted
+              - bank_ownership_changed
+              - debit_not_authorized
+              - incorrect_account_holder_address
+              - incorrect_account_holder_name
+              - incorrect_account_holder_tax_id
+              - insufficient_funds
+              - invalid_account_number
+              - invalid_currency
+              - no_account
+              - other
+              type: string
+          title: failure_details_params
+          type: object
+    treasury.received_debit:
+      description: ReceivedDebits represent funds pulled from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts). These are not initiated from the FinancialAccount.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        failure_code:
+          description: Reason for the failure. A ReceivedDebit might fail because the FinancialAccount doesn't have sufficient funds, is closed, or is frozen.
+          enum:
+          - account_closed
+          - account_frozen
+          - insufficient_funds
+          - other
+          type:
+          - string
+          - 'null'
+        financial_account:
+          description: The FinancialAccount that funds were pulled from.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        initiating_payment_method_details:
+          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
+        linked_flows:
+          $ref: '#/components/schemas/treasury_received_debits_resource_linked_flows'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        network:
+          description: The network used for the ReceivedDebit.
+          enum:
+          - ach
+          - card
+          - stripe
+          type: string
+          x-stripeBypassValidation: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.received_debit
+          type: string
+        reversal_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_received_debits_resource_reversal_details'
+          description: Details describing when a ReceivedDebit might be reversed.
+        status:
+          description: Status of the ReceivedDebit. ReceivedDebits are created with a status of either `succeeded` (approved) or `failed` (declined). The failure reason can be found under the `failure_code`.
+          enum:
+          - failed
+          - succeeded
+          type: string
+          x-stripeBypassValidation: true
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - created
+      - currency
+      - description
+      - id
+      - linked_flows
+      - livemode
+      - network
+      - object
+      - status
+      title: TreasuryReceivedDebitsResourceReceivedDebit
+      type: object
+      x-expandableFields:
+      - initiating_payment_method_details
+      - linked_flows
+      - reversal_details
+      - transaction
+      x-resourceId: treasury.received_debit
+    PostTestHelpersTreasuryOutboundPaymentsIdPostRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostTestHelpersRefundsRefundExpireRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PostTestHelpersIssuingAuthorizationsAuthorizationCaptureRequest:
+      type: object
+      properties:
+        capture_amount:
+          description: The amount to capture from the authorization. If not provided, the full amount of the authorization will be captured. This amount is in the authorization currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+        close_authorization:
+          description: Whether to close the authorization after capture. Defaults to true. Set to false to enable multi-capture flows.
+          type: boolean
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        purchase_details:
+          description: Additional purchase information that is optionally provided by the merchant.
+          properties:
+            flight:
+              properties:
+                departure_at:
+                  format: unix-time
+                  type: integer
+                passenger_name:
+                  maxLength: 5000
+                  type: string
+                refundable:
+                  type: boolean
+                segments:
+                  items:
+                    properties:
+                      arrival_airport_code:
+                        maxLength: 3
+                        type: string
+                      carrier:
+                        maxLength: 5000
+                        type: string
+                      departure_airport_code:
+                        maxLength: 3
+                        type: string
+                      flight_number:
+                        maxLength: 5000
+                        type: string
+                      service_class:
+                        maxLength: 5000
+                        type: string
+                      stopover_allowed:
+                        type: boolean
+                    title: flight_segment_specs
+                    type: object
+                  type: array
+                travel_agency:
+                  maxLength: 5000
+                  type: string
+              title: flight_specs
+              type: object
+            fuel:
+              properties:
+                type:
+                  enum:
+                  - diesel
+                  - other
+                  - unleaded_plus
+                  - unleaded_regular
+                  - unleaded_super
+                  maxLength: 5000
+                  type: string
+                unit:
+                  enum:
+                  - liter
+                  - us_gallon
+                  maxLength: 5000
+                  type: string
+                unit_cost_decimal:
+                  format: decimal
+                  type: string
+                volume_decimal:
+                  format: decimal
+                  type: string
+              title: fuel_specs
+              type: object
+            lodging:
+              properties:
+                check_in_at:
+                  format: unix-time
+                  type: integer
+                nights:
+                  type: integer
+              title: lodging_specs
+              type: object
+            receipt:
+              items:
+                properties:
+                  description:
+                    maxLength: 26
+                    type: string
+                  quantity:
+                    format: decimal
+                    type: string
+                  total:
+                    type: integer
+                  unit_cost:
+                    type: integer
+                title: receipt_specs
+                type: object
+              type: array
+            reference:
+              maxLength: 5000
+              type: string
+          title: purchase_details_specs
+          type: object
+    DeleteTestHelpersTestClocksTestClockRequest:
+      type: object
+      properties: {}
+    GetTestHelpersTestClocksTestClockRequest:
+      type: object
+      properties: {}
+    terminal.reader:
+      description: 'A Reader represents a physical device for accepting payment details.
+
+
+        Related guide: [Connecting to a reader](https://stripe.com/docs/terminal/payments/connect-reader)'
+      properties:
+        action:
+          anyOf:
+          - $ref: '#/components/schemas/terminal_reader_reader_resource_reader_action'
+          description: The most recent action performed by the reader.
+        device_sw_version:
+          description: The current software version of the reader.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        device_type:
+          description: Type of reader, one of `bbpos_wisepad3`, `stripe_m2`, `bbpos_chipper2x`, `bbpos_wisepos_e`, `verifone_P400`, or `simulated_wisepos_e`.
+          enum:
+          - bbpos_chipper2x
+          - bbpos_wisepad3
+          - bbpos_wisepos_e
+          - simulated_wisepos_e
+          - stripe_m2
+          - verifone_P400
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        ip_address:
+          description: The local IP address of the reader.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        label:
+          description: Custom label given to the reader for easier identification.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        location:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/terminal.location'
+          description: The location identifier of the reader.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/terminal.location'
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - terminal.reader
+          type: string
+        serial_number:
+          description: Serial number of the reader.
+          maxLength: 5000
+          type: string
+        status:
+          description: The networking status of the reader.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+      required:
+      - device_type
+      - id
+      - label
+      - livemode
+      - metadata
+      - object
+      - serial_number
+      title: TerminalReaderReader
+      type: object
+      x-expandableFields:
+      - action
+      - location
+      x-resourceId: terminal.reader
     issuing.card:
       description: You can [create physical or virtual cards](https://stripe.com/docs/issuing/cards) that are issued to cardholders.
       properties:
@@ -1487,62 +2992,246 @@ components:
       - spending_controls
       - wallets
       x-resourceId: issuing.card
-    PostTestHelpersTreasuryReceivedDebitsRequest:
+    PostTestHelpersIssuingAuthorizationsAuthorizationExpireRequest:
       type: object
-      required:
-      - amount
-      - currency
-      - financial_account
-      - network
       properties:
-        amount:
-          description: Amount (in cents) to be transferred.
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
+    treasury.outbound_payment:
+      description: 'Use OutboundPayments to send funds to another party''s external bank account or [FinancialAccount](https://stripe.com/docs/api#financial_accounts). To send money to an account belonging to the same user, use an [OutboundTransfer](https://stripe.com/docs/api#outbound_transfers).
+
+
+        Simulate OutboundPayment state changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints. These methods can only be called on test mode objects.'
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        cancelable:
+          description: Returns `true` if the object can be canceled, and `false` otherwise.
+          type: boolean
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          description: ID of the [customer](https://stripe.com/docs/api/customers) to whom an OutboundPayment is sent.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method:
+          description: The PaymentMethod via which an OutboundPayment is sent. This field can be empty if the OutboundPayment was created using `destination_payment_method_data`.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method_details:
+          anyOf:
+          - $ref: '#/components/schemas/outbound_payments_payment_method_details'
+          description: Details about the PaymentMethod for an OutboundPayment.
+        end_user_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_end_user_details'
+          description: Details about the end user.
+        expected_arrival_date:
+          description: The date when funds are expected to arrive in the destination account.
+          format: unix-time
+          type: integer
         financial_account:
-          description: The FinancialAccount to pull funds from.
+          description: The FinancialAccount that funds were pulled from.
+          maxLength: 5000
           type: string
-        initiating_payment_method_details:
-          description: Initiating payment method details for the object.
-          properties:
-            type:
-              enum:
-              - us_bank_account
-              type: string
-            us_bank_account:
-              properties:
-                account_holder_name:
-                  maxLength: 5000
-                  type: string
-                account_number:
-                  maxLength: 5000
-                  type: string
-                routing_number:
-                  maxLength: 5000
-                  type: string
-              title: us_bank_account_source_params
-              type: object
-          required:
-          - type
-          title: source_params
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
           type: object
-        network:
-          description: The rails used for the object.
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
           enum:
-          - ach
+          - treasury.outbound_payment
           type: string
+        returned_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_outbound_payments_resource_returned_status'
+          description: Details about a returned OutboundPayment. Only set when the status is `returned`.
+        statement_descriptor:
+          description: The description that appears on the receiving end for an OutboundPayment (for example, bank statement for external bank transfer).
+          maxLength: 5000
+          type: string
+        status:
+          description: 'Current status of the OutboundPayment: `processing`, `failed`, `posted`, `returned`, `canceled`. An OutboundPayment is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundPayment has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundPayment fails to arrive at its destination, its status will change to `returned`.'
+          enum:
+          - canceled
+          - failed
+          - posted
+          - processing
+          - returned
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - cancelable
+      - created
+      - currency
+      - expected_arrival_date
+      - financial_account
+      - id
+      - livemode
+      - metadata
+      - object
+      - statement_descriptor
+      - status
+      - status_transitions
+      - transaction
+      title: TreasuryOutboundPaymentsResourceOutboundPayment
+      type: object
+      x-expandableFields:
+      - destination_payment_method_details
+      - end_user_details
+      - returned_details
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.outbound_payment
+    PostTestHelpersIssuingTransactionsTransactionRefundRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        refund_amount:
+          description: The total amount to attempt to refund. This amount is in the provided currency, or defaults to the cards currency, and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+    customer_cash_balance_transaction:
+      description: 'Customers with certain payments enabled have a cash balance, representing funds that were paid
+
+        by the customer to a merchant, but have not yet been allocated to a payment. Cash Balance Transactions
+
+        represent when funds are moved into or out of this balance. This includes funding by the customer, allocation
+
+        to payments, and refunds to the customer.'
+      properties:
+        adjusted_for_overdraft:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_adjusted_for_overdraft'
+        applied_to_payment:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_applied_to_payment_transaction'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          maxLength: 5000
+          type: string
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          description: The customer whose available cash balance changed as a result of this transaction.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+        ending_balance:
+          description: The total available cash balance for the specified currency after this transaction was applied. Represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          type: integer
+        funded:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_funded_transaction'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        net_amount:
+          description: The amount by which the cash balance changed, represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). A positive value represents funds being added to the cash balance, a negative value represents funds being removed from the cash balance.
+          type: integer
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - customer_cash_balance_transaction
+          type: string
+        refunded_from_payment:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_refunded_from_payment_transaction'
+        transferred_to_balance:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_transferred_to_balance'
+        type:
+          description: The type of the cash balance transaction. New types may be added in future. See [Customer Balance](https://stripe.com/docs/payments/customer-balance#types) to learn more about these types.
+          enum:
+          - adjusted_for_overdraft
+          - applied_to_payment
+          - funded
+          - funding_reversed
+          - refunded_from_payment
+          - return_canceled
+          - return_initiated
+          - transferred_to_balance
+          - unapplied_from_payment
+          type: string
+        unapplied_from_payment:
+          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_unapplied_from_payment_transaction'
+      required:
+      - created
+      - currency
+      - customer
+      - ending_balance
+      - id
+      - livemode
+      - net_amount
+      - object
+      - type
+      title: CustomerCashBalanceTransaction
+      type: object
+      x-expandableFields:
+      - adjusted_for_overdraft
+      - applied_to_payment
+      - customer
+      - funded
+      - refunded_from_payment
+      - transferred_to_balance
+      - unapplied_from_payment
+      x-resourceId: customer_cash_balance_transaction
     PostTestHelpersIssuingTransactionsCreateUnlinkedRefundRequest:
       type: object
       required:
@@ -1988,595 +3677,6 @@ components:
               type: string
           title: purchase_details_specs
           type: object
-    PostTestHelpersRefundsRefundExpireRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostTestHelpersIssuingAuthorizationsAuthorizationCaptureRequest:
-      type: object
-      properties:
-        capture_amount:
-          description: The amount to capture from the authorization. If not provided, the full amount of the authorization will be captured. This amount is in the authorization currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-          type: integer
-        close_authorization:
-          description: Whether to close the authorization after capture. Defaults to true. Set to false to enable multi-capture flows.
-          type: boolean
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        purchase_details:
-          description: Additional purchase information that is optionally provided by the merchant.
-          properties:
-            flight:
-              properties:
-                departure_at:
-                  format: unix-time
-                  type: integer
-                passenger_name:
-                  maxLength: 5000
-                  type: string
-                refundable:
-                  type: boolean
-                segments:
-                  items:
-                    properties:
-                      arrival_airport_code:
-                        maxLength: 3
-                        type: string
-                      carrier:
-                        maxLength: 5000
-                        type: string
-                      departure_airport_code:
-                        maxLength: 3
-                        type: string
-                      flight_number:
-                        maxLength: 5000
-                        type: string
-                      service_class:
-                        maxLength: 5000
-                        type: string
-                      stopover_allowed:
-                        type: boolean
-                    title: flight_segment_specs
-                    type: object
-                  type: array
-                travel_agency:
-                  maxLength: 5000
-                  type: string
-              title: flight_specs
-              type: object
-            fuel:
-              properties:
-                type:
-                  enum:
-                  - diesel
-                  - other
-                  - unleaded_plus
-                  - unleaded_regular
-                  - unleaded_super
-                  maxLength: 5000
-                  type: string
-                unit:
-                  enum:
-                  - liter
-                  - us_gallon
-                  maxLength: 5000
-                  type: string
-                unit_cost_decimal:
-                  format: decimal
-                  type: string
-                volume_decimal:
-                  format: decimal
-                  type: string
-              title: fuel_specs
-              type: object
-            lodging:
-              properties:
-                check_in_at:
-                  format: unix-time
-                  type: integer
-                nights:
-                  type: integer
-              title: lodging_specs
-              type: object
-            receipt:
-              items:
-                properties:
-                  description:
-                    maxLength: 26
-                    type: string
-                  quantity:
-                    format: decimal
-                    type: string
-                  total:
-                    type: integer
-                  unit_cost:
-                    type: integer
-                title: receipt_specs
-                type: object
-              type: array
-            reference:
-              maxLength: 5000
-              type: string
-          title: purchase_details_specs
-          type: object
-    GetTestHelpersTestClocksRequest:
-      type: object
-      properties: {}
-    treasury.inbound_transfer:
-      description: Use [InboundTransfers](https://stripe.com/docs/treasury/moving-money/financial-accounts/into/inbound-transfers) to add funds to your [FinancialAccount](https://stripe.com/docs/api#financial_accounts) via a PaymentMethod that is owned by you. The funds will be transferred via an ACH debit.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        cancelable:
-          description: Returns `true` if the InboundTransfer is able to be canceled.
-          type: boolean
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        failure_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_inbound_transfers_resource_failure_details'
-          description: Details about this InboundTransfer's failure. Only set when status is `failed`.
-        financial_account:
-          description: The FinancialAccount that received the funds.
-          maxLength: 5000
-          type: string
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        linked_flows:
-          $ref: '#/components/schemas/treasury_inbound_transfers_resource_inbound_transfer_resource_linked_flows'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.inbound_transfer
-          type: string
-        origin_payment_method:
-          description: The origin payment method to be debited for an InboundTransfer.
-          maxLength: 5000
-          type: string
-        origin_payment_method_details:
-          anyOf:
-          - $ref: '#/components/schemas/inbound_transfers'
-          description: Details about the PaymentMethod for an InboundTransfer.
-        returned:
-          description: Returns `true` if the funds for an InboundTransfer were returned after the InboundTransfer went to the `succeeded` state.
-          type:
-          - boolean
-          - 'null'
-        statement_descriptor:
-          description: Statement descriptor shown when funds are debited from the source. Not all payment networks support `statement_descriptor`.
-          maxLength: 5000
-          type: string
-        status:
-          description: 'Status of the InboundTransfer: `processing`, `succeeded`, `failed`, and `canceled`. An InboundTransfer is `processing` if it is created and pending. The status changes to `succeeded` once the funds have been "confirmed" and a `transaction` is created and posted. The status changes to `failed` if the transfer fails.'
-          enum:
-          - canceled
-          - failed
-          - processing
-          - succeeded
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_inbound_transfers_resource_inbound_transfer_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - cancelable
-      - created
-      - currency
-      - financial_account
-      - id
-      - linked_flows
-      - livemode
-      - metadata
-      - object
-      - origin_payment_method
-      - statement_descriptor
-      - status
-      - status_transitions
-      title: TreasuryInboundTransfersResourceInboundTransfer
-      type: object
-      x-expandableFields:
-      - failure_details
-      - linked_flows
-      - origin_payment_method_details
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.inbound_transfer
-    PostTestHelpersIssuingCardsCardShippingShipRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    treasury.outbound_payment:
-      description: 'Use OutboundPayments to send funds to another party''s external bank account or [FinancialAccount](https://stripe.com/docs/api#financial_accounts). To send money to an account belonging to the same user, use an [OutboundTransfer](https://stripe.com/docs/api#outbound_transfers).
-
-
-        Simulate OutboundPayment state changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints. These methods can only be called on test mode objects.'
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        cancelable:
-          description: Returns `true` if the object can be canceled, and `false` otherwise.
-          type: boolean
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        customer:
-          description: ID of the [customer](https://stripe.com/docs/api/customers) to whom an OutboundPayment is sent.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method:
-          description: The PaymentMethod via which an OutboundPayment is sent. This field can be empty if the OutboundPayment was created using `destination_payment_method_data`.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method_details:
-          anyOf:
-          - $ref: '#/components/schemas/outbound_payments_payment_method_details'
-          description: Details about the PaymentMethod for an OutboundPayment.
-        end_user_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_end_user_details'
-          description: Details about the end user.
-        expected_arrival_date:
-          description: The date when funds are expected to arrive in the destination account.
-          format: unix-time
-          type: integer
-        financial_account:
-          description: The FinancialAccount that funds were pulled from.
-          maxLength: 5000
-          type: string
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.outbound_payment
-          type: string
-        returned_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_payments_resource_returned_status'
-          description: Details about a returned OutboundPayment. Only set when the status is `returned`.
-        statement_descriptor:
-          description: The description that appears on the receiving end for an OutboundPayment (for example, bank statement for external bank transfer).
-          maxLength: 5000
-          type: string
-        status:
-          description: 'Current status of the OutboundPayment: `processing`, `failed`, `posted`, `returned`, `canceled`. An OutboundPayment is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundPayment has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundPayment fails to arrive at its destination, its status will change to `returned`.'
-          enum:
-          - canceled
-          - failed
-          - posted
-          - processing
-          - returned
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - cancelable
-      - created
-      - currency
-      - expected_arrival_date
-      - financial_account
-      - id
-      - livemode
-      - metadata
-      - object
-      - statement_descriptor
-      - status
-      - status_transitions
-      - transaction
-      title: TreasuryOutboundPaymentsResourceOutboundPayment
-      type: object
-      x-expandableFields:
-      - destination_payment_method_details
-      - end_user_details
-      - returned_details
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.outbound_payment
-    PostTestHelpersIssuingTransactionsTransactionRefundRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        refund_amount:
-          description: The total amount to attempt to refund. This amount is in the provided currency, or defaults to the cards currency, and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-          type: integer
-    PostTestHelpersIssuingAuthorizationsAuthorizationReverseRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        reverse_amount:
-          description: The amount to reverse from the authorization. If not provided, the full amount of the authorization will be reversed. This amount is in the authorization currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-          type: integer
-    PostTestHelpersTestClocksTestClockAdvanceRequest:
-      type: object
-      required:
-      - frozen_time
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        frozen_time:
-          description: The time to advance the test clock. Must be after the test clock's current frozen time. Cannot be more than two intervals in the future from the shortest subscription in this test clock. If there are no subscriptions in this test clock, it cannot be more than two years in the future.
-          format: unix-time
-          type: integer
-    PostTestHelpersTreasuryInboundTransfersIdReturnRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    test_helpers.test_clock:
-      description: 'A test clock enables deterministic control over objects in testmode. With a test clock, you can create
-
-        objects at a frozen time in the past or future, and advance to a specific future time to observe webhooks and state changes. After the clock advances,
-
-        you can either validate the current state of your scenario (and test your assumptions), change the current state of your scenario (and test more complex scenarios), or keep advancing forward in time.'
-      properties:
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        deletes_after:
-          description: Time at which this clock is scheduled to auto delete.
-          format: unix-time
-          type: integer
-        frozen_time:
-          description: Time at which all objects belonging to this clock are frozen.
-          format: unix-time
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        name:
-          description: The custom name supplied at creation.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - test_helpers.test_clock
-          type: string
-        status:
-          description: The status of the Test Clock.
-          enum:
-          - advancing
-          - internal_failure
-          - ready
-          type: string
-      required:
-      - created
-      - deletes_after
-      - frozen_time
-      - id
-      - livemode
-      - object
-      - status
-      title: TestClock
-      type: object
-      x-expandableFields: []
-      x-resourceId: test_helpers.test_clock
-    PostTestHelpersTreasuryOutboundTransfersOutboundTransferReturnRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        returned_details:
-          description: Details about a returned OutboundTransfer.
-          properties:
-            code:
-              enum:
-              - account_closed
-              - account_frozen
-              - bank_account_restricted
-              - bank_ownership_changed
-              - declined
-              - incorrect_account_holder_name
-              - invalid_account_number
-              - invalid_currency
-              - no_account
-              - other
-              type: string
-          title: returned_details_params
-          type: object
-    PostTestHelpersIssuingAuthorizationsAuthorizationExpireRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostTestHelpersIssuingCardsCardShippingFailRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    BillingClocksResourceBillingClockList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/test_helpers.test_clock'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/test_helpers/test_clocks
-          type: string
-    GetTestHelpersTestClocksTestClockRequest:
-      type: object
-      properties: {}
-    PostTestHelpersTerminalReadersReaderPresentPaymentMethodRequest:
-      type: object
-      properties:
-        amount_tip:
-          description: Simulated on-reader tip amount.
-          type: integer
-        card_present:
-          description: Simulated data for the card_present payment method.
-          properties:
-            number:
-              maxLength: 5000
-              type: string
-          title: card_present
-          type: object
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        interac_present:
-          description: Simulated data for the interac_present payment method.
-          properties:
-            number:
-              maxLength: 5000
-              type: string
-          title: interac_present
-          type: object
-        type:
-          description: Simulated payment type.
-          enum:
-          - card_present
-          - interac_present
-          type: string
-          x-stripeBypassValidation: true
     PostTestHelpersIssuingTransactionsCreateForceCaptureRequest:
       type: object
       required:
@@ -3022,384 +4122,16 @@ components:
               type: string
           title: purchase_details_specs
           type: object
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
+    PostTestHelpersTreasuryReceivedCreditsRequest:
       type: object
-    terminal.reader:
-      description: 'A Reader represents a physical device for accepting payment details.
-
-
-        Related guide: [Connecting to a reader](https://stripe.com/docs/terminal/payments/connect-reader)'
-      properties:
-        action:
-          anyOf:
-          - $ref: '#/components/schemas/terminal_reader_reader_resource_reader_action'
-          description: The most recent action performed by the reader.
-        device_sw_version:
-          description: The current software version of the reader.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        device_type:
-          description: Type of reader, one of `bbpos_wisepad3`, `stripe_m2`, `bbpos_chipper2x`, `bbpos_wisepos_e`, `verifone_P400`, or `simulated_wisepos_e`.
-          enum:
-          - bbpos_chipper2x
-          - bbpos_wisepad3
-          - bbpos_wisepos_e
-          - simulated_wisepos_e
-          - stripe_m2
-          - verifone_P400
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        ip_address:
-          description: The local IP address of the reader.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        label:
-          description: Custom label given to the reader for easier identification.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        location:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/terminal.location'
-          description: The location identifier of the reader.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/terminal.location'
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - terminal.reader
-          type: string
-        serial_number:
-          description: Serial number of the reader.
-          maxLength: 5000
-          type: string
-        status:
-          description: The networking status of the reader.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-      required:
-      - device_type
-      - id
-      - label
-      - livemode
-      - metadata
-      - object
-      - serial_number
-      title: TerminalReaderReader
-      type: object
-      x-expandableFields:
-      - action
-      - location
-      x-resourceId: terminal.reader
-    refund:
-      description: 'Refund objects allow you to refund a previously created charge that isn''t
-
-        refunded yet. Funds are refunded to the credit or debit card that''s
-
-        initially charged.
-
-
-        Related guide: [Refunds](https://stripe.com/docs/refunds)'
-      properties:
-        amount:
-          description: Amount, in cents (or local equivalent).
-          type: integer
-        balance_transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/balance_transaction'
-          description: Balance transaction that describes the impact on your account balance.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/balance_transaction'
-        charge:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/charge'
-          description: ID of the charge that's refunded.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/charge'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. You can use this for displaying to users (available on non-card refunds only).
-          maxLength: 5000
-          type: string
-        destination_details:
-          $ref: '#/components/schemas/refund_destination_details'
-        failure_balance_transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/balance_transaction'
-          description: After the refund fails, this balance transaction describes the adjustment made on your account balance that reverses the initial balance transaction.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/balance_transaction'
-        failure_reason:
-          description: 'Provides the reason for the refund failure. Possible values are: `lost_or_stolen_card`, `expired_or_canceled_card`, `charge_for_pending_refund_disputed`, `insufficient_funds`, `declined`, `merchant_request`, or `unknown`.'
-          maxLength: 5000
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        instructions_email:
-          description: For payment methods without native refund support (for example, Konbini, PromptPay), provide an email address for the customer to receive refund instructions.
-          maxLength: 5000
-          type: string
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type:
-          - object
-          - 'null'
-        next_action:
-          $ref: '#/components/schemas/refund_next_action'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - refund
-          type: string
-        payment_intent:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/payment_intent'
-          description: ID of the PaymentIntent that's refunded.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/payment_intent'
-        reason:
-          description: Reason for the refund, which is either user-provided (`duplicate`, `fraudulent`, or `requested_by_customer`) or generated by Stripe internally (`expired_uncaptured_charge`).
-          enum:
-          - duplicate
-          - expired_uncaptured_charge
-          - fraudulent
-          - requested_by_customer
-          type:
-          - string
-          - 'null'
-          x-stripeBypassValidation: true
-        receipt_number:
-          description: This is the transaction number that appears on email receipts sent for this refund.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        source_transfer_reversal:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/transfer_reversal'
-          description: The transfer reversal that's associated with the refund. Only present if the charge came from another Stripe account.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/transfer_reversal'
-        status:
-          description: Status of the refund. This can be `pending`, `requires_action`, `succeeded`, `failed`, or `canceled`. Learn more about [failed refunds](https://stripe.com/docs/refunds#failed-refunds).
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        transfer_reversal:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/transfer_reversal'
-          description: This refers to the transfer reversal object if the accompanying transfer reverses. This is only applicable if the charge was created using the destination parameter.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/transfer_reversal'
       required:
       - amount
-      - created
       - currency
-      - id
-      - object
-      title: Refund
-      type: object
-      x-expandableFields:
-      - balance_transaction
-      - charge
-      - destination_details
-      - failure_balance_transaction
-      - next_action
-      - payment_intent
-      - source_transfer_reversal
-      - transfer_reversal
-      x-resourceId: refund
-    PostTestHelpersTreasuryOutboundPaymentsIdFailRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostTestHelpersIssuingCardsCardShippingReturnRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    customer_cash_balance_transaction:
-      description: 'Customers with certain payments enabled have a cash balance, representing funds that were paid
-
-        by the customer to a merchant, but have not yet been allocated to a payment. Cash Balance Transactions
-
-        represent when funds are moved into or out of this balance. This includes funding by the customer, allocation
-
-        to payments, and refunds to the customer.'
-      properties:
-        adjusted_for_overdraft:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_adjusted_for_overdraft'
-        applied_to_payment:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_applied_to_payment_transaction'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          maxLength: 5000
-          type: string
-        customer:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/customer'
-          description: The customer whose available cash balance changed as a result of this transaction.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/customer'
-        ending_balance:
-          description: The total available cash balance for the specified currency after this transaction was applied. Represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-          type: integer
-        funded:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_funded_transaction'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        net_amount:
-          description: The amount by which the cash balance changed, represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). A positive value represents funds being added to the cash balance, a negative value represents funds being removed from the cash balance.
-          type: integer
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - customer_cash_balance_transaction
-          type: string
-        refunded_from_payment:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_refunded_from_payment_transaction'
-        transferred_to_balance:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_transferred_to_balance'
-        type:
-          description: The type of the cash balance transaction. New types may be added in future. See [Customer Balance](https://stripe.com/docs/payments/customer-balance#types) to learn more about these types.
-          enum:
-          - adjusted_for_overdraft
-          - applied_to_payment
-          - funded
-          - funding_reversed
-          - refunded_from_payment
-          - return_canceled
-          - return_initiated
-          - transferred_to_balance
-          - unapplied_from_payment
-          type: string
-        unapplied_from_payment:
-          $ref: '#/components/schemas/customer_balance_resource_cash_balance_transaction_resource_unapplied_from_payment_transaction'
-      required:
-      - created
-      - currency
-      - customer
-      - ending_balance
-      - id
-      - livemode
-      - net_amount
-      - object
-      - type
-      title: CustomerCashBalanceTransaction
-      type: object
-      x-expandableFields:
-      - adjusted_for_overdraft
-      - applied_to_payment
-      - customer
-      - funded
-      - refunded_from_payment
-      - transferred_to_balance
-      - unapplied_from_payment
-      x-resourceId: customer_cash_balance_transaction
-    PostTestHelpersTreasuryInboundTransfersIdSucceedRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    DeleteTestHelpersTestClocksTestClockRequest:
-      type: object
-      properties: {}
-    treasury.outbound_transfer:
-      description: 'Use OutboundTransfers to transfer funds from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) to a PaymentMethod belonging to the same entity. To send funds to a different party, use [OutboundPayments](https://stripe.com/docs/api#outbound_payments) instead. You can send funds over ACH rails or through a domestic wire transfer to a user''s own external bank account.
-
-
-        Simulate OutboundTransfer state changes with the `/v1/test_helpers/treasury/outbound_transfers` endpoints. These methods can only be called on test mode objects.'
+      - financial_account
+      - network
       properties:
         amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        cancelable:
-          description: Returns `true` if the object can be canceled, and `false` otherwise.
-          type: boolean
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
+          description: Amount (in cents) to be transferred.
           type: integer
         currency:
           description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -3407,177 +4139,64 @@ components:
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
           maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method:
-          description: The PaymentMethod used as the payment instrument for an OutboundTransfer.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method_details:
-          $ref: '#/components/schemas/outbound_transfers_payment_method_details'
-        expected_arrival_date:
-          description: The date when funds are expected to arrive in the destination account.
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        financial_account:
+          description: The FinancialAccount to send funds to.
+          type: string
+        initiating_payment_method_details:
+          description: Initiating payment method details for the object.
+          properties:
+            type:
+              enum:
+              - us_bank_account
+              type: string
+            us_bank_account:
+              properties:
+                account_holder_name:
+                  maxLength: 5000
+                  type: string
+                account_number:
+                  maxLength: 5000
+                  type: string
+                routing_number:
+                  maxLength: 5000
+                  type: string
+              title: us_bank_account_source_params
+              type: object
+          required:
+          - type
+          title: source_params
+          type: object
+        network:
+          description: The rails used for the object.
+          enum:
+          - ach
+          - us_domestic_wire
+          type: string
+    PostTestHelpersTestClocksRequest:
+      type: object
+      required:
+      - frozen_time
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        frozen_time:
+          description: The initial frozen time for this test clock.
           format: unix-time
           type: integer
-        financial_account:
-          description: The FinancialAccount that funds were pulled from.
-          maxLength: 5000
-          type: string
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.outbound_transfer
-          type: string
-        returned_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_transfers_resource_returned_details'
-          description: Details about a returned OutboundTransfer. Only set when the status is `returned`.
-        statement_descriptor:
-          description: Information about the OutboundTransfer to be sent to the recipient account.
-          maxLength: 5000
-          type: string
-        status:
-          description: 'Current status of the OutboundTransfer: `processing`, `failed`, `canceled`, `posted`, `returned`. An OutboundTransfer is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundTransfer has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundTransfer fails to arrive at its destination, its status will change to `returned`.'
-          enum:
-          - canceled
-          - failed
-          - posted
-          - processing
-          - returned
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_outbound_transfers_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - cancelable
-      - created
-      - currency
-      - destination_payment_method_details
-      - expected_arrival_date
-      - financial_account
-      - id
-      - livemode
-      - metadata
-      - object
-      - statement_descriptor
-      - status
-      - status_transitions
-      - transaction
-      title: TreasuryOutboundTransfersResourceOutboundTransfer
-      type: object
-      x-expandableFields:
-      - destination_payment_method_details
-      - returned_details
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.outbound_transfer
-    PostTestHelpersTreasuryInboundTransfersIdFailRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        failure_details:
-          description: Details about a failed InboundTransfer.
-          properties:
-            code:
-              enum:
-              - account_closed
-              - account_frozen
-              - bank_account_restricted
-              - bank_ownership_changed
-              - debit_not_authorized
-              - incorrect_account_holder_address
-              - incorrect_account_holder_name
-              - incorrect_account_holder_tax_id
-              - insufficient_funds
-              - invalid_account_number
-              - invalid_currency
-              - no_account
-              - other
-              type: string
-          title: failure_details_params
-          type: object
-    deleted_test_helpers.test_clock:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - test_helpers.test_clock
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedTestClock
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_test_helpers.test_clock
-    PostTestHelpersCustomersCustomerFundCashBalanceRequest:
-      type: object
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          description: Amount to be used for this test cash balance transaction. A positive integer representing how much to fund in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to fund $1.00 or 100 to fund ¥100, a zero-decimal currency).
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        reference:
-          description: A description of the test funding. This simulates free-text references supplied by customers when making bank transfers to their cash balance. You can use this to test how Stripe's [reconciliation algorithm](https://stripe.com/docs/payments/customer-balance/reconciliation) applies to different user inputs.
-          maxLength: 5000
+        name:
+          description: The name for this test clock.
+          maxLength: 300
           type: string
     PostTestHelpersIssuingAuthorizationsRequest:
       type: object
@@ -4026,270 +4645,7 @@ components:
           - google_pay
           - samsung_pay
           type: string
-    issuing.authorization:
-      description: 'When an [issued card](https://stripe.com/docs/issuing) is used to make a purchase, an Issuing `Authorization`
-
-        object is created. [Authorizations](https://stripe.com/docs/issuing/purchases/authorizations) must be approved for the
-
-        purchase to be completed successfully.
-
-
-        Related guide: [Issued card authorizations](https://stripe.com/docs/issuing/purchases/authorizations)'
-      properties:
-        amount:
-          description: The total amount that was authorized or rejected. This amount is in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `amount` should be the same as `merchant_amount`, unless `currency` and `merchant_currency` are different.
-          type: integer
-        amount_details:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_authorization_amount_details'
-          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-        approved:
-          description: Whether the authorization has been approved.
-          type: boolean
-        authorization_method:
-          description: How the card details were provided.
-          enum:
-          - chip
-          - contactless
-          - keyed_in
-          - online
-          - swipe
-          type: string
-        balance_transactions:
-          description: List of balance transactions associated with this authorization.
-          items:
-            $ref: '#/components/schemas/balance_transaction'
-          type: array
-        card:
-          $ref: '#/components/schemas/issuing.card'
-        cardholder:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.cardholder'
-          description: The cardholder to whom this authorization belongs.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.cardholder'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: The currency of the cardholder. This currency can be different from the currency presented at authorization and the `merchant_currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        merchant_amount:
-          description: The total amount that was authorized or rejected. This amount is in the `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `merchant_amount` should be the same as `amount`, unless `merchant_currency` and `currency` are different.
-          type: integer
-        merchant_currency:
-          description: The local currency that was presented to the cardholder for the authorization. This currency can be different from the cardholder currency and the `currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        merchant_data:
-          $ref: '#/components/schemas/issuing_authorization_merchant_data'
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        network_data:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_authorization_network_data'
-          description: Details about the authorization, such as identifiers, set by the card network.
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - issuing.authorization
-          type: string
-        pending_request:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_authorization_pending_request'
-          description: The pending authorization request. This field will only be non-null during an `issuing_authorization.request` webhook.
-        request_history:
-          description: History of every time a `pending_request` authorization was approved/declined, either by you directly or by Stripe (e.g. based on your spending_controls). If the merchant changes the authorization by performing an incremental authorization, you can look at this field to see the previous requests for the authorization. This field can be helpful in determining why a given authorization was approved/declined.
-          items:
-            $ref: '#/components/schemas/issuing_authorization_request'
-          type: array
-        status:
-          description: The current status of the authorization in its lifecycle.
-          enum:
-          - closed
-          - pending
-          - reversed
-          type: string
-        token:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.token'
-          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this authorization. If a network token was not used for this authorization, this field will be null.'
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.token'
-        transactions:
-          description: List of [transactions](https://stripe.com/docs/api/issuing/transactions) associated with this authorization.
-          items:
-            $ref: '#/components/schemas/issuing.transaction'
-          type: array
-        treasury:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_authorization_treasury'
-          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this authorization if it was created on a [FinancialAccount](https://stripe.com/docs/api/treasury/financial_accounts).'
-        verification_data:
-          $ref: '#/components/schemas/issuing_authorization_verification_data'
-        wallet:
-          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`. Will populate as `null` when no digital wallet was utilized.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-      required:
-      - amount
-      - approved
-      - authorization_method
-      - balance_transactions
-      - card
-      - created
-      - currency
-      - id
-      - livemode
-      - merchant_amount
-      - merchant_currency
-      - merchant_data
-      - metadata
-      - object
-      - request_history
-      - status
-      - transactions
-      - verification_data
-      title: IssuingAuthorization
-      type: object
-      x-expandableFields:
-      - amount_details
-      - balance_transactions
-      - card
-      - cardholder
-      - merchant_data
-      - network_data
-      - pending_request
-      - request_history
-      - token
-      - transactions
-      - treasury
-      - verification_data
-      x-resourceId: issuing.authorization
-    treasury.received_credit:
-      description: ReceivedCredits represent funds sent to a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) (for example, via ACH or wire). These money movements are not initiated from the FinancialAccount.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        failure_code:
-          description: Reason for the failure. A ReceivedCredit might fail because the receiving FinancialAccount is closed or frozen.
-          enum:
-          - account_closed
-          - account_frozen
-          - other
-          type:
-          - string
-          - 'null'
-          x-stripeBypassValidation: true
-        financial_account:
-          description: The FinancialAccount that received the funds.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        initiating_payment_method_details:
-          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
-        linked_flows:
-          $ref: '#/components/schemas/treasury_received_credits_resource_linked_flows'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        network:
-          description: The rails used to send the funds.
-          enum:
-          - ach
-          - card
-          - stripe
-          - us_domestic_wire
-          type: string
-          x-stripeBypassValidation: true
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.received_credit
-          type: string
-        reversal_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_received_credits_resource_reversal_details'
-          description: Details describing when a ReceivedCredit may be reversed.
-        status:
-          description: Status of the ReceivedCredit. ReceivedCredits are created either `succeeded` (approved) or `failed` (declined). If a ReceivedCredit is declined, the failure reason can be found in the `failure_code` field.
-          enum:
-          - failed
-          - succeeded
-          type: string
-          x-stripeBypassValidation: true
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - created
-      - currency
-      - description
-      - id
-      - initiating_payment_method_details
-      - linked_flows
-      - livemode
-      - network
-      - object
-      - status
-      title: TreasuryReceivedCreditsResourceReceivedCredit
-      type: object
-      x-expandableFields:
-      - initiating_payment_method_details
-      - linked_flows
-      - reversal_details
-      - transaction
-      x-resourceId: treasury.received_credit
-    PostTestHelpersTreasuryOutboundPaymentsIdPostRequest:
+    PostTestHelpersIssuingCardsCardShippingFailRequest:
       type: object
       properties:
         expand:
@@ -4298,362 +4654,6 @@ components:
             maxLength: 5000
             type: string
           type: array
-    PostTestHelpersTreasuryOutboundTransfersOutboundTransferPostRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    issuing.transaction:
-      description: 'Any use of an [issued card](https://stripe.com/docs/issuing) that results in funds entering or leaving
-
-        your Stripe account, such as a completed purchase or refund, is represented by an Issuing
-
-        `Transaction` object.
-
-
-        Related guide: [Issued card transactions](https://stripe.com/docs/issuing/purchases/transactions)'
-      properties:
-        amount:
-          description: The transaction amount, which will be reflected in your balance. This amount is in your currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-          type: integer
-        amount_details:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_transaction_amount_details'
-          description: Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
-        authorization:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.authorization'
-          description: The `Authorization` object that led to this transaction.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.authorization'
-        balance_transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/balance_transaction'
-          description: ID of the [balance transaction](https://stripe.com/docs/api/balance_transactions) associated with this transaction.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/balance_transaction'
-        card:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.card'
-          description: The card used to make this transaction.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.card'
-        cardholder:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.cardholder'
-          description: The cardholder to whom this transaction belongs.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.cardholder'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        dispute:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.dispute'
-          description: If you've disputed the transaction, the ID of the dispute.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.dispute'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        merchant_amount:
-          description: The amount that the merchant will receive, denominated in `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). It will be different from `amount` if the merchant is taking payment in a different currency.
-          type: integer
-        merchant_currency:
-          description: The currency with which the merchant is taking payment.
-          type: string
-        merchant_data:
-          $ref: '#/components/schemas/issuing_authorization_merchant_data'
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        network_data:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_transaction_network_data'
-          description: Details about the transaction, such as processing dates, set by the card network.
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - issuing.transaction
-          type: string
-        purchase_details:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_transaction_purchase_details'
-          description: Additional purchase information that is optionally provided by the merchant.
-        token:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/issuing.token'
-          description: '[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this transaction. If a network token was not used for this transaction, this field will be null.'
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/issuing.token'
-        treasury:
-          anyOf:
-          - $ref: '#/components/schemas/issuing_transaction_treasury'
-          description: '[Treasury](https://stripe.com/docs/api/treasury) details related to this transaction if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts'
-        type:
-          description: The nature of the transaction.
-          enum:
-          - capture
-          - refund
-          type: string
-          x-stripeBypassValidation: true
-        wallet:
-          description: The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`.
-          enum:
-          - apple_pay
-          - google_pay
-          - samsung_pay
-          type:
-          - string
-          - 'null'
-      required:
-      - amount
-      - card
-      - created
-      - currency
-      - id
-      - livemode
-      - merchant_amount
-      - merchant_currency
-      - merchant_data
-      - metadata
-      - object
-      - type
-      title: IssuingTransaction
-      type: object
-      x-expandableFields:
-      - amount_details
-      - authorization
-      - balance_transaction
-      - card
-      - cardholder
-      - dispute
-      - merchant_data
-      - network_data
-      - purchase_details
-      - token
-      - treasury
-      x-resourceId: issuing.transaction
-    PostTestHelpersTestClocksRequest:
-      type: object
-      required:
-      - frozen_time
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        frozen_time:
-          description: The initial frozen time for this test clock.
-          format: unix-time
-          type: integer
-        name:
-          description: The name for this test clock.
-          maxLength: 300
-          type: string
-    PostTestHelpersIssuingCardsCardShippingDeliverRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    treasury.received_debit:
-      description: ReceivedDebits represent funds pulled from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts). These are not initiated from the FinancialAccount.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        failure_code:
-          description: Reason for the failure. A ReceivedDebit might fail because the FinancialAccount doesn't have sufficient funds, is closed, or is frozen.
-          enum:
-          - account_closed
-          - account_frozen
-          - insufficient_funds
-          - other
-          type:
-          - string
-          - 'null'
-        financial_account:
-          description: The FinancialAccount that funds were pulled from.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        initiating_payment_method_details:
-          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
-        linked_flows:
-          $ref: '#/components/schemas/treasury_received_debits_resource_linked_flows'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        network:
-          description: The network used for the ReceivedDebit.
-          enum:
-          - ach
-          - card
-          - stripe
-          type: string
-          x-stripeBypassValidation: true
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.received_debit
-          type: string
-        reversal_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_received_debits_resource_reversal_details'
-          description: Details describing when a ReceivedDebit might be reversed.
-        status:
-          description: Status of the ReceivedDebit. ReceivedDebits are created with a status of either `succeeded` (approved) or `failed` (declined). The failure reason can be found under the `failure_code`.
-          enum:
-          - failed
-          - succeeded
-          type: string
-          x-stripeBypassValidation: true
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - created
-      - currency
-      - description
-      - id
-      - linked_flows
-      - livemode
-      - network
-      - object
-      - status
-      title: TreasuryReceivedDebitsResourceReceivedDebit
-      type: object
-      x-expandableFields:
-      - initiating_payment_method_details
-      - linked_flows
-      - reversal_details
-      - transaction
-      x-resourceId: treasury.received_debit
-    PostTestHelpersTreasuryReceivedCreditsRequest:
-      type: object
-      required:
-      - amount
-      - currency
-      - financial_account
-      - network
-      properties:
-        amount:
-          description: Amount (in cents) to be transferred.
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        financial_account:
-          description: The FinancialAccount to send funds to.
-          type: string
-        initiating_payment_method_details:
-          description: Initiating payment method details for the object.
-          properties:
-            type:
-              enum:
-              - us_bank_account
-              type: string
-            us_bank_account:
-              properties:
-                account_holder_name:
-                  maxLength: 5000
-                  type: string
-                account_number:
-                  maxLength: 5000
-                  type: string
-                routing_number:
-                  maxLength: 5000
-                  type: string
-              title: us_bank_account_source_params
-              type: object
-          required:
-          - type
-          title: source_params
-          type: object
-        network:
-          description: The rails used for the object.
-          enum:
-          - ach
-          - us_domestic_wire
-          type: string
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

@@ -637,31 +637,261 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    QuotesResourceQuoteList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
+    error:
+      description: An error response from the Stripe API
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/quote'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostQuotesQuoteRequest:
+      type: object
+      properties:
+        application_fee_amount:
+          anyOf:
+          - type: integer
+          - enum:
+            - ''
+            type: string
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. There cannot be any line items with recurring prices when using this field.
+        application_fee_percent:
+          anyOf:
+          - type: number
+          - enum:
+            - ''
+            type: string
+          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. There must be at least 1 line item with a recurring price to use this field.
+        automatic_tax:
+          description: Settings for automatic tax lookup for this quote and resulting invoices and subscriptions.
+          properties:
+            enabled:
+              type: boolean
+          required:
+          - enabled
+          title: automatic_tax_param
+          type: object
+        collection_method:
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay invoices at the end of the subscription cycle or at invoice finalization using the default payment method attached to the subscription or customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
           enum:
-          - list
+          - charge_automatically
+          - send_invoice
           type: string
-        url:
-          description: The URL where this list can be accessed.
+        customer:
+          description: The customer for which this quote belongs to. A customer is required before finalizing the quote. Once specified, it cannot be changed.
           maxLength: 5000
-          pattern: ^/v1/quotes
           type: string
+        default_tax_rates:
+          anyOf:
+          - items:
+              maxLength: 5000
+              type: string
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: The tax rates that will apply to any line item that does not have `tax_rates` set.
+        description:
+          anyOf:
+          - maxLength: 500
+            type: string
+          - enum:
+            - ''
+            type: string
+          description: A description that will be displayed on the quote PDF.
+        discounts:
+          anyOf:
+          - items:
+              properties:
+                coupon:
+                  maxLength: 5000
+                  type: string
+                discount:
+                  maxLength: 5000
+                  type: string
+              title: discounts_data_param
+              type: object
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: The discounts applied to the quote. You can only set up to one discount.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        expires_at:
+          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        footer:
+          anyOf:
+          - maxLength: 500
+            type: string
+          - enum:
+            - ''
+            type: string
+          description: A footer that will be displayed on the quote PDF.
+        header:
+          anyOf:
+          - maxLength: 50
+            type: string
+          - enum:
+            - ''
+            type: string
+          description: A header that will be displayed on the quote PDF.
+        invoice_settings:
+          description: All invoices will be billed using the specified settings.
+          properties:
+            days_until_due:
+              type: integer
+          title: quote_param
+          type: object
+        line_items:
+          description: A list of line items the customer is being quoted for. Each line item includes information about the product, the quantity, and the resulting cost.
+          items:
+            properties:
+              id:
+                maxLength: 5000
+                type: string
+              price:
+                maxLength: 5000
+                type: string
+              price_data:
+                properties:
+                  currency:
+                    type: string
+                  product:
+                    maxLength: 5000
+                    type: string
+                  recurring:
+                    properties:
+                      interval:
+                        enum:
+                        - day
+                        - month
+                        - week
+                        - year
+                        type: string
+                      interval_count:
+                        type: integer
+                    required:
+                    - interval
+                    title: recurring_adhoc
+                    type: object
+                  tax_behavior:
+                    enum:
+                    - exclusive
+                    - inclusive
+                    - unspecified
+                    type: string
+                  unit_amount:
+                    type: integer
+                  unit_amount_decimal:
+                    format: decimal
+                    type: string
+                required:
+                - currency
+                - product
+                title: price_data
+                type: object
+              quantity:
+                type: integer
+              tax_rates:
+                anyOf:
+                - items:
+                    maxLength: 5000
+                    type: string
+                  type: array
+                - enum:
+                  - ''
+                  type: string
+            title: line_item_update_params
+            type: object
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        on_behalf_of:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: The account on behalf of which to charge.
+        subscription_data:
+          description: When creating a subscription or subscription schedule, the specified configuration data will be used. There must be at least one line item with a recurring price for a subscription or subscription schedule to be created. A subscription schedule is created if `subscription_data[effective_date]` is present and in the future, otherwise a subscription is created.
+          properties:
+            description:
+              anyOf:
+              - maxLength: 500
+                type: string
+              - enum:
+                - ''
+                type: string
+            effective_date:
+              anyOf:
+              - enum:
+                - current_period_end
+                maxLength: 5000
+                type: string
+              - format: unix-time
+                type: integer
+              - enum:
+                - ''
+                type: string
+            metadata:
+              additionalProperties:
+                type: string
+              type: object
+            trial_period_days:
+              anyOf:
+              - type: integer
+              - enum:
+                - ''
+                type: string
+          title: subscription_data_update_params
+          type: object
+        transfer_data:
+          anyOf:
+          - properties:
+              amount:
+                type: integer
+              amount_percent:
+                type: number
+              destination:
+                type: string
+            required:
+            - destination
+            title: transfer_data_specs
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: The data with which to automatically create a Transfer for each of the invoices.
+    GetQuotesQuoteLineItemsRequest:
+      type: object
+      properties: {}
+    PostQuotesQuoteFinalizeRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        expires_at:
+          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+    GetQuotesQuoteRequest:
+      type: object
+      properties: {}
     PostQuotesQuoteCancelRequest:
       type: object
       properties:
@@ -671,31 +901,6 @@ components:
             maxLength: 5000
             type: string
           type: array
-    QuotesResourceListLineItems:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     quote:
       description: 'A Quote is a way to model prices that you''d like to provide to a customer.
 
@@ -968,270 +1173,59 @@ components:
       - total_details
       - transfer_data
       x-resourceId: quote
-    PostQuotesQuoteAcceptRequest:
+    QuotesResourceListLineItems:
       type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
       required:
-      - error
-      type: object
-    PostQuotesQuoteRequest:
-      type: object
+      - data
+      - has_more
+      - object
+      - url
       properties:
-        application_fee_amount:
-          anyOf:
-          - type: integer
-          - enum:
-            - ''
-            type: string
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. There cannot be any line items with recurring prices when using this field.
-        application_fee_percent:
-          anyOf:
-          - type: number
-          - enum:
-            - ''
-            type: string
-          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. There must be at least 1 line item with a recurring price to use this field.
-        automatic_tax:
-          description: Settings for automatic tax lookup for this quote and resulting invoices and subscriptions.
-          properties:
-            enabled:
-              type: boolean
-          required:
-          - enabled
-          title: automatic_tax_param
-          type: object
-        collection_method:
-          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay invoices at the end of the subscription cycle or at invoice finalization using the default payment method attached to the subscription or customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
           enum:
-          - charge_automatically
-          - send_invoice
+          - list
           type: string
-        customer:
-          description: The customer for which this quote belongs to. A customer is required before finalizing the quote. Once specified, it cannot be changed.
+        url:
+          description: The URL where this list can be accessed.
           maxLength: 5000
           type: string
-        default_tax_rates:
-          anyOf:
-          - items:
-              maxLength: 5000
-              type: string
-            type: array
-          - enum:
-            - ''
-            type: string
-          description: The tax rates that will apply to any line item that does not have `tax_rates` set.
-        description:
-          anyOf:
-          - maxLength: 500
-            type: string
-          - enum:
-            - ''
-            type: string
-          description: A description that will be displayed on the quote PDF.
-        discounts:
-          anyOf:
-          - items:
-              properties:
-                coupon:
-                  maxLength: 5000
-                  type: string
-                discount:
-                  maxLength: 5000
-                  type: string
-              title: discounts_data_param
-              type: object
-            type: array
-          - enum:
-            - ''
-            type: string
-          description: The discounts applied to the quote. You can only set up to one discount.
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        expires_at:
-          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        footer:
-          anyOf:
-          - maxLength: 500
-            type: string
-          - enum:
-            - ''
-            type: string
-          description: A footer that will be displayed on the quote PDF.
-        header:
-          anyOf:
-          - maxLength: 50
-            type: string
-          - enum:
-            - ''
-            type: string
-          description: A header that will be displayed on the quote PDF.
-        invoice_settings:
-          description: All invoices will be billed using the specified settings.
-          properties:
-            days_until_due:
-              type: integer
-          title: quote_param
-          type: object
-        line_items:
-          description: A list of line items the customer is being quoted for. Each line item includes information about the product, the quantity, and the resulting cost.
-          items:
-            properties:
-              id:
-                maxLength: 5000
-                type: string
-              price:
-                maxLength: 5000
-                type: string
-              price_data:
-                properties:
-                  currency:
-                    type: string
-                  product:
-                    maxLength: 5000
-                    type: string
-                  recurring:
-                    properties:
-                      interval:
-                        enum:
-                        - day
-                        - month
-                        - week
-                        - year
-                        type: string
-                      interval_count:
-                        type: integer
-                    required:
-                    - interval
-                    title: recurring_adhoc
-                    type: object
-                  tax_behavior:
-                    enum:
-                    - exclusive
-                    - inclusive
-                    - unspecified
-                    type: string
-                  unit_amount:
-                    type: integer
-                  unit_amount_decimal:
-                    format: decimal
-                    type: string
-                required:
-                - currency
-                - product
-                title: price_data
-                type: object
-              quantity:
-                type: integer
-              tax_rates:
-                anyOf:
-                - items:
-                    maxLength: 5000
-                    type: string
-                  type: array
-                - enum:
-                  - ''
-                  type: string
-            title: line_item_update_params
-            type: object
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        on_behalf_of:
-          anyOf:
-          - type: string
-          - enum:
-            - ''
-            type: string
-          description: The account on behalf of which to charge.
-        subscription_data:
-          description: When creating a subscription or subscription schedule, the specified configuration data will be used. There must be at least one line item with a recurring price for a subscription or subscription schedule to be created. A subscription schedule is created if `subscription_data[effective_date]` is present and in the future, otherwise a subscription is created.
-          properties:
-            description:
-              anyOf:
-              - maxLength: 500
-                type: string
-              - enum:
-                - ''
-                type: string
-            effective_date:
-              anyOf:
-              - enum:
-                - current_period_end
-                maxLength: 5000
-                type: string
-              - format: unix-time
-                type: integer
-              - enum:
-                - ''
-                type: string
-            metadata:
-              additionalProperties:
-                type: string
-              type: object
-            trial_period_days:
-              anyOf:
-              - type: integer
-              - enum:
-                - ''
-                type: string
-          title: subscription_data_update_params
-          type: object
-        transfer_data:
-          anyOf:
-          - properties:
-              amount:
-                type: integer
-              amount_percent:
-                type: number
-              destination:
-                type: string
-            required:
-            - destination
-            title: transfer_data_specs
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: The data with which to automatically create a Transfer for each of the invoices.
-    GetQuotesQuoteLineItemsRequest:
+    GetQuotesQuoteComputedUpfrontLineItemsRequest:
       type: object
       properties: {}
-    PostQuotesQuoteFinalizeRequest:
+    QuotesResourceQuoteList:
       type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
       properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
+        data:
           items:
-            maxLength: 5000
-            type: string
+            $ref: '#/components/schemas/quote'
           type: array
-        expires_at:
-          description: A future timestamp on which the quote will be canceled if in `open` or `draft` status. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-    GetQuotesQuoteRequest:
-      type: object
-      properties: {}
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/quotes
+          type: string
     GetQuotesQuotePdfRequest:
       type: object
       properties: {}
@@ -1475,9 +1469,15 @@ components:
     GetQuotesRequest:
       type: object
       properties: {}
-    GetQuotesQuoteComputedUpfrontLineItemsRequest:
+    PostQuotesQuoteAcceptRequest:
       type: object
-      properties: {}
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

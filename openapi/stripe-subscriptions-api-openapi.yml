@@ -653,6 +653,50 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetSubscriptionsSubscriptionExposedIdRequest:
+      type: object
+      properties: {}
+    GetSubscriptionsSearchRequest:
+      type: object
+      properties: {}
+    SearchResult:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/subscription'
+          type: array
+        has_more:
+          type: boolean
+        next_page:
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - search_result
+          type: string
+        total_count:
+          description: The total number of objects that match the query, only accurate up to 10,000.
+          type: integer
+        url:
+          maxLength: 5000
+          type: string
     subscription:
       description: 'Subscriptions allow you to charge a customer on a recurring basis.
 
@@ -979,959 +1023,6 @@ components:
       - transfer_data
       - trial_settings
       x-resourceId: subscription
-    subscription_item:
-      description: 'Subscription items allow you to create customer subscriptions with more than
-
-        one plan, making it easy to represent complex billing relationships.'
-      properties:
-        billing_thresholds:
-          anyOf:
-          - $ref: '#/components/schemas/subscription_item_billing_thresholds'
-          description: Define thresholds at which an invoice will be sent, and the related subscription advanced to a new billing period
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - subscription_item
-          type: string
-        price:
-          $ref: '#/components/schemas/price'
-        quantity:
-          description: The [quantity](https://stripe.com/docs/subscriptions/quantities) of the plan to which the customer should be subscribed.
-          type: integer
-        subscription:
-          description: The `subscription` this `subscription_item` belongs to.
-          maxLength: 5000
-          type: string
-        tax_rates:
-          description: The tax rates which apply to this `subscription_item`. When set, the `default_tax_rates` on the subscription do not apply to this `subscription_item`.
-          items:
-            $ref: '#/components/schemas/tax_rate'
-          type:
-          - array
-          - 'null'
-      required:
-      - created
-      - id
-      - metadata
-      - object
-      - price
-      - subscription
-      title: SubscriptionItem
-      type: object
-      x-expandableFields:
-      - billing_thresholds
-      - price
-      - tax_rates
-      x-resourceId: subscription_item
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    PostSubscriptionsSubscriptionResumeRequest:
-      type: object
-      properties:
-        billing_cycle_anchor:
-          description: Either `now` or `unchanged`. Setting the value to `now` resets the subscription's billing cycle anchor to the current time (in UTC). Setting the value to `unchanged` advances the subscription's billing cycle anchor to the period that surrounds the current time. For more information, see the billing cycle [documentation](https://stripe.com/docs/billing/subscriptions/billing-cycle).
-          enum:
-          - now
-          - unchanged
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        proration_behavior:
-          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
-          enum:
-          - always_invoice
-          - create_prorations
-          - none
-          type: string
-        proration_date:
-          description: If set, the proration will be calculated as though the subscription was resumed at the given time. This can be used to apply exactly the same proration that was previewed with [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
-          format: unix-time
-          type: integer
-    GetSubscriptionsSearchRequest:
-      type: object
-      properties: {}
-    DeleteSubscriptionsSubscriptionExposedIdDiscountRequest:
-      type: object
-      properties: {}
-    PostSubscriptionsRequest:
-      type: object
-      required:
-      - customer
-      properties:
-        add_invoice_items:
-          description: A list of prices and quantities that will generate invoice items appended to the next invoice for this subscription. You may pass up to 20 items.
-          items:
-            properties:
-              price:
-                maxLength: 5000
-                type: string
-              price_data:
-                properties:
-                  currency:
-                    type: string
-                  product:
-                    maxLength: 5000
-                    type: string
-                  tax_behavior:
-                    enum:
-                    - exclusive
-                    - inclusive
-                    - unspecified
-                    type: string
-                  unit_amount:
-                    type: integer
-                  unit_amount_decimal:
-                    format: decimal
-                    type: string
-                required:
-                - currency
-                - product
-                title: one_time_price_data_with_negative_amounts
-                type: object
-              quantity:
-                type: integer
-              tax_rates:
-                anyOf:
-                - items:
-                    maxLength: 5000
-                    type: string
-                  type: array
-                - enum:
-                  - ''
-                  type: string
-            title: add_invoice_item_entry
-            type: object
-          type: array
-        application_fee_percent:
-          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. The request must be made by a platform account on a connected account in order to set an application fee percentage. For more information, see the application fees [documentation](https://stripe.com/docs/connect/subscriptions#collecting-fees-on-subscriptions).
-          type: number
-        automatic_tax:
-          description: Automatic tax settings for this subscription. We recommend you only include this parameter when the existing value is being changed.
-          properties:
-            enabled:
-              type: boolean
-          required:
-          - enabled
-          title: automatic_tax_config
-          type: object
-        backdate_start_date:
-          description: For new subscriptions, a past timestamp to backdate the subscription's start date to. If set, the first invoice will contain a proration for the timespan between the start date and the current time. Can be combined with trials and the billing cycle anchor.
-          format: unix-time
-          type: integer
-        billing_cycle_anchor:
-          description: A future timestamp to anchor the subscription's [billing cycle](https://stripe.com/docs/subscriptions/billing-cycle). This is used to determine the date of the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for subsequent invoices. The timestamp is in UTC format.
-          format: unix-time
-          type: integer
-          x-stripeBypassValidation: true
-        billing_thresholds:
-          anyOf:
-          - properties:
-              amount_gte:
-                type: integer
-              reset_billing_cycle_anchor:
-                type: boolean
-            title: billing_thresholds_param
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period. Pass an empty string to remove previously-defined thresholds.
-        cancel_at:
-          description: A timestamp at which the subscription should cancel. If set to a date before the current period ends, this will cause a proration if prorations have been enabled using `proration_behavior`. If set during a future period, this will always cause a proration for that period.
-          format: unix-time
-          type: integer
-        cancel_at_period_end:
-          description: Boolean indicating whether this subscription should cancel at the end of the current period.
-          type: boolean
-        collection_method:
-          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this subscription at the end of the cycle using the default source attached to the customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
-          enum:
-          - charge_automatically
-          - send_invoice
-          type: string
-        coupon:
-          description: The ID of the coupon to apply to this subscription. A coupon applied to a subscription will only affect invoices created for that particular subscription.
-          maxLength: 5000
-          type: string
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        customer:
-          description: The identifier of the customer to subscribe.
-          maxLength: 5000
-          type: string
-        days_until_due:
-          description: Number of days a customer has to pay invoices generated by this subscription. Valid only for subscriptions where `collection_method` is set to `send_invoice`.
-          type: integer
-        default_payment_method:
-          description: ID of the default payment method for the subscription. It must belong to the customer associated with the subscription. This takes precedence over `default_source`. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
-          maxLength: 5000
-          type: string
-        default_source:
-          description: ID of the default payment source for the subscription. It must belong to the customer associated with the subscription and be in a chargeable state. If `default_payment_method` is also set, `default_payment_method` will take precedence. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
-          maxLength: 5000
-          type: string
-        default_tax_rates:
-          anyOf:
-          - items:
-              maxLength: 5000
-              type: string
-            type: array
-          - enum:
-            - ''
-            type: string
-          description: The tax rates that will apply to any subscription item that does not have `tax_rates` set. Invoices created will have their `default_tax_rates` populated from the subscription.
-        description:
-          description: The subscription's description, meant to be displayable to the customer. Use this field to optionally store an explanation of the subscription for rendering in Stripe surfaces and certain local payment methods UIs.
-          maxLength: 500
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        items:
-          description: A list of up to 20 subscription items, each with an attached price.
-          items:
-            properties:
-              billing_thresholds:
-                anyOf:
-                - properties:
-                    usage_gte:
-                      type: integer
-                  required:
-                  - usage_gte
-                  title: item_billing_thresholds_param
-                  type: object
-                - enum:
-                  - ''
-                  type: string
-              metadata:
-                additionalProperties:
-                  type: string
-                type: object
-              price:
-                maxLength: 5000
-                type: string
-              price_data:
-                properties:
-                  currency:
-                    type: string
-                  product:
-                    maxLength: 5000
-                    type: string
-                  recurring:
-                    properties:
-                      interval:
-                        enum:
-                        - day
-                        - month
-                        - week
-                        - year
-                        type: string
-                      interval_count:
-                        type: integer
-                    required:
-                    - interval
-                    title: recurring_adhoc
-                    type: object
-                  tax_behavior:
-                    enum:
-                    - exclusive
-                    - inclusive
-                    - unspecified
-                    type: string
-                  unit_amount:
-                    type: integer
-                  unit_amount_decimal:
-                    format: decimal
-                    type: string
-                required:
-                - currency
-                - product
-                - recurring
-                title: recurring_price_data
-                type: object
-              quantity:
-                type: integer
-              tax_rates:
-                anyOf:
-                - items:
-                    maxLength: 5000
-                    type: string
-                  type: array
-                - enum:
-                  - ''
-                  type: string
-            title: subscription_item_create_params
-            type: object
-          type: array
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        off_session:
-          description: Indicates if a customer is on or off-session while an invoice payment is attempted.
-          type: boolean
-        on_behalf_of:
-          anyOf:
-          - type: string
-          - enum:
-            - ''
-            type: string
-          description: The account on behalf of which to charge, for each of the subscription's invoices.
-        payment_behavior:
-          description: 'Only applies to subscriptions with `collection_method=charge_automatically`.
-
-
-            Use `allow_incomplete` to create subscriptions with `status=incomplete` if the first invoice cannot be paid. Creating subscriptions with this status allows you to manage scenarios where additional user actions are needed to pay a subscription''s invoice. For example, SCA regulation may require 3DS authentication to complete payment. See the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication) for Billing to learn more. This is the default behavior.
-
-
-            Use `default_incomplete` to create Subscriptions with `status=incomplete` when the first invoice requires payment, otherwise start as active. Subscriptions transition to `status=active` when successfully confirming the payment intent on the first invoice. This allows simpler management of scenarios where additional user actions are needed to pay a subscription’s invoice. Such as failed payments, [SCA regulation](https://stripe.com/docs/billing/migration/strong-customer-authentication), or collecting a mandate for a bank debit payment method. If the payment intent is not confirmed within 23 hours subscriptions transition to `status=incomplete_expired`, which is a terminal state.
-
-
-            Use `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription''s first invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA regulation and further user action is needed, this parameter does not create a subscription and returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See the [changelog](https://stripe.com/docs/upgrades#2019-03-14) to learn more.
-
-
-            `pending_if_incomplete` is only used with updates and cannot be passed when creating a subscription.
-
-
-            Subscriptions with `collection_method=send_invoice` are automatically activated regardless of the first invoice status.'
-          enum:
-          - allow_incomplete
-          - default_incomplete
-          - error_if_incomplete
-          - pending_if_incomplete
-          type: string
-        payment_settings:
-          description: Payment settings to pass to invoices created by the subscription.
-          properties:
-            payment_method_options:
-              properties:
-                acss_debit:
-                  anyOf:
-                  - properties:
-                      mandate_options:
-                        properties:
-                          transaction_type:
-                            enum:
-                            - business
-                            - personal
-                            type: string
-                        title: mandate_options_param
-                        type: object
-                      verification_method:
-                        enum:
-                        - automatic
-                        - instant
-                        - microdeposits
-                        type: string
-                        x-stripeBypassValidation: true
-                    title: invoice_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                bancontact:
-                  anyOf:
-                  - properties:
-                      preferred_language:
-                        enum:
-                        - de
-                        - en
-                        - fr
-                        - nl
-                        type: string
-                    title: invoice_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                card:
-                  anyOf:
-                  - properties:
-                      mandate_options:
-                        properties:
-                          amount:
-                            type: integer
-                          amount_type:
-                            enum:
-                            - fixed
-                            - maximum
-                            type: string
-                          description:
-                            maxLength: 200
-                            type: string
-                        title: mandate_options_param
-                        type: object
-                      network:
-                        enum:
-                        - amex
-                        - cartes_bancaires
-                        - diners
-                        - discover
-                        - eftpos_au
-                        - interac
-                        - jcb
-                        - mastercard
-                        - unionpay
-                        - unknown
-                        - visa
-                        maxLength: 5000
-                        type: string
-                        x-stripeBypassValidation: true
-                      request_three_d_secure:
-                        enum:
-                        - any
-                        - automatic
-                        type: string
-                    title: subscription_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                customer_balance:
-                  anyOf:
-                  - properties:
-                      bank_transfer:
-                        properties:
-                          eu_bank_transfer:
-                            properties:
-                              country:
-                                maxLength: 5000
-                                type: string
-                            required:
-                            - country
-                            title: eu_bank_transfer_param
-                            type: object
-                          type:
-                            type: string
-                        title: bank_transfer_param
-                        type: object
-                      funding_type:
-                        type: string
-                    title: invoice_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                konbini:
-                  anyOf:
-                  - properties: {}
-                    title: invoice_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-                us_bank_account:
-                  anyOf:
-                  - properties:
-                      financial_connections:
-                        properties:
-                          permissions:
-                            items:
-                              enum:
-                              - balances
-                              - ownership
-                              - payment_method
-                              - transactions
-                              maxLength: 5000
-                              type: string
-                              x-stripeBypassValidation: true
-                            type: array
-                          prefetch:
-                            items:
-                              enum:
-                              - balances
-                              - transactions
-                              type: string
-                              x-stripeBypassValidation: true
-                            type: array
-                        title: invoice_linked_account_options_param
-                        type: object
-                      verification_method:
-                        enum:
-                        - automatic
-                        - instant
-                        - microdeposits
-                        type: string
-                        x-stripeBypassValidation: true
-                    title: invoice_payment_method_options_param
-                    type: object
-                  - enum:
-                    - ''
-                    type: string
-              title: payment_method_options
-              type: object
-            payment_method_types:
-              anyOf:
-              - items:
-                  enum:
-                  - ach_credit_transfer
-                  - ach_debit
-                  - acss_debit
-                  - au_becs_debit
-                  - bacs_debit
-                  - bancontact
-                  - boleto
-                  - card
-                  - cashapp
-                  - customer_balance
-                  - fpx
-                  - giropay
-                  - grabpay
-                  - ideal
-                  - konbini
-                  - link
-                  - paynow
-                  - paypal
-                  - promptpay
-                  - sepa_debit
-                  - sofort
-                  - us_bank_account
-                  - wechat_pay
-                  type: string
-                  x-stripeBypassValidation: true
-                type: array
-              - enum:
-                - ''
-                type: string
-            save_default_payment_method:
-              enum:
-              - 'off'
-              - on_subscription
-              type: string
-          title: payment_settings
-          type: object
-        pending_invoice_item_interval:
-          anyOf:
-          - properties:
-              interval:
-                enum:
-                - day
-                - month
-                - week
-                - year
-                type: string
-              interval_count:
-                type: integer
-            required:
-            - interval
-            title: pending_invoice_item_interval_params
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Specifies an interval for how often to bill for any pending invoice items. It is analogous to calling [Create an invoice](https://stripe.com/docs/api#create_invoice) for the given subscription at the specified interval.
-        promotion_code:
-          description: The API ID of a promotion code to apply to this subscription. A promotion code applied to a subscription will only affect invoices created for that particular subscription.
-          maxLength: 5000
-          type: string
-        proration_behavior:
-          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) resulting from the `billing_cycle_anchor`. If no value is passed, the default is `create_prorations`.
-          enum:
-          - always_invoice
-          - create_prorations
-          - none
-          type: string
-        transfer_data:
-          description: If specified, the funds from the subscription's invoices will be transferred to the destination and the ID of the resulting transfers will be found on the resulting charges.
-          properties:
-            amount_percent:
-              type: number
-            destination:
-              type: string
-          required:
-          - destination
-          title: transfer_data_specs
-          type: object
-        trial_end:
-          anyOf:
-          - enum:
-            - now
-            maxLength: 5000
-            type: string
-          - format: unix-time
-            type: integer
-          description: Unix timestamp representing the end of the trial period the customer will get before being charged for the first time. If set, trial_end will override the default trial period of the plan the customer is being subscribed to. The special value `now` can be provided to end the customer's trial immediately. Can be at most two years from `billing_cycle_anchor`. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
-        trial_from_plan:
-          description: Indicates if a plan's `trial_period_days` should be applied to the subscription. Setting `trial_end` per subscription is preferred, and this defaults to `false`. Setting this flag to `true` together with `trial_end` is not allowed. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
-          type: boolean
-        trial_period_days:
-          description: Integer representing the number of trial period days before the customer is charged for the first time. This will always overwrite any trials that might apply via a subscribed plan. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
-          type: integer
-        trial_settings:
-          description: Settings related to subscription trials.
-          properties:
-            end_behavior:
-              properties:
-                missing_payment_method:
-                  enum:
-                  - cancel
-                  - create_invoice
-                  - pause
-                  type: string
-              required:
-              - missing_payment_method
-              title: end_behavior
-              type: object
-          required:
-          - end_behavior
-          title: trial_settings_config
-          type: object
-    GetSubscriptionsSubscriptionExposedIdRequest:
-      type: object
-      properties: {}
-    DeleteSubscriptionsSubscriptionExposedIdRequest:
-      type: object
-      properties:
-        cancellation_details:
-          description: Details about why this subscription was cancelled
-          properties:
-            comment:
-              anyOf:
-              - maxLength: 5000
-                type: string
-              - enum:
-                - ''
-                type: string
-            feedback:
-              enum:
-              - ''
-              - customer_service
-              - low_quality
-              - missing_features
-              - other
-              - switched_service
-              - too_complex
-              - too_expensive
-              - unused
-              type: string
-          title: cancellation_details_param
-          type: object
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        invoice_now:
-          description: Will generate a final invoice that invoices for any un-invoiced metered usage and new/pending proration invoice items.
-          type: boolean
-        prorate:
-          description: Will generate a proration invoice item that credits remaining unused time until the subscription period end.
-          type: boolean
-    deleted_discount:
-      description: ''
-      properties:
-        checkout_session:
-          description: The Checkout session that this coupon is applied to, if it is applied to a particular session in payment mode. Will not be present for subscription mode.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        coupon:
-          $ref: '#/components/schemas/coupon'
-        customer:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/customer'
-          - $ref: '#/components/schemas/deleted_customer'
-          description: The ID of the customer associated with this discount.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/customer'
-            - $ref: '#/components/schemas/deleted_customer'
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: The ID of the discount object. Discounts cannot be fetched by ID. Use `expand[]=discounts` in API calls to expand discount IDs in an array.
-          maxLength: 5000
-          type: string
-        invoice:
-          description: The invoice that the discount's coupon was applied to, if it was applied directly to a particular invoice.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        invoice_item:
-          description: The invoice item `id` (or invoice line item `id` for invoice line items of type='subscription') that the discount's coupon was applied to, if it was applied directly to a particular invoice item or invoice line item.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - discount
-          type: string
-        promotion_code:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/promotion_code'
-          description: The promotion code applied to create this discount.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/promotion_code'
-        start:
-          description: Date that the coupon was applied.
-          format: unix-time
-          type: integer
-        subscription:
-          description: The subscription that this coupon is applied to, if it is applied to a particular subscription.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-      required:
-      - coupon
-      - deleted
-      - id
-      - object
-      - start
-      title: DeletedDiscount
-      type: object
-      x-expandableFields:
-      - coupon
-      - customer
-      - promotion_code
-      x-resourceId: deleted_discount
-    SearchResult:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/subscription'
-          type: array
-        has_more:
-          type: boolean
-        next_page:
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - search_result
-          type: string
-        total_count:
-          description: The total number of objects that match the query, only accurate up to 10,000.
-          type: integer
-        url:
-          maxLength: 5000
-          type: string
-    SubscriptionsSubscriptionList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/subscription'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/subscriptions
-          type: string
-    GetSubscriptionsRequest:
-      type: object
-      properties: {}
-    subscription_schedule:
-      description: 'A subscription schedule allows you to create and manage the lifecycle of a subscription by predefining expected changes.
-
-
-        Related guide: [Subscription schedules](https://stripe.com/docs/billing/subscriptions/subscription-schedules)'
-      properties:
-        application:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/application'
-          - $ref: '#/components/schemas/deleted_application'
-          description: ID of the Connect Application that created the schedule.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/application'
-            - $ref: '#/components/schemas/deleted_application'
-        canceled_at:
-          description: Time at which the subscription schedule was canceled. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        completed_at:
-          description: Time at which the subscription schedule was completed. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        current_phase:
-          anyOf:
-          - $ref: '#/components/schemas/subscription_schedule_current_phase'
-          description: Object representing the start and end dates for the current phase of the subscription schedule, if it is `active`.
-        customer:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/customer'
-          - $ref: '#/components/schemas/deleted_customer'
-          description: ID of the customer who owns the subscription schedule.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/customer'
-            - $ref: '#/components/schemas/deleted_customer'
-        default_settings:
-          $ref: '#/components/schemas/subscription_schedules_resource_default_settings'
-        end_behavior:
-          description: Behavior of the subscription schedule and underlying subscription when it ends. Possible values are `release` or `cancel` with the default being `release`. `release` will end the subscription schedule and keep the underlying subscription running.`cancel` will end the subscription schedule and cancel the underlying subscription.
-          enum:
-          - cancel
-          - none
-          - release
-          - renew
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type:
-          - object
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - subscription_schedule
-          type: string
-        phases:
-          description: Configuration for the subscription schedule's phases.
-          items:
-            $ref: '#/components/schemas/subscription_schedule_phase_configuration'
-          type: array
-        released_at:
-          description: Time at which the subscription schedule was released. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        released_subscription:
-          description: ID of the subscription once managed by the subscription schedule (if it is released).
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        status:
-          description: The present status of the subscription schedule. Possible values are `not_started`, `active`, `completed`, `released`, and `canceled`. You can read more about the different states in our [behavior guide](https://stripe.com/docs/billing/subscriptions/subscription-schedules).
-          enum:
-          - active
-          - canceled
-          - completed
-          - not_started
-          - released
-          type: string
-        subscription:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/subscription'
-          description: ID of the subscription managed by the subscription schedule.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/subscription'
-        test_clock:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/test_helpers.test_clock'
-          description: ID of the test clock this subscription schedule belongs to.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/test_helpers.test_clock'
-      required:
-      - created
-      - customer
-      - default_settings
-      - end_behavior
-      - id
-      - livemode
-      - object
-      - phases
-      - status
-      title: SubscriptionSchedule
-      type: object
-      x-expandableFields:
-      - application
-      - current_phase
-      - customer
-      - default_settings
-      - phases
-      - subscription
-      - test_clock
-      x-resourceId: subscription_schedule
     PostSubscriptionsSubscriptionExposedIdRequest:
       type: object
       properties:
@@ -2520,6 +1611,915 @@ components:
           - end_behavior
           title: trial_settings_config
           type: object
+    PostSubscriptionsSubscriptionResumeRequest:
+      type: object
+      properties:
+        billing_cycle_anchor:
+          description: Either `now` or `unchanged`. Setting the value to `now` resets the subscription's billing cycle anchor to the current time (in UTC). Setting the value to `unchanged` advances the subscription's billing cycle anchor to the period that surrounds the current time. For more information, see the billing cycle [documentation](https://stripe.com/docs/billing/subscriptions/billing-cycle).
+          enum:
+          - now
+          - unchanged
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        proration_date:
+          description: If set, the proration will be calculated as though the subscription was resumed at the given time. This can be used to apply exactly the same proration that was previewed with [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
+          format: unix-time
+          type: integer
+    deleted_discount:
+      description: ''
+      properties:
+        checkout_session:
+          description: The Checkout session that this coupon is applied to, if it is applied to a particular session in payment mode. Will not be present for subscription mode.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        coupon:
+          $ref: '#/components/schemas/coupon'
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: The ID of the customer associated with this discount.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: The ID of the discount object. Discounts cannot be fetched by ID. Use `expand[]=discounts` in API calls to expand discount IDs in an array.
+          maxLength: 5000
+          type: string
+        invoice:
+          description: The invoice that the discount's coupon was applied to, if it was applied directly to a particular invoice.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        invoice_item:
+          description: The invoice item `id` (or invoice line item `id` for invoice line items of type='subscription') that the discount's coupon was applied to, if it was applied directly to a particular invoice item or invoice line item.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - discount
+          type: string
+        promotion_code:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/promotion_code'
+          description: The promotion code applied to create this discount.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/promotion_code'
+        start:
+          description: Date that the coupon was applied.
+          format: unix-time
+          type: integer
+        subscription:
+          description: The subscription that this coupon is applied to, if it is applied to a particular subscription.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+      required:
+      - coupon
+      - deleted
+      - id
+      - object
+      - start
+      title: DeletedDiscount
+      type: object
+      x-expandableFields:
+      - coupon
+      - customer
+      - promotion_code
+      x-resourceId: deleted_discount
+    subscription_schedule:
+      description: 'A subscription schedule allows you to create and manage the lifecycle of a subscription by predefining expected changes.
+
+
+        Related guide: [Subscription schedules](https://stripe.com/docs/billing/subscriptions/subscription-schedules)'
+      properties:
+        application:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/application'
+          - $ref: '#/components/schemas/deleted_application'
+          description: ID of the Connect Application that created the schedule.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/application'
+            - $ref: '#/components/schemas/deleted_application'
+        canceled_at:
+          description: Time at which the subscription schedule was canceled. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        completed_at:
+          description: Time at which the subscription schedule was completed. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        current_phase:
+          anyOf:
+          - $ref: '#/components/schemas/subscription_schedule_current_phase'
+          description: Object representing the start and end dates for the current phase of the subscription schedule, if it is `active`.
+        customer:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/customer'
+          - $ref: '#/components/schemas/deleted_customer'
+          description: ID of the customer who owns the subscription schedule.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/customer'
+            - $ref: '#/components/schemas/deleted_customer'
+        default_settings:
+          $ref: '#/components/schemas/subscription_schedules_resource_default_settings'
+        end_behavior:
+          description: Behavior of the subscription schedule and underlying subscription when it ends. Possible values are `release` or `cancel` with the default being `release`. `release` will end the subscription schedule and keep the underlying subscription running.`cancel` will end the subscription schedule and cancel the underlying subscription.
+          enum:
+          - cancel
+          - none
+          - release
+          - renew
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type:
+          - object
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_schedule
+          type: string
+        phases:
+          description: Configuration for the subscription schedule's phases.
+          items:
+            $ref: '#/components/schemas/subscription_schedule_phase_configuration'
+          type: array
+        released_at:
+          description: Time at which the subscription schedule was released. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        released_subscription:
+          description: ID of the subscription once managed by the subscription schedule (if it is released).
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        status:
+          description: The present status of the subscription schedule. Possible values are `not_started`, `active`, `completed`, `released`, and `canceled`. You can read more about the different states in our [behavior guide](https://stripe.com/docs/billing/subscriptions/subscription-schedules).
+          enum:
+          - active
+          - canceled
+          - completed
+          - not_started
+          - released
+          type: string
+        subscription:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/subscription'
+          description: ID of the subscription managed by the subscription schedule.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/subscription'
+        test_clock:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/test_helpers.test_clock'
+          description: ID of the test clock this subscription schedule belongs to.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/test_helpers.test_clock'
+      required:
+      - created
+      - customer
+      - default_settings
+      - end_behavior
+      - id
+      - livemode
+      - object
+      - phases
+      - status
+      title: SubscriptionSchedule
+      type: object
+      x-expandableFields:
+      - application
+      - current_phase
+      - customer
+      - default_settings
+      - phases
+      - subscription
+      - test_clock
+      x-resourceId: subscription_schedule
+    subscription_item:
+      description: 'Subscription items allow you to create customer subscriptions with more than
+
+        one plan, making it easy to represent complex billing relationships.'
+      properties:
+        billing_thresholds:
+          anyOf:
+          - $ref: '#/components/schemas/subscription_item_billing_thresholds'
+          description: Define thresholds at which an invoice will be sent, and the related subscription advanced to a new billing period
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+        price:
+          $ref: '#/components/schemas/price'
+        quantity:
+          description: The [quantity](https://stripe.com/docs/subscriptions/quantities) of the plan to which the customer should be subscribed.
+          type: integer
+        subscription:
+          description: The `subscription` this `subscription_item` belongs to.
+          maxLength: 5000
+          type: string
+        tax_rates:
+          description: The tax rates which apply to this `subscription_item`. When set, the `default_tax_rates` on the subscription do not apply to this `subscription_item`.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          type:
+          - array
+          - 'null'
+      required:
+      - created
+      - id
+      - metadata
+      - object
+      - price
+      - subscription
+      title: SubscriptionItem
+      type: object
+      x-expandableFields:
+      - billing_thresholds
+      - price
+      - tax_rates
+      x-resourceId: subscription_item
+    DeleteSubscriptionsSubscriptionExposedIdDiscountRequest:
+      type: object
+      properties: {}
+    DeleteSubscriptionsSubscriptionExposedIdRequest:
+      type: object
+      properties:
+        cancellation_details:
+          description: Details about why this subscription was cancelled
+          properties:
+            comment:
+              anyOf:
+              - maxLength: 5000
+                type: string
+              - enum:
+                - ''
+                type: string
+            feedback:
+              enum:
+              - ''
+              - customer_service
+              - low_quality
+              - missing_features
+              - other
+              - switched_service
+              - too_complex
+              - too_expensive
+              - unused
+              type: string
+          title: cancellation_details_param
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        invoice_now:
+          description: Will generate a final invoice that invoices for any un-invoiced metered usage and new/pending proration invoice items.
+          type: boolean
+        prorate:
+          description: Will generate a proration invoice item that credits remaining unused time until the subscription period end.
+          type: boolean
+    SubscriptionsSubscriptionList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/subscription'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/subscriptions
+          type: string
+    PostSubscriptionsRequest:
+      type: object
+      required:
+      - customer
+      properties:
+        add_invoice_items:
+          description: A list of prices and quantities that will generate invoice items appended to the next invoice for this subscription. You may pass up to 20 items.
+          items:
+            properties:
+              price:
+                maxLength: 5000
+                type: string
+              price_data:
+                properties:
+                  currency:
+                    type: string
+                  product:
+                    maxLength: 5000
+                    type: string
+                  tax_behavior:
+                    enum:
+                    - exclusive
+                    - inclusive
+                    - unspecified
+                    type: string
+                  unit_amount:
+                    type: integer
+                  unit_amount_decimal:
+                    format: decimal
+                    type: string
+                required:
+                - currency
+                - product
+                title: one_time_price_data_with_negative_amounts
+                type: object
+              quantity:
+                type: integer
+              tax_rates:
+                anyOf:
+                - items:
+                    maxLength: 5000
+                    type: string
+                  type: array
+                - enum:
+                  - ''
+                  type: string
+            title: add_invoice_item_entry
+            type: object
+          type: array
+        application_fee_percent:
+          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account. The request must be made by a platform account on a connected account in order to set an application fee percentage. For more information, see the application fees [documentation](https://stripe.com/docs/connect/subscriptions#collecting-fees-on-subscriptions).
+          type: number
+        automatic_tax:
+          description: Automatic tax settings for this subscription. We recommend you only include this parameter when the existing value is being changed.
+          properties:
+            enabled:
+              type: boolean
+          required:
+          - enabled
+          title: automatic_tax_config
+          type: object
+        backdate_start_date:
+          description: For new subscriptions, a past timestamp to backdate the subscription's start date to. If set, the first invoice will contain a proration for the timespan between the start date and the current time. Can be combined with trials and the billing cycle anchor.
+          format: unix-time
+          type: integer
+        billing_cycle_anchor:
+          description: A future timestamp to anchor the subscription's [billing cycle](https://stripe.com/docs/subscriptions/billing-cycle). This is used to determine the date of the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for subsequent invoices. The timestamp is in UTC format.
+          format: unix-time
+          type: integer
+          x-stripeBypassValidation: true
+        billing_thresholds:
+          anyOf:
+          - properties:
+              amount_gte:
+                type: integer
+              reset_billing_cycle_anchor:
+                type: boolean
+            title: billing_thresholds_param
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period. Pass an empty string to remove previously-defined thresholds.
+        cancel_at:
+          description: A timestamp at which the subscription should cancel. If set to a date before the current period ends, this will cause a proration if prorations have been enabled using `proration_behavior`. If set during a future period, this will always cause a proration for that period.
+          format: unix-time
+          type: integer
+        cancel_at_period_end:
+          description: Boolean indicating whether this subscription should cancel at the end of the current period.
+          type: boolean
+        collection_method:
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this subscription at the end of the cycle using the default source attached to the customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`. Defaults to `charge_automatically`.
+          enum:
+          - charge_automatically
+          - send_invoice
+          type: string
+        coupon:
+          description: The ID of the coupon to apply to this subscription. A coupon applied to a subscription will only affect invoices created for that particular subscription.
+          maxLength: 5000
+          type: string
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          description: The identifier of the customer to subscribe.
+          maxLength: 5000
+          type: string
+        days_until_due:
+          description: Number of days a customer has to pay invoices generated by this subscription. Valid only for subscriptions where `collection_method` is set to `send_invoice`.
+          type: integer
+        default_payment_method:
+          description: ID of the default payment method for the subscription. It must belong to the customer associated with the subscription. This takes precedence over `default_source`. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
+          maxLength: 5000
+          type: string
+        default_source:
+          description: ID of the default payment source for the subscription. It must belong to the customer associated with the subscription and be in a chargeable state. If `default_payment_method` is also set, `default_payment_method` will take precedence. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
+          maxLength: 5000
+          type: string
+        default_tax_rates:
+          anyOf:
+          - items:
+              maxLength: 5000
+              type: string
+            type: array
+          - enum:
+            - ''
+            type: string
+          description: The tax rates that will apply to any subscription item that does not have `tax_rates` set. Invoices created will have their `default_tax_rates` populated from the subscription.
+        description:
+          description: The subscription's description, meant to be displayable to the customer. Use this field to optionally store an explanation of the subscription for rendering in Stripe surfaces and certain local payment methods UIs.
+          maxLength: 500
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        items:
+          description: A list of up to 20 subscription items, each with an attached price.
+          items:
+            properties:
+              billing_thresholds:
+                anyOf:
+                - properties:
+                    usage_gte:
+                      type: integer
+                  required:
+                  - usage_gte
+                  title: item_billing_thresholds_param
+                  type: object
+                - enum:
+                  - ''
+                  type: string
+              metadata:
+                additionalProperties:
+                  type: string
+                type: object
+              price:
+                maxLength: 5000
+                type: string
+              price_data:
+                properties:
+                  currency:
+                    type: string
+                  product:
+                    maxLength: 5000
+                    type: string
+                  recurring:
+                    properties:
+                      interval:
+                        enum:
+                        - day
+                        - month
+                        - week
+                        - year
+                        type: string
+                      interval_count:
+                        type: integer
+                    required:
+                    - interval
+                    title: recurring_adhoc
+                    type: object
+                  tax_behavior:
+                    enum:
+                    - exclusive
+                    - inclusive
+                    - unspecified
+                    type: string
+                  unit_amount:
+                    type: integer
+                  unit_amount_decimal:
+                    format: decimal
+                    type: string
+                required:
+                - currency
+                - product
+                - recurring
+                title: recurring_price_data
+                type: object
+              quantity:
+                type: integer
+              tax_rates:
+                anyOf:
+                - items:
+                    maxLength: 5000
+                    type: string
+                  type: array
+                - enum:
+                  - ''
+                  type: string
+            title: subscription_item_create_params
+            type: object
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        off_session:
+          description: Indicates if a customer is on or off-session while an invoice payment is attempted.
+          type: boolean
+        on_behalf_of:
+          anyOf:
+          - type: string
+          - enum:
+            - ''
+            type: string
+          description: The account on behalf of which to charge, for each of the subscription's invoices.
+        payment_behavior:
+          description: 'Only applies to subscriptions with `collection_method=charge_automatically`.
+
+
+            Use `allow_incomplete` to create subscriptions with `status=incomplete` if the first invoice cannot be paid. Creating subscriptions with this status allows you to manage scenarios where additional user actions are needed to pay a subscription''s invoice. For example, SCA regulation may require 3DS authentication to complete payment. See the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication) for Billing to learn more. This is the default behavior.
+
+
+            Use `default_incomplete` to create Subscriptions with `status=incomplete` when the first invoice requires payment, otherwise start as active. Subscriptions transition to `status=active` when successfully confirming the payment intent on the first invoice. This allows simpler management of scenarios where additional user actions are needed to pay a subscription’s invoice. Such as failed payments, [SCA regulation](https://stripe.com/docs/billing/migration/strong-customer-authentication), or collecting a mandate for a bank debit payment method. If the payment intent is not confirmed within 23 hours subscriptions transition to `status=incomplete_expired`, which is a terminal state.
+
+
+            Use `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription''s first invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA regulation and further user action is needed, this parameter does not create a subscription and returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See the [changelog](https://stripe.com/docs/upgrades#2019-03-14) to learn more.
+
+
+            `pending_if_incomplete` is only used with updates and cannot be passed when creating a subscription.
+
+
+            Subscriptions with `collection_method=send_invoice` are automatically activated regardless of the first invoice status.'
+          enum:
+          - allow_incomplete
+          - default_incomplete
+          - error_if_incomplete
+          - pending_if_incomplete
+          type: string
+        payment_settings:
+          description: Payment settings to pass to invoices created by the subscription.
+          properties:
+            payment_method_options:
+              properties:
+                acss_debit:
+                  anyOf:
+                  - properties:
+                      mandate_options:
+                        properties:
+                          transaction_type:
+                            enum:
+                            - business
+                            - personal
+                            type: string
+                        title: mandate_options_param
+                        type: object
+                      verification_method:
+                        enum:
+                        - automatic
+                        - instant
+                        - microdeposits
+                        type: string
+                        x-stripeBypassValidation: true
+                    title: invoice_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                bancontact:
+                  anyOf:
+                  - properties:
+                      preferred_language:
+                        enum:
+                        - de
+                        - en
+                        - fr
+                        - nl
+                        type: string
+                    title: invoice_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                card:
+                  anyOf:
+                  - properties:
+                      mandate_options:
+                        properties:
+                          amount:
+                            type: integer
+                          amount_type:
+                            enum:
+                            - fixed
+                            - maximum
+                            type: string
+                          description:
+                            maxLength: 200
+                            type: string
+                        title: mandate_options_param
+                        type: object
+                      network:
+                        enum:
+                        - amex
+                        - cartes_bancaires
+                        - diners
+                        - discover
+                        - eftpos_au
+                        - interac
+                        - jcb
+                        - mastercard
+                        - unionpay
+                        - unknown
+                        - visa
+                        maxLength: 5000
+                        type: string
+                        x-stripeBypassValidation: true
+                      request_three_d_secure:
+                        enum:
+                        - any
+                        - automatic
+                        type: string
+                    title: subscription_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                customer_balance:
+                  anyOf:
+                  - properties:
+                      bank_transfer:
+                        properties:
+                          eu_bank_transfer:
+                            properties:
+                              country:
+                                maxLength: 5000
+                                type: string
+                            required:
+                            - country
+                            title: eu_bank_transfer_param
+                            type: object
+                          type:
+                            type: string
+                        title: bank_transfer_param
+                        type: object
+                      funding_type:
+                        type: string
+                    title: invoice_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                konbini:
+                  anyOf:
+                  - properties: {}
+                    title: invoice_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+                us_bank_account:
+                  anyOf:
+                  - properties:
+                      financial_connections:
+                        properties:
+                          permissions:
+                            items:
+                              enum:
+                              - balances
+                              - ownership
+                              - payment_method
+                              - transactions
+                              maxLength: 5000
+                              type: string
+                              x-stripeBypassValidation: true
+                            type: array
+                          prefetch:
+                            items:
+                              enum:
+                              - balances
+                              - transactions
+                              type: string
+                              x-stripeBypassValidation: true
+                            type: array
+                        title: invoice_linked_account_options_param
+                        type: object
+                      verification_method:
+                        enum:
+                        - automatic
+                        - instant
+                        - microdeposits
+                        type: string
+                        x-stripeBypassValidation: true
+                    title: invoice_payment_method_options_param
+                    type: object
+                  - enum:
+                    - ''
+                    type: string
+              title: payment_method_options
+              type: object
+            payment_method_types:
+              anyOf:
+              - items:
+                  enum:
+                  - ach_credit_transfer
+                  - ach_debit
+                  - acss_debit
+                  - au_becs_debit
+                  - bacs_debit
+                  - bancontact
+                  - boleto
+                  - card
+                  - cashapp
+                  - customer_balance
+                  - fpx
+                  - giropay
+                  - grabpay
+                  - ideal
+                  - konbini
+                  - link
+                  - paynow
+                  - paypal
+                  - promptpay
+                  - sepa_debit
+                  - sofort
+                  - us_bank_account
+                  - wechat_pay
+                  type: string
+                  x-stripeBypassValidation: true
+                type: array
+              - enum:
+                - ''
+                type: string
+            save_default_payment_method:
+              enum:
+              - 'off'
+              - on_subscription
+              type: string
+          title: payment_settings
+          type: object
+        pending_invoice_item_interval:
+          anyOf:
+          - properties:
+              interval:
+                enum:
+                - day
+                - month
+                - week
+                - year
+                type: string
+              interval_count:
+                type: integer
+            required:
+            - interval
+            title: pending_invoice_item_interval_params
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Specifies an interval for how often to bill for any pending invoice items. It is analogous to calling [Create an invoice](https://stripe.com/docs/api#create_invoice) for the given subscription at the specified interval.
+        promotion_code:
+          description: The API ID of a promotion code to apply to this subscription. A promotion code applied to a subscription will only affect invoices created for that particular subscription.
+          maxLength: 5000
+          type: string
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) resulting from the `billing_cycle_anchor`. If no value is passed, the default is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        transfer_data:
+          description: If specified, the funds from the subscription's invoices will be transferred to the destination and the ID of the resulting transfers will be found on the resulting charges.
+          properties:
+            amount_percent:
+              type: number
+            destination:
+              type: string
+          required:
+          - destination
+          title: transfer_data_specs
+          type: object
+        trial_end:
+          anyOf:
+          - enum:
+            - now
+            maxLength: 5000
+            type: string
+          - format: unix-time
+            type: integer
+          description: Unix timestamp representing the end of the trial period the customer will get before being charged for the first time. If set, trial_end will override the default trial period of the plan the customer is being subscribed to. The special value `now` can be provided to end the customer's trial immediately. Can be at most two years from `billing_cycle_anchor`. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
+        trial_from_plan:
+          description: Indicates if a plan's `trial_period_days` should be applied to the subscription. Setting `trial_end` per subscription is preferred, and this defaults to `false`. Setting this flag to `true` together with `trial_end` is not allowed. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
+          type: boolean
+        trial_period_days:
+          description: Integer representing the number of trial period days before the customer is charged for the first time. This will always overwrite any trials that might apply via a subscribed plan. See [Using trial periods on subscriptions](https://stripe.com/docs/billing/subscriptions/trials) to learn more.
+          type: integer
+        trial_settings:
+          description: Settings related to subscription trials.
+          properties:
+            end_behavior:
+              properties:
+                missing_payment_method:
+                  enum:
+                  - cancel
+                  - create_invoice
+                  - pause
+                  type: string
+              required:
+              - missing_payment_method
+              title: end_behavior
+              type: object
+          required:
+          - end_behavior
+          title: trial_settings_config
+          type: object
+    GetSubscriptionsRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

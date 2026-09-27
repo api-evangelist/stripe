@@ -659,7 +659,15 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PostFinancialConnectionsAccountsAccountSubscribeRequest:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostFinancialConnectionsAccountsAccountRefreshRequest:
       type: object
       required:
       - features
@@ -671,36 +679,15 @@ components:
             type: string
           type: array
         features:
-          description: The list of account features to which you would like to subscribe.`.
+          description: The list of account features that you would like to refresh.
           items:
             enum:
+            - balance
+            - ownership
             - transactions
             type: string
             x-stripeBypassValidation: true
           type: array
-    GetFinancialConnectionsTransactionsTransactionRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    PostFinancialConnectionsAccountsAccountDisconnectRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetFinancialConnectionsAccountsRequest:
-      type: object
-      properties: {}
     BankConnectionsResourceTransactionList:
       type: object
       required:
@@ -727,175 +714,10 @@ components:
           maxLength: 5000
           pattern: ^/v1/financial_connections/transactions
           type: string
-    GetFinancialConnectionsAccountsAccountRequest:
+    GetFinancialConnectionsSessionsSessionRequest:
       type: object
       properties: {}
-    financial_connections.session:
-      description: A Financial Connections Session is the secure way to programmatically launch the client-side Stripe.js modal that lets your users link their accounts.
-      properties:
-        account_holder:
-          anyOf:
-          - $ref: '#/components/schemas/bank_connections_resource_accountholder'
-          description: The account holder for whom accounts are collected in this session.
-        accounts:
-          description: The accounts that were collected as part of this Session.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/financial_connections.account'
-              type: array
-            has_more:
-              description: True if this list has another page of items after this one that can be fetched.
-              type: boolean
-            object:
-              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-              enum:
-              - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              pattern: ^/v1/financial_connections/accounts
-              type: string
-          required:
-          - data
-          - has_more
-          - object
-          - url
-          title: BankConnectionsResourceLinkedAccountList
-          type: object
-          x-expandableFields:
-          - data
-        client_secret:
-          description: A value that will be passed to the client to launch the authentication flow.
-          maxLength: 5000
-          type: string
-        filters:
-          $ref: '#/components/schemas/bank_connections_resource_link_account_session_filters'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - financial_connections.session
-          type: string
-        permissions:
-          description: Permissions requested for accounts collected during this session.
-          items:
-            enum:
-            - balances
-            - ownership
-            - payment_method
-            - transactions
-            type: string
-            x-stripeBypassValidation: true
-          type: array
-        prefetch:
-          description: Data features requested to be retrieved upon account creation.
-          items:
-            enum:
-            - balances
-            - ownership
-            - transactions
-            type: string
-            x-stripeBypassValidation: true
-          type:
-          - array
-          - 'null'
-        return_url:
-          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
-          maxLength: 5000
-          type: string
-      required:
-      - accounts
-      - client_secret
-      - id
-      - livemode
-      - object
-      - permissions
-      title: BankConnectionsResourceLinkAccountSession
-      type: object
-      x-expandableFields:
-      - account_holder
-      - accounts
-      - filters
-      x-resourceId: financial_connections.session
-    financial_connections.transaction:
-      description: A Transaction represents a real transaction that affects a Financial Connections Account balance.
-      properties:
-        account:
-          description: The ID of the Financial Connections Account this transaction belongs to.
-          maxLength: 5000
-          type: string
-        amount:
-          description: The amount of this transaction, in cents (or local equivalent).
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          maxLength: 5000
-          type: string
-        description:
-          description: The description of this transaction.
-          maxLength: 5000
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - financial_connections.transaction
-          type: string
-        status:
-          description: The status of the transaction.
-          enum:
-          - pending
-          - posted
-          - void
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/bank_connections_resource_transaction_resource_status_transitions'
-        transacted_at:
-          description: Time at which the transaction was transacted. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        transaction_refresh:
-          description: The token of the transaction refresh that last updated or created this transaction.
-          maxLength: 5000
-          type: string
-        updated:
-          description: Time at which the object was last updated. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-      required:
-      - account
-      - amount
-      - currency
-      - description
-      - id
-      - livemode
-      - object
-      - status
-      - status_transitions
-      - transacted_at
-      - transaction_refresh
-      - updated
-      title: BankConnectionsResourceTransaction
-      type: object
-      x-expandableFields:
-      - status_transitions
-      x-resourceId: financial_connections.transaction
-    GetFinancialConnectionsAccountsAccountOwnersRequest:
+    GetFinancialConnectionsTransactionsRequest:
       type: object
       properties: {}
     financial_connections.account:
@@ -1037,6 +859,9 @@ components:
       - ownership_refresh
       - transaction_refresh
       x-resourceId: financial_connections.account
+    GetFinancialConnectionsAccountsRequest:
+      type: object
+      properties: {}
     PostFinancialConnectionsSessionsRequest:
       type: object
       required:
@@ -1134,7 +959,85 @@ components:
           maxLength: 5000
           pattern: ^/v1/financial_connections/accounts
           type: string
-    PostFinancialConnectionsAccountsAccountUnsubscribeRequest:
+    financial_connections.transaction:
+      description: A Transaction represents a real transaction that affects a Financial Connections Account balance.
+      properties:
+        account:
+          description: The ID of the Financial Connections Account this transaction belongs to.
+          maxLength: 5000
+          type: string
+        amount:
+          description: The amount of this transaction, in cents (or local equivalent).
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          maxLength: 5000
+          type: string
+        description:
+          description: The description of this transaction.
+          maxLength: 5000
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - financial_connections.transaction
+          type: string
+        status:
+          description: The status of the transaction.
+          enum:
+          - pending
+          - posted
+          - void
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/bank_connections_resource_transaction_resource_status_transitions'
+        transacted_at:
+          description: Time at which the transaction was transacted. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        transaction_refresh:
+          description: The token of the transaction refresh that last updated or created this transaction.
+          maxLength: 5000
+          type: string
+        updated:
+          description: Time at which the object was last updated. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+      required:
+      - account
+      - amount
+      - currency
+      - description
+      - id
+      - livemode
+      - object
+      - status
+      - status_transitions
+      - transacted_at
+      - transaction_refresh
+      - updated
+      title: BankConnectionsResourceTransaction
+      type: object
+      x-expandableFields:
+      - status_transitions
+      x-resourceId: financial_connections.transaction
+    GetFinancialConnectionsTransactionsTransactionRequest:
+      type: object
+      properties: {}
+    GetFinancialConnectionsAccountsAccountOwnersRequest:
+      type: object
+      properties: {}
+    GetFinancialConnectionsAccountsAccountRequest:
+      type: object
+      properties: {}
+    PostFinancialConnectionsAccountsAccountSubscribeRequest:
       type: object
       required:
       - features
@@ -1146,16 +1049,13 @@ components:
             type: string
           type: array
         features:
-          description: The list of account features from which you would like to unsubscribe.
+          description: The list of account features to which you would like to subscribe.`.
           items:
             enum:
             - transactions
             type: string
             x-stripeBypassValidation: true
           type: array
-    GetFinancialConnectionsTransactionsRequest:
-      type: object
-      properties: {}
     BankConnectionsResourceOwnerList:
       type: object
       required:
@@ -1181,7 +1081,112 @@ components:
           description: The URL where this list can be accessed.
           maxLength: 5000
           type: string
-    PostFinancialConnectionsAccountsAccountRefreshRequest:
+    PostFinancialConnectionsAccountsAccountDisconnectRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    financial_connections.session:
+      description: A Financial Connections Session is the secure way to programmatically launch the client-side Stripe.js modal that lets your users link their accounts.
+      properties:
+        account_holder:
+          anyOf:
+          - $ref: '#/components/schemas/bank_connections_resource_accountholder'
+          description: The account holder for whom accounts are collected in this session.
+        accounts:
+          description: The accounts that were collected as part of this Session.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/financial_connections.account'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              pattern: ^/v1/financial_connections/accounts
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: BankConnectionsResourceLinkedAccountList
+          type: object
+          x-expandableFields:
+          - data
+        client_secret:
+          description: A value that will be passed to the client to launch the authentication flow.
+          maxLength: 5000
+          type: string
+        filters:
+          $ref: '#/components/schemas/bank_connections_resource_link_account_session_filters'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - financial_connections.session
+          type: string
+        permissions:
+          description: Permissions requested for accounts collected during this session.
+          items:
+            enum:
+            - balances
+            - ownership
+            - payment_method
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          type: array
+        prefetch:
+          description: Data features requested to be retrieved upon account creation.
+          items:
+            enum:
+            - balances
+            - ownership
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          type:
+          - array
+          - 'null'
+        return_url:
+          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
+          maxLength: 5000
+          type: string
+      required:
+      - accounts
+      - client_secret
+      - id
+      - livemode
+      - object
+      - permissions
+      title: BankConnectionsResourceLinkAccountSession
+      type: object
+      x-expandableFields:
+      - account_holder
+      - accounts
+      - filters
+      x-resourceId: financial_connections.session
+    PostFinancialConnectionsAccountsAccountUnsubscribeRequest:
       type: object
       required:
       - features
@@ -1193,18 +1198,13 @@ components:
             type: string
           type: array
         features:
-          description: The list of account features that you would like to refresh.
+          description: The list of account features from which you would like to unsubscribe.
           items:
             enum:
-            - balance
-            - ownership
             - transactions
             type: string
             x-stripeBypassValidation: true
           type: array
-    GetFinancialConnectionsSessionsSessionRequest:
-      type: object
-      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

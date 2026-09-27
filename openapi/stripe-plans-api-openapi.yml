@@ -290,7 +290,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetPlansRequest:
+    GetPlansPlanRequest:
       type: object
       properties: {}
     error:
@@ -301,12 +301,89 @@ components:
       required:
       - error
       type: object
-    GetPlansPlanRequest:
+    deleted_plan:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - plan
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedPlan
       type: object
-      properties: {}
-    DeletePlansPlanRequest:
+      x-expandableFields: []
+      x-resourceId: deleted_plan
+    PostPlansPlanRequest:
       type: object
-      properties: {}
+      properties:
+        active:
+          description: Whether the plan is currently available for new subscriptions.
+          type: boolean
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        nickname:
+          description: A brief description of the plan, hidden from customers.
+          maxLength: 5000
+          type: string
+        product:
+          description: The product the plan belongs to. This cannot be changed once it has been used in a subscription or subscription schedule.
+          maxLength: 5000
+          type: string
+        trial_period_days:
+          description: Default number of trial days when subscribing a customer to this plan using [`trial_from_plan=true`](https://stripe.com/docs/api#create_subscription-trial_from_plan).
+          type: integer
+    PlanList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/plan'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/plans
+          type: string
     PostPlansRequest:
       type: object
       required:
@@ -462,57 +539,12 @@ components:
           - licensed
           - metered
           type: string
-    PlanList:
+    DeletePlansPlanRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/plan'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/plans
-          type: string
-    deleted_plan:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - plan
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedPlan
+      properties: {}
+    GetPlansRequest:
       type: object
-      x-expandableFields: []
-      x-resourceId: deleted_plan
+      properties: {}
     plan:
       description: 'You can now model subscriptions more flexibly using the [Prices API](https://stripe.com/docs/api#prices). It replaces the Plans API and is backwards compatible to simplify your migration.
 
@@ -658,38 +690,6 @@ components:
       - tiers
       - transform_usage
       x-resourceId: plan
-    PostPlansPlanRequest:
-      type: object
-      properties:
-        active:
-          description: Whether the plan is currently available for new subscriptions.
-          type: boolean
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        nickname:
-          description: A brief description of the plan, hidden from customers.
-          maxLength: 5000
-          type: string
-        product:
-          description: The product the plan belongs to. This cannot be changed once it has been used in a subscription or subscription schedule.
-          maxLength: 5000
-          type: string
-        trial_period_days:
-          description: Default number of trial days when subscribing a customer to this plan using [`trial_from_plan=true`](https://stripe.com/docs/api#create_subscription-trial_from_plan).
-          type: integer
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

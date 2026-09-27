@@ -815,38 +815,6 @@ paths:
         ChooseTags: true
 components:
   schemas:
-    external_account:
-      anyOf:
-      - $ref: '#/components/schemas/bank_account'
-      - $ref: '#/components/schemas/card'
-      title: Polymorphic
-      x-resourceId: external_account
-      x-stripeBypassValidation: true
-    deleted_account:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - account
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedAccount
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_account
     error:
       description: An error response from the Stripe API
       properties:
@@ -855,40 +823,66 @@ components:
       required:
       - error
       type: object
-    account_link:
-      description: 'Account Links are the means by which a Connect platform grants a connected account permission to access
-
-        Stripe-hosted applications, such as Connect Onboarding.
+    account_session:
+      description: 'An AccountSession allows a Connect platform to grant access to a connected account in Connect embedded components.
 
 
-        Related guide: [Connect Onboarding](https://stripe.com/docs/connect/custom/hosted-onboarding)'
+        We recommend that you create an AccountSession each time you need to display an embedded component
+
+        to your user. Do not save AccountSessions to your database as they expire relatively
+
+        quickly, and cannot be used more than once.
+
+
+        Related guide: [Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components)'
       properties:
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
+        account:
+          description: The ID of the account the AccountSession was created for
+          maxLength: 5000
+          type: string
+        client_secret:
+          description: 'The client secret of this AccountSession. Used on the client to set up secure access to the given `account`.
+
+
+            The client secret can be used to provide access to `account` from your frontend. It should not be stored, logged, or exposed to anyone other than the connected account. Make sure that you have TLS enabled on any page that includes the client secret.
+
+
+            Refer to our docs to [setup Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components) and learn about how `client_secret` should be handled.'
+          maxLength: 5000
+          type: string
+        components:
+          $ref: '#/components/schemas/connect_embedded_account_session_create_components'
         expires_at:
-          description: The timestamp at which this account link will expire.
+          description: The timestamp at which this AccountSession will expire.
           format: unix-time
           type: integer
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
-          - account_link
-          type: string
-        url:
-          description: The URL for the account link.
-          maxLength: 5000
+          - account_session
           type: string
       required:
-      - created
+      - account
+      - client_secret
+      - components
       - expires_at
+      - livemode
       - object
-      - url
-      title: AccountLink
+      title: ConnectEmbeddedMethodAccountSessionCreateMethodAccountSession
       type: object
-      x-expandableFields: []
-      x-resourceId: account_link
+      x-expandableFields:
+      - components
+      x-resourceId: account_session
+    deleted_external_account:
+      anyOf:
+      - $ref: '#/components/schemas/deleted_bank_account'
+      - $ref: '#/components/schemas/deleted_card'
+      title: Polymorphic
+      x-resourceId: deleted_external_account
+      x-stripeBypassValidation: true
     person:
       description: 'This is an object representing a person associated with a Stripe account.
 
@@ -1052,59 +1046,38 @@ components:
       - requirements
       - verification
       x-resourceId: person
-    account_session:
-      description: 'An AccountSession allows a Connect platform to grant access to a connected account in Connect embedded components.
-
-
-        We recommend that you create an AccountSession each time you need to display an embedded component
-
-        to your user. Do not save AccountSessions to your database as they expire relatively
-
-        quickly, and cannot be used more than once.
-
-
-        Related guide: [Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components)'
+    deleted_account:
+      description: ''
       properties:
-        account:
-          description: The ID of the account the AccountSession was created for
-          maxLength: 5000
-          type: string
-        client_secret:
-          description: 'The client secret of this AccountSession. Used on the client to set up secure access to the given `account`.
-
-
-            The client secret can be used to provide access to `account` from your frontend. It should not be stored, logged, or exposed to anyone other than the connected account. Make sure that you have TLS enabled on any page that includes the client secret.
-
-
-            Refer to our docs to [setup Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components) and learn about how `client_secret` should be handled.'
-          maxLength: 5000
-          type: string
-        components:
-          $ref: '#/components/schemas/connect_embedded_account_session_create_components'
-        expires_at:
-          description: The timestamp at which this AccountSession will expire.
-          format: unix-time
-          type: integer
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
           type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
-          - account_session
+          - account
           type: string
       required:
-      - account
-      - client_secret
-      - components
-      - expires_at
-      - livemode
+      - deleted
+      - id
       - object
-      title: ConnectEmbeddedMethodAccountSessionCreateMethodAccountSession
+      title: DeletedAccount
       type: object
-      x-expandableFields:
-      - components
-      x-resourceId: account_session
+      x-expandableFields: []
+      x-resourceId: deleted_account
+    external_account:
+      anyOf:
+      - $ref: '#/components/schemas/bank_account'
+      - $ref: '#/components/schemas/card'
+      title: Polymorphic
+      x-resourceId: external_account
+      x-stripeBypassValidation: true
     account:
       description: 'This is an object representing a Stripe account. You can retrieve it to see
 
@@ -1253,10 +1226,37 @@ components:
       - settings
       - tos_acceptance
       x-resourceId: account
-    deleted_external_account:
-      anyOf:
-      - $ref: '#/components/schemas/deleted_bank_account'
-      - $ref: '#/components/schemas/deleted_card'
-      title: Polymorphic
-      x-resourceId: deleted_external_account
-      x-stripeBypassValidation: true
+    account_link:
+      description: 'Account Links are the means by which a Connect platform grants a connected account permission to access
+
+        Stripe-hosted applications, such as Connect Onboarding.
+
+
+        Related guide: [Connect Onboarding](https://stripe.com/docs/connect/custom/hosted-onboarding)'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        expires_at:
+          description: The timestamp at which this account link will expire.
+          format: unix-time
+          type: integer
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - account_link
+          type: string
+        url:
+          description: The URL for the account link.
+          maxLength: 5000
+          type: string
+      required:
+      - created
+      - expires_at
+      - object
+      - url
+      title: AccountLink
+      type: object
+      x-expandableFields: []
+      x-resourceId: account_link

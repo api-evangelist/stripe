@@ -2009,379 +2009,147 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    treasury.transaction:
-      description: Transactions represent changes to a [FinancialAccount's](https://stripe.com/docs/api#financial_accounts) balance.
+    error:
+      description: An error response from the Stripe API
       properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        balance_impact:
-          $ref: '#/components/schemas/treasury_transactions_resource_balance_impact'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        entries:
-          description: A list of TransactionEntries that are part of this Transaction. This cannot be expanded in any list endpoints.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/treasury.transaction_entry'
-              type: array
-            has_more:
-              description: True if this list has another page of items after this one that can be fetched.
-              type: boolean
-            object:
-              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-              enum:
-              - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              pattern: ^/v1/treasury/transaction_entries
-              type: string
-          required:
-          - data
-          - has_more
-          - object
-          - url
-          title: TreasuryTransactionsResourceTransactionEntryList
-          type:
-          - object
-          - 'null'
-          x-expandableFields:
-          - data
-        financial_account:
-          description: The FinancialAccount associated with this object.
-          maxLength: 5000
-          type: string
-        flow:
-          description: ID of the flow that created the Transaction.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        flow_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_transactions_resource_flow_details'
-          description: Details of the flow that created the Transaction.
-        flow_type:
-          description: Type of the flow that created the Transaction.
-          enum:
-          - credit_reversal
-          - debit_reversal
-          - inbound_transfer
-          - issuing_authorization
-          - other
-          - outbound_payment
-          - outbound_transfer
-          - received_credit
-          - received_debit
-          type: string
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.transaction
-          type: string
-        status:
-          description: Status of the Transaction.
-          enum:
-          - open
-          - posted
-          - void
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_transactions_resource_abstract_transaction_resource_status_transitions'
+        error:
+          $ref: '#/components/schemas/api_errors'
       required:
-      - amount
-      - balance_impact
-      - created
-      - currency
-      - description
-      - financial_account
-      - flow_type
-      - id
-      - livemode
-      - object
-      - status
-      - status_transitions
-      title: TreasuryTransactionsResourceTransaction
+      - error
       type: object
-      x-expandableFields:
-      - balance_impact
-      - entries
-      - flow_details
-      - status_transitions
-      x-resourceId: treasury.transaction
-    GetTreasuryDebitReversalsDebitReversalRequest:
+    PostTreasuryFinancialAccountsRequest:
       type: object
-      properties: {}
+      required:
+      - supported_currencies
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        features:
+          description: Encodes whether a FinancialAccount has access to a particular feature. Stripe or the platform can control features via the requested field.
+          properties:
+            card_issuing:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access
+              type: object
+            deposit_insurance:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access
+              type: object
+            financial_addresses:
+              properties:
+                aba:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: aba_access
+                  type: object
+              title: financial_addresses
+              type: object
+            inbound_transfers:
+              properties:
+                ach:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: access_with_ach_details
+                  type: object
+              title: inbound_transfers
+              type: object
+            intra_stripe_flows:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access
+              type: object
+            outbound_payments:
+              properties:
+                ach:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: access_with_ach_details
+                  type: object
+                us_domestic_wire:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: access
+                  type: object
+              title: outbound_payments
+              type: object
+            outbound_transfers:
+              properties:
+                ach:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: access_with_ach_details
+                  type: object
+                us_domestic_wire:
+                  properties:
+                    requested:
+                      type: boolean
+                  required:
+                  - requested
+                  title: access
+                  type: object
+              title: outbound_transfers
+              type: object
+          title: feature_access
+          type: object
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        platform_restrictions:
+          description: The set of functionalities that the platform can restrict on the FinancialAccount.
+          properties:
+            inbound_flows:
+              enum:
+              - restricted
+              - unrestricted
+              type: string
+            outbound_flows:
+              enum:
+              - restricted
+              - unrestricted
+              type: string
+          title: platform_restrictions
+          type: object
+        supported_currencies:
+          description: The currencies the FinancialAccount can hold a balance in.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
     GetTreasuryFinancialAccountsRequest:
       type: object
       properties: {}
-    TreasuryReceivedCreditsResourceCreditReversalList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.credit_reversal'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    TreasuryOutboundTransfersResourceOutboundTransferList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.outbound_transfer'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetTreasuryInboundTransfersRequest:
-      type: object
-      properties: {}
-    PostTreasuryFinancialAccountsFinancialAccountFeaturesRequest:
-      type: object
-      properties:
-        card_issuing:
-          description: Encodes the FinancialAccount's ability to be used with the Issuing product, including attaching cards to and drawing funds from the FinancialAccount.
-          properties:
-            requested:
-              type: boolean
-          required:
-          - requested
-          title: access
-          type: object
-        deposit_insurance:
-          description: Represents whether this FinancialAccount is eligible for deposit insurance. Various factors determine the insurance amount.
-          properties:
-            requested:
-              type: boolean
-          required:
-          - requested
-          title: access
-          type: object
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        financial_addresses:
-          description: Contains Features that add FinancialAddresses to the FinancialAccount.
-          properties:
-            aba:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: aba_access
-              type: object
-          title: financial_addresses
-          type: object
-        inbound_transfers:
-          description: Contains settings related to adding funds to a FinancialAccount from another Account with the same owner.
-          properties:
-            ach:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access_with_ach_details
-              type: object
-          title: inbound_transfers
-          type: object
-        intra_stripe_flows:
-          description: Represents the ability for the FinancialAccount to send money to, or receive money from other FinancialAccounts (for example, via OutboundPayment).
-          properties:
-            requested:
-              type: boolean
-          required:
-          - requested
-          title: access
-          type: object
-        outbound_payments:
-          description: Includes Features related to initiating money movement out of the FinancialAccount to someone else's bucket of money.
-          properties:
-            ach:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access_with_ach_details
-              type: object
-            us_domestic_wire:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access
-              type: object
-          title: outbound_payments
-          type: object
-        outbound_transfers:
-          description: Contains a Feature and settings related to moving money out of the FinancialAccount into another Account with the same owner.
-          properties:
-            ach:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access_with_ach_details
-              type: object
-            us_domestic_wire:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access
-              type: object
-          title: outbound_transfers
-          type: object
-    TreasuryTransactionsResourceTransactionList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.transaction'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    TreasuryReceivedDebitsResourceDebitReversalList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.debit_reversal'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    PostTreasuryCreditReversalsRequest:
-      type: object
-      required:
-      - received_credit
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        received_credit:
-          description: The ReceivedCredit to reverse.
-          maxLength: 5000
-          type: string
-    PostTreasuryDebitReversalsRequest:
-      type: object
-      required:
-      - received_debit
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        received_debit:
-          description: The ReceivedDebit to reverse.
-          maxLength: 5000
-          type: string
     PostTreasuryOutboundPaymentsRequest:
       type: object
       required:
@@ -2545,6 +2313,190 @@ components:
           description: The description that appears on the receiving end for this OutboundPayment (for example, bank statement for external bank transfer). Maximum 10 characters for `ach` payments, 140 characters for `us_domestic_wire` payments, or 500 characters for `stripe` network transfers. The default value is "payment".
           maxLength: 5000
           type: string
+    GetTreasuryReceivedDebitsIdRequest:
+      type: object
+      properties: {}
+    GetTreasuryDebitReversalsDebitReversalRequest:
+      type: object
+      properties: {}
+    GetTreasuryOutboundPaymentsIdRequest:
+      type: object
+      properties: {}
+    GetTreasuryTransactionsRequest:
+      type: object
+      properties: {}
+    GetTreasuryInboundTransfersIdRequest:
+      type: object
+      properties: {}
+    treasury.financial_account_features:
+      description: 'Encodes whether a FinancialAccount has access to a particular Feature, with a `status` enum and associated `status_details`.
+
+        Stripe or the platform can control Features via the requested field.'
+      properties:
+        card_issuing:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
+        deposit_insurance:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
+        financial_addresses:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_financial_addresses_features'
+        inbound_transfers:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_inbound_transfers'
+        intra_stripe_flows:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.financial_account_features
+          type: string
+        outbound_payments:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_outbound_payments'
+        outbound_transfers:
+          $ref: '#/components/schemas/treasury_financial_accounts_resource_outbound_transfers'
+      required:
+      - object
+      title: TreasuryFinancialAccountsResourceFinancialAccountFeatures
+      type: object
+      x-expandableFields:
+      - card_issuing
+      - deposit_insurance
+      - financial_addresses
+      - inbound_transfers
+      - intra_stripe_flows
+      - outbound_payments
+      - outbound_transfers
+      x-resourceId: treasury.financial_account_features
+    GetTreasuryInboundTransfersRequest:
+      type: object
+      properties: {}
+    GetTreasuryTransactionsIdRequest:
+      type: object
+      properties: {}
+    GetTreasuryTransactionEntriesRequest:
+      type: object
+      properties: {}
+    PostTreasuryInboundTransfersRequest:
+      type: object
+      required:
+      - amount
+      - currency
+      - financial_account
+      - origin_payment_method
+      properties:
+        amount:
+          description: Amount (in cents) to be transferred.
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        financial_account:
+          description: The FinancialAccount to send funds to.
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        origin_payment_method:
+          description: The origin payment method to be debited for the InboundTransfer.
+          maxLength: 5000
+          type: string
+        statement_descriptor:
+          description: The complete description that appears on your customers' statements. Maximum 10 characters.
+          maxLength: 10
+          type: string
+    PostTreasuryCreditReversalsRequest:
+      type: object
+      required:
+      - received_credit
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        received_credit:
+          description: The ReceivedCredit to reverse.
+          maxLength: 5000
+          type: string
+    TreasuryTransactionsResourceTransactionList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.transaction'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostTreasuryOutboundPaymentsIdCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetTreasuryOutboundTransfersRequest:
+      type: object
+      properties: {}
+    TreasuryOutboundPaymentsResourceOutboundPaymentList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.outbound_payment'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/treasury/outbound_payments
+          type: string
     treasury.inbound_transfer:
       description: Use [InboundTransfers](https://stripe.com/docs/treasury/moving-money/financial-accounts/into/inbound-transfers) to add funds to your [FinancialAccount](https://stripe.com/docs/api#financial_accounts) via a PaymentMethod that is owned by you. The funds will be transferred via an ACH debit.
       properties:
@@ -2661,14 +2613,432 @@ components:
       - status_transitions
       - transaction
       x-resourceId: treasury.inbound_transfer
-    GetTreasuryTransactionsRequest:
+    GetTreasuryTransactionEntriesIdRequest:
       type: object
       properties: {}
-    treasury.outbound_payment:
-      description: 'Use OutboundPayments to send funds to another party''s external bank account or [FinancialAccount](https://stripe.com/docs/api#financial_accounts). To send money to an account belonging to the same user, use an [OutboundTransfer](https://stripe.com/docs/api#outbound_transfers).
+    treasury.transaction:
+      description: Transactions represent changes to a [FinancialAccount's](https://stripe.com/docs/api#financial_accounts) balance.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        balance_impact:
+          $ref: '#/components/schemas/treasury_transactions_resource_balance_impact'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        entries:
+          description: A list of TransactionEntries that are part of this Transaction. This cannot be expanded in any list endpoints.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/treasury.transaction_entry'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              pattern: ^/v1/treasury/transaction_entries
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: TreasuryTransactionsResourceTransactionEntryList
+          type:
+          - object
+          - 'null'
+          x-expandableFields:
+          - data
+        financial_account:
+          description: The FinancialAccount associated with this object.
+          maxLength: 5000
+          type: string
+        flow:
+          description: ID of the flow that created the Transaction.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        flow_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_transactions_resource_flow_details'
+          description: Details of the flow that created the Transaction.
+        flow_type:
+          description: Type of the flow that created the Transaction.
+          enum:
+          - credit_reversal
+          - debit_reversal
+          - inbound_transfer
+          - issuing_authorization
+          - other
+          - outbound_payment
+          - outbound_transfer
+          - received_credit
+          - received_debit
+          type: string
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.transaction
+          type: string
+        status:
+          description: Status of the Transaction.
+          enum:
+          - open
+          - posted
+          - void
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_transactions_resource_abstract_transaction_resource_status_transitions'
+      required:
+      - amount
+      - balance_impact
+      - created
+      - currency
+      - description
+      - financial_account
+      - flow_type
+      - id
+      - livemode
+      - object
+      - status
+      - status_transitions
+      title: TreasuryTransactionsResourceTransaction
+      type: object
+      x-expandableFields:
+      - balance_impact
+      - entries
+      - flow_details
+      - status_transitions
+      x-resourceId: treasury.transaction
+    PostTreasuryInboundTransfersInboundTransferCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    TreasuryReceivedCreditsResourceReceivedCreditList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.received_credit'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    TreasuryReceivedDebitsResourceDebitReversalList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.debit_reversal'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostTreasuryFinancialAccountsFinancialAccountFeaturesRequest:
+      type: object
+      properties:
+        card_issuing:
+          description: Encodes the FinancialAccount's ability to be used with the Issuing product, including attaching cards to and drawing funds from the FinancialAccount.
+          properties:
+            requested:
+              type: boolean
+          required:
+          - requested
+          title: access
+          type: object
+        deposit_insurance:
+          description: Represents whether this FinancialAccount is eligible for deposit insurance. Various factors determine the insurance amount.
+          properties:
+            requested:
+              type: boolean
+          required:
+          - requested
+          title: access
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        financial_addresses:
+          description: Contains Features that add FinancialAddresses to the FinancialAccount.
+          properties:
+            aba:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: aba_access
+              type: object
+          title: financial_addresses
+          type: object
+        inbound_transfers:
+          description: Contains settings related to adding funds to a FinancialAccount from another Account with the same owner.
+          properties:
+            ach:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access_with_ach_details
+              type: object
+          title: inbound_transfers
+          type: object
+        intra_stripe_flows:
+          description: Represents the ability for the FinancialAccount to send money to, or receive money from other FinancialAccounts (for example, via OutboundPayment).
+          properties:
+            requested:
+              type: boolean
+          required:
+          - requested
+          title: access
+          type: object
+        outbound_payments:
+          description: Includes Features related to initiating money movement out of the FinancialAccount to someone else's bucket of money.
+          properties:
+            ach:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access_with_ach_details
+              type: object
+            us_domestic_wire:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access
+              type: object
+          title: outbound_payments
+          type: object
+        outbound_transfers:
+          description: Contains a Feature and settings related to moving money out of the FinancialAccount into another Account with the same owner.
+          properties:
+            ach:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access_with_ach_details
+              type: object
+            us_domestic_wire:
+              properties:
+                requested:
+                  type: boolean
+              required:
+              - requested
+              title: access
+              type: object
+          title: outbound_transfers
+          type: object
+    GetTreasuryCreditReversalsRequest:
+      type: object
+      properties: {}
+    TreasuryReceivedCreditsResourceCreditReversalList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.credit_reversal'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetTreasuryCreditReversalsCreditReversalRequest:
+      type: object
+      properties: {}
+    treasury.received_credit:
+      description: ReceivedCredits represent funds sent to a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) (for example, via ACH or wire). These money movements are not initiated from the FinancialAccount.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        failure_code:
+          description: Reason for the failure. A ReceivedCredit might fail because the receiving FinancialAccount is closed or frozen.
+          enum:
+          - account_closed
+          - account_frozen
+          - other
+          type:
+          - string
+          - 'null'
+          x-stripeBypassValidation: true
+        financial_account:
+          description: The FinancialAccount that received the funds.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        initiating_payment_method_details:
+          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
+        linked_flows:
+          $ref: '#/components/schemas/treasury_received_credits_resource_linked_flows'
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        network:
+          description: The rails used to send the funds.
+          enum:
+          - ach
+          - card
+          - stripe
+          - us_domestic_wire
+          type: string
+          x-stripeBypassValidation: true
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.received_credit
+          type: string
+        reversal_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_received_credits_resource_reversal_details'
+          description: Details describing when a ReceivedCredit may be reversed.
+        status:
+          description: Status of the ReceivedCredit. ReceivedCredits are created either `succeeded` (approved) or `failed` (declined). If a ReceivedCredit is declined, the failure reason can be found in the `failure_code` field.
+          enum:
+          - failed
+          - succeeded
+          type: string
+          x-stripeBypassValidation: true
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - created
+      - currency
+      - description
+      - id
+      - initiating_payment_method_details
+      - linked_flows
+      - livemode
+      - network
+      - object
+      - status
+      title: TreasuryReceivedCreditsResourceReceivedCredit
+      type: object
+      x-expandableFields:
+      - initiating_payment_method_details
+      - linked_flows
+      - reversal_details
+      - transaction
+      x-resourceId: treasury.received_credit
+    treasury.outbound_transfer:
+      description: 'Use OutboundTransfers to transfer funds from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) to a PaymentMethod belonging to the same entity. To send funds to a different party, use [OutboundPayments](https://stripe.com/docs/api#outbound_payments) instead. You can send funds over ACH rails or through a domestic wire transfer to a user''s own external bank account.
 
 
-        Simulate OutboundPayment state changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints. These methods can only be called on test mode objects.'
+        Simulate OutboundTransfer state changes with the `/v1/test_helpers/treasury/outbound_transfers` endpoints. These methods can only be called on test mode objects.'
       properties:
         amount:
           description: Amount (in cents) transferred.
@@ -2683,12 +3053,6 @@ components:
         currency:
           description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
           type: string
-        customer:
-          description: ID of the [customer](https://stripe.com/docs/api/customers) to whom an OutboundPayment is sent.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
           maxLength: 5000
@@ -2696,19 +3060,13 @@ components:
           - string
           - 'null'
         destination_payment_method:
-          description: The PaymentMethod via which an OutboundPayment is sent. This field can be empty if the OutboundPayment was created using `destination_payment_method_data`.
+          description: The PaymentMethod used as the payment instrument for an OutboundTransfer.
           maxLength: 5000
           type:
           - string
           - 'null'
         destination_payment_method_details:
-          anyOf:
-          - $ref: '#/components/schemas/outbound_payments_payment_method_details'
-          description: Details about the PaymentMethod for an OutboundPayment.
-        end_user_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_end_user_details'
-          description: Details about the end user.
+          $ref: '#/components/schemas/outbound_transfers_payment_method_details'
         expected_arrival_date:
           description: The date when funds are expected to arrive in the destination account.
           format: unix-time
@@ -2739,18 +3097,18 @@ components:
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
-          - treasury.outbound_payment
+          - treasury.outbound_transfer
           type: string
         returned_details:
           anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_payments_resource_returned_status'
-          description: Details about a returned OutboundPayment. Only set when the status is `returned`.
+          - $ref: '#/components/schemas/treasury_outbound_transfers_resource_returned_details'
+          description: Details about a returned OutboundTransfer. Only set when the status is `returned`.
         statement_descriptor:
-          description: The description that appears on the receiving end for an OutboundPayment (for example, bank statement for external bank transfer).
+          description: Information about the OutboundTransfer to be sent to the recipient account.
           maxLength: 5000
           type: string
         status:
-          description: 'Current status of the OutboundPayment: `processing`, `failed`, `posted`, `returned`, `canceled`. An OutboundPayment is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundPayment has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundPayment fails to arrive at its destination, its status will change to `returned`.'
+          description: 'Current status of the OutboundTransfer: `processing`, `failed`, `canceled`, `posted`, `returned`. An OutboundTransfer is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundTransfer has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundTransfer fails to arrive at its destination, its status will change to `returned`.'
           enum:
           - canceled
           - failed
@@ -2759,7 +3117,7 @@ components:
           - returned
           type: string
         status_transitions:
-          $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_status_transitions'
+          $ref: '#/components/schemas/treasury_outbound_transfers_resource_status_transitions'
         transaction:
           anyOf:
           - maxLength: 5000
@@ -2774,6 +3132,7 @@ components:
       - cancelable
       - created
       - currency
+      - destination_payment_method_details
       - expected_arrival_date
       - financial_account
       - id
@@ -2784,19 +3143,86 @@ components:
       - status
       - status_transitions
       - transaction
-      title: TreasuryOutboundPaymentsResourceOutboundPayment
+      title: TreasuryOutboundTransfersResourceOutboundTransfer
       type: object
       x-expandableFields:
       - destination_payment_method_details
-      - end_user_details
       - returned_details
       - status_transitions
       - transaction
-      x-resourceId: treasury.outbound_payment
-    GetTreasuryDebitReversalsRequest:
+      x-resourceId: treasury.outbound_transfer
+    TreasuryTransactionsResourceTransactionEntryList:
       type: object
-      properties: {}
-    GetTreasuryTransactionEntriesIdRequest:
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.transaction_entry'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/treasury/transaction_entries
+          type: string
+    TreasuryInboundTransfersResourceInboundTransferList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.inbound_transfer'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostTreasuryDebitReversalsRequest:
+      type: object
+      required:
+      - received_debit
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        received_debit:
+          description: The ReceivedDebit to reverse.
+          maxLength: 5000
+          type: string
+    GetTreasuryReceivedCreditsIdRequest:
       type: object
       properties: {}
     treasury.financial_account:
@@ -2930,373 +3356,6 @@ components:
       - platform_restrictions
       - status_details
       x-resourceId: treasury.financial_account
-    TreasuryFinancialAccountsResourceFinancialAccountList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/treasury.financial_account'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/treasury/financial_accounts
-          type: string
-    GetTreasuryReceivedDebitsIdRequest:
-      type: object
-      properties: {}
-    GetTreasuryOutboundPaymentsRequest:
-      type: object
-      properties: {}
-    treasury.financial_account_features:
-      description: 'Encodes whether a FinancialAccount has access to a particular Feature, with a `status` enum and associated `status_details`.
-
-        Stripe or the platform can control Features via the requested field.'
-      properties:
-        card_issuing:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
-        deposit_insurance:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
-        financial_addresses:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_financial_addresses_features'
-        inbound_transfers:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_inbound_transfers'
-        intra_stripe_flows:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_toggle_settings'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.financial_account_features
-          type: string
-        outbound_payments:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_outbound_payments'
-        outbound_transfers:
-          $ref: '#/components/schemas/treasury_financial_accounts_resource_outbound_transfers'
-      required:
-      - object
-      title: TreasuryFinancialAccountsResourceFinancialAccountFeatures
-      type: object
-      x-expandableFields:
-      - card_issuing
-      - deposit_insurance
-      - financial_addresses
-      - inbound_transfers
-      - intra_stripe_flows
-      - outbound_payments
-      - outbound_transfers
-      x-resourceId: treasury.financial_account_features
-    TreasuryInboundTransfersResourceInboundTransferList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.inbound_transfer'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    PostTreasuryInboundTransfersInboundTransferCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    TreasuryOutboundPaymentsResourceOutboundPaymentList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.outbound_payment'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/treasury/outbound_payments
-          type: string
-    GetTreasuryOutboundTransfersOutboundTransferRequest:
-      type: object
-      properties: {}
-    TreasuryReceivedCreditsResourceReceivedCreditList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.received_credit'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetTreasuryReceivedCreditsIdRequest:
-      type: object
-      properties: {}
-    GetTreasuryFinancialAccountsFinancialAccountFeaturesRequest:
-      type: object
-      properties: {}
-    PostTreasuryInboundTransfersRequest:
-      type: object
-      required:
-      - amount
-      - currency
-      - financial_account
-      - origin_payment_method
-      properties:
-        amount:
-          description: Amount (in cents) to be transferred.
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        financial_account:
-          description: The FinancialAccount to send funds to.
-          type: string
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        origin_payment_method:
-          description: The origin payment method to be debited for the InboundTransfer.
-          maxLength: 5000
-          type: string
-        statement_descriptor:
-          description: The complete description that appears on your customers' statements. Maximum 10 characters.
-          maxLength: 10
-          type: string
-    GetTreasuryFinancialAccountsFinancialAccountRequest:
-      type: object
-      properties: {}
-    GetTreasuryOutboundTransfersRequest:
-      type: object
-      properties: {}
-    GetTreasuryCreditReversalsRequest:
-      type: object
-      properties: {}
-    treasury.outbound_transfer:
-      description: 'Use OutboundTransfers to transfer funds from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) to a PaymentMethod belonging to the same entity. To send funds to a different party, use [OutboundPayments](https://stripe.com/docs/api#outbound_payments) instead. You can send funds over ACH rails or through a domestic wire transfer to a user''s own external bank account.
-
-
-        Simulate OutboundTransfer state changes with the `/v1/test_helpers/treasury/outbound_transfers` endpoints. These methods can only be called on test mode objects.'
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        cancelable:
-          description: Returns `true` if the object can be canceled, and `false` otherwise.
-          type: boolean
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method:
-          description: The PaymentMethod used as the payment instrument for an OutboundTransfer.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        destination_payment_method_details:
-          $ref: '#/components/schemas/outbound_transfers_payment_method_details'
-        expected_arrival_date:
-          description: The date when funds are expected to arrive in the destination account.
-          format: unix-time
-          type: integer
-        financial_account:
-          description: The FinancialAccount that funds were pulled from.
-          maxLength: 5000
-          type: string
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.outbound_transfer
-          type: string
-        returned_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_outbound_transfers_resource_returned_details'
-          description: Details about a returned OutboundTransfer. Only set when the status is `returned`.
-        statement_descriptor:
-          description: Information about the OutboundTransfer to be sent to the recipient account.
-          maxLength: 5000
-          type: string
-        status:
-          description: 'Current status of the OutboundTransfer: `processing`, `failed`, `canceled`, `posted`, `returned`. An OutboundTransfer is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundTransfer has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundTransfer fails to arrive at its destination, its status will change to `returned`.'
-          enum:
-          - canceled
-          - failed
-          - posted
-          - processing
-          - returned
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_outbound_transfers_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - cancelable
-      - created
-      - currency
-      - destination_payment_method_details
-      - expected_arrival_date
-      - financial_account
-      - id
-      - livemode
-      - metadata
-      - object
-      - statement_descriptor
-      - status
-      - status_transitions
-      - transaction
-      title: TreasuryOutboundTransfersResourceOutboundTransfer
-      type: object
-      x-expandableFields:
-      - destination_payment_method_details
-      - returned_details
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.outbound_transfer
-    TreasuryReceivedDebitsResourceReceivedDebitList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.received_debit'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetTreasuryReceivedDebitsRequest:
-      type: object
-      properties: {}
-    GetTreasuryTransactionEntriesRequest:
-      type: object
-      properties: {}
     treasury.transaction_entry:
       description: TransactionEntries represent individual units of money movements within a single [Transaction](https://stripe.com/docs/api#transactions).
       properties:
@@ -3404,478 +3463,6 @@ components:
       - flow_details
       - transaction
       x-resourceId: treasury.transaction_entry
-    GetTreasuryReceivedCreditsRequest:
-      type: object
-      properties: {}
-    GetTreasuryCreditReversalsCreditReversalRequest:
-      type: object
-      properties: {}
-    PostTreasuryOutboundPaymentsIdCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    PostTreasuryOutboundTransfersOutboundTransferCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    treasury.credit_reversal:
-      description: You can reverse some [ReceivedCredits](https://stripe.com/docs/api#received_credits) depending on their network and source flow. Reversing a ReceivedCredit leads to the creation of a new object known as a CreditReversal.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        financial_account:
-          description: The FinancialAccount to reverse funds from.
-          maxLength: 5000
-          type: string
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        network:
-          description: The rails used to reverse the funds.
-          enum:
-          - ach
-          - stripe
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.credit_reversal
-          type: string
-        received_credit:
-          description: The ReceivedCredit being reversed.
-          maxLength: 5000
-          type: string
-        status:
-          description: Status of the CreditReversal
-          enum:
-          - canceled
-          - posted
-          - processing
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_received_credits_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - created
-      - currency
-      - financial_account
-      - id
-      - livemode
-      - metadata
-      - network
-      - object
-      - received_credit
-      - status
-      - status_transitions
-      title: TreasuryReceivedCreditsResourceCreditReversal
-      type: object
-      x-expandableFields:
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.credit_reversal
-    treasury.debit_reversal:
-      description: You can reverse some [ReceivedDebits](https://stripe.com/docs/api#received_debits) depending on their network and source flow. Reversing a ReceivedDebit leads to the creation of a new object known as a DebitReversal.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        financial_account:
-          description: The FinancialAccount to reverse funds from.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        linked_flows:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_received_debits_resource_debit_reversal_linked_flows'
-          description: Other flows linked to a DebitReversal.
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        network:
-          description: The rails used to reverse the funds.
-          enum:
-          - ach
-          - card
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.debit_reversal
-          type: string
-        received_debit:
-          description: The ReceivedDebit being reversed.
-          maxLength: 5000
-          type: string
-        status:
-          description: Status of the DebitReversal
-          enum:
-          - failed
-          - processing
-          - succeeded
-          type: string
-        status_transitions:
-          $ref: '#/components/schemas/treasury_received_debits_resource_status_transitions'
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - created
-      - currency
-      - id
-      - livemode
-      - metadata
-      - network
-      - object
-      - received_debit
-      - status
-      - status_transitions
-      title: TreasuryReceivedDebitsResourceDebitReversal
-      type: object
-      x-expandableFields:
-      - linked_flows
-      - status_transitions
-      - transaction
-      x-resourceId: treasury.debit_reversal
-    GetTreasuryTransactionsIdRequest:
-      type: object
-      properties: {}
-    treasury.received_credit:
-      description: ReceivedCredits represent funds sent to a [FinancialAccount](https://stripe.com/docs/api#financial_accounts) (for example, via ACH or wire). These money movements are not initiated from the FinancialAccount.
-      properties:
-        amount:
-          description: Amount (in cents) transferred.
-          type: integer
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        failure_code:
-          description: Reason for the failure. A ReceivedCredit might fail because the receiving FinancialAccount is closed or frozen.
-          enum:
-          - account_closed
-          - account_frozen
-          - other
-          type:
-          - string
-          - 'null'
-          x-stripeBypassValidation: true
-        financial_account:
-          description: The FinancialAccount that received the funds.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        hosted_regulatory_receipt_url:
-          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        initiating_payment_method_details:
-          $ref: '#/components/schemas/treasury_shared_resource_initiating_payment_method_details_initiating_payment_method_details'
-        linked_flows:
-          $ref: '#/components/schemas/treasury_received_credits_resource_linked_flows'
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        network:
-          description: The rails used to send the funds.
-          enum:
-          - ach
-          - card
-          - stripe
-          - us_domestic_wire
-          type: string
-          x-stripeBypassValidation: true
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - treasury.received_credit
-          type: string
-        reversal_details:
-          anyOf:
-          - $ref: '#/components/schemas/treasury_received_credits_resource_reversal_details'
-          description: Details describing when a ReceivedCredit may be reversed.
-        status:
-          description: Status of the ReceivedCredit. ReceivedCredits are created either `succeeded` (approved) or `failed` (declined). If a ReceivedCredit is declined, the failure reason can be found in the `failure_code` field.
-          enum:
-          - failed
-          - succeeded
-          type: string
-          x-stripeBypassValidation: true
-        transaction:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/treasury.transaction'
-          description: The Transaction associated with this object.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/treasury.transaction'
-      required:
-      - amount
-      - created
-      - currency
-      - description
-      - id
-      - initiating_payment_method_details
-      - linked_flows
-      - livemode
-      - network
-      - object
-      - status
-      title: TreasuryReceivedCreditsResourceReceivedCredit
-      type: object
-      x-expandableFields:
-      - initiating_payment_method_details
-      - linked_flows
-      - reversal_details
-      - transaction
-      x-resourceId: treasury.received_credit
-    TreasuryTransactionsResourceTransactionEntryList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/treasury.transaction_entry'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/treasury/transaction_entries
-          type: string
-    PostTreasuryFinancialAccountsRequest:
-      type: object
-      required:
-      - supported_currencies
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        features:
-          description: Encodes whether a FinancialAccount has access to a particular feature. Stripe or the platform can control features via the requested field.
-          properties:
-            card_issuing:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access
-              type: object
-            deposit_insurance:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access
-              type: object
-            financial_addresses:
-              properties:
-                aba:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: aba_access
-                  type: object
-              title: financial_addresses
-              type: object
-            inbound_transfers:
-              properties:
-                ach:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: access_with_ach_details
-                  type: object
-              title: inbound_transfers
-              type: object
-            intra_stripe_flows:
-              properties:
-                requested:
-                  type: boolean
-              required:
-              - requested
-              title: access
-              type: object
-            outbound_payments:
-              properties:
-                ach:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: access_with_ach_details
-                  type: object
-                us_domestic_wire:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: access
-                  type: object
-              title: outbound_payments
-              type: object
-            outbound_transfers:
-              properties:
-                ach:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: access_with_ach_details
-                  type: object
-                us_domestic_wire:
-                  properties:
-                    requested:
-                      type: boolean
-                  required:
-                  - requested
-                  title: access
-                  type: object
-              title: outbound_transfers
-              type: object
-          title: feature_access
-          type: object
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        platform_restrictions:
-          description: The set of functionalities that the platform can restrict on the FinancialAccount.
-          properties:
-            inbound_flows:
-              enum:
-              - restricted
-              - unrestricted
-              type: string
-            outbound_flows:
-              enum:
-              - restricted
-              - unrestricted
-              type: string
-          title: platform_restrictions
-          type: object
-        supported_currencies:
-          description: The currencies the FinancialAccount can hold a balance in.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetTreasuryInboundTransfersIdRequest:
-      type: object
-      properties: {}
     treasury.received_debit:
       description: ReceivedDebits represent funds pulled from a [FinancialAccount](https://stripe.com/docs/api#financial_accounts). These are not initiated from the FinancialAccount.
       properties:
@@ -4100,9 +3687,284 @@ components:
               type: string
           title: platform_restrictions
           type: object
-    GetTreasuryOutboundPaymentsIdRequest:
+    TreasuryReceivedDebitsResourceReceivedDebitList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.received_debit'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    GetTreasuryFinancialAccountsFinancialAccountFeaturesRequest:
       type: object
       properties: {}
+    GetTreasuryOutboundPaymentsRequest:
+      type: object
+      properties: {}
+    GetTreasuryDebitReversalsRequest:
+      type: object
+      properties: {}
+    GetTreasuryReceivedCreditsRequest:
+      type: object
+      properties: {}
+    GetTreasuryOutboundTransfersOutboundTransferRequest:
+      type: object
+      properties: {}
+    treasury.debit_reversal:
+      description: You can reverse some [ReceivedDebits](https://stripe.com/docs/api#received_debits) depending on their network and source flow. Reversing a ReceivedDebit leads to the creation of a new object known as a DebitReversal.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        financial_account:
+          description: The FinancialAccount to reverse funds from.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        linked_flows:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_received_debits_resource_debit_reversal_linked_flows'
+          description: Other flows linked to a DebitReversal.
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network:
+          description: The rails used to reverse the funds.
+          enum:
+          - ach
+          - card
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.debit_reversal
+          type: string
+        received_debit:
+          description: The ReceivedDebit being reversed.
+          maxLength: 5000
+          type: string
+        status:
+          description: Status of the DebitReversal
+          enum:
+          - failed
+          - processing
+          - succeeded
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_received_debits_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - created
+      - currency
+      - id
+      - livemode
+      - metadata
+      - network
+      - object
+      - received_debit
+      - status
+      - status_transitions
+      title: TreasuryReceivedDebitsResourceDebitReversal
+      type: object
+      x-expandableFields:
+      - linked_flows
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.debit_reversal
+    GetTreasuryFinancialAccountsFinancialAccountRequest:
+      type: object
+      properties: {}
+    treasury.outbound_payment:
+      description: 'Use OutboundPayments to send funds to another party''s external bank account or [FinancialAccount](https://stripe.com/docs/api#financial_accounts). To send money to an account belonging to the same user, use an [OutboundTransfer](https://stripe.com/docs/api#outbound_transfers).
+
+
+        Simulate OutboundPayment state changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints. These methods can only be called on test mode objects.'
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        cancelable:
+          description: Returns `true` if the object can be canceled, and `false` otherwise.
+          type: boolean
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        customer:
+          description: ID of the [customer](https://stripe.com/docs/api/customers) to whom an OutboundPayment is sent.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method:
+          description: The PaymentMethod via which an OutboundPayment is sent. This field can be empty if the OutboundPayment was created using `destination_payment_method_data`.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        destination_payment_method_details:
+          anyOf:
+          - $ref: '#/components/schemas/outbound_payments_payment_method_details'
+          description: Details about the PaymentMethod for an OutboundPayment.
+        end_user_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_end_user_details'
+          description: Details about the end user.
+        expected_arrival_date:
+          description: The date when funds are expected to arrive in the destination account.
+          format: unix-time
+          type: integer
+        financial_account:
+          description: The FinancialAccount that funds were pulled from.
+          maxLength: 5000
+          type: string
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.outbound_payment
+          type: string
+        returned_details:
+          anyOf:
+          - $ref: '#/components/schemas/treasury_outbound_payments_resource_returned_status'
+          description: Details about a returned OutboundPayment. Only set when the status is `returned`.
+        statement_descriptor:
+          description: The description that appears on the receiving end for an OutboundPayment (for example, bank statement for external bank transfer).
+          maxLength: 5000
+          type: string
+        status:
+          description: 'Current status of the OutboundPayment: `processing`, `failed`, `posted`, `returned`, `canceled`. An OutboundPayment is `processing` if it has been created and is pending. The status changes to `posted` once the OutboundPayment has been "confirmed" and funds have left the account, or to `failed` or `canceled`. If an OutboundPayment fails to arrive at its destination, its status will change to `returned`.'
+          enum:
+          - canceled
+          - failed
+          - posted
+          - processing
+          - returned
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_outbound_payments_resource_outbound_payment_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - cancelable
+      - created
+      - currency
+      - expected_arrival_date
+      - financial_account
+      - id
+      - livemode
+      - metadata
+      - object
+      - statement_descriptor
+      - status
+      - status_transitions
+      - transaction
+      title: TreasuryOutboundPaymentsResourceOutboundPayment
+      type: object
+      x-expandableFields:
+      - destination_payment_method_details
+      - end_user_details
+      - returned_details
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.outbound_payment
+    GetTreasuryReceivedDebitsRequest:
+      type: object
+      properties: {}
+    PostTreasuryOutboundTransfersOutboundTransferCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
     PostTreasuryOutboundTransfersRequest:
       type: object
       required:
@@ -4159,6 +4021,144 @@ components:
         statement_descriptor:
           description: Statement descriptor to be shown on the receiving end of an OutboundTransfer. Maximum 10 characters for `ach` transfers or 140 characters for `us_domestic_wire` transfers. The default value is "transfer".
           maxLength: 5000
+          type: string
+    TreasuryOutboundTransfersResourceOutboundTransferList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/treasury.outbound_transfer'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    treasury.credit_reversal:
+      description: You can reverse some [ReceivedCredits](https://stripe.com/docs/api#received_credits) depending on their network and source flow. Reversing a ReceivedCredit leads to the creation of a new object known as a CreditReversal.
+      properties:
+        amount:
+          description: Amount (in cents) transferred.
+          type: integer
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        financial_account:
+          description: The FinancialAccount to reverse funds from.
+          maxLength: 5000
+          type: string
+        hosted_regulatory_receipt_url:
+          description: A [hosted transaction receipt](https://stripe.com/docs/treasury/moving-money/regulatory-receipts) URL that is provided when money movement is considered regulated under Stripe's money transmission licenses.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        network:
+          description: The rails used to reverse the funds.
+          enum:
+          - ach
+          - stripe
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - treasury.credit_reversal
+          type: string
+        received_credit:
+          description: The ReceivedCredit being reversed.
+          maxLength: 5000
+          type: string
+        status:
+          description: Status of the CreditReversal
+          enum:
+          - canceled
+          - posted
+          - processing
+          type: string
+        status_transitions:
+          $ref: '#/components/schemas/treasury_received_credits_resource_status_transitions'
+        transaction:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/treasury.transaction'
+          description: The Transaction associated with this object.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/treasury.transaction'
+      required:
+      - amount
+      - created
+      - currency
+      - financial_account
+      - id
+      - livemode
+      - metadata
+      - network
+      - object
+      - received_credit
+      - status
+      - status_transitions
+      title: TreasuryReceivedCreditsResourceCreditReversal
+      type: object
+      x-expandableFields:
+      - status_transitions
+      - transaction
+      x-resourceId: treasury.credit_reversal
+    TreasuryFinancialAccountsResourceFinancialAccountList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/treasury.financial_account'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/treasury/financial_accounts
           type: string
   securitySchemes:
     basicAuth:
