@@ -575,6 +575,376 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    tax.calculation:
+      description: 'A Tax Calculation allows you to calculate the tax to collect from your customer.
+
+
+        Related guide: [Calculate tax in your custom payment flow](https://stripe.com/docs/tax/custom)'
+      properties:
+        amount_total:
+          description: Total after taxes.
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          maxLength: 5000
+          type: string
+        customer:
+          description: The ID of an existing [Customer](https://stripe.com/docs/api/customers/object) used for the resource.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        customer_details:
+          $ref: '#/components/schemas/tax_product_resource_customer_details'
+        expires_at:
+          description: Timestamp of date at which the tax calculation will expire.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        id:
+          description: Unique identifier for the calculation.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        line_items:
+          description: The list of items the customer is purchasing.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/tax.calculation_line_item'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              pattern: ^/v1/tax/calculations/[^/]+/line_items
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: TaxProductResourceTaxCalculationLineItemList
+          type:
+          - object
+          - 'null'
+          x-expandableFields:
+          - data
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - tax.calculation
+          type: string
+        shipping_cost:
+          anyOf:
+          - $ref: '#/components/schemas/tax_product_resource_tax_calculation_shipping_cost'
+          description: The shipping cost details for the calculation.
+        tax_amount_exclusive:
+          description: The amount of tax to be collected on top of the line item prices.
+          type: integer
+        tax_amount_inclusive:
+          description: The amount of tax already included in the line item prices.
+          type: integer
+        tax_breakdown:
+          description: Breakdown of individual tax amounts that add up to the total.
+          items:
+            $ref: '#/components/schemas/tax_product_resource_tax_breakdown'
+          type: array
+        tax_date:
+          description: Timestamp of date at which the tax rules and rates in effect applies for the calculation.
+          format: unix-time
+          type: integer
+      required:
+      - amount_total
+      - currency
+      - customer_details
+      - livemode
+      - object
+      - tax_amount_exclusive
+      - tax_amount_inclusive
+      - tax_breakdown
+      - tax_date
+      title: TaxProductResourceTaxCalculation
+      type: object
+      x-expandableFields:
+      - customer_details
+      - line_items
+      - shipping_cost
+      - tax_breakdown
+      x-resourceId: tax.calculation
+    TaxProductResourceTaxCalculationLineItemList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/tax.calculation_line_item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/tax/calculations/[^/]+/line_items
+          type: string
+    GetTaxTransactionsTransactionLineItemsRequest:
+      type: object
+      properties: {}
+    tax.transaction:
+      description: 'A Tax Transaction records the tax collected from or refunded to your customer.
+
+
+        Related guide: [Calculate tax in your custom payment flow](https://stripe.com/docs/tax/custom#tax-transaction)'
+      properties:
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          maxLength: 5000
+          type: string
+        customer:
+          description: The ID of an existing [Customer](https://stripe.com/docs/api/customers/object) used for the resource.
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        customer_details:
+          $ref: '#/components/schemas/tax_product_resource_customer_details'
+        id:
+          description: Unique identifier for the transaction.
+          maxLength: 5000
+          type: string
+        line_items:
+          description: The tax collected or refunded, by line item.
+          properties:
+            data:
+              description: Details about each object.
+              items:
+                $ref: '#/components/schemas/tax.transaction_line_item'
+              type: array
+            has_more:
+              description: True if this list has another page of items after this one that can be fetched.
+              type: boolean
+            object:
+              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+              enum:
+              - list
+              type: string
+            url:
+              description: The URL where this list can be accessed.
+              maxLength: 5000
+              pattern: ^/v1/tax/transactions/[^/]+/line_items
+              type: string
+          required:
+          - data
+          - has_more
+          - object
+          - url
+          title: TaxProductResourceTaxTransactionLineItemList
+          type:
+          - object
+          - 'null'
+          x-expandableFields:
+          - data
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type:
+          - object
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - tax.transaction
+          type: string
+        reference:
+          description: A custom unique identifier, such as 'myOrder_123'.
+          maxLength: 5000
+          type: string
+        reversal:
+          anyOf:
+          - $ref: '#/components/schemas/tax_product_resource_tax_transaction_resource_reversal'
+          description: If `type=reversal`, contains information about what was reversed.
+        shipping_cost:
+          anyOf:
+          - $ref: '#/components/schemas/tax_product_resource_tax_transaction_shipping_cost'
+          description: The shipping cost details for the transaction.
+        tax_date:
+          description: Timestamp of date at which the tax rules and rates in effect applies for the calculation.
+          format: unix-time
+          type: integer
+        type:
+          description: If `reversal`, this transaction reverses an earlier transaction.
+          enum:
+          - reversal
+          - transaction
+          type: string
+      required:
+      - created
+      - currency
+      - customer_details
+      - id
+      - livemode
+      - object
+      - reference
+      - tax_date
+      - type
+      title: TaxProductResourceTaxTransaction
+      type: object
+      x-expandableFields:
+      - customer_details
+      - line_items
+      - reversal
+      - shipping_cost
+      x-resourceId: tax.transaction
+    PostTaxRegistrationsIdRequest:
+      type: object
+      properties:
+        active_from:
+          anyOf:
+          - enum:
+            - now
+            maxLength: 5000
+            type: string
+          - format: unix-time
+            type: integer
+          description: Time at which the registration becomes active. It can be either `now` to indicate the current time, or a timestamp measured in seconds since the Unix epoch.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        expires_at:
+          anyOf:
+          - enum:
+            - now
+            maxLength: 5000
+            type: string
+          - format: unix-time
+            type: integer
+          - enum:
+            - ''
+            type: string
+          description: If set, the registration stops being active at this time. If not set, the registration will be active indefinitely. It can be either `now` to indicate the current time, or a timestamp measured in seconds since the Unix epoch.
+    tax.registration:
+      description: 'A Tax `Registration` lets us know that your business is registered to collect tax on payments within a region, enabling you to [automatically collect tax](https://stripe.com/docs/tax).
+
+
+        Stripe doesn''t register on your behalf with the relevant authorities when you create a Tax `Registration` object. For more information on how to register to collect tax, see [our guide](https://stripe.com/docs/tax/registering).
+
+
+        Related guide: [Using the Registrations API](https://stripe.com/docs/tax/registrations-api)'
+      properties:
+        active_from:
+          description: Time at which the registration becomes active. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        country:
+          description: Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+          maxLength: 5000
+          type: string
+        country_options:
+          $ref: '#/components/schemas/tax_product_registrations_resource_country_options'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        expires_at:
+          description: If set, the registration stops being active at this time. If not set, the registration will be active indefinitely. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - tax.registration
+          type: string
+        status:
+          description: The status of the registration. This field is present for convenience and can be deduced from `active_from` and `expires_at`.
+          enum:
+          - active
+          - expired
+          - scheduled
+          type: string
+      required:
+      - active_from
+      - country
+      - country_options
+      - created
+      - id
+      - livemode
+      - object
+      - status
+      title: TaxProductRegistrationsResourceTaxRegistration
+      type: object
+      x-expandableFields:
+      - country_options
+      x-resourceId: tax.registration
+    TaxProductRegistrationsResourceTaxRegistrationList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/tax.registration'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/tax/registrations
+          type: string
     error:
       description: An error response from the Stripe API
       properties:
@@ -792,368 +1162,6 @@ components:
         tax_date:
           description: Timestamp of date at which the tax rules and rates in effect applies for the calculation. Measured in seconds since the Unix epoch. Can be up to 48 hours in the past, and up to 48 hours in the future.
           type: integer
-    tax.calculation:
-      description: 'A Tax Calculation allows you to calculate the tax to collect from your customer.
-
-
-        Related guide: [Calculate tax in your custom payment flow](https://stripe.com/docs/tax/custom)'
-      properties:
-        amount_total:
-          description: Total after taxes.
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          maxLength: 5000
-          type: string
-        customer:
-          description: The ID of an existing [Customer](https://stripe.com/docs/api/customers/object) used for the resource.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        customer_details:
-          $ref: '#/components/schemas/tax_product_resource_customer_details'
-        expires_at:
-          description: Timestamp of date at which the tax calculation will expire.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        id:
-          description: Unique identifier for the calculation.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        line_items:
-          description: The list of items the customer is purchasing.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/tax.calculation_line_item'
-              type: array
-            has_more:
-              description: True if this list has another page of items after this one that can be fetched.
-              type: boolean
-            object:
-              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-              enum:
-              - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              pattern: ^/v1/tax/calculations/[^/]+/line_items
-              type: string
-          required:
-          - data
-          - has_more
-          - object
-          - url
-          title: TaxProductResourceTaxCalculationLineItemList
-          type:
-          - object
-          - 'null'
-          x-expandableFields:
-          - data
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - tax.calculation
-          type: string
-        shipping_cost:
-          anyOf:
-          - $ref: '#/components/schemas/tax_product_resource_tax_calculation_shipping_cost'
-          description: The shipping cost details for the calculation.
-        tax_amount_exclusive:
-          description: The amount of tax to be collected on top of the line item prices.
-          type: integer
-        tax_amount_inclusive:
-          description: The amount of tax already included in the line item prices.
-          type: integer
-        tax_breakdown:
-          description: Breakdown of individual tax amounts that add up to the total.
-          items:
-            $ref: '#/components/schemas/tax_product_resource_tax_breakdown'
-          type: array
-        tax_date:
-          description: Timestamp of date at which the tax rules and rates in effect applies for the calculation.
-          format: unix-time
-          type: integer
-      required:
-      - amount_total
-      - currency
-      - customer_details
-      - livemode
-      - object
-      - tax_amount_exclusive
-      - tax_amount_inclusive
-      - tax_breakdown
-      - tax_date
-      title: TaxProductResourceTaxCalculation
-      type: object
-      x-expandableFields:
-      - customer_details
-      - line_items
-      - shipping_cost
-      - tax_breakdown
-      x-resourceId: tax.calculation
-    GetTaxRegistrationsRequest:
-      type: object
-      properties: {}
-    TaxProductRegistrationsResourceTaxRegistrationList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/tax.registration'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/tax/registrations
-          type: string
-    tax.registration:
-      description: 'A Tax `Registration` lets us know that your business is registered to collect tax on payments within a region, enabling you to [automatically collect tax](https://stripe.com/docs/tax).
-
-
-        Stripe doesn''t register on your behalf with the relevant authorities when you create a Tax `Registration` object. For more information on how to register to collect tax, see [our guide](https://stripe.com/docs/tax/registering).
-
-
-        Related guide: [Using the Registrations API](https://stripe.com/docs/tax/registrations-api)'
-      properties:
-        active_from:
-          description: Time at which the registration becomes active. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        country:
-          description: Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-          maxLength: 5000
-          type: string
-        country_options:
-          $ref: '#/components/schemas/tax_product_registrations_resource_country_options'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        expires_at:
-          description: If set, the registration stops being active at this time. If not set, the registration will be active indefinitely. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - tax.registration
-          type: string
-        status:
-          description: The status of the registration. This field is present for convenience and can be deduced from `active_from` and `expires_at`.
-          enum:
-          - active
-          - expired
-          - scheduled
-          type: string
-      required:
-      - active_from
-      - country
-      - country_options
-      - created
-      - id
-      - livemode
-      - object
-      - status
-      title: TaxProductRegistrationsResourceTaxRegistration
-      type: object
-      x-expandableFields:
-      - country_options
-      x-resourceId: tax.registration
-    PostTaxRegistrationsIdRequest:
-      type: object
-      properties:
-        active_from:
-          anyOf:
-          - enum:
-            - now
-            maxLength: 5000
-            type: string
-          - format: unix-time
-            type: integer
-          description: Time at which the registration becomes active. It can be either `now` to indicate the current time, or a timestamp measured in seconds since the Unix epoch.
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        expires_at:
-          anyOf:
-          - enum:
-            - now
-            maxLength: 5000
-            type: string
-          - format: unix-time
-            type: integer
-          - enum:
-            - ''
-            type: string
-          description: If set, the registration stops being active at this time. If not set, the registration will be active indefinitely. It can be either `now` to indicate the current time, or a timestamp measured in seconds since the Unix epoch.
-    PostTaxTransactionsCreateReversalRequest:
-      type: object
-      required:
-      - mode
-      - original_transaction
-      - reference
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        flat_amount:
-          description: A flat amount to reverse across the entire transaction, in negative integer cents. This value represents the total amount to refund from the transaction, including taxes.
-          type: integer
-        line_items:
-          description: The line item amounts to reverse.
-          items:
-            properties:
-              amount:
-                type: integer
-              amount_tax:
-                type: integer
-              metadata:
-                additionalProperties:
-                  type: string
-                type: object
-              original_line_item:
-                maxLength: 5000
-                type: string
-              quantity:
-                type: integer
-              reference:
-                maxLength: 500
-                type: string
-            required:
-            - amount
-            - amount_tax
-            - original_line_item
-            - reference
-            title: transaction_line_item_reversal
-            type: object
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        mode:
-          description: If `partial`, the provided line item or shipping cost amounts are reversed. If `full`, the original transaction is fully reversed.
-          enum:
-          - full
-          - partial
-          type: string
-        original_transaction:
-          description: The ID of the Transaction to partially or fully reverse.
-          maxLength: 5000
-          type: string
-        reference:
-          description: A custom identifier for this reversal, such as `myOrder_123-refund_1`, which must be unique across all transactions. The reference helps identify this reversal transaction in exported [tax reports](https://stripe.com/docs/tax/reports).
-          maxLength: 500
-          type: string
-        shipping_cost:
-          description: The shipping cost to reverse.
-          properties:
-            amount:
-              type: integer
-            amount_tax:
-              type: integer
-          required:
-          - amount
-          - amount_tax
-          title: transaction_shipping_cost_reversal
-          type: object
-    PostTaxTransactionsCreateFromCalculationRequest:
-      type: object
-      required:
-      - calculation
-      - reference
-      properties:
-        calculation:
-          description: Tax Calculation ID to be used as input when creating the transaction.
-          maxLength: 5000
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        reference:
-          description: A custom order or sale identifier, such as 'myOrder_123'. Must be unique across all transactions, including reversals.
-          maxLength: 500
-          type: string
-    GetTaxTransactionsTransactionRequest:
-      type: object
-      properties: {}
-    TaxProductResourceTaxTransactionLineItemList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/tax.transaction_line_item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/tax/transactions/[^/]+/line_items
-          type: string
-    GetTaxTransactionsTransactionLineItemsRequest:
-      type: object
-      properties: {}
     PostTaxRegistrationsRequest:
       type: object
       required:
@@ -2093,6 +2101,84 @@ components:
           description: If set, the Tax Registration stops being active at this time. If not set, the Tax Registration will be active indefinitely. Timestamp measured in seconds since the Unix epoch.
           format: unix-time
           type: integer
+    PostTaxTransactionsCreateReversalRequest:
+      type: object
+      required:
+      - mode
+      - original_transaction
+      - reference
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        flat_amount:
+          description: A flat amount to reverse across the entire transaction, in negative integer cents. This value represents the total amount to refund from the transaction, including taxes.
+          type: integer
+        line_items:
+          description: The line item amounts to reverse.
+          items:
+            properties:
+              amount:
+                type: integer
+              amount_tax:
+                type: integer
+              metadata:
+                additionalProperties:
+                  type: string
+                type: object
+              original_line_item:
+                maxLength: 5000
+                type: string
+              quantity:
+                type: integer
+              reference:
+                maxLength: 500
+                type: string
+            required:
+            - amount
+            - amount_tax
+            - original_line_item
+            - reference
+            title: transaction_line_item_reversal
+            type: object
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        mode:
+          description: If `partial`, the provided line item or shipping cost amounts are reversed. If `full`, the original transaction is fully reversed.
+          enum:
+          - full
+          - partial
+          type: string
+        original_transaction:
+          description: The ID of the Transaction to partially or fully reverse.
+          maxLength: 5000
+          type: string
+        reference:
+          description: A custom identifier for this reversal, such as `myOrder_123-refund_1`, which must be unique across all transactions. The reference helps identify this reversal transaction in exported [tax reports](https://stripe.com/docs/tax/reports).
+          maxLength: 500
+          type: string
+        shipping_cost:
+          description: The shipping cost to reverse.
+          properties:
+            amount:
+              type: integer
+            amount_tax:
+              type: integer
+          required:
+          - amount
+          - amount_tax
+          title: transaction_shipping_cost_reversal
+          type: object
+    GetTaxCalculationsCalculationLineItemsRequest:
+      type: object
+      properties: {}
     tax.settings:
       description: 'You can use Tax `Settings` to manage configurations used by Stripe Tax calculations.
 
@@ -2134,6 +2220,34 @@ components:
       - head_office
       - status_details
       x-resourceId: tax.settings
+    GetTaxTransactionsTransactionRequest:
+      type: object
+      properties: {}
+    PostTaxTransactionsCreateFromCalculationRequest:
+      type: object
+      required:
+      - calculation
+      - reference
+      properties:
+        calculation:
+          description: Tax Calculation ID to be used as input when creating the transaction.
+          maxLength: 5000
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        reference:
+          description: A custom order or sale identifier, such as 'myOrder_123'. Must be unique across all transactions, including reversals.
+          maxLength: 500
+          type: string
     PostTaxSettingsRequest:
       type: object
       properties:
@@ -2185,127 +2299,10 @@ components:
           - address
           title: head_office_param
           type: object
-    tax.transaction:
-      description: 'A Tax Transaction records the tax collected from or refunded to your customer.
-
-
-        Related guide: [Calculate tax in your custom payment flow](https://stripe.com/docs/tax/custom#tax-transaction)'
-      properties:
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          maxLength: 5000
-          type: string
-        customer:
-          description: The ID of an existing [Customer](https://stripe.com/docs/api/customers/object) used for the resource.
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
-        customer_details:
-          $ref: '#/components/schemas/tax_product_resource_customer_details'
-        id:
-          description: Unique identifier for the transaction.
-          maxLength: 5000
-          type: string
-        line_items:
-          description: The tax collected or refunded, by line item.
-          properties:
-            data:
-              description: Details about each object.
-              items:
-                $ref: '#/components/schemas/tax.transaction_line_item'
-              type: array
-            has_more:
-              description: True if this list has another page of items after this one that can be fetched.
-              type: boolean
-            object:
-              description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-              enum:
-              - list
-              type: string
-            url:
-              description: The URL where this list can be accessed.
-              maxLength: 5000
-              pattern: ^/v1/tax/transactions/[^/]+/line_items
-              type: string
-          required:
-          - data
-          - has_more
-          - object
-          - url
-          title: TaxProductResourceTaxTransactionLineItemList
-          type:
-          - object
-          - 'null'
-          x-expandableFields:
-          - data
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type:
-          - object
-          - 'null'
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - tax.transaction
-          type: string
-        reference:
-          description: A custom unique identifier, such as 'myOrder_123'.
-          maxLength: 5000
-          type: string
-        reversal:
-          anyOf:
-          - $ref: '#/components/schemas/tax_product_resource_tax_transaction_resource_reversal'
-          description: If `type=reversal`, contains information about what was reversed.
-        shipping_cost:
-          anyOf:
-          - $ref: '#/components/schemas/tax_product_resource_tax_transaction_shipping_cost'
-          description: The shipping cost details for the transaction.
-        tax_date:
-          description: Timestamp of date at which the tax rules and rates in effect applies for the calculation.
-          format: unix-time
-          type: integer
-        type:
-          description: If `reversal`, this transaction reverses an earlier transaction.
-          enum:
-          - reversal
-          - transaction
-          type: string
-      required:
-      - created
-      - currency
-      - customer_details
-      - id
-      - livemode
-      - object
-      - reference
-      - tax_date
-      - type
-      title: TaxProductResourceTaxTransaction
-      type: object
-      x-expandableFields:
-      - customer_details
-      - line_items
-      - reversal
-      - shipping_cost
-      x-resourceId: tax.transaction
-    GetTaxCalculationsCalculationLineItemsRequest:
-      type: object
-      properties: {}
     GetTaxSettingsRequest:
       type: object
       properties: {}
-    TaxProductResourceTaxCalculationLineItemList:
+    TaxProductResourceTaxTransactionLineItemList:
       type: object
       required:
       - data
@@ -2316,7 +2313,7 @@ components:
         data:
           description: Details about each object.
           items:
-            $ref: '#/components/schemas/tax.calculation_line_item'
+            $ref: '#/components/schemas/tax.transaction_line_item'
           type: array
         has_more:
           description: True if this list has another page of items after this one that can be fetched.
@@ -2329,8 +2326,11 @@ components:
         url:
           description: The URL where this list can be accessed.
           maxLength: 5000
-          pattern: ^/v1/tax/calculations/[^/]+/line_items
+          pattern: ^/v1/tax/transactions/[^/]+/line_items
           type: string
+    GetTaxRegistrationsRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

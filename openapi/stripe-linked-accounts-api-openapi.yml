@@ -323,14 +323,12 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
+    GetLinkedAccountsAccountOwnersRequest:
       type: object
+      properties: {}
+    GetLinkedAccountsAccountRequest:
+      type: object
+      properties: {}
     financial_connections.account:
       description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree of access.
       properties:
@@ -491,6 +489,51 @@ components:
             type: string
             x-stripeBypassValidation: true
           type: array
+    PostLinkedAccountsAccountDisconnectRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    BankConnectionsResourceOwnerList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/financial_connections.account_owner'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetLinkedAccountsRequest:
+      type: object
+      properties: {}
     BankConnectionsResourceLinkedAccountList:
       type: object
       required:
@@ -517,49 +560,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/financial_connections/accounts
           type: string
-    GetLinkedAccountsAccountRequest:
-      type: object
-      properties: {}
-    GetLinkedAccountsRequest:
-      type: object
-      properties: {}
-    BankConnectionsResourceOwnerList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/financial_connections.account_owner'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
-    GetLinkedAccountsAccountOwnersRequest:
-      type: object
-      properties: {}
-    PostLinkedAccountsAccountDisconnectRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

@@ -397,14 +397,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     PostSubscriptionItemsItemRequest:
       type: object
       properties:
@@ -524,6 +516,90 @@ components:
             - ''
             type: string
           description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
+    subscription_item:
+      description: 'Subscription items allow you to create customer subscriptions with more than
+
+        one plan, making it easy to represent complex billing relationships.'
+      properties:
+        billing_thresholds:
+          anyOf:
+          - $ref: '#/components/schemas/subscription_item_billing_thresholds'
+          description: Define thresholds at which an invoice will be sent, and the related subscription advanced to a new billing period
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        metadata:
+          additionalProperties:
+            maxLength: 500
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          type: object
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+        price:
+          $ref: '#/components/schemas/price'
+        quantity:
+          description: The [quantity](https://stripe.com/docs/subscriptions/quantities) of the plan to which the customer should be subscribed.
+          type: integer
+        subscription:
+          description: The `subscription` this `subscription_item` belongs to.
+          maxLength: 5000
+          type: string
+        tax_rates:
+          description: The tax rates which apply to this `subscription_item`. When set, the `default_tax_rates` on the subscription do not apply to this `subscription_item`.
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          type:
+          - array
+          - 'null'
+      required:
+      - created
+      - id
+      - metadata
+      - object
+      - price
+      - subscription
+      title: SubscriptionItem
+      type: object
+      x-expandableFields:
+      - billing_thresholds
+      - price
+      - tax_rates
+      x-resourceId: subscription_item
+    GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest:
+      type: object
+      properties: {}
+    UsageEventsResourceUsageRecordSummaryList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/usage_record_summary'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
     PostSubscriptionItemsRequest:
       type: object
       required:
@@ -642,31 +718,9 @@ components:
             - ''
             type: string
           description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
-    SubscriptionsItemsSubscriptionItemList:
+    GetSubscriptionItemsItemRequest:
       type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/subscription_item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/subscription_items
-          type: string
+      properties: {}
     usage_record:
       description: 'Usage records allow you to report customer usage and metrics to Stripe for
 
@@ -709,32 +763,10 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: usage_record
-    deleted_subscription_item:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - subscription_item
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedSubscriptionItem
+    GetSubscriptionItemsRequest:
       type: object
-      x-expandableFields: []
-      x-resourceId: deleted_subscription_item
-    UsageEventsResourceUsageRecordSummaryList:
+      properties: {}
+    SubscriptionsItemsSubscriptionItemList:
       type: object
       required:
       - data
@@ -744,7 +776,7 @@ components:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/usage_record_summary'
+            $ref: '#/components/schemas/subscription_item'
           type: array
         has_more:
           description: True if this list has another page of items after this one that can be fetched.
@@ -757,70 +789,8 @@ components:
         url:
           description: The URL where this list can be accessed.
           maxLength: 5000
+          pattern: ^/v1/subscription_items
           type: string
-    subscription_item:
-      description: 'Subscription items allow you to create customer subscriptions with more than
-
-        one plan, making it easy to represent complex billing relationships.'
-      properties:
-        billing_thresholds:
-          anyOf:
-          - $ref: '#/components/schemas/subscription_item_billing_thresholds'
-          description: Define thresholds at which an invoice will be sent, and the related subscription advanced to a new billing period
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        metadata:
-          additionalProperties:
-            maxLength: 500
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-          type: object
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - subscription_item
-          type: string
-        price:
-          $ref: '#/components/schemas/price'
-        quantity:
-          description: The [quantity](https://stripe.com/docs/subscriptions/quantities) of the plan to which the customer should be subscribed.
-          type: integer
-        subscription:
-          description: The `subscription` this `subscription_item` belongs to.
-          maxLength: 5000
-          type: string
-        tax_rates:
-          description: The tax rates which apply to this `subscription_item`. When set, the `default_tax_rates` on the subscription do not apply to this `subscription_item`.
-          items:
-            $ref: '#/components/schemas/tax_rate'
-          type:
-          - array
-          - 'null'
-      required:
-      - created
-      - id
-      - metadata
-      - object
-      - price
-      - subscription
-      title: SubscriptionItem
-      type: object
-      x-expandableFields:
-      - billing_thresholds
-      - price
-      - tax_rates
-      x-resourceId: subscription_item
-    GetSubscriptionItemsRequest:
-      type: object
-      properties: {}
-    GetSubscriptionItemsItemRequest:
-      type: object
-      properties: {}
     DeleteSubscriptionItemsItemRequest:
       type: object
       properties:
@@ -838,6 +808,14 @@ components:
           description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
           format: unix-time
           type: integer
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PostSubscriptionItemsSubscriptionItemUsageRecordsRequest:
       type: object
       required:
@@ -867,9 +845,31 @@ components:
           - format: unix-time
             type: integer
           description: The timestamp for the usage event. This timestamp must be within the current billing period of the subscription of the provided `subscription_item`, and must not be in the future. When passing `"now"`, Stripe records usage for the current time. Default is `"now"` if a value is not provided.
-    GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest:
+    deleted_subscription_item:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedSubscriptionItem
       type: object
-      properties: {}
+      x-expandableFields: []
+      x-resourceId: deleted_subscription_item
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

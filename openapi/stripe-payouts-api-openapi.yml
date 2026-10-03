@@ -355,15 +355,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PostPayoutsPayoutCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
     PostPayoutsPayoutRequest:
       type: object
       properties:
@@ -382,20 +373,6 @@ components:
             - ''
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-    GetPayoutsPayoutRequest:
-      type: object
-      properties: {}
-    GetPayoutsRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     PostPayoutsPayoutReverseRequest:
       type: object
       properties:
@@ -410,6 +387,98 @@ components:
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
           type: object
+    PostPayoutsPayoutCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    PayoutList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/payout'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/payouts
+          type: string
+    GetPayoutsPayoutRequest:
+      type: object
+      properties: {}
+    PostPayoutsRequest:
+      type: object
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          description: A positive integer in cents representing how much to payout.
+          type: integer
+        currency:
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          type: string
+        description:
+          description: An arbitrary string attached to the object. Often useful for displaying to users.
+          maxLength: 5000
+          type: string
+        destination:
+          description: The ID of a bank account or a card to send the payout to. If you don't provide a destination, we use the default external account for the specified currency.
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        method:
+          description: The method used to send this payout, which is `standard` or `instant`. We support `instant` for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
+          enum:
+          - instant
+          - standard
+          maxLength: 5000
+          type: string
+          x-stripeBypassValidation: true
+        source_type:
+          description: The balance type of your Stripe balance to draw this payout from. Balances for different payment sources are kept separately. You can find the amounts with the Balances API. One of `bank_account`, `card`, or `fpx`.
+          enum:
+          - bank_account
+          - card
+          - fpx
+          maxLength: 5000
+          type: string
+          x-stripeBypassValidation: true
+        statement_descriptor:
+          description: A string that displays on the recipient's bank or card statement (up to 22 characters). A `statement_descriptor` that's longer than 22 characters return an error. Most banks truncate this information and display it inconsistently. Some banks might not display it at all.
+          maxLength: 22
+          type: string
+          x-stripeBypassValidation: true
+    GetPayoutsRequest:
+      type: object
+      properties: {}
     payout:
       description: 'A `Payout` object is created when you receive funds from Stripe, or when you
 
@@ -588,83 +657,14 @@ components:
       - original_payout
       - reversed_by
       x-resourceId: payout
-    PostPayoutsRequest:
-      type: object
-      required:
-      - amount
-      - currency
+    error:
+      description: An error response from the Stripe API
       properties:
-        amount:
-          description: A positive integer in cents representing how much to payout.
-          type: integer
-        currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-          type: string
-        description:
-          description: An arbitrary string attached to the object. Often useful for displaying to users.
-          maxLength: 5000
-          type: string
-        destination:
-          description: The ID of a bank account or a card to send the payout to. If you don't provide a destination, we use the default external account for the specified currency.
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        method:
-          description: The method used to send this payout, which is `standard` or `instant`. We support `instant` for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
-          enum:
-          - instant
-          - standard
-          maxLength: 5000
-          type: string
-          x-stripeBypassValidation: true
-        source_type:
-          description: The balance type of your Stripe balance to draw this payout from. Balances for different payment sources are kept separately. You can find the amounts with the Balances API. One of `bank_account`, `card`, or `fpx`.
-          enum:
-          - bank_account
-          - card
-          - fpx
-          maxLength: 5000
-          type: string
-          x-stripeBypassValidation: true
-        statement_descriptor:
-          description: A string that displays on the recipient's bank or card statement (up to 22 characters). A `statement_descriptor` that's longer than 22 characters return an error. Most banks truncate this information and display it inconsistently. Some banks might not display it at all.
-          maxLength: 22
-          type: string
-          x-stripeBypassValidation: true
-    PayoutList:
-      type: object
+        error:
+          $ref: '#/components/schemas/api_errors'
       required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/payout'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/payouts
-          type: string
+      - error
+      type: object
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

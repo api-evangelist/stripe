@@ -267,14 +267,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     PaymentMethodDomainResourcePaymentMethodDomainList:
       type: object
       required:
@@ -358,24 +350,6 @@ components:
       - link
       - paypal
       x-resourceId: payment_method_domain
-    PostPaymentMethodDomainsPaymentMethodDomainRequest:
-      type: object
-      properties:
-        enabled:
-          description: Whether this payment method domain is enabled. If the domain is not enabled, payment methods that require a payment method domain will not appear in Elements.
-          type: boolean
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetPaymentMethodDomainsRequest:
-      type: object
-      properties: {}
-    GetPaymentMethodDomainsPaymentMethodDomainRequest:
-      type: object
-      properties: {}
     PostPaymentMethodDomainsRequest:
       type: object
       required:
@@ -403,6 +377,32 @@ components:
             maxLength: 5000
             type: string
           type: array
+    PostPaymentMethodDomainsPaymentMethodDomainRequest:
+      type: object
+      properties:
+        enabled:
+          description: Whether this payment method domain is enabled. If the domain is not enabled, payment methods that require a payment method domain will not appear in Elements.
+          type: boolean
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetPaymentMethodDomainsPaymentMethodDomainRequest:
+      type: object
+      properties: {}
+    GetPaymentMethodDomainsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

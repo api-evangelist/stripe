@@ -134,14 +134,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     CountrySpecList:
       type: object
       required:
@@ -167,9 +159,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/country_specs
           type: string
-    GetCountrySpecsRequest:
-      type: object
-      properties: {}
     country_spec:
       description: 'Stripe needs to collect certain pieces of information about each account
 
@@ -237,6 +226,17 @@ components:
       x-expandableFields:
       - verification_fields
       x-resourceId: country_spec
+    GetCountrySpecsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     GetCountrySpecsCountryRequest:
       type: object
       properties: {}

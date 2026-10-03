@@ -381,76 +381,7 @@ components:
       - applies_to
       - currency_options
       x-resourceId: coupon
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     DeleteCouponsCouponRequest:
-      type: object
-      properties: {}
-    PostCouponsCouponRequest:
-      type: object
-      properties:
-        currency_options:
-          additionalProperties:
-            properties:
-              amount_off:
-                type: integer
-            required:
-            - amount_off
-            title: currency_option
-            type: object
-          description: Coupons defined in each available currency option (only supported if the coupon is amount-based). Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported currency](https://stripe.com/docs/currencies).
-          type: object
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        name:
-          description: Name of the coupon displayed to customers on, for instance invoices, or receipts. By default the `id` is shown if `name` is not set.
-          maxLength: 40
-          type: string
-    deleted_coupon:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - coupon
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedCoupon
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_coupon
-    GetCouponsRequest:
       type: object
       properties: {}
     CouponsResourceCouponList:
@@ -478,6 +409,42 @@ components:
           maxLength: 5000
           pattern: ^/v1/coupons
           type: string
+    GetCouponsRequest:
+      type: object
+      properties: {}
+    deleted_coupon:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - coupon
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedCoupon
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_coupon
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PostCouponsRequest:
       type: object
       properties:
@@ -552,6 +519,39 @@ components:
           description: Unix timestamp specifying the last time at which the coupon can be redeemed. After the redeem_by date, the coupon can no longer be applied to new customers.
           format: unix-time
           type: integer
+    PostCouponsCouponRequest:
+      type: object
+      properties:
+        currency_options:
+          additionalProperties:
+            properties:
+              amount_off:
+                type: integer
+            required:
+            - amount_off
+            title: currency_option
+            type: object
+          description: Coupons defined in each available currency option (only supported if the coupon is amount-based). Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported currency](https://stripe.com/docs/currencies).
+          type: object
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        name:
+          description: Name of the coupon displayed to customers on, for instance invoices, or receipts. By default the `id` is shown if `name` is not set.
+          maxLength: 40
+          type: string
     GetCouponsCouponRequest:
       type: object
       properties: {}

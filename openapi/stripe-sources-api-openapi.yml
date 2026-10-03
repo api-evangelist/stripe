@@ -406,224 +406,27 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     GetSourcesSourceSourceTransactionsRequest:
       type: object
       properties: {}
-    PostSourcesSourceRequest:
+    PostSourcesSourceVerifyRequest:
       type: object
+      required:
+      - values
       properties:
-        amount:
-          description: Amount associated with the source.
-          type: integer
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-        mandate:
-          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance status.
-          properties:
-            acceptance:
-              properties:
-                date:
-                  format: unix-time
-                  type: integer
-                ip:
-                  type: string
-                offline:
-                  properties:
-                    contact_email:
-                      type: string
-                  required:
-                  - contact_email
-                  title: mandate_offline_acceptance_params
-                  type: object
-                online:
-                  properties:
-                    date:
-                      format: unix-time
-                      type: integer
-                    ip:
-                      type: string
-                    user_agent:
-                      maxLength: 5000
-                      type: string
-                  title: mandate_online_acceptance_params
-                  type: object
-                status:
-                  enum:
-                  - accepted
-                  - pending
-                  - refused
-                  - revoked
-                  maxLength: 5000
-                  type: string
-                type:
-                  enum:
-                  - offline
-                  - online
-                  maxLength: 5000
-                  type: string
-                user_agent:
-                  maxLength: 5000
-                  type: string
-              required:
-              - status
-              title: mandate_acceptance_params
-              type: object
-            amount:
-              anyOf:
-              - type: integer
-              - enum:
-                - ''
-                type: string
-            currency:
-              type: string
-            interval:
-              enum:
-              - one_time
-              - scheduled
-              - variable
-              maxLength: 5000
-              type: string
-            notification_method:
-              enum:
-              - deprecated_none
-              - email
-              - manual
-              - none
-              - stripe_email
-              maxLength: 5000
-              type: string
-          title: mandate_params
-          type: object
-        metadata:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - enum:
-            - ''
+        values:
+          description: The values needed to verify the source.
+          items:
+            maxLength: 5000
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-        owner:
-          description: Information about the owner of the payment instrument that may be used or required by particular source types.
-          properties:
-            address:
-              properties:
-                city:
-                  maxLength: 5000
-                  type: string
-                country:
-                  maxLength: 5000
-                  type: string
-                line1:
-                  maxLength: 5000
-                  type: string
-                line2:
-                  maxLength: 5000
-                  type: string
-                postal_code:
-                  maxLength: 5000
-                  type: string
-                state:
-                  maxLength: 5000
-                  type: string
-              title: source_address
-              type: object
-            email:
-              type: string
-            name:
-              maxLength: 5000
-              type: string
-            phone:
-              maxLength: 5000
-              type: string
-          title: owner
-          type: object
-        source_order:
-          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna) sources before you can charge it.
-          properties:
-            items:
-              items:
-                properties:
-                  amount:
-                    type: integer
-                  currency:
-                    type: string
-                  description:
-                    maxLength: 1000
-                    type: string
-                  parent:
-                    maxLength: 5000
-                    type: string
-                  quantity:
-                    type: integer
-                  type:
-                    enum:
-                    - discount
-                    - shipping
-                    - sku
-                    - tax
-                    maxLength: 5000
-                    type: string
-                title: order_item_specs
-                type: object
-              type: array
-            shipping:
-              properties:
-                address:
-                  properties:
-                    city:
-                      maxLength: 5000
-                      type: string
-                    country:
-                      maxLength: 5000
-                      type: string
-                    line1:
-                      maxLength: 5000
-                      type: string
-                    line2:
-                      maxLength: 5000
-                      type: string
-                    postal_code:
-                      maxLength: 5000
-                      type: string
-                    state:
-                      maxLength: 5000
-                      type: string
-                  required:
-                  - line1
-                  title: address
-                  type: object
-                carrier:
-                  maxLength: 5000
-                  type: string
-                name:
-                  maxLength: 5000
-                  type: string
-                phone:
-                  maxLength: 5000
-                  type: string
-                tracking_number:
-                  maxLength: 5000
-                  type: string
-              required:
-              - address
-              title: order_shipping
-              type: object
-          title: order_params
-          type: object
-    GetSourcesSourceRequest:
+          type: array
+    GetSourcesSourceMandateNotificationsMandateNotificationRequest:
       type: object
       properties: {}
     PostSourcesRequest:
@@ -886,26 +689,304 @@ components:
           - single_use
           maxLength: 5000
           type: string
-    PostSourcesSourceVerifyRequest:
+    ApmsSourcesSourceTransactionList:
       type: object
       required:
-      - values
+      - data
+      - has_more
+      - object
+      - url
       properties:
+        data:
+          items:
+            $ref: '#/components/schemas/source_transaction'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostSourcesSourceRequest:
+      type: object
+      properties:
+        amount:
+          description: Amount associated with the source.
+          type: integer
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-        values:
-          description: The values needed to verify the source.
-          items:
-            maxLength: 5000
+        mandate:
+          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance status.
+          properties:
+            acceptance:
+              properties:
+                date:
+                  format: unix-time
+                  type: integer
+                ip:
+                  type: string
+                offline:
+                  properties:
+                    contact_email:
+                      type: string
+                  required:
+                  - contact_email
+                  title: mandate_offline_acceptance_params
+                  type: object
+                online:
+                  properties:
+                    date:
+                      format: unix-time
+                      type: integer
+                    ip:
+                      type: string
+                    user_agent:
+                      maxLength: 5000
+                      type: string
+                  title: mandate_online_acceptance_params
+                  type: object
+                status:
+                  enum:
+                  - accepted
+                  - pending
+                  - refused
+                  - revoked
+                  maxLength: 5000
+                  type: string
+                type:
+                  enum:
+                  - offline
+                  - online
+                  maxLength: 5000
+                  type: string
+                user_agent:
+                  maxLength: 5000
+                  type: string
+              required:
+              - status
+              title: mandate_acceptance_params
+              type: object
+            amount:
+              anyOf:
+              - type: integer
+              - enum:
+                - ''
+                type: string
+            currency:
+              type: string
+            interval:
+              enum:
+              - one_time
+              - scheduled
+              - variable
+              maxLength: 5000
+              type: string
+            notification_method:
+              enum:
+              - deprecated_none
+              - email
+              - manual
+              - none
+              - stripe_email
+              maxLength: 5000
+              type: string
+          title: mandate_params
+          type: object
+        metadata:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - enum:
+            - ''
             type: string
-          type: array
-    GetSourcesSourceSourceTransactionsSourceTransactionRequest:
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+        owner:
+          description: Information about the owner of the payment instrument that may be used or required by particular source types.
+          properties:
+            address:
+              properties:
+                city:
+                  maxLength: 5000
+                  type: string
+                country:
+                  maxLength: 5000
+                  type: string
+                line1:
+                  maxLength: 5000
+                  type: string
+                line2:
+                  maxLength: 5000
+                  type: string
+                postal_code:
+                  maxLength: 5000
+                  type: string
+                state:
+                  maxLength: 5000
+                  type: string
+              title: source_address
+              type: object
+            email:
+              type: string
+            name:
+              maxLength: 5000
+              type: string
+            phone:
+              maxLength: 5000
+              type: string
+          title: owner
+          type: object
+        source_order:
+          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna) sources before you can charge it.
+          properties:
+            items:
+              items:
+                properties:
+                  amount:
+                    type: integer
+                  currency:
+                    type: string
+                  description:
+                    maxLength: 1000
+                    type: string
+                  parent:
+                    maxLength: 5000
+                    type: string
+                  quantity:
+                    type: integer
+                  type:
+                    enum:
+                    - discount
+                    - shipping
+                    - sku
+                    - tax
+                    maxLength: 5000
+                    type: string
+                title: order_item_specs
+                type: object
+              type: array
+            shipping:
+              properties:
+                address:
+                  properties:
+                    city:
+                      maxLength: 5000
+                      type: string
+                    country:
+                      maxLength: 5000
+                      type: string
+                    line1:
+                      maxLength: 5000
+                      type: string
+                    line2:
+                      maxLength: 5000
+                      type: string
+                    postal_code:
+                      maxLength: 5000
+                      type: string
+                    state:
+                      maxLength: 5000
+                      type: string
+                  required:
+                  - line1
+                  title: address
+                  type: object
+                carrier:
+                  maxLength: 5000
+                  type: string
+                name:
+                  maxLength: 5000
+                  type: string
+                phone:
+                  maxLength: 5000
+                  type: string
+                tracking_number:
+                  maxLength: 5000
+                  type: string
+              required:
+              - address
+              title: order_shipping
+              type: object
+          title: order_params
+          type: object
+    GetSourcesSourceRequest:
       type: object
       properties: {}
+    source_mandate_notification:
+      description: 'Source mandate notifications should be created when a notification related to
+
+        a source mandate must be sent to the payer. They will trigger a webhook or
+
+        deliver an email to the customer.'
+      properties:
+        acss_debit:
+          $ref: '#/components/schemas/source_mandate_notification_acss_debit_data'
+        amount:
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.
+          type:
+          - integer
+          - 'null'
+        bacs_debit:
+          $ref: '#/components/schemas/source_mandate_notification_bacs_debit_data'
+        created:
+          description: Time at which the object was created. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type: integer
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - source_mandate_notification
+          type: string
+        reason:
+          description: The reason of the mandate notification. Valid reasons are `mandate_confirmed` or `debit_initiated`.
+          maxLength: 5000
+          type: string
+        sepa_debit:
+          $ref: '#/components/schemas/source_mandate_notification_sepa_debit_data'
+        source:
+          $ref: '#/components/schemas/source'
+        status:
+          description: The status of the mandate notification. Valid statuses are `pending` or `submitted`.
+          maxLength: 5000
+          type: string
+        type:
+          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.
+          maxLength: 5000
+          type: string
+      required:
+      - created
+      - id
+      - livemode
+      - object
+      - reason
+      - source
+      - status
+      - type
+      title: SourceMandateNotification
+      type: object
+      x-expandableFields:
+      - acss_debit
+      - bacs_debit
+      - sepa_debit
+      - source
+      x-resourceId: source_mandate_notification
     source_transaction:
       description: 'Some payment methods have no required amount that a customer must send.
 
@@ -994,9 +1075,14 @@ components:
       - paper_check
       - sepa_credit_transfer
       x-resourceId: source_transaction
-    GetSourcesSourceMandateNotificationsMandateNotificationRequest:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
       type: object
-      properties: {}
     source:
       description: '`Source` objects allow you to accept a variety of payment methods. They
 
@@ -1167,92 +1253,6 @@ components:
       - redirect
       - source_order
       x-resourceId: source
-    source_mandate_notification:
-      description: 'Source mandate notifications should be created when a notification related to
-
-        a source mandate must be sent to the payer. They will trigger a webhook or
-
-        deliver an email to the customer.'
-      properties:
-        acss_debit:
-          $ref: '#/components/schemas/source_mandate_notification_acss_debit_data'
-        amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.
-          type:
-          - integer
-          - 'null'
-        bacs_debit:
-          $ref: '#/components/schemas/source_mandate_notification_bacs_debit_data'
-        created:
-          description: Time at which the object was created. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type: integer
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - source_mandate_notification
-          type: string
-        reason:
-          description: The reason of the mandate notification. Valid reasons are `mandate_confirmed` or `debit_initiated`.
-          maxLength: 5000
-          type: string
-        sepa_debit:
-          $ref: '#/components/schemas/source_mandate_notification_sepa_debit_data'
-        source:
-          $ref: '#/components/schemas/source'
-        status:
-          description: The status of the mandate notification. Valid statuses are `pending` or `submitted`.
-          maxLength: 5000
-          type: string
-        type:
-          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.
-          maxLength: 5000
-          type: string
-      required:
-      - created
-      - id
-      - livemode
-      - object
-      - reason
-      - source
-      - status
-      - type
-      title: SourceMandateNotification
+    GetSourcesSourceSourceTransactionsSourceTransactionRequest:
       type: object
-      x-expandableFields:
-      - acss_debit
-      - bacs_debit
-      - sepa_debit
-      - source
-      x-resourceId: source_mandate_notification
-    ApmsSourcesSourceTransactionList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/source_transaction'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
+      properties: {}

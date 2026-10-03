@@ -518,14 +518,6 @@ components:
             - ''
             type: string
           description: A URL of a publicly-accessible webpage for this product.
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     deleted_product:
       description: ''
       properties:
@@ -551,7 +543,7 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: deleted_product
-    SearchResult:
+    ProductList:
       type: object
       required:
       - data
@@ -560,30 +552,23 @@ components:
       - url
       properties:
         data:
+          description: Details about each object.
           items:
             $ref: '#/components/schemas/product'
           type: array
         has_more:
+          description: True if this list has another page of items after this one that can be fetched.
           type: boolean
-        next_page:
-          maxLength: 5000
-          type:
-          - string
-          - 'null'
         object:
-          description: String representing the object's type. Objects of the same type share the same value.
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
           enum:
-          - search_result
+          - list
           type: string
-        total_count:
-          description: The total number of objects that match the query, only accurate up to 10,000.
-          type: integer
         url:
+          description: The URL where this list can be accessed.
           maxLength: 5000
+          pattern: ^/v1/products
           type: string
-    DeleteProductsIdRequest:
-      type: object
-      properties: {}
     GetProductsSearchRequest:
       type: object
       properties: {}
@@ -720,35 +705,6 @@ components:
       - package_dimensions
       - tax_code
       x-resourceId: product
-    GetProductsRequest:
-      type: object
-      properties: {}
-    ProductList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/product'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/products
-          type: string
     PostProductsRequest:
       type: object
       required:
@@ -922,5 +878,49 @@ components:
           type: string
         url:
           description: A URL of a publicly-accessible webpage for this product.
+          maxLength: 5000
+          type: string
+    DeleteProductsIdRequest:
+      type: object
+      properties: {}
+    GetProductsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    SearchResult:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/product'
+          type: array
+        has_more:
+          type: boolean
+        next_page:
+          maxLength: 5000
+          type:
+          - string
+          - 'null'
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - search_result
+          type: string
+        total_count:
+          description: The total number of objects that match the query, only accurate up to 10,000.
+          type: integer
+        url:
           maxLength: 5000
           type: string

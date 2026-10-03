@@ -464,6 +464,34 @@ components:
       - status
       - status_transitions
       - updated
+    billing.meter_event_summary:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - billing.meter_event_summary
+        aggregated_value:
+          type: number
+        end_time:
+          type: integer
+        livemode:
+          type: boolean
+        meter:
+          type: string
+        start_time:
+          type: integer
+      required:
+      - id
+      - object
+      - aggregated_value
+      - end_time
+      - livemode
+      - meter
+      - start_time
     billing.meter_event:
       type: object
       properties:
@@ -494,31 +522,3 @@ components:
       - livemode
       - payload
       - timestamp
-    billing.meter_event_summary:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-          - billing.meter_event_summary
-        aggregated_value:
-          type: number
-        end_time:
-          type: integer
-        livemode:
-          type: boolean
-        meter:
-          type: string
-        start_time:
-          type: integer
-      required:
-      - id
-      - object
-      - aggregated_value
-      - end_time
-      - livemode
-      - meter
-      - start_time

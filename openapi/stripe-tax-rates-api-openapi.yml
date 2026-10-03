@@ -244,39 +244,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    TaxRatesList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/tax_rate'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/tax_rates
-          type: string
     tax_rate:
       description: 'Tax rates can be applied to [invoices](https://stripe.com/docs/billing/invoices/tax-rates), [subscriptions](https://stripe.com/docs/billing/subscriptions/taxes) and [Checkout Sessions](https://stripe.com/docs/payments/checkout/set-up-a-subscription#tax-rates) to collect tax.
 
@@ -385,9 +352,39 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: tax_rate
-    GetTaxRatesRequest:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
       type: object
-      properties: {}
+    TaxRatesList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/tax_rate'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/tax_rates
+          type: string
     PostTaxRatesRequest:
       type: object
       required:
@@ -452,9 +449,6 @@ components:
           - service_tax
           - vat
           type: string
-    GetTaxRatesTaxRateRequest:
-      type: object
-      properties: {}
     PostTaxRatesTaxRateRequest:
       type: object
       properties:
@@ -513,6 +507,12 @@ components:
           - service_tax
           - vat
           type: string
+    GetTaxRatesRequest:
+      type: object
+      properties: {}
+    GetTaxRatesTaxRateRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

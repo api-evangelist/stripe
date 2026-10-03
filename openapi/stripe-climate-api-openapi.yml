@@ -792,135 +792,36 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
+    GetClimateOrdersOrderRequest:
       type: object
-    PostClimateOrdersRequest:
+      properties: {}
+    PostClimateReservationsOrderConfirmRequest:
       type: object
-      required:
-      - product
       properties:
-        amount:
-          description: Requested amount of carbon removal units. Either this or `metric_tons` must be specified.
-          type: integer
-        beneficiary:
-          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
-          properties:
-            public_name:
-              maxLength: 5000
-              type: string
-          required:
-          - public_name
-          title: beneficiary_params
-          type: object
-        currency:
-          description: Request currency for the order as a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a supported [settlement currency for your account](https://stripe.com/docs/currencies). If omitted, the account's default currency will be used.
-          maxLength: 5000
-          type: string
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-        metric_tons:
-          description: Requested number of tons for the order. Either this or `amount` must be specified.
-          format: decimal
-          type: string
-        product:
-          description: Unique identifier of the Climate product.
-          maxLength: 5000
-          type: string
-    PostClimateReservationsOrderRequest:
+    PostClimateOrdersOrderCancelRequest:
       type: object
       properties:
-        beneficiary:
-          anyOf:
-          - properties:
-              public_name:
-                anyOf:
-                - maxLength: 5000
-                  type: string
-                - enum:
-                  - ''
-                  type: string
-            required:
-            - public_name
-            title: beneficiary_params
-            type: object
-          - enum:
-            - ''
-            type: string
-          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-        metadata:
-          additionalProperties:
-            type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
-          type: object
-    climate.supplier:
-      description: A supplier of carbon removal.
-      properties:
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        info_url:
-          description: Link to a webpage to learn more about the supplier.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        locations:
-          description: The locations in which this supplier operates.
-          items:
-            $ref: '#/components/schemas/climate_removals_location'
-          type: array
-        name:
-          description: Name of this carbon removal supplier.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object’s type. Objects of the same type share the same value.
-          enum:
-          - climate.supplier
-          type: string
-        removal_pathway:
-          description: The scientific pathway used for carbon removal.
-          enum:
-          - biomass_carbon_removal_and_storage
-          - direct_air_capture
-          - enhanced_weathering
-          type: string
-      required:
-      - id
-      - info_url
-      - livemode
-      - locations
-      - name
-      - object
-      - removal_pathway
-      title: ClimateRemovalsSuppliers
+    GetClimateReservationsRequest:
       type: object
-      x-expandableFields:
-      - locations
-      x-resourceId: climate.supplier
+      properties: {}
+    GetClimateReservationsOrderRequest:
+      type: object
+      properties: {}
+    GetClimateSuppliersRequest:
+      type: object
+      properties: {}
     climate.product:
       description: 'A Climate product represents a type of carbon removal unit available for reservation.
 
@@ -984,6 +885,184 @@ components:
       - current_prices_per_metric_ton
       - suppliers
       x-resourceId: climate.product
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    PostClimateOrdersOrderRequest:
+      type: object
+      properties:
+        beneficiary:
+          anyOf:
+          - properties:
+              public_name:
+                anyOf:
+                - maxLength: 5000
+                  type: string
+                - enum:
+                  - ''
+                  type: string
+            required:
+            - public_name
+            title: beneficiary_params
+            type: object
+          - enum:
+            - ''
+            type: string
+          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+    PostClimateReservationsOrderCancelRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    ClimateRemovalsProductsList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/climate.product'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/climate/products
+          type: string
+    GetClimateOrdersRequest:
+      type: object
+      properties: {}
+    climate.supplier:
+      description: A supplier of carbon removal.
+      properties:
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        info_url:
+          description: Link to a webpage to learn more about the supplier.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        locations:
+          description: The locations in which this supplier operates.
+          items:
+            $ref: '#/components/schemas/climate_removals_location'
+          type: array
+        name:
+          description: Name of this carbon removal supplier.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object’s type. Objects of the same type share the same value.
+          enum:
+          - climate.supplier
+          type: string
+        removal_pathway:
+          description: The scientific pathway used for carbon removal.
+          enum:
+          - biomass_carbon_removal_and_storage
+          - direct_air_capture
+          - enhanced_weathering
+          type: string
+      required:
+      - id
+      - info_url
+      - livemode
+      - locations
+      - name
+      - object
+      - removal_pathway
+      title: ClimateRemovalsSuppliers
+      type: object
+      x-expandableFields:
+      - locations
+      x-resourceId: climate.supplier
+    ClimateRemovalsSuppliersList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/climate.supplier'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/climate/suppliers
+          type: string
+    ClimateRemovalsOrdersList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/climate.order'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/climate/orders
+          type: string
+    GetClimateSuppliersSupplierRequest:
+      type: object
+      properties: {}
     PostClimateReservationsRequest:
       type: object
       required:
@@ -1025,89 +1104,53 @@ components:
           description: Unique identifier of the Climate product.
           maxLength: 5000
           type: string
-    PostClimateReservationsOrderCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetClimateSuppliersRequest:
+    GetClimateProductsRequest:
       type: object
       properties: {}
     GetClimateProductsProductRequest:
       type: object
       properties: {}
-    PostClimateReservationsOrderConfirmRequest:
+    PostClimateOrdersRequest:
       type: object
+      required:
+      - product
       properties:
+        amount:
+          description: Requested amount of carbon removal units. Either this or `metric_tons` must be specified.
+          type: integer
+        beneficiary:
+          description: Publicly sharable reference for the end beneficiary of carbon removal. Assumed to be the Stripe account if not set.
+          properties:
+            public_name:
+              maxLength: 5000
+              type: string
+          required:
+          - public_name
+          title: beneficiary_params
+          type: object
+        currency:
+          description: Request currency for the order as a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a supported [settlement currency for your account](https://stripe.com/docs/currencies). If omitted, the account's default currency will be used.
+          maxLength: 5000
+          type: string
         expand:
           description: Specifies which fields in the response should be expanded.
           items:
             maxLength: 5000
             type: string
           type: array
-    ClimateRemovalsSuppliersList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/climate.supplier'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
+        metadata:
+          additionalProperties:
+            type: string
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          type: object
+        metric_tons:
+          description: Requested number of tons for the order. Either this or `amount` must be specified.
+          format: decimal
           type: string
-        url:
-          description: The URL where this list can be accessed.
+        product:
+          description: Unique identifier of the Climate product.
           maxLength: 5000
-          pattern: ^/v1/climate/suppliers
           type: string
-    GetClimateReservationsOrderRequest:
-      type: object
-      properties: {}
-    GetClimateReservationsRequest:
-      type: object
-      properties: {}
-    ClimateRemovalsOrdersList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/climate.order'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/climate/orders
-          type: string
-    GetClimateOrdersOrderRequest:
-      type: object
-      properties: {}
     climate.order:
       description: 'Orders represent your intent to purchase a particular Climate product. When you create an order, the
 
@@ -1248,25 +1291,7 @@ components:
       - delivery_details
       - product
       x-resourceId: climate.order
-    GetClimateSuppliersSupplierRequest:
-      type: object
-      properties: {}
-    PostClimateOrdersOrderCancelRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    GetClimateOrdersRequest:
-      type: object
-      properties: {}
-    GetClimateProductsRequest:
-      type: object
-      properties: {}
-    PostClimateOrdersOrderRequest:
+    PostClimateReservationsOrderRequest:
       type: object
       properties:
         beneficiary:
@@ -1298,31 +1323,6 @@ components:
             type: string
           description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
           type: object
-    ClimateRemovalsProductsList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/climate.product'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/climate/products
-          type: string
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
