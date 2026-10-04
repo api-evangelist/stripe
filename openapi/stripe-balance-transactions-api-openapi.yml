@@ -190,6 +190,20 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    GetBalanceTransactionsIdRequest:
+      type: object
+      properties: {}
+    GetBalanceTransactionsRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     BalanceTransactionsList:
       type: object
       required:
@@ -215,9 +229,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/balance_transactions
           type: string
-    GetBalanceTransactionsIdRequest:
-      type: object
-      properties: {}
     balance_transaction:
       description: 'Balance transactions represent funds moving through your Stripe account.
 
@@ -388,17 +399,6 @@ components:
       - fee_details
       - source
       x-resourceId: balance_transaction
-    GetBalanceTransactionsRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

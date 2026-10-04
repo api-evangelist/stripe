@@ -217,14 +217,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     file:
       description: 'This object represents files hosted on Stripe''s servers. You can upload
 
@@ -348,32 +340,7 @@ components:
       x-expandableFields:
       - links
       x-resourceId: file
-    FileResourceFileList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/file'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/files
-          type: string
-    GetFilesRequest:
+    GetFilesFileRequest:
       type: object
       properties: {}
     PostFilesRequest:
@@ -427,7 +394,40 @@ components:
           - terminal_reader_splashscreen
           type: string
           x-stripeBypassValidation: true
-    GetFilesFileRequest:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    FileResourceFileList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/file'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/files
+          type: string
+    GetFilesRequest:
       type: object
       properties: {}
   securitySchemes:

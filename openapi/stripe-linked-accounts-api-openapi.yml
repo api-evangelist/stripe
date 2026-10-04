@@ -323,6 +323,27 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PostLinkedAccountsAccountRefreshRequest:
+      type: object
+      required:
+      - features
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        features:
+          description: The list of account features that you would like to refresh.
+          items:
+            enum:
+            - balance
+            - ownership
+            - transactions
+            type: string
+            x-stripeBypassValidation: true
+          type: array
     GetLinkedAccountsAccountOwnersRequest:
       type: object
       properties: {}
@@ -468,61 +489,6 @@ components:
       - ownership_refresh
       - transaction_refresh
       x-resourceId: financial_connections.account
-    PostLinkedAccountsAccountRefreshRequest:
-      type: object
-      required:
-      - features
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        features:
-          description: The list of account features that you would like to refresh.
-          items:
-            enum:
-            - balance
-            - ownership
-            - transactions
-            type: string
-            x-stripeBypassValidation: true
-          type: array
-    PostLinkedAccountsAccountDisconnectRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    BankConnectionsResourceOwnerList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          description: Details about each object.
-          items:
-            $ref: '#/components/schemas/financial_connections.account_owner'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     error:
       description: An error response from the Stripe API
       properties:
@@ -531,9 +497,6 @@ components:
       required:
       - error
       type: object
-    GetLinkedAccountsRequest:
-      type: object
-      properties: {}
     BankConnectionsResourceLinkedAccountList:
       type: object
       required:
@@ -560,6 +523,43 @@ components:
           maxLength: 5000
           pattern: ^/v1/financial_connections/accounts
           type: string
+    BankConnectionsResourceOwnerList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          description: Details about each object.
+          items:
+            $ref: '#/components/schemas/financial_connections.account_owner'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    PostLinkedAccountsAccountDisconnectRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    GetLinkedAccountsRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

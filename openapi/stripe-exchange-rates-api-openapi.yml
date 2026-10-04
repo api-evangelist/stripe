@@ -134,6 +134,42 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ExchangeRateList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/exchange_rate'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/exchange_rates
+          type: string
+    GetExchangeRatesRequest:
+      type: object
+      properties: {}
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     exchange_rate:
       description: '`ExchangeRate` objects allow you to determine the rates that Stripe is currently
 
@@ -202,42 +238,6 @@ components:
       type: object
       x-expandableFields: []
       x-resourceId: exchange_rate
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    ExchangeRateList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/exchange_rate'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/exchange_rates
-          type: string
-    GetExchangeRatesRequest:
-      type: object
-      properties: {}
     GetExchangeRatesRateIdRequest:
       type: object
       properties: {}

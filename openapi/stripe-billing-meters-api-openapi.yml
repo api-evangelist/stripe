@@ -381,6 +381,36 @@ paths:
       - Billing Meters
 components:
   schemas:
+    billing.meter_event:
+      type: object
+      properties:
+        object:
+          type: string
+          enum:
+          - billing.meter_event
+        created:
+          type: integer
+        event_name:
+          type: string
+        identifier:
+          type:
+          - string
+          - 'null'
+        livemode:
+          type: boolean
+        payload:
+          type: object
+          additionalProperties:
+            type: string
+        timestamp:
+          type: integer
+      required:
+      - object
+      - created
+      - event_name
+      - livemode
+      - payload
+      - timestamp
     error:
       type: object
       properties:
@@ -395,6 +425,34 @@ components:
               type: string
             param:
               type: string
+    billing.meter_event_summary:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 5000
+        object:
+          type: string
+          enum:
+          - billing.meter_event_summary
+        aggregated_value:
+          type: number
+        end_time:
+          type: integer
+        livemode:
+          type: boolean
+        meter:
+          type: string
+        start_time:
+          type: integer
+      required:
+      - id
+      - object
+      - aggregated_value
+      - end_time
+      - livemode
+      - meter
+      - start_time
     billing.meter:
       type: object
       properties:
@@ -464,61 +522,3 @@ components:
       - status
       - status_transitions
       - updated
-    billing.meter_event_summary:
-      type: object
-      properties:
-        id:
-          type: string
-          maxLength: 5000
-        object:
-          type: string
-          enum:
-          - billing.meter_event_summary
-        aggregated_value:
-          type: number
-        end_time:
-          type: integer
-        livemode:
-          type: boolean
-        meter:
-          type: string
-        start_time:
-          type: integer
-      required:
-      - id
-      - object
-      - aggregated_value
-      - end_time
-      - livemode
-      - meter
-      - start_time
-    billing.meter_event:
-      type: object
-      properties:
-        object:
-          type: string
-          enum:
-          - billing.meter_event
-        created:
-          type: integer
-        event_name:
-          type: string
-        identifier:
-          type:
-          - string
-          - 'null'
-        livemode:
-          type: boolean
-        payload:
-          type: object
-          additionalProperties:
-            type: string
-        timestamp:
-          type: integer
-      required:
-      - object
-      - created
-      - event_name
-      - livemode
-      - payload
-      - timestamp

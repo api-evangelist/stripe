@@ -267,9 +267,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetPromotionCodesPromotionCodeRequest:
-      type: object
-      properties: {}
     PostPromotionCodesRequest:
       type: object
       required:
@@ -327,31 +324,6 @@ components:
               type: string
           title: restrictions_params
           type: object
-    PromotionCodesResourcePromotionCodeList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/promotion_code'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/promotion_codes
-          type: string
     PostPromotionCodesPromotionCodeRequest:
       type: object
       properties:
@@ -386,9 +358,6 @@ components:
               type: object
           title: restrictions_params
           type: object
-    GetPromotionCodesRequest:
-      type: object
-      properties: {}
     error:
       description: An error response from the Stripe API
       properties:
@@ -397,6 +366,37 @@ components:
       required:
       - error
       type: object
+    GetPromotionCodesPromotionCodeRequest:
+      type: object
+      properties: {}
+    GetPromotionCodesRequest:
+      type: object
+      properties: {}
+    PromotionCodesResourcePromotionCodeList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/promotion_code'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/promotion_codes
+          type: string
     promotion_code:
       description: 'A Promotion Code represents a customer-redeemable code for a [coupon](https://stripe.com/docs/api#coupons). It can be used to
 

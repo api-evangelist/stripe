@@ -260,34 +260,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    DisputeList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/dispute'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/disputes
-          type: string
-    GetDisputesDisputeRequest:
-      type: object
-      properties: {}
     PostDisputesDisputeRequest:
       type: object
       properties:
@@ -386,23 +358,6 @@ components:
         submit:
           description: Whether to immediately submit evidence to the bank. If `false`, evidence is staged on the dispute. Staged evidence is visible in the API and Dashboard, and can be submitted to the bank by making another request with this attribute set to `true` (the default).
           type: boolean
-    PostDisputesDisputeCloseRequest:
-      type: object
-      properties:
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
     dispute:
       description: 'A dispute occurs when a customer questions your charge with their card issuer.
 
@@ -513,7 +468,52 @@ components:
       - payment_intent
       - payment_method_details
       x-resourceId: dispute
+    DisputeList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/dispute'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/disputes
+          type: string
+    PostDisputesDisputeCloseRequest:
+      type: object
+      properties:
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     GetDisputesRequest:
+      type: object
+      properties: {}
+    GetDisputesDisputeRequest:
       type: object
       properties: {}
   securitySchemes:

@@ -134,43 +134,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SigmaScheduledQueryRunList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/scheduled_query_run'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/sigma/scheduled_query_runs
-          type: string
     GetSigmaScheduledQueryRunsRequest:
-      type: object
-      properties: {}
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    GetSigmaScheduledQueryRunsScheduledQueryRunRequest:
       type: object
       properties: {}
     scheduled_query_run:
@@ -240,6 +204,42 @@ components:
       - error
       - file
       x-resourceId: scheduled_query_run
+    SigmaScheduledQueryRunList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/scheduled_query_run'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/sigma/scheduled_query_runs
+          type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
+    GetSigmaScheduledQueryRunsScheduledQueryRunRequest:
+      type: object
+      properties: {}
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

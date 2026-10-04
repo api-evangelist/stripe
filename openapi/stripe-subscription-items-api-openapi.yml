@@ -397,6 +397,154 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    SubscriptionsItemsSubscriptionItemList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/subscription_item'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          pattern: ^/v1/subscription_items
+          type: string
+    usage_record:
+      description: 'Usage records allow you to report customer usage and metrics to Stripe for
+
+        metered billing of subscription prices.
+
+
+        Related guide: [Metered billing](https://stripe.com/docs/billing/subscriptions/metered-billing)'
+      properties:
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        livemode:
+          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - usage_record
+          type: string
+        quantity:
+          description: The usage quantity for the specified date.
+          type: integer
+        subscription_item:
+          description: The ID of the subscription item this usage record contains data for.
+          maxLength: 5000
+          type: string
+        timestamp:
+          description: The timestamp when this usage occurred.
+          format: unix-time
+          type: integer
+      required:
+      - id
+      - livemode
+      - object
+      - quantity
+      - subscription_item
+      - timestamp
+      title: UsageRecord
+      type: object
+      x-expandableFields: []
+      x-resourceId: usage_record
+    PostSubscriptionItemsSubscriptionItemUsageRecordsRequest:
+      type: object
+      required:
+      - quantity
+      properties:
+        action:
+          description: Valid values are `increment` (default) or `set`. When using `increment` the specified `quantity` will be added to the usage at the specified timestamp. The `set` action will overwrite the usage quantity at that timestamp. If the subscription has [billing thresholds](https://stripe.com/docs/api/subscriptions/object#subscription_object-billing_thresholds), `increment` is the only allowed value.
+          enum:
+          - increment
+          - set
+          type: string
+        expand:
+          description: Specifies which fields in the response should be expanded.
+          items:
+            maxLength: 5000
+            type: string
+          type: array
+        quantity:
+          description: The usage quantity for the specified timestamp.
+          type: integer
+        timestamp:
+          anyOf:
+          - enum:
+            - now
+            maxLength: 5000
+            type: string
+          - format: unix-time
+            type: integer
+          description: The timestamp for the usage event. This timestamp must be within the current billing period of the subscription of the provided `subscription_item`, and must not be in the future. When passing `"now"`, Stripe records usage for the current time. Default is `"now"` if a value is not provided.
+    DeleteSubscriptionItemsItemRequest:
+      type: object
+      properties:
+        clear_usage:
+          description: Delete all usage for the given subscription item. Allowed only when the current plan's `usage_type` is `metered`.
+          type: boolean
+        proration_behavior:
+          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
+          enum:
+          - always_invoice
+          - create_prorations
+          - none
+          type: string
+        proration_date:
+          description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
+          format: unix-time
+          type: integer
+    GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest:
+      type: object
+      properties: {}
+    UsageEventsResourceUsageRecordSummaryList:
+      type: object
+      required:
+      - data
+      - has_more
+      - object
+      - url
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/usage_record_summary'
+          type: array
+        has_more:
+          description: True if this list has another page of items after this one that can be fetched.
+          type: boolean
+        object:
+          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
+          enum:
+          - list
+          type: string
+        url:
+          description: The URL where this list can be accessed.
+          maxLength: 5000
+          type: string
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     PostSubscriptionItemsItemRequest:
       type: object
       properties:
@@ -516,6 +664,34 @@ components:
             - ''
             type: string
           description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
+    deleted_subscription_item:
+      description: ''
+      properties:
+        deleted:
+          description: Always true for a deleted object
+          enum:
+          - true
+          type: boolean
+        id:
+          description: Unique identifier for the object.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - subscription_item
+          type: string
+      required:
+      - deleted
+      - id
+      - object
+      title: DeletedSubscriptionItem
+      type: object
+      x-expandableFields: []
+      x-resourceId: deleted_subscription_item
+    GetSubscriptionItemsItemRequest:
+      type: object
+      properties: {}
     subscription_item:
       description: 'Subscription items allow you to create customer subscriptions with more than
 
@@ -573,33 +749,6 @@ components:
       - price
       - tax_rates
       x-resourceId: subscription_item
-    GetSubscriptionItemsSubscriptionItemUsageRecordSummariesRequest:
-      type: object
-      properties: {}
-    UsageEventsResourceUsageRecordSummaryList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/usage_record_summary'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          type: string
     PostSubscriptionItemsRequest:
       type: object
       required:
@@ -718,158 +867,9 @@ components:
             - ''
             type: string
           description: A list of [Tax Rate](https://stripe.com/docs/api/tax_rates) ids. These Tax Rates will override the [`default_tax_rates`](https://stripe.com/docs/api/subscriptions/create#create_subscription-default_tax_rates) on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
-    GetSubscriptionItemsItemRequest:
-      type: object
-      properties: {}
-    usage_record:
-      description: 'Usage records allow you to report customer usage and metrics to Stripe for
-
-        metered billing of subscription prices.
-
-
-        Related guide: [Metered billing](https://stripe.com/docs/billing/subscriptions/metered-billing)'
-      properties:
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        livemode:
-          description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - usage_record
-          type: string
-        quantity:
-          description: The usage quantity for the specified date.
-          type: integer
-        subscription_item:
-          description: The ID of the subscription item this usage record contains data for.
-          maxLength: 5000
-          type: string
-        timestamp:
-          description: The timestamp when this usage occurred.
-          format: unix-time
-          type: integer
-      required:
-      - id
-      - livemode
-      - object
-      - quantity
-      - subscription_item
-      - timestamp
-      title: UsageRecord
-      type: object
-      x-expandableFields: []
-      x-resourceId: usage_record
     GetSubscriptionItemsRequest:
       type: object
       properties: {}
-    SubscriptionsItemsSubscriptionItemList:
-      type: object
-      required:
-      - data
-      - has_more
-      - object
-      - url
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/subscription_item'
-          type: array
-        has_more:
-          description: True if this list has another page of items after this one that can be fetched.
-          type: boolean
-        object:
-          description: String representing the object's type. Objects of the same type share the same value. Always has the value `list`.
-          enum:
-          - list
-          type: string
-        url:
-          description: The URL where this list can be accessed.
-          maxLength: 5000
-          pattern: ^/v1/subscription_items
-          type: string
-    DeleteSubscriptionItemsItemRequest:
-      type: object
-      properties:
-        clear_usage:
-          description: Delete all usage for the given subscription item. Allowed only when the current plan's `usage_type` is `metered`.
-          type: boolean
-        proration_behavior:
-          description: Determines how to handle [prorations](https://stripe.com/docs/subscriptions/billing-cycle#prorations) when the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
-          enum:
-          - always_invoice
-          - create_prorations
-          - none
-          type: string
-        proration_date:
-          description: If set, the proration will be calculated as though the subscription was updated at the given time. This can be used to apply the same proration that was previewed with the [upcoming invoice](https://stripe.com/docs/api#retrieve_customer_invoice) endpoint.
-          format: unix-time
-          type: integer
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
-    PostSubscriptionItemsSubscriptionItemUsageRecordsRequest:
-      type: object
-      required:
-      - quantity
-      properties:
-        action:
-          description: Valid values are `increment` (default) or `set`. When using `increment` the specified `quantity` will be added to the usage at the specified timestamp. The `set` action will overwrite the usage quantity at that timestamp. If the subscription has [billing thresholds](https://stripe.com/docs/api/subscriptions/object#subscription_object-billing_thresholds), `increment` is the only allowed value.
-          enum:
-          - increment
-          - set
-          type: string
-        expand:
-          description: Specifies which fields in the response should be expanded.
-          items:
-            maxLength: 5000
-            type: string
-          type: array
-        quantity:
-          description: The usage quantity for the specified timestamp.
-          type: integer
-        timestamp:
-          anyOf:
-          - enum:
-            - now
-            maxLength: 5000
-            type: string
-          - format: unix-time
-            type: integer
-          description: The timestamp for the usage event. This timestamp must be within the current billing period of the subscription of the provided `subscription_item`, and must not be in the future. When passing `"now"`, Stripe records usage for the current time. Default is `"now"` if a value is not provided.
-    deleted_subscription_item:
-      description: ''
-      properties:
-        deleted:
-          description: Always true for a deleted object
-          enum:
-          - true
-          type: boolean
-        id:
-          description: Unique identifier for the object.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - subscription_item
-          type: string
-      required:
-      - deleted
-      - id
-      - object
-      title: DeletedSubscriptionItem
-      type: object
-      x-expandableFields: []
-      x-resourceId: deleted_subscription_item
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

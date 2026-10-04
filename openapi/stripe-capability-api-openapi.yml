@@ -120,14 +120,65 @@ paths:
         ChooseTags: true
 components:
   schemas:
-    error:
-      description: An error response from the Stripe API
+    capability:
+      description: 'This is an object representing a capability for a Stripe account.
+
+
+        Related guide: [Account capabilities](https://stripe.com/docs/connect/account-capabilities)'
       properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
+        account:
+          anyOf:
+          - maxLength: 5000
+            type: string
+          - $ref: '#/components/schemas/account'
+          description: The account for which the capability enables functionality.
+          x-expansionResources:
+            oneOf:
+            - $ref: '#/components/schemas/account'
+        future_requirements:
+          $ref: '#/components/schemas/account_capability_future_requirements'
+        id:
+          description: The identifier for the capability.
+          maxLength: 5000
+          type: string
+        object:
+          description: String representing the object's type. Objects of the same type share the same value.
+          enum:
+          - capability
+          type: string
+        requested:
+          description: Whether the capability has been requested.
+          type: boolean
+        requested_at:
+          description: Time at which the capability was requested. Measured in seconds since the Unix epoch.
+          format: unix-time
+          type:
+          - integer
+          - 'null'
+        requirements:
+          $ref: '#/components/schemas/account_capability_requirements'
+        status:
+          description: The status of the capability. Can be `active`, `inactive`, `pending`, or `unrequested`.
+          enum:
+          - active
+          - disabled
+          - inactive
+          - pending
+          - unrequested
+          type: string
       required:
-      - error
+      - account
+      - id
+      - object
+      - requested
+      - status
+      title: AccountCapability
       type: object
+      x-expandableFields:
+      - account
+      - future_requirements
+      - requirements
+      x-resourceId: capability
     account:
       description: 'This is an object representing a Stripe account. You can retrieve it to see
 
@@ -439,62 +490,11 @@ components:
       - requirements
       - verification
       x-resourceId: person
-    capability:
-      description: 'This is an object representing a capability for a Stripe account.
-
-
-        Related guide: [Account capabilities](https://stripe.com/docs/connect/account-capabilities)'
+    error:
+      description: An error response from the Stripe API
       properties:
-        account:
-          anyOf:
-          - maxLength: 5000
-            type: string
-          - $ref: '#/components/schemas/account'
-          description: The account for which the capability enables functionality.
-          x-expansionResources:
-            oneOf:
-            - $ref: '#/components/schemas/account'
-        future_requirements:
-          $ref: '#/components/schemas/account_capability_future_requirements'
-        id:
-          description: The identifier for the capability.
-          maxLength: 5000
-          type: string
-        object:
-          description: String representing the object's type. Objects of the same type share the same value.
-          enum:
-          - capability
-          type: string
-        requested:
-          description: Whether the capability has been requested.
-          type: boolean
-        requested_at:
-          description: Time at which the capability was requested. Measured in seconds since the Unix epoch.
-          format: unix-time
-          type:
-          - integer
-          - 'null'
-        requirements:
-          $ref: '#/components/schemas/account_capability_requirements'
-        status:
-          description: The status of the capability. Can be `active`, `inactive`, `pending`, or `unrequested`.
-          enum:
-          - active
-          - disabled
-          - inactive
-          - pending
-          - unrequested
-          type: string
+        error:
+          $ref: '#/components/schemas/api_errors'
       required:
-      - account
-      - id
-      - object
-      - requested
-      - status
-      title: AccountCapability
+      - error
       type: object
-      x-expandableFields:
-      - account
-      - future_requirements
-      - requirements
-      x-resourceId: capability

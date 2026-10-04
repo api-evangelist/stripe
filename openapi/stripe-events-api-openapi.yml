@@ -179,7 +179,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error:
+      description: An error response from the Stripe API
+      properties:
+        error:
+          $ref: '#/components/schemas/api_errors'
+      required:
+      - error
+      type: object
     GetEventsRequest:
+      type: object
+      properties: {}
+    GetEventsIdRequest:
       type: object
       properties: {}
     event:
@@ -292,9 +303,6 @@ components:
       - data
       - request
       x-resourceId: event
-    GetEventsIdRequest:
-      type: object
-      properties: {}
     NotificationEventList:
       type: object
       required:
@@ -320,14 +328,6 @@ components:
           maxLength: 5000
           pattern: ^/v1/events
           type: string
-    error:
-      description: An error response from the Stripe API
-      properties:
-        error:
-          $ref: '#/components/schemas/api_errors'
-      required:
-      - error
-      type: object
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'
