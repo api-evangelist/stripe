@@ -1,0 +1,549 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-payout-schema.json",
+  "title": "Payout",
+  "description": "A `Payout` object is created when you receive funds from Stripe, or when you\ninitiate a payout to either a bank account or debit card of a [connected\nStripe account](/docs/connect/bank-debit-card-payouts). You can retrieve individual payouts,\nand list all payouts. Payouts are made on [varying\nschedules](/docs/connect/manage-payout-schedule), depending on your country and\nindustry.\n\nRelated guide: [Receiving payouts](https://stripe.com/docs/payouts)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-payouts-api-openapi.yml#/components/schemas/payout",
+  "properties": {
+    "amount": {
+      "description": "The amount (in cents (or local equivalent)) that transfers to your bank account or debit card.",
+      "type": "integer"
+    },
+    "arrival_date": {
+      "description": "Date that you can expect the payout to arrive in the bank. This factors in delays to account for weekends or bank holidays.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "automatic": {
+      "description": "Returns `true` if the payout is created by an [automated payout schedule](https://stripe.com/docs/payouts#payout-schedule) and `false` if it's [requested manually](https://stripe.com/docs/payouts#manual-payouts).",
+      "type": "boolean"
+    },
+    "balance_transaction": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/balance_transaction"
+        }
+      ],
+      "description": "ID of the balance transaction that describes the impact of this payout on your account balance.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/balance_transaction"
+          }
+        ]
+      }
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "description": {
+      "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "destination": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/bank_account"
+        },
+        {
+          "$ref": "#/$defs/card"
+        },
+        {
+          "$ref": "#/$defs/deleted_bank_account"
+        },
+        {
+          "$ref": "#/$defs/deleted_card"
+        }
+      ],
+      "description": "ID of the bank account or card the payout is sent to.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/bank_account"
+          },
+          {
+            "$ref": "#/$defs/card"
+          },
+          {
+            "$ref": "#/$defs/deleted_bank_account"
+          },
+          {
+            "$ref": "#/$defs/deleted_card"
+          }
+        ]
+      },
+      "x-stripeBypassValidation": true
+    },
+    "failure_balance_transaction": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/balance_transaction"
+        }
+      ],
+      "description": "If the payout fails or cancels, this is the ID of the balance transaction that reverses the initial balance transaction and returns the funds from the failed payout back in your balance.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/balance_transaction"
+          }
+        ]
+      }
+    },
+    "failure_code": {
+      "description": "Error code that provides a reason for a payout failure, if available. View our [list of failure codes](https://stripe.com/docs/api#payout_failures).",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "failure_message": {
+      "description": "Message that provides the reason for a payout failure, if available.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "method": {
+      "description": "The method used to send this payout, which can be `standard` or `instant`. `instant` is supported for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "payout"
+      ],
+      "type": "string"
+    },
+    "original_payout": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/payout"
+        }
+      ],
+      "description": "If the payout reverses another, this is the ID of the original payout.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/payout"
+          }
+        ]
+      }
+    },
+    "reconciliation_status": {
+      "description": "If `completed`, you can use the [Balance Transactions API](https://stripe.com/docs/api/balance_transactions/list#balance_transaction_list-payout) to list all balance transactions that are paid out in this payout.",
+      "enum": [
+        "completed",
+        "in_progress",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "reversed_by": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/payout"
+        }
+      ],
+      "description": "If the payout reverses, this is the ID of the payout that reverses this payout.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/payout"
+          }
+        ]
+      }
+    },
+    "source_type": {
+      "description": "The source balance this payout came from, which can be one of the following: `card`, `fpx`, or `bank_account`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "statement_descriptor": {
+      "description": "Extra information about a payout that displays on the user's bank statement.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "description": "Current status of the payout: `paid`, `pending`, `in_transit`, `canceled` or `failed`. A payout is `pending` until it's submitted to the bank, when it becomes `in_transit`. The status changes to `paid` if the transaction succeeds, or to `failed` or `canceled` (within 5 business days). Some payouts that fail might initially show as `paid`, then change to `failed`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "type": {
+      "description": "Can be `bank_account` or `card`.",
+      "enum": [
+        "bank_account",
+        "card"
+      ],
+      "type": "string",
+      "x-stripeBypassValidation": true
+    }
+  },
+  "required": [
+    "amount",
+    "arrival_date",
+    "automatic",
+    "created",
+    "currency",
+    "id",
+    "livemode",
+    "method",
+    "object",
+    "reconciliation_status",
+    "source_type",
+    "status",
+    "type"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "balance_transaction",
+    "destination",
+    "failure_balance_transaction",
+    "original_payout",
+    "reversed_by"
+  ],
+  "x-resourceId": "payout",
+  "$defs": {
+    "balance_transaction": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_account": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "card": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_bank_account": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_card": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "payout": {
+      "description": "A `Payout` object is created when you receive funds from Stripe, or when you\ninitiate a payout to either a bank account or debit card of a [connected\nStripe account](/docs/connect/bank-debit-card-payouts). You can retrieve individual payouts,\nand list all payouts. Payouts are made on [varying\nschedules](/docs/connect/manage-payout-schedule), depending on your country and\nindustry.\n\nRelated guide: [Receiving payouts](https://stripe.com/docs/payouts)",
+      "properties": {
+        "amount": {
+          "description": "The amount (in cents (or local equivalent)) that transfers to your bank account or debit card.",
+          "type": "integer"
+        },
+        "arrival_date": {
+          "description": "Date that you can expect the payout to arrive in the bank. This factors in delays to account for weekends or bank holidays.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "automatic": {
+          "description": "Returns `true` if the payout is created by an [automated payout schedule](https://stripe.com/docs/payouts#payout-schedule) and `false` if it's [requested manually](https://stripe.com/docs/payouts#manual-payouts).",
+          "type": "boolean"
+        },
+        "balance_transaction": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/balance_transaction"
+            }
+          ],
+          "description": "ID of the balance transaction that describes the impact of this payout on your account balance.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/balance_transaction"
+              }
+            ]
+          }
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "description": {
+          "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/bank_account"
+            },
+            {
+              "$ref": "#/$defs/card"
+            },
+            {
+              "$ref": "#/$defs/deleted_bank_account"
+            },
+            {
+              "$ref": "#/$defs/deleted_card"
+            }
+          ],
+          "description": "ID of the bank account or card the payout is sent to.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/bank_account"
+              },
+              {
+                "$ref": "#/$defs/card"
+              },
+              {
+                "$ref": "#/$defs/deleted_bank_account"
+              },
+              {
+                "$ref": "#/$defs/deleted_card"
+              }
+            ]
+          },
+          "x-stripeBypassValidation": true
+        },
+        "failure_balance_transaction": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/balance_transaction"
+            }
+          ],
+          "description": "If the payout fails or cancels, this is the ID of the balance transaction that reverses the initial balance transaction and returns the funds from the failed payout back in your balance.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/balance_transaction"
+              }
+            ]
+          }
+        },
+        "failure_code": {
+          "description": "Error code that provides a reason for a payout failure, if available. View our [list of failure codes](https://stripe.com/docs/api#payout_failures).",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "failure_message": {
+          "description": "Message that provides the reason for a payout failure, if available.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "method": {
+          "description": "The method used to send this payout, which can be `standard` or `instant`. `instant` is supported for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "payout"
+          ],
+          "type": "string"
+        },
+        "original_payout": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/payout"
+            }
+          ],
+          "description": "If the payout reverses another, this is the ID of the original payout.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/payout"
+              }
+            ]
+          }
+        },
+        "reconciliation_status": {
+          "description": "If `completed`, you can use the [Balance Transactions API](https://stripe.com/docs/api/balance_transactions/list#balance_transaction_list-payout) to list all balance transactions that are paid out in this payout.",
+          "enum": [
+            "completed",
+            "in_progress",
+            "not_applicable"
+          ],
+          "type": "string"
+        },
+        "reversed_by": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/payout"
+            }
+          ],
+          "description": "If the payout reverses, this is the ID of the payout that reverses this payout.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/payout"
+              }
+            ]
+          }
+        },
+        "source_type": {
+          "description": "The source balance this payout came from, which can be one of the following: `card`, `fpx`, or `bank_account`.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "statement_descriptor": {
+          "description": "Extra information about a payout that displays on the user's bank statement.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "description": "Current status of the payout: `paid`, `pending`, `in_transit`, `canceled` or `failed`. A payout is `pending` until it's submitted to the bank, when it becomes `in_transit`. The status changes to `paid` if the transaction succeeds, or to `failed` or `canceled` (within 5 business days). Some payouts that fail might initially show as `paid`, then change to `failed`.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "type": {
+          "description": "Can be `bank_account` or `card`.",
+          "enum": [
+            "bank_account",
+            "card"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        }
+      },
+      "required": [
+        "amount",
+        "arrival_date",
+        "automatic",
+        "created",
+        "currency",
+        "id",
+        "livemode",
+        "method",
+        "object",
+        "reconciliation_status",
+        "source_type",
+        "status",
+        "type"
+      ],
+      "title": "Payout",
+      "type": "object",
+      "x-expandableFields": [
+        "balance_transaction",
+        "destination",
+        "failure_balance_transaction",
+        "original_payout",
+        "reversed_by"
+      ],
+      "x-resourceId": "payout"
+    }
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-credit-note-schema.json",
+  "title": "CreditNote",
+  "description": "Issue a credit note to adjust an invoice's amount after the invoice is finalized.\n\nRelated guide: [Credit notes](https://stripe.com/docs/billing/invoices/credit-notes)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-credit-notes-api-openapi.yml#/components/schemas/credit_note",
+  "properties": {
+    "amount": {
+      "description": "The integer amount in cents (or local equivalent) representing the total amount of the credit note, including tax.",
+      "type": "integer"
+    },
+    "amount_shipping": {
+      "description": "This is the sum of all the shipping amounts.",
+      "type": "integer"
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "customer": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/customer"
+        },
+        {
+          "$ref": "#/$defs/deleted_customer"
+        }
+      ],
+      "description": "ID of the customer.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/customer"
+          },
+          {
+            "$ref": "#/$defs/deleted_customer"
+          }
+        ]
+      }
+    },
+    "customer_balance_transaction": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/customer_balance_transaction"
+        }
+      ],
+      "description": "Customer balance transaction related to this credit note.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/customer_balance_transaction"
+          }
+        ]
+      }
+    },
+    "discount_amount": {
+      "description": "The integer amount in cents (or local equivalent) representing the total amount of discount that was credited.",
+      "type": "integer"
+    },
+    "discount_amounts": {
+      "description": "The aggregate amounts calculated per discount for all line items.",
+      "items": {
+        "$ref": "#/$defs/discounts_resource_discount_amount"
+      },
+      "type": "array"
+    },
+    "effective_at": {
+      "description": "The date when this credit note is in effect. Same as `created` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the credit note PDF.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "invoice": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/invoice"
+        }
+      ],
+      "description": "ID of the invoice.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/invoice"
+          }
+        ]
+      }
+    },
+    "lines": {
+      "description": "Line items that make up the credit note",
+      "properties": {
+        "data": {
+          "description": "Details about each object.",
+          "items": {
+            "$ref": "#/$defs/credit_note_line_item"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "True if this list has another page of items after this one that can be fetched.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+          "enum": [
+            "list"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "description": "The URL where this list can be accessed.",
+          "maxLength": 5000,
+          "type": "string"
+        }
+      },
+      "required": [
+        "data",
+        "has_more",
+        "object",
+        "url"
+      ],
+      "title": "CreditNoteLinesList",
+      "type": "object",
+      "x-expandableFields": [
+        "data"
+      ]
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "memo": {
+      "description": "Customer-facing text that appears on the credit note PDF.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "number": {
+      "description": "A unique number that identifies this particular credit note and appears on the PDF of the credit note and its associated invoice.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "credit_note"
+      ],
+      "type": "string"
+    },
+    "out_of_band_amount": {
+      "description": "Amount that was credited outside of Stripe.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "pdf": {
+      "description": "The link to download the PDF of the credit note.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "reason": {
+      "description": "Reason for issuing this credit note, one of `duplicate`, `fraudulent`, `order_change`, or `product_unsatisfactory`",
+      "enum": [
+        "duplicate",
+        "fraudulent",
+        "order_change",
+        "product_unsatisfactory"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refund": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/refund"
+        }
+      ],
+      "description": "Refund related to this credit note.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/refund"
+          }
+        ]
+      }
+    },
+    "shipping_cost": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/invoices_shipping_cost"
+        }
+      ],
+      "description": "The details of the cost of shipping, including the ShippingRate applied to the invoice."
+    },
+    "status": {
+      "description": "Status of this credit note, one of `issued` or `void`. Learn more about [voiding credit notes](https://stripe.com/docs/billing/invoices/credit-notes#voiding).",
+      "enum": [
+        "issued",
+        "void"
+      ],
+      "type": "string"
+    },
+    "subtotal": {
+      "description": "The integer amount in cents (or local equivalent) representing the amount of the credit note, excluding exclusive tax and invoice level discounts.",
+      "type": "integer"
+    },
+    "subtotal_excluding_tax": {
+      "description": "The integer amount in cents (or local equivalent) representing the amount of the credit note, excluding all tax and invoice level discounts.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "tax_amounts": {
+      "description": "The aggregate amounts calculated per tax rate for all line items.",
+      "items": {
+        "$ref": "#/$defs/credit_note_tax_amount"
+      },
+      "type": "array"
+    },
+    "total": {
+      "description": "The integer amount in cents (or local equivalent) representing the total amount of the credit note, including tax and all discount.",
+      "type": "integer"
+    },
+    "total_excluding_tax": {
+      "description": "The integer amount in cents (or local equivalent) representing the total amount of the credit note, excluding tax, but including discounts.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "type": {
+      "description": "Type of this credit note, one of `pre_payment` or `post_payment`. A `pre_payment` credit note means it was issued when the invoice was open. A `post_payment` credit note means it was issued when the invoice was paid.",
+      "enum": [
+        "post_payment",
+        "pre_payment"
+      ],
+      "type": "string"
+    },
+    "voided_at": {
+      "description": "The time that the credit note was voided.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "amount",
+    "amount_shipping",
+    "created",
+    "currency",
+    "customer",
+    "discount_amount",
+    "discount_amounts",
+    "id",
+    "invoice",
+    "lines",
+    "livemode",
+    "number",
+    "object",
+    "pdf",
+    "status",
+    "subtotal",
+    "tax_amounts",
+    "total",
+    "type"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "customer",
+    "customer_balance_transaction",
+    "discount_amounts",
+    "invoice",
+    "lines",
+    "refund",
+    "shipping_cost",
+    "tax_amounts"
+  ],
+  "x-resourceId": "credit_note"
+}

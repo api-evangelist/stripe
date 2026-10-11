@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Stripe Accounts Account Get API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements
+    or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -19,7 +20,8 @@ tags:
 paths:
   /v1/Invoice Items:
     get:
-      description: Returns a list of your invoice items. Invoice items are returned sorted by creation date, with the most recently created invoice items appearing first.
+      description: Returns a list of your invoice items. Invoice items are returned sorted by creation date, with the most recently created invoice
+        items appearing first.
       operationId: getInvoiceItems
       parameters:
       - explode: true
@@ -49,7 +51,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -68,7 +72,8 @@ paths:
             type: string
           type: array
         style: deepObject
-      - description: Only return invoice items belonging to this invoice. If none is provided, all invoice items will be returned. If specifying an invoice, no customer identifier is needed.
+      - description: Only return invoice items belonging to this invoice. If none is provided, all invoice items will be returned. If specifying
+          an invoice, no customer identifier is needed.
         in: query
         name: invoice
         required: false
@@ -83,14 +88,17 @@ paths:
         schema:
           type: integer
         style: form
-      - description: Set to `true` to only show pending invoice items, which are not yet attached to any invoices. Set to `false` to only show invoice items already attached to invoices. If unspecified, no filter is applied.
+      - description: Set to `true` to only show pending invoice items, which are not yet attached to any invoices. Set to `false` to only show
+          invoice items already attached to invoices. If unspecified, no filter is applied.
         in: query
         name: pending
         required: false
         schema:
           type: boolean
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -206,7 +214,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/account'
-          description: The account this card belongs to. This attribute will not be in the card object if the card belongs to a customer or recipient instead.
+          description: The account this card belongs to. This attribute will not be in the card object if the card belongs to a customer or recipient
+            instead.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
@@ -259,7 +268,8 @@ components:
           - string
           - 'null'
         available_payout_methods:
-          description: A set of available payout methods for this card. Only values from this set should be passed as the `method` when creating a payout.
+          description: A set of available payout methods for this card. Only values from this set should be passed as the `method` when creating
+            a payout.
           items:
             enum:
             - instant
@@ -269,17 +279,20 @@ components:
           - array
           - 'null'
         brand:
-          description: Card brand. Can be `American Express`, `Diners Club`, `Discover`, `Eftpos Australia`, `JCB`, `MasterCard`, `UnionPay`, `Visa`, or `Unknown`.
+          description: Card brand. Can be `American Express`, `Diners Club`, `Discover`, `Eftpos Australia`, `JCB`, `MasterCard`, `UnionPay`,
+            `Visa`, or `Unknown`.
           maxLength: 5000
           type: string
         country:
-          description: Two-letter ISO code representing the country of the card. You could use this attribute to get a sense of the international breakdown of cards you've collected.
+          description: Two-letter ISO code representing the country of the card. You could use this attribute to get a sense of the international
+            breakdown of cards you've collected.
           maxLength: 5000
           type:
           - string
           - 'null'
         currency:
-          description: Three-letter [ISO code for currency](https://stripe.com/docs/payouts). Only applicable on accounts (not customers or recipients). The card can be used as a transfer destination for funds in this currency.
+          description: Three-letter [ISO code for currency](https://stripe.com/docs/payouts). Only applicable on accounts (not customers or recipients).
+            The card can be used as a transfer destination for funds in this currency.
           type:
           - string
           - 'null'
@@ -289,13 +302,16 @@ components:
             type: string
           - $ref: '#/components/schemas/customer'
           - $ref: '#/components/schemas/deleted_customer'
-          description: The customer that this card belongs to. This attribute will not be in the card object if the card belongs to an account or recipient instead.
+          description: The customer that this card belongs to. This attribute will not be in the card object if the card belongs to an account
+            or recipient instead.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
             - $ref: '#/components/schemas/deleted_customer'
         cvc_check:
-          description: 'If a CVC was provided, results of the check: `pass`, `fail`, `unavailable`, or `unchecked`. A result of unchecked indicates that CVC was provided but hasn''t been checked yet. Checks are typically performed when attaching a card to a Customer object, or when creating a charge. For more details, see [Check if a card is valid without a charge](https://support.stripe.com/questions/check-if-a-card-is-valid-without-a-charge).'
+          description: 'If a CVC was provided, results of the check: `pass`, `fail`, `unavailable`, or `unchecked`. A result of unchecked indicates
+            that CVC was provided but hasn''t been checked yet. Checks are typically performed when attaching a card to a Customer object, or
+            when creating a charge. For more details, see [Check if a card is valid without a charge](https://support.stripe.com/questions/check-if-a-card-is-valid-without-a-charge).'
           maxLength: 5000
           type:
           - string
@@ -318,10 +334,13 @@ components:
           description: Four-digit number representing the card's expiration year.
           type: integer
         fingerprint:
-          description: 'Uniquely identifies this particular card number. You can use this attribute to check whether two customers who’ve signed up with you are using the same card number, for example. For payment methods that tokenize card information (Apple Pay, Google Pay), the tokenized number might be provided instead of the underlying card number.
+          description: 'Uniquely identifies this particular card number. You can use this attribute to check whether two customers who’ve signed
+            up with you are using the same card number, for example. For payment methods that tokenize card information (Apple Pay, Google Pay),
+            the tokenized number might be provided instead of the underlying card number.
 
 
-            *As of May 1, 2021, card fingerprint in India for Connect changed to allow two fingerprints for the same cardone for India and one for the rest of the world.*'
+            *As of May 1, 2021, card fingerprint in India for Connect changed to allow two fingerprints for the same cardone for India and one
+            for the rest of the world.*'
           maxLength: 5000
           type:
           - string
@@ -342,7 +361,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -358,13 +378,15 @@ components:
           - card
           type: string
         status:
-          description: For external accounts that are cards, possible values are `new` and `errored`. If a payout fails, the status is set to `errored` and [scheduled payouts](https://stripe.com/docs/payouts#payout-schedule) are stopped until account details are updated.
+          description: For external accounts that are cards, possible values are `new` and `errored`. If a payout fails, the status is set to
+            `errored` and [scheduled payouts](https://stripe.com/docs/payouts#payout-schedule) are stopped until account details are updated.
           maxLength: 5000
           type:
           - string
           - 'null'
         tokenization_method:
-          description: If the card number is tokenized, this is the method that was used. Can be `android_pay` (includes Google Pay), `apple_pay`, `masterpass`, `visa_checkout`, or null.
+          description: If the card number is tokenized, this is the method that was used. Can be `android_pay` (includes Google Pay), `apple_pay`,
+            `masterpass`, `visa_checkout`, or null.
           maxLength: 5000
           type:
           - string
@@ -470,7 +492,10 @@ components:
           - array
           - 'null'
         amount_due:
-          description: Final amount due at this time for this invoice. If the invoice's total is smaller than the minimum charge amount, for example, or if there is account credit that can be applied to the invoice, the `amount_due` may be 0. If there is a positive `starting_balance` for the invoice (the customer owes money), the `amount_due` will also take that into account. The charge that gets generated for the invoice will be for the amount specified in `amount_due`.
+          description: Final amount due at this time for this invoice. If the invoice's total is smaller than the minimum charge amount, for example,
+            or if there is account credit that can be applied to the invoice, the `amount_due` may be 0. If there is a positive `starting_balance`
+            for the invoice (the customer owes money), the `amount_due` will also take that into account. The charge that gets generated for the
+            invoice will be for the amount specified in `amount_due`.
           type: integer
         amount_paid:
           description: The amount, in cents (or local equivalent), that was paid.
@@ -493,18 +518,23 @@ components:
             - $ref: '#/components/schemas/application'
             - $ref: '#/components/schemas/deleted_application'
         application_fee_amount:
-          description: The fee in cents (or local equivalent) that will be applied to the invoice and transferred to the application owner's Stripe account when the invoice is paid.
+          description: The fee in cents (or local equivalent) that will be applied to the invoice and transferred to the application owner's Stripe
+            account when the invoice is paid.
           type:
           - integer
           - 'null'
         attempt_count:
-          description: Number of payment attempts made for this invoice, from the perspective of the payment retry schedule. Any payment attempt counts as the first attempt, and subsequently only automatic retries increment the attempt count. In other words, manual payment attempts after the first attempt do not affect the retry schedule.
+          description: Number of payment attempts made for this invoice, from the perspective of the payment retry schedule. Any payment attempt
+            counts as the first attempt, and subsequently only automatic retries increment the attempt count. In other words, manual payment attempts
+            after the first attempt do not affect the retry schedule.
           type: integer
         attempted:
-          description: Whether an attempt has been made to pay the invoice. An invoice is not attempted until 1 hour after the `invoice.created` webhook, for example, so you might not want to display that invoice as unpaid to your users.
+          description: Whether an attempt has been made to pay the invoice. An invoice is not attempted until 1 hour after the `invoice.created`
+            webhook, for example, so you might not want to display that invoice as unpaid to your users.
           type: boolean
         auto_advance:
-          description: Controls whether Stripe performs [automatic collection](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection) of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action.
+          description: Controls whether Stripe performs [automatic collection](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection)
+            of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action.
           type: boolean
         automatic_tax:
           $ref: '#/components/schemas/automatic_tax'
@@ -514,7 +544,8 @@ components:
 
             * `manual`: Unrelated to a subscription, for example, created via the invoice editor.
 
-            * `subscription`: No longer in use. Applies to subscriptions from before May 2018 where no distinction was made between updates, cycles, and thresholds.
+            * `subscription`: No longer in use. Applies to subscriptions from before May 2018 where no distinction was made between updates, cycles,
+            and thresholds.
 
             * `subscription_create`: A new subscription was created.
 
@@ -548,7 +579,9 @@ components:
             oneOf:
             - $ref: '#/components/schemas/charge'
         collection_method:
-          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this invoice using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment instructions.
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this invoice
+            using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment
+            instructions.
           enum:
           - charge_automatically
           - send_invoice
@@ -558,7 +591,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         custom_fields:
           description: Custom fields displayed on the invoice.
@@ -581,21 +615,25 @@ components:
         customer_address:
           anyOf:
           - $ref: '#/components/schemas/address'
-          description: The customer's address. Until the invoice is finalized, this field will equal `customer.address`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's address. Until the invoice is finalized, this field will equal `customer.address`. Once the invoice is finalized,
+            this field will no longer be updated.
         customer_email:
-          description: The customer's email. Until the invoice is finalized, this field will equal `customer.email`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's email. Until the invoice is finalized, this field will equal `customer.email`. Once the invoice is finalized,
+            this field will no longer be updated.
           maxLength: 5000
           type:
           - string
           - 'null'
         customer_name:
-          description: The customer's name. Until the invoice is finalized, this field will equal `customer.name`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's name. Until the invoice is finalized, this field will equal `customer.name`. Once the invoice is finalized,
+            this field will no longer be updated.
           maxLength: 5000
           type:
           - string
           - 'null'
         customer_phone:
-          description: The customer's phone number. Until the invoice is finalized, this field will equal `customer.phone`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's phone number. Until the invoice is finalized, this field will equal `customer.phone`. Once the invoice is
+            finalized, this field will no longer be updated.
           maxLength: 5000
           type:
           - string
@@ -603,9 +641,11 @@ components:
         customer_shipping:
           anyOf:
           - $ref: '#/components/schemas/shipping'
-          description: The customer's shipping information. Until the invoice is finalized, this field will equal `customer.shipping`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's shipping information. Until the invoice is finalized, this field will equal `customer.shipping`. Once the
+            invoice is finalized, this field will no longer be updated.
         customer_tax_exempt:
-          description: The customer's tax exempt status. Until the invoice is finalized, this field will equal `customer.tax_exempt`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's tax exempt status. Until the invoice is finalized, this field will equal `customer.tax_exempt`. Once the
+            invoice is finalized, this field will no longer be updated.
           enum:
           - exempt
           - none
@@ -614,7 +654,8 @@ components:
           - string
           - 'null'
         customer_tax_ids:
-          description: The customer's tax IDs. Until the invoice is finalized, this field will contain the same tax IDs as `customer.tax_ids`. Once the invoice is finalized, this field will no longer be updated.
+          description: The customer's tax IDs. Until the invoice is finalized, this field will contain the same tax IDs as `customer.tax_ids`.
+            Once the invoice is finalized, this field will no longer be updated.
           items:
             $ref: '#/components/schemas/invoices_resource_invoice_tax_id'
           type:
@@ -625,7 +666,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/payment_method'
-          description: ID of the default payment method for the invoice. It must belong to the customer associated with the invoice. If not set, defaults to the subscription's default payment method, if any, or to the default payment method in the customer's invoice settings.
+          description: ID of the default payment method for the invoice. It must belong to the customer associated with the invoice. If not set,
+            defaults to the subscription's default payment method, if any, or to the default payment method in the customer's invoice settings.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/payment_method'
@@ -636,7 +678,8 @@ components:
           - $ref: '#/components/schemas/bank_account'
           - $ref: '#/components/schemas/card'
           - $ref: '#/components/schemas/source'
-          description: ID of the default payment source for the invoice. It must belong to the customer associated with the invoice and be in a chargeable state. If not set, defaults to the subscription's default source, if any, or to the customer's default source.
+          description: ID of the default payment source for the invoice. It must belong to the customer associated with the invoice and be in
+            a chargeable state. If not set, defaults to the subscription's default source, if any, or to the customer's default source.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/bank_account'
@@ -659,7 +702,8 @@ components:
           - $ref: '#/components/schemas/discount'
           description: Describes the current discount applied to this invoice, if there is one. Not populated if there are multiple discounts.
         discounts:
-          description: The discounts applied to the invoice. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          description: The discounts applied to the invoice. Line item discounts are applied before invoice discounts. Use `expand[]=discounts`
+            to expand each discount.
           items:
             anyOf:
             - maxLength: 5000
@@ -680,13 +724,15 @@ components:
           - integer
           - 'null'
         effective_at:
-          description: The date when this invoice is in effect. Same as `finalized_at` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the invoice PDF and receipt.
+          description: The date when this invoice is in effect. Same as `finalized_at` unless overwritten. When defined, this value replaces the
+            system-generated 'Date of issue' printed on the invoice PDF and receipt.
           format: unix-time
           type:
           - integer
           - 'null'
         ending_balance:
-          description: Ending customer balance after the invoice is finalized. Invoices are finalized approximately an hour after successful webhook delivery or when payment collection is attempted for the invoice. If the invoice has not been finalized yet, this will be null.
+          description: Ending customer balance after the invoice is finalized. Invoices are finalized approximately an hour after successful webhook
+            delivery or when payment collection is attempted for the invoice. If the invoice has not been finalized yet, this will be null.
           type:
           - integer
           - 'null'
@@ -699,15 +745,18 @@ components:
         from_invoice:
           anyOf:
           - $ref: '#/components/schemas/invoices_from_invoice'
-          description: Details of the invoice that was cloned. See the [revision documentation](https://stripe.com/docs/invoicing/invoice-revisions) for more details.
+          description: Details of the invoice that was cloned. See the [revision documentation](https://stripe.com/docs/invoicing/invoice-revisions)
+            for more details.
         hosted_invoice_url:
-          description: The URL for the hosted invoice page, which allows customers to view and pay an invoice. If the invoice has not been finalized yet, this will be null.
+          description: The URL for the hosted invoice page, which allows customers to view and pay an invoice. If the invoice has not been finalized
+            yet, this will be null.
           maxLength: 5000
           type:
           - string
           - 'null'
         id:
-          description: Unique identifier for the object. This property is always present unless the invoice is an upcoming invoice. See [Retrieve an upcoming invoice](https://stripe.com/docs/api/invoices/upcoming) for more details.
+          description: Unique identifier for the object. This property is always present unless the invoice is an upcoming invoice. See [Retrieve
+            an upcoming invoice](https://stripe.com/docs/api/invoices/upcoming) for more details.
           maxLength: 5000
           type: string
         invoice_pdf:
@@ -719,7 +768,8 @@ components:
         last_finalization_error:
           anyOf:
           - $ref: '#/components/schemas/api_errors'
-          description: The error encountered during the previous attempt to finalize the invoice. This field is cleared when the invoice is successfully finalized.
+          description: The error encountered during the previous attempt to finalize the invoice. This field is cleared when the invoice is successfully
+            finalized.
         latest_revision:
           anyOf:
           - maxLength: 5000
@@ -730,7 +780,9 @@ components:
             oneOf:
             - $ref: '#/components/schemas/invoice'
         lines:
-          description: 'The individual line items that make up the invoice. `lines` is sorted as follows: (1) pending invoice items (including prorations) in reverse chronological order, (2) subscription items in reverse chronological order, and (3) invoice items added after invoice creation in chronological order.'
+          description: 'The individual line items that make up the invoice. `lines` is sorted as follows: (1) pending invoice items (including
+            prorations) in reverse chronological order, (2) subscription items in reverse chronological order, and (3) invoice items added after
+            invoice creation in chronological order.'
           properties:
             data:
               description: Details about each object.
@@ -765,7 +817,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -776,7 +829,8 @@ components:
           - integer
           - 'null'
         number:
-          description: A unique, identifying string that appears on emails sent to the customer for this invoice. This starts with the customer's unique invoice_prefix if it is specified.
+          description: A unique, identifying string that appears on emails sent to the customer for this invoice. This starts with the customer's
+            unique invoice_prefix if it is specified.
           maxLength: 5000
           type:
           - string
@@ -791,22 +845,27 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/account'
-          description: The account (if any) for which the funds of the invoice payment are intended. If set, the invoice will be presented with the branding and support information of the specified account. See the [Invoices with Connect](https://stripe.com/docs/billing/invoices/connect) documentation for details.
+          description: The account (if any) for which the funds of the invoice payment are intended. If set, the invoice will be presented with
+            the branding and support information of the specified account. See the [Invoices with Connect](https://stripe.com/docs/billing/invoices/connect)
+            documentation for details.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
         paid:
-          description: Whether payment was successfully collected for this invoice. An invoice can be paid (most commonly) with a charge or with credit from the customer's account balance.
+          description: Whether payment was successfully collected for this invoice. An invoice can be paid (most commonly) with a charge or with
+            credit from the customer's account balance.
           type: boolean
         paid_out_of_band:
-          description: Returns true if the invoice was manually marked paid, returns false if the invoice hasn't been paid yet or was paid on Stripe.
+          description: Returns true if the invoice was manually marked paid, returns false if the invoice hasn't been paid yet or was paid on
+            Stripe.
           type: boolean
         payment_intent:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/payment_intent'
-          description: The PaymentIntent associated with this invoice. The PaymentIntent is generated when the invoice is finalized, and can then be used to pay the invoice. Note that voiding an invoice will cancel the PaymentIntent.
+          description: The PaymentIntent associated with this invoice. The PaymentIntent is generated when the invoice is finalized, and can then
+            be used to pay the invoice. Note that voiding an invoice will cancel the PaymentIntent.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/payment_intent'
@@ -844,7 +903,8 @@ components:
         rendering:
           anyOf:
           - $ref: '#/components/schemas/invoices_invoice_rendering'
-          description: The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted Invoice Page.
+          description: The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted
+            Invoice Page.
         shipping_cost:
           anyOf:
           - $ref: '#/components/schemas/invoices_shipping_cost'
@@ -852,9 +912,11 @@ components:
         shipping_details:
           anyOf:
           - $ref: '#/components/schemas/shipping'
-          description: Shipping details for the invoice. The Invoice PDF will use the `shipping_details` value if it is set, otherwise the PDF will render the shipping address from the customer.
+          description: Shipping details for the invoice. The Invoice PDF will use the `shipping_details` value if it is set, otherwise the PDF
+            will render the shipping address from the customer.
         starting_balance:
-          description: Starting customer balance before the invoice is finalized. If the invoice has not been finalized yet, this will be the current customer balance. For revision invoices, this also includes any customer balance that was applied to the original invoice.
+          description: Starting customer balance before the invoice is finalized. If the invoice has not been finalized yet, this will be the
+            current customer balance. For revision invoices, this also includes any customer balance that was applied to the original invoice.
           type: integer
         statement_descriptor:
           description: Extra information about an invoice for the customer's credit card statement.
@@ -893,10 +955,12 @@ components:
           description: Only set for upcoming invoices that preview prorations. The time used to calculate prorations.
           type: integer
         subtotal:
-          description: Total of all subscriptions, invoice items, and prorations on the invoice before any invoice level discount or exclusive tax is applied. Item discounts are already incorporated
+          description: Total of all subscriptions, invoice items, and prorations on the invoice before any invoice level discount or exclusive
+            tax is applied. Item discounts are already incorporated
           type: integer
         subtotal_excluding_tax:
-          description: The integer amount in cents (or local equivalent) representing the subtotal of the invoice before any invoice level discount or tax is applied. Item discounts are already incorporated
+          description: The integer amount in cents (or local equivalent) representing the subtotal of the invoice before any invoice level discount
+            or tax is applied. Item discounts are already incorporated
           type:
           - integer
           - 'null'
@@ -927,7 +991,8 @@ components:
           - array
           - 'null'
         total_excluding_tax:
-          description: The integer amount in cents (or local equivalent) representing the total amount of the invoice including all discounts but excluding all tax.
+          description: The integer amount in cents (or local equivalent) representing the total amount of the invoice including all discounts
+            but excluding all tax.
           type:
           - integer
           - 'null'
@@ -939,9 +1004,12 @@ components:
         transfer_data:
           anyOf:
           - $ref: '#/components/schemas/invoice_transfer_data'
-          description: The account (if any) the payment will be attributed to for tax reporting, and where funds from the payment will be transferred to for the invoice.
+          description: The account (if any) the payment will be attributed to for tax reporting, and where funds from the payment will be transferred
+            to for the invoice.
         webhooks_delivered_at:
-          description: Invoices are automatically paid or sent 1 hour after webhooks are delivered, or until all webhook delivery attempts have [been exhausted](https://stripe.com/docs/billing/webhooks#understand). This field tracks the time when webhooks for this invoice were successfully delivered. If the invoice had no webhooks to deliver, this will be set while the invoice is being created.
+          description: Invoices are automatically paid or sent 1 hour after webhooks are delivered, or until all webhook delivery attempts have
+            [been exhausted](https://stripe.com/docs/billing/webhooks#understand). This field tracks the time when webhooks for this invoice were
+            successfully delivered. If the invoice had no webhooks to deliver, this will be set while the invoice is being created.
           format: unix-time
           type:
           - integer
@@ -1028,14 +1096,16 @@ components:
             - $ref: '#/components/schemas/application'
             - $ref: '#/components/schemas/deleted_application'
         application_fee_percent:
-          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account.
+          description: A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription
+            invoice total that will be transferred to the application owner's Stripe account.
           type:
           - number
           - 'null'
         automatic_tax:
           $ref: '#/components/schemas/subscription_automatic_tax'
         billing_cycle_anchor:
-          description: Determines the date of the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for subsequent invoices. The timestamp is in UTC format.
+          description: Determines the date of the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for
+            subsequent invoices. The timestamp is in UTC format.
           format: unix-time
           type: integer
         billing_thresholds:
@@ -1049,10 +1119,14 @@ components:
           - integer
           - 'null'
         cancel_at_period_end:
-          description: If the subscription has been canceled with the `at_period_end` flag set to `true`, `cancel_at_period_end` on the subscription will be true. You can use this attribute to determine whether a subscription that has a status of active is scheduled to be canceled at the end of the current period.
+          description: If the subscription has been canceled with the `at_period_end` flag set to `true`, `cancel_at_period_end` on the subscription
+            will be true. You can use this attribute to determine whether a subscription that has a status of active is scheduled to be canceled
+            at the end of the current period.
           type: boolean
         canceled_at:
-          description: If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with `cancel_at_period_end`, `canceled_at` will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
+          description: If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with `cancel_at_period_end`,
+            `canceled_at` will reflect the time of the most recent update request, not the end of the subscription period when the subscription
+            is automatically moved to a canceled state.
           format: unix-time
           type:
           - integer
@@ -1062,7 +1136,9 @@ components:
           - $ref: '#/components/schemas/cancellation_details'
           description: Details about why this subscription was cancelled
         collection_method:
-          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this subscription at the end of the cycle using the default source attached to the customer. When sending an invoice, Stripe will email your customer an invoice with payment instructions and mark the subscription as `active`.
+          description: Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this subscription
+            at the end of the cycle using the default source attached to the customer. When sending an invoice, Stripe will email your customer
+            an invoice with payment instructions and mark the subscription as `active`.
           enum:
           - charge_automatically
           - send_invoice
@@ -1072,10 +1148,12 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         current_period_end:
-          description: End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be created.
+          description: End of the current period that the subscription has been invoiced for. At the end of this period, a new invoice will be
+            created.
           format: unix-time
           type: integer
         current_period_start:
@@ -1094,7 +1172,8 @@ components:
             - $ref: '#/components/schemas/customer'
             - $ref: '#/components/schemas/deleted_customer'
         days_until_due:
-          description: Number of days a customer has to pay invoices generated by this subscription. This value will be `null` for subscriptions where `collection_method=charge_automatically`.
+          description: Number of days a customer has to pay invoices generated by this subscription. This value will be `null` for subscriptions
+            where `collection_method=charge_automatically`.
           type:
           - integer
           - 'null'
@@ -1103,7 +1182,9 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/payment_method'
-          description: ID of the default payment method for the subscription. It must belong to the customer associated with the subscription. This takes precedence over `default_source`. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
+          description: ID of the default payment method for the subscription. It must belong to the customer associated with the subscription.
+            This takes precedence over `default_source`. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method)
+            or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/payment_method'
@@ -1114,7 +1195,10 @@ components:
           - $ref: '#/components/schemas/bank_account'
           - $ref: '#/components/schemas/card'
           - $ref: '#/components/schemas/source'
-          description: ID of the default payment source for the subscription. It must belong to the customer associated with the subscription and be in a chargeable state. If `default_payment_method` is also set, `default_payment_method` will take precedence. If neither are set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
+          description: ID of the default payment source for the subscription. It must belong to the customer associated with the subscription
+            and be in a chargeable state. If `default_payment_method` is also set, `default_payment_method` will take precedence. If neither are
+            set, invoices will use the customer's [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method)
+            or [default_source](https://stripe.com/docs/api/customers/object#customer_object-default_source).
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/bank_account'
@@ -1122,14 +1206,16 @@ components:
             - $ref: '#/components/schemas/source'
           x-stripeBypassValidation: true
         default_tax_rates:
-          description: The tax rates that will apply to any subscription item that does not have `tax_rates` set. Invoices created will have their `default_tax_rates` populated from the subscription.
+          description: The tax rates that will apply to any subscription item that does not have `tax_rates` set. Invoices created will have their
+            `default_tax_rates` populated from the subscription.
           items:
             $ref: '#/components/schemas/tax_rate'
           type:
           - array
           - 'null'
         description:
-          description: The subscription's description, meant to be displayable to the customer. Use this field to optionally store an explanation of the subscription for rendering in Stripe surfaces and certain local payment methods UIs.
+          description: The subscription's description, meant to be displayable to the customer. Use this field to optionally store an explanation
+            of the subscription for rendering in Stripe surfaces and certain local payment methods UIs.
           maxLength: 500
           type:
           - string
@@ -1137,7 +1223,8 @@ components:
         discount:
           anyOf:
           - $ref: '#/components/schemas/discount'
-          description: Describes the current discount applied to this subscription, if there is one. When billing, a discount applied to a subscription overrides a discount applied on a customer-wide basis.
+          description: Describes the current discount applied to this subscription, if there is one. When billing, a discount applied to a subscription
+            overrides a discount applied on a customer-wide basis.
         ended_at:
           description: If the subscription has ended, the date the subscription ended.
           format: unix-time
@@ -1193,10 +1280,12 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type: object
         next_pending_invoice_item_invoice:
-          description: Specifies the approximate timestamp on which any pending invoice items will be billed according to the schedule provided at `pending_invoice_item_interval`.
+          description: Specifies the approximate timestamp on which any pending invoice items will be billed according to the schedule provided
+            at `pending_invoice_item_interval`.
           format: unix-time
           type:
           - integer
@@ -1211,7 +1300,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/account'
-          description: The account (if any) the charge was made on behalf of for charges associated with this subscription. See the Connect documentation for details.
+          description: The account (if any) the charge was made on behalf of for charges associated with this subscription. See the Connect documentation
+            for details.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
@@ -1226,20 +1316,24 @@ components:
         pending_invoice_item_interval:
           anyOf:
           - $ref: '#/components/schemas/subscription_pending_invoice_item_interval'
-          description: Specifies an interval for how often to bill for any pending invoice items. It is analogous to calling [Create an invoice](https://stripe.com/docs/api#create_invoice) for the given subscription at the specified interval.
+          description: Specifies an interval for how often to bill for any pending invoice items. It is analogous to calling [Create an invoice](https://stripe.com/docs/api#create_invoice)
+            for the given subscription at the specified interval.
         pending_setup_intent:
           anyOf:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/setup_intent'
-          description: You can use this [SetupIntent](https://stripe.com/docs/api/setup_intents) to collect user authentication when creating a subscription without immediate payment or updating a subscription's payment method, allowing you to optimize for off-session payments. Learn more in the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication#scenario-2).
+          description: You can use this [SetupIntent](https://stripe.com/docs/api/setup_intents) to collect user authentication when creating
+            a subscription without immediate payment or updating a subscription's payment method, allowing you to optimize for off-session payments.
+            Learn more in the [SCA Migration Guide](https://stripe.com/docs/billing/migration/strong-customer-authentication#scenario-2).
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/setup_intent'
         pending_update:
           anyOf:
           - $ref: '#/components/schemas/subscriptions_resource_pending_update'
-          description: If specified, [pending updates](https://stripe.com/docs/billing/subscriptions/pending-updates) that will be applied to the subscription once the `latest_invoice` has been paid.
+          description: If specified, [pending updates](https://stripe.com/docs/billing/subscriptions/pending-updates) that will be applied to
+            the subscription once the `latest_invoice` has been paid.
         schedule:
           anyOf:
           - maxLength: 5000
@@ -1254,7 +1348,18 @@ components:
           format: unix-time
           type: integer
         status:
-          description: "Possible values are `incomplete`, `incomplete_expired`, `trialing`, `active`, `past_due`, `canceled`, or `unpaid`. \n\nFor `collection_method=charge_automatically` a subscription moves into `incomplete` if the initial payment attempt fails. A subscription in this state can only have metadata and default_source updated. Once the first invoice is paid, the subscription moves into an `active` state. If the first invoice is not paid within 23 hours, the subscription transitions to `incomplete_expired`. This is a terminal state, the open invoice will be voided and no further invoices will be generated. \n\nA subscription that is currently in a trial period is `trialing` and moves to `active` when the trial period is over. \n\nIf subscription `collection_method=charge_automatically`, it becomes `past_due` when payment is required but cannot be paid (due to failed payment or awaiting additional user actions). Once Stripe has exhausted all payment retry attempts, the subscription will become `canceled` or `unpaid` (depending on your subscriptions settings). \n\nIf subscription `collection_method=send_invoice` it becomes `past_due` when its invoice is not paid by the due date, and `canceled` or `unpaid` if it is still not paid by an additional deadline after that. Note that when a subscription has a status of `unpaid`, no subsequent invoices will be attempted (invoices will be created, but then immediately automatically closed). After receiving updated payment information from a customer, you may choose to reopen and pay their closed invoices."
+          description: "Possible values are `incomplete`, `incomplete_expired`, `trialing`, `active`, `past_due`, `canceled`, or `unpaid`. \n\n\
+            For `collection_method=charge_automatically` a subscription moves into `incomplete` if the initial payment attempt fails. A subscription\
+            \ in this state can only have metadata and default_source updated. Once the first invoice is paid, the subscription moves into an\
+            \ `active` state. If the first invoice is not paid within 23 hours, the subscription transitions to `incomplete_expired`. This is\
+            \ a terminal state, the open invoice will be voided and no further invoices will be generated. \n\nA subscription that is currently\
+            \ in a trial period is `trialing` and moves to `active` when the trial period is over. \n\nIf subscription `collection_method=charge_automatically`,\
+            \ it becomes `past_due` when payment is required but cannot be paid (due to failed payment or awaiting additional user actions). Once\
+            \ Stripe has exhausted all payment retry attempts, the subscription will become `canceled` or `unpaid` (depending on your subscriptions\
+            \ settings). \n\nIf subscription `collection_method=send_invoice` it becomes `past_due` when its invoice is not paid by the due date,\
+            \ and `canceled` or `unpaid` if it is still not paid by an additional deadline after that. Note that when a subscription has a status\
+            \ of `unpaid`, no subsequent invoices will be attempted (invoices will be created, but then immediately automatically closed). After\
+            \ receiving updated payment information from a customer, you may choose to reopen and pay their closed invoices."
           enum:
           - active
           - canceled
@@ -1277,7 +1382,8 @@ components:
         transfer_data:
           anyOf:
           - $ref: '#/components/schemas/subscription_transfer_data'
-          description: The account (if any) the subscription's payments will be attributed to for tax reporting, and where funds from each payment will be transferred to for each of the subscription's invoices.
+          description: The account (if any) the subscription's payments will be attributed to for tax reporting, and where funds from each payment
+            will be transferred to for each of the subscription's invoices.
         trial_end:
           description: If the subscription has a trial, the end of that trial.
           format: unix-time
@@ -1348,7 +1454,8 @@ components:
         Related guide: [Applying discounts to subscriptions](https://stripe.com/docs/billing/subscriptions/discounts)'
       properties:
         checkout_session:
-          description: The Checkout session that this coupon is applied to, if it is applied to a particular session in payment mode. Will not be present for subscription mode.
+          description: The Checkout session that this coupon is applied to, if it is applied to a particular session in payment mode. Will not
+            be present for subscription mode.
           maxLength: 5000
           type:
           - string
@@ -1367,13 +1474,15 @@ components:
             - $ref: '#/components/schemas/customer'
             - $ref: '#/components/schemas/deleted_customer'
         end:
-          description: If the coupon has a duration of `repeating`, the date that this discount will end. If the coupon has a duration of `once` or `forever`, this attribute will be null.
+          description: If the coupon has a duration of `repeating`, the date that this discount will end. If the coupon has a duration of `once`
+            or `forever`, this attribute will be null.
           format: unix-time
           type:
           - integer
           - 'null'
         id:
-          description: The ID of the discount object. Discounts cannot be fetched by ID. Use `expand[]=discounts` in API calls to expand discount IDs in an array.
+          description: The ID of the discount object. Discounts cannot be fetched by ID. Use `expand[]=discounts` in API calls to expand discount
+            IDs in an array.
           maxLength: 5000
           type: string
         invoice:
@@ -1383,7 +1492,8 @@ components:
           - string
           - 'null'
         invoice_item:
-          description: The invoice item `id` (or invoice line item `id` for invoice line items of type='subscription') that the discount's coupon was applied to, if it was applied directly to a particular invoice item or invoice line item.
+          description: The invoice item `id` (or invoice line item `id` for invoice line items of type='subscription') that the discount's coupon
+            was applied to, if it was applied directly to a particular invoice item or invoice line item.
           maxLength: 5000
           type:
           - string
@@ -1425,7 +1535,8 @@ components:
       - promotion_code
       x-resourceId: discount
     customer:
-      description: 'This object represents a customer of your business. Use it to create recurring charges and track payments that belong to the same customer.
+      description: 'This object represents a customer of your business. Use it to create recurring charges and track payments that belong to the
+        same customer.
 
 
         Related guide: [Save a card during payment](https://stripe.com/docs/payments/save-during-payment)'
@@ -1435,18 +1546,24 @@ components:
           - $ref: '#/components/schemas/address'
           description: The customer's address.
         balance:
-          description: The current balance, if any, that's stored on the customer. If negative, the customer has credit to apply to their next invoice. If positive, the customer has an amount owed that's added to their next invoice. The balance only considers amounts that Stripe hasn't successfully applied to any invoice. It doesn't reflect unpaid invoices. This balance is only taken into account after invoices finalize.
+          description: The current balance, if any, that's stored on the customer. If negative, the customer has credit to apply to their next
+            invoice. If positive, the customer has an amount owed that's added to their next invoice. The balance only considers amounts that
+            Stripe hasn't successfully applied to any invoice. It doesn't reflect unpaid invoices. This balance is only taken into account after
+            invoices finalize.
           type: integer
         cash_balance:
           anyOf:
           - $ref: '#/components/schemas/cash_balance'
-          description: The current funds being held by Stripe on behalf of the customer. You can apply these funds towards payment intents when the source is "cash_balance". The `settings[reconciliation_mode]` field describes if these funds apply to these payment intents manually or automatically.
+          description: The current funds being held by Stripe on behalf of the customer. You can apply these funds towards payment intents when
+            the source is "cash_balance". The `settings[reconciliation_mode]` field describes if these funds apply to these payment intents manually
+            or automatically.
         created:
           description: Time at which the object was created. Measured in seconds since the Unix epoch.
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) the customer can be charged in for recurring billing purposes.
+          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) the customer can be charged in for recurring
+            billing purposes.
           maxLength: 5000
           type:
           - string
@@ -1461,7 +1578,8 @@ components:
           description: 'ID of the default payment source for the customer.
 
 
-            If you use payment methods created through the PaymentMethods API, see the [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method) field instead.'
+            If you use payment methods created through the PaymentMethods API, see the [invoice_settings.default_payment_method](https://stripe.com/docs/api/customers/object#customer_object-invoice_settings-default_payment_method)
+            field instead.'
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/bank_account'
@@ -1469,13 +1587,17 @@ components:
             - $ref: '#/components/schemas/source'
           x-stripeBypassValidation: true
         delinquent:
-          description: 'Tracks the most recent state change on any invoice belonging to the customer. Paying an invoice or marking it uncollectible via the API will set this field to false. An automatic payment failure or passing the `invoice.due_date` will set this field to `true`.
+          description: 'Tracks the most recent state change on any invoice belonging to the customer. Paying an invoice or marking it uncollectible
+            via the API will set this field to false. An automatic payment failure or passing the `invoice.due_date` will set this field to `true`.
 
 
-            If an invoice becomes uncollectible by [dunning](https://stripe.com/docs/billing/automatic-collection), `delinquent` doesn''t reset to `false`.
+            If an invoice becomes uncollectible by [dunning](https://stripe.com/docs/billing/automatic-collection), `delinquent` doesn''t reset
+            to `false`.
 
 
-            If you care whether the customer has paid their most recent subscription invoice, use `subscription.status` instead. Paying or marking uncollectible any customer invoice regardless of whether it is the latest invoice for a subscription will always set this field to `false`.'
+            If you care whether the customer has paid their most recent subscription invoice, use `subscription.status` instead. Paying or marking
+            uncollectible any customer invoice regardless of whether it is the latest invoice for a subscription will always set this field to
+            `false`.'
           type:
           - boolean
           - 'null'
@@ -1502,7 +1624,11 @@ components:
         invoice_credit_balance:
           additionalProperties:
             type: integer
-          description: The current multi-currency balances, if any, that's stored on the customer. If positive in a currency, the customer has a credit to apply to their next invoice denominated in that currency. If negative, the customer has an amount owed that's added to their next invoice denominated in that currency. These balances don't apply to unpaid invoices. They solely track amounts that Stripe hasn't successfully applied to any invoice. Stripe only applies a balance in a specific currency to an invoice after that invoice (which is in the same currency) finalizes.
+          description: The current multi-currency balances, if any, that's stored on the customer. If positive in a currency, the customer has
+            a credit to apply to their next invoice denominated in that currency. If negative, the customer has an amount owed that's added to
+            their next invoice denominated in that currency. These balances don't apply to unpaid invoices. They solely track amounts that Stripe
+            hasn't successfully applied to any invoice. Stripe only applies a balance in a specific currency to an invoice after that invoice
+            (which is in the same currency) finalizes.
           type: object
         invoice_prefix:
           description: The prefix for the customer used to generate unique invoice numbers.
@@ -1519,7 +1645,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type: object
         name:
           description: The customer's full name or business name.
@@ -1619,7 +1746,8 @@ components:
         tax:
           $ref: '#/components/schemas/customer_tax'
         tax_exempt:
-          description: 'Describes the customer''s tax exemption status, which is `none`, `exempt`, or `reverse`. When set to `reverse`, invoice and receipt PDFs include the following text: **"Reverse charge"**.'
+          description: 'Describes the customer''s tax exemption status, which is `none`, `exempt`, or `reverse`. When set to `reverse`, invoice
+            and receipt PDFs include the following text: **"Reverse charge"**.'
           enum:
           - exempt
           - none
@@ -1686,12 +1814,14 @@ components:
       - test_clock
       x-resourceId: customer
     cash_balance:
-      description: A customer's `Cash balance` represents real funds. Customers can add funds to their cash balance by sending a bank transfer. These funds can be used for payment and can eventually be paid out to your bank account.
+      description: A customer's `Cash balance` represents real funds. Customers can add funds to their cash balance by sending a bank transfer.
+        These funds can be used for payment and can eventually be paid out to your bank account.
       properties:
         available:
           additionalProperties:
             type: integer
-          description: A hash of all cash balances available to this customer. You cannot delete a customer with any cash balances, even if the balance is 0. Amounts are represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
+          description: A hash of all cash balances available to this customer. You cannot delete a customer with any cash balances, even if the
+            balance is 0. Amounts are represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).
           type:
           - object
           - 'null'
@@ -1731,7 +1861,8 @@ components:
           - integer
           - 'null'
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
@@ -1750,7 +1881,8 @@ components:
           description: If true, discounts will apply to this line item. Always false for prorations.
           type: boolean
         discounts:
-          description: The discounts applied to the invoice line item. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          description: The discounts applied to the invoice line item. Line item discounts are applied before invoice discounts. Use `expand[]=discounts`
+            to expand each discount.
           items:
             anyOf:
             - maxLength: 5000
@@ -1782,7 +1914,9 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Note that for line items with `type=subscription` this will reflect the metadata of the subscription that caused the line item to be created.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Note that for line items with `type=subscription` this will
+            reflect the metadata of the subscription that caused the line item to be created.
           type: object
         object:
           description: String representing the object's type. Objects of the same type share the same value.
@@ -1945,7 +2079,12 @@ components:
           - tax_id
           type: string
         type:
-          description: Type of the tax ID, one of `ad_nrt`, `ae_trn`, `ar_cuit`, `au_abn`, `au_arn`, `bg_uic`, `bo_tin`, `br_cnpj`, `br_cpf`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `ch_vat`, `cl_tin`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `eu_oss_vat`, `eu_vat`, `gb_vat`, `ge_vat`, `hk_br`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`, `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kr_brn`, `li_uid`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `no_vat`, `nz_gst`, `pe_ruc`, `ph_tin`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sv_nit`, `th_vat`, `tr_tin`, `tw_vat`, `ua_vat`, `us_ein`, `uy_ruc`, `ve_rif`, `vn_tin`, or `za_vat`. Note that some legacy tax IDs have type `unknown`
+          description: Type of the tax ID, one of `ad_nrt`, `ae_trn`, `ar_cuit`, `au_abn`, `au_arn`, `bg_uic`, `bo_tin`, `br_cnpj`, `br_cpf`,
+            `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `ch_vat`, `cl_tin`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`,
+            `ec_ruc`, `eg_tin`, `es_cif`, `eu_oss_vat`, `eu_vat`, `gb_vat`, `ge_vat`, `hk_br`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`, `is_vat`,
+            `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kr_brn`, `li_uid`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `no_vat`, `nz_gst`, `pe_ruc`, `ph_tin`,
+            `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sv_nit`, `th_vat`, `tr_tin`, `tw_vat`, `ua_vat`,
+            `us_ein`, `uy_ruc`, `ve_rif`, `vn_tin`, or `za_vat`. Note that some legacy tax IDs have type `unknown`
           enum:
           - ad_nrt
           - ae_trn
@@ -2106,7 +2245,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/customer'
-          description: The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved to a Customer.
+          description: The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved
+            to a Customer.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
@@ -2141,7 +2281,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -2171,7 +2312,8 @@ components:
         sofort:
           $ref: '#/components/schemas/payment_method_sofort'
         type:
-          description: The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
+          description: The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It
+            contains additional information specific to the PaymentMethod type.
           enum:
           - acss_debit
           - affirm
@@ -2285,7 +2427,10 @@ components:
         Related guide: [Payment Intents API](https://stripe.com/docs/payments/payment-intents)'
       properties:
         amount:
-          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest
+            currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal
+            currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts).
+            The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
           type: integer
         amount_capturable:
           description: Amount that can be captured from this PaymentIntent.
@@ -2305,7 +2450,9 @@ components:
             oneOf:
             - $ref: '#/components/schemas/application'
         application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type:
           - integer
           - 'null'
@@ -2314,13 +2461,15 @@ components:
           - $ref: '#/components/schemas/payment_flows_automatic_payment_methods_payment_intent'
           description: Settings to configure compatible payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods)
         canceled_at:
-          description: Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since the Unix epoch.
+          description: Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since
+            the Unix epoch.
           format: unix-time
           type:
           - integer
           - 'null'
         cancellation_reason:
-          description: Reason for cancellation of this PaymentIntent, either user-provided (`duplicate`, `fraudulent`, `requested_by_customer`, or `abandoned`) or generated by Stripe internally (`failed_invoice`, `void_invoice`, or `automatic`).
+          description: Reason for cancellation of this PaymentIntent, either user-provided (`duplicate`, `fraudulent`, `requested_by_customer`,
+            or `abandoned`) or generated by Stripe internally (`failed_invoice`, `void_invoice`, or `automatic`).
           enum:
           - abandoned
           - automatic
@@ -2340,7 +2489,10 @@ components:
           - manual
           type: string
         client_secret:
-          description: "The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. \n\nThe client secret can be used to complete a payment from your frontend. It should not be stored, logged, or exposed to anyone other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.\n\nRefer to our docs to [accept a payment](https://stripe.com/docs/payments/accept-a-payment?ui=elements) and learn about how `client_secret` should be handled."
+          description: "The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. \n\nThe client secret\
+            \ can be used to complete a payment from your frontend. It should not be stored, logged, or exposed to anyone other than the customer.\
+            \ Make sure that you have TLS enabled on any page that includes the client secret.\n\nRefer to our docs to [accept a payment](https://stripe.com/docs/payments/accept-a-payment?ui=elements)\
+            \ and learn about how `client_secret` should be handled."
           maxLength: 5000
           type:
           - string
@@ -2356,7 +2508,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         customer:
           anyOf:
@@ -2370,7 +2523,9 @@ components:
             Payment methods attached to other Customers cannot be used with this PaymentIntent.
 
 
-            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete.'
+            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s
+            payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user
+            are complete.'
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
@@ -2397,7 +2552,8 @@ components:
         last_payment_error:
           anyOf:
           - $ref: '#/components/schemas/api_errors'
-          description: The payment error encountered in the previous PaymentIntent confirmation. It will be cleared if the PaymentIntent is later updated for any reason.
+          description: The payment error encountered in the previous PaymentIntent confirmation. It will be cleared if the PaymentIntent is later
+            updated for any reason.
         latest_charge:
           anyOf:
           - maxLength: 5000
@@ -2414,12 +2570,14 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Learn more about [storing information in metadata](https://stripe.com/docs/payments/payment-intents/creating-payment-intents#storing-information-in-metadata).
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Learn more about [storing information in metadata](https://stripe.com/docs/payments/payment-intents/creating-payment-intents#storing-information-in-metadata).
           type: object
         next_action:
           anyOf:
           - $ref: '#/components/schemas/payment_intent_next_action'
-          description: If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using the provided source.
+          description: If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using
+            the provided source.
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
@@ -2430,7 +2588,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/account'
-          description: The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts) for details.
+          description: The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected
+            accounts](https://stripe.com/docs/payments/connected-accounts) for details.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
@@ -2462,7 +2621,8 @@ components:
           - $ref: '#/components/schemas/payment_intent_processing'
           description: If present, this property tells you about the processing state of the payment.
         receipt_email:
-          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment
+            in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
           maxLength: 5000
           type:
           - string
@@ -2480,10 +2640,14 @@ components:
           description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
 
 
-            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s
+            Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was
+            provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction
+            completes.
 
 
-            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional
+            legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
           enum:
           - off_session
           - on_session
@@ -2495,19 +2659,24 @@ components:
           - $ref: '#/components/schemas/shipping'
           description: Shipping information for this PaymentIntent.
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 5000
           type:
           - string
           - 'null'
         statement_descriptor_suffix:
-          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened
+            descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for
+            the concatenated descriptor.
           maxLength: 5000
           type:
           - string
           - 'null'
         status:
-          description: Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `canceled`, or `succeeded`. Read more about each PaymentIntent [status](https://stripe.com/docs/payments/intents#intent-statuses).
+          description: Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`,
+            `requires_capture`, `canceled`, or `succeeded`. Read more about each PaymentIntent [status](https://stripe.com/docs/payments/intents#intent-statuses).
           enum:
           - canceled
           - processing
@@ -2520,7 +2689,8 @@ components:
         transfer_data:
           anyOf:
           - $ref: '#/components/schemas/transfer_data'
-          description: The data that automatically creates a Transfer after the payment finalizes. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The data that automatically creates a Transfer after the payment finalizes. Learn more about the [use case for connected
+            accounts](https://stripe.com/docs/payments/connected-accounts).
         transfer_group:
           description: A string that identifies the resulting payment as part of a group. Learn more about the [use case for connected accounts](https://stripe.com/docs/connect/separate-charges-and-transfers).
           maxLength: 5000
@@ -2593,13 +2763,15 @@ components:
           - string
           - 'null'
         account_type:
-          description: The bank account type. This can only be `checking` or `savings` in most countries. In Japan, this can only be `futsu` or `toza`.
+          description: The bank account type. This can only be `checking` or `savings` in most countries. In Japan, this can only be `futsu` or
+            `toza`.
           maxLength: 5000
           type:
           - string
           - 'null'
         available_payout_methods:
-          description: A set of available payout methods for this bank account. Only values from this set should be passed as the `method` when creating a payout.
+          description: A set of available payout methods for this bank account. Only values from this set should be passed as the `method` when
+            creating a payout.
           items:
             enum:
             - instant
@@ -2638,7 +2810,8 @@ components:
           - boolean
           - 'null'
         fingerprint:
-          description: Uniquely identifies this particular bank account. You can use this attribute to check whether two bank accounts are the same.
+          description: Uniquely identifies this particular bank account. You can use this attribute to check whether two bank accounts are the
+            same.
           maxLength: 5000
           type:
           - string
@@ -2646,7 +2819,8 @@ components:
         future_requirements:
           anyOf:
           - $ref: '#/components/schemas/external_account_requirements'
-          description: Information about the [upcoming new requirements for the bank account](https://stripe.com/docs/connect/custom-accounts/future-requirements), including what information needs to be collected, and by when.
+          description: Information about the [upcoming new requirements for the bank account](https://stripe.com/docs/connect/custom-accounts/future-requirements),
+            including what information needs to be collected, and by when.
         id:
           description: Unique identifier for the object.
           maxLength: 5000
@@ -2659,7 +2833,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -2679,10 +2854,19 @@ components:
           - string
           - 'null'
         status:
-          description: 'For bank accounts, possible values are `new`, `validated`, `verified`, `verification_failed`, or `errored`. A bank account that hasn''t had any activity or validation performed is `new`. If Stripe can determine that the bank account exists, its status will be `validated`. Note that there often isn’t enough information to know (e.g., for smaller credit unions), and the validation is not always run. If customer bank account verification has succeeded, the bank account status will be `verified`. If the verification failed for any reason, such as microdeposit failure, the status will be `verification_failed`. If a payout sent to this bank account fails, we''ll set the status to `errored` and will not continue to send [scheduled payouts](https://stripe.com/docs/payouts#payout-schedule) until the bank details are updated.
+          description: 'For bank accounts, possible values are `new`, `validated`, `verified`, `verification_failed`, or `errored`. A bank account
+            that hasn''t had any activity or validation performed is `new`. If Stripe can determine that the bank account exists, its status will
+            be `validated`. Note that there often isn’t enough information to know (e.g., for smaller credit unions), and the validation is not
+            always run. If customer bank account verification has succeeded, the bank account status will be `verified`. If the verification failed
+            for any reason, such as microdeposit failure, the status will be `verification_failed`. If a payout sent to this bank account fails,
+            we''ll set the status to `errored` and will not continue to send [scheduled payouts](https://stripe.com/docs/payouts#payout-schedule)
+            until the bank details are updated.
 
 
-            For external accounts, possible values are `new`, `errored` and `verification_failed`. If a payouts fails, the status is set to `errored` and scheduled payouts are stopped until account details are updated. In India, if we can''t [verify the owner of the bank account](https://support.stripe.com/questions/bank-account-ownership-verification), we''ll set the status to `verification_failed`. Other validations aren''t run against external accounts because they''re only used for payouts. This means the other statuses don''t apply.'
+            For external accounts, possible values are `new`, `errored` and `verification_failed`. If a payouts fails, the status is set to `errored`
+            and scheduled payouts are stopped until account details are updated. In India, if we can''t [verify the owner of the bank account](https://support.stripe.com/questions/bank-account-ownership-verification),
+            we''ll set the status to `verification_failed`. Other validations aren''t run against external accounts because they''re only used
+            for payouts. This means the other statuses don''t apply.'
           maxLength: 5000
           type: string
       required:
@@ -2703,19 +2887,25 @@ components:
     price:
       description: 'Prices define the unit cost, currency, and (optional) billing cycle for both recurring and one-time purchases of products.
 
-        [Products](https://stripe.com/docs/api#products) help you track inventory or provisioning, and prices help you track payment terms. Different physical goods or levels of service should be represented by products, and pricing options should be represented by prices. This approach lets you change prices without having to change your provisioning scheme.
+        [Products](https://stripe.com/docs/api#products) help you track inventory or provisioning, and prices help you track payment terms. Different
+        physical goods or levels of service should be represented by products, and pricing options should be represented by prices. This approach
+        lets you change prices without having to change your provisioning scheme.
 
 
         For example, you might have a single "gold" product that has prices for $10/month, $100/year, and €9 once.
 
 
-        Related guides: [Set up a subscription](https://stripe.com/docs/billing/subscriptions/set-up-subscription), [create an invoice](https://stripe.com/docs/billing/invoices/create), and more about [products and prices](https://stripe.com/docs/products-prices/overview).'
+        Related guides: [Set up a subscription](https://stripe.com/docs/billing/subscriptions/set-up-subscription), [create an invoice](https://stripe.com/docs/billing/invoices/create),
+        and more about [products and prices](https://stripe.com/docs/products-prices/overview).'
       properties:
         active:
           description: Whether the price can be used for new purchases.
           type: boolean
         billing_scheme:
-          description: Describes how to compute the price per period. Either `per_unit` or `tiered`. `per_unit` indicates that the fixed amount (specified in `unit_amount` or `unit_amount_decimal`) will be charged per unit in `quantity` (for prices with `usage_type=licensed`), or per unit of total usage (for prices with `usage_type=metered`). `tiered` indicates that the unit pricing will be computed using a tiering strategy as defined using the `tiers` and `tiers_mode` attributes.
+          description: Describes how to compute the price per period. Either `per_unit` or `tiered`. `per_unit` indicates that the fixed amount
+            (specified in `unit_amount` or `unit_amount_decimal`) will be charged per unit in `quantity` (for prices with `usage_type=licensed`),
+            or per unit of total usage (for prices with `usage_type=metered`). `tiered` indicates that the unit pricing will be computed using
+            a tiering strategy as defined using the `tiers` and `tiers_mode` attributes.
           enum:
           - per_unit
           - tiered
@@ -2725,12 +2915,14 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         currency_options:
           additionalProperties:
             $ref: '#/components/schemas/currency_option'
-          description: Prices defined in each available currency option. Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported currency](https://stripe.com/docs/currencies).
+          description: Prices defined in each available currency option. Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html)
+            and a [supported currency](https://stripe.com/docs/currencies).
           type: object
         custom_unit_amount:
           anyOf:
@@ -2753,7 +2945,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type: object
         nickname:
           description: A brief description of the price, hidden from customers.
@@ -2782,7 +2975,9 @@ components:
           - $ref: '#/components/schemas/recurring'
           description: The recurring components of a price such as `interval` and `usage_type`.
         tax_behavior:
-          description: Only required if a [default tax behavior](https://stripe.com/docs/tax/products-prices-tax-categories-tax-behavior#setting-a-default-tax-behavior-(recommended)) was not provided in the Stripe Tax settings. Specifies whether the price is considered inclusive of taxes or exclusive of taxes. One of `inclusive`, `exclusive`, or `unspecified`. Once specified as either `inclusive` or `exclusive`, it cannot be changed.
+          description: Only required if a [default tax behavior](https://stripe.com/docs/tax/products-prices-tax-categories-tax-behavior#setting-a-default-tax-behavior-(recommended))
+            was not provided in the Stripe Tax settings. Specifies whether the price is considered inclusive of taxes or exclusive of taxes. One
+            of `inclusive`, `exclusive`, or `unspecified`. Once specified as either `inclusive` or `exclusive`, it cannot be changed.
           enum:
           - exclusive
           - inclusive
@@ -2791,12 +2986,14 @@ components:
           - string
           - 'null'
         tiers:
-          description: Each element represents a pricing tier. This parameter requires `billing_scheme` to be set to `tiered`. See also the documentation for `billing_scheme`.
+          description: Each element represents a pricing tier. This parameter requires `billing_scheme` to be set to `tiered`. See also the documentation
+            for `billing_scheme`.
           items:
             $ref: '#/components/schemas/price_tier'
           type: array
         tiers_mode:
-          description: Defines if the tiering price should be `graduated` or `volume` based. In `volume`-based tiering, the maximum quantity within a period determines the per unit price. In `graduated` tiering, pricing can change as the quantity grows.
+          description: Defines if the tiering price should be `graduated` or `volume` based. In `volume`-based tiering, the maximum quantity within
+            a period determines the per unit price. In `graduated` tiering, pricing can change as the quantity grows.
           enum:
           - graduated
           - volume
@@ -2806,9 +3003,11 @@ components:
         transform_quantity:
           anyOf:
           - $ref: '#/components/schemas/transform_quantity'
-          description: Apply a transformation to the reported usage or set quantity before computing the amount billed. Cannot be combined with `tiers`.
+          description: Apply a transformation to the reported usage or set quantity before computing the amount billed. Cannot be combined with
+            `tiers`.
         type:
-          description: One of `one_time` or `recurring` depending on whether the price is for a one-time purchase or a recurring (subscription) purchase.
+          description: One of `one_time` or `recurring` depending on whether the price is for a one-time purchase or a recurring (subscription)
+            purchase.
           enum:
           - one_time
           - recurring
@@ -2819,7 +3018,8 @@ components:
           - integer
           - 'null'
         unit_amount_decimal:
-          description: The unit amount in cents (or local equivalent) to be charged, represented as a decimal string with at most 12 decimal places. Only set if `billing_scheme=per_unit`.
+          description: The unit amount in cents (or local equivalent) to be charged, represented as a decimal string with at most 12 decimal places.
+            Only set if `billing_scheme=per_unit`.
           format: decimal
           type:
           - string
@@ -2846,7 +3046,8 @@ components:
       - transform_quantity
       x-resourceId: price
     invoiceitem:
-      description: 'Invoice Items represent the component lines of an [invoice](https://stripe.com/docs/api/invoices). An invoice item is added to an
+      description: 'Invoice Items represent the component lines of an [invoice](https://stripe.com/docs/api/invoices). An invoice item is added
+        to an
 
         invoice by creating or updating it with an `invoice` field, at which point it will be included as
 
@@ -2857,7 +3058,8 @@ components:
 
         Invoice Items can be created before you are ready to actually send the invoice. This can be particularly useful when combined
 
-        with a [subscription](https://stripe.com/docs/api/subscriptions). Sometimes you want to add a charge or credit to a customer, but actually charge
+        with a [subscription](https://stripe.com/docs/api/subscriptions). Sometimes you want to add a charge or credit to a customer, but actually
+        charge
 
         or credit the customer’s card only at the end of a regular billing cycle. This is useful for combining several charges
 
@@ -2870,7 +3072,8 @@ components:
           description: Amount (in the `currency` specified) of the invoice item. This should always be equal to `unit_amount * quantity`.
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         customer:
           anyOf:
@@ -2897,7 +3100,8 @@ components:
           description: If true, discounts will apply to this invoice item. Always false for prorations.
           type: boolean
         discounts:
-          description: The discounts which apply to the invoice item. Item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.
+          description: The discounts which apply to the invoice item. Item discounts are applied before invoice discounts. Use `expand[]=discounts`
+            to expand each discount.
           items:
             anyOf:
             - maxLength: 5000
@@ -2929,7 +3133,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -2948,7 +3153,8 @@ components:
           description: Whether the invoice item was created automatically as a proration adjustment when the customer switched plans.
           type: boolean
         quantity:
-          description: Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the subscription that the proration was computed for.
+          description: Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the subscription that the proration
+            was computed for.
           type: integer
         subscription:
           anyOf:
@@ -2964,7 +3170,8 @@ components:
           maxLength: 5000
           type: string
         tax_rates:
-          description: The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do not apply to this invoice item.
+          description: The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do not apply to this invoice
+            item.
           items:
             $ref: '#/components/schemas/tax_rate'
           type:
@@ -3019,7 +3226,8 @@ components:
 
         might want to apply to a customer. Coupons may be applied to [subscriptions](https://stripe.com/docs/api#subscriptions), [invoices](https://stripe.com/docs/api#invoices),
 
-        [checkout sessions](https://stripe.com/docs/api/checkout/sessions), [quotes](https://stripe.com/docs/api#quotes), and more. Coupons do not work with conventional one-off [charges](https://stripe.com/docs/api#create_charge) or [payment intents](https://stripe.com/docs/api/payment_intents).'
+        [checkout sessions](https://stripe.com/docs/api/checkout/sessions), [quotes](https://stripe.com/docs/api#quotes), and more. Coupons do
+        not work with conventional one-off [charges](https://stripe.com/docs/api#create_charge) or [payment intents](https://stripe.com/docs/api/payment_intents).'
       properties:
         amount_off:
           description: Amount (in the `currency` specified) that will be taken off the subtotal of any invoices for this customer.
@@ -3033,14 +3241,16 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: If `amount_off` has been set, the three-letter [ISO code for the currency](https://stripe.com/docs/currencies) of the amount to take off.
+          description: If `amount_off` has been set, the three-letter [ISO code for the currency](https://stripe.com/docs/currencies) of the amount
+            to take off.
           type:
           - string
           - 'null'
         currency_options:
           additionalProperties:
             $ref: '#/components/schemas/coupon_currency_option'
-          description: Coupons defined in each available currency option. Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported currency](https://stripe.com/docs/currencies).
+          description: Coupons defined in each available currency option. Each key must be a three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html)
+            and a [supported currency](https://stripe.com/docs/currencies).
           type: object
         duration:
           description: One of `forever`, `once`, and `repeating`. Describes how long a customer who applies this coupon will get the discount.
@@ -3071,7 +3281,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -3087,7 +3298,8 @@ components:
           - coupon
           type: string
         percent_off:
-          description: Percent that will be taken off the subtotal of any invoices for this customer for the duration of the coupon. For example, a coupon with percent_off of 50 will make a $ (or local equivalent)100 invoice $ (or local equivalent)50 instead.
+          description: Percent that will be taken off the subtotal of any invoices for this customer for the duration of the coupon. For example,
+            a coupon with percent_off of 50 will make a $ (or local equivalent)100 invoice $ (or local equivalent)50 instead.
           type:
           - number
           - 'null'
@@ -3117,3 +3329,498 @@ components:
       - applies_to
       - currency_options
       x-resourceId: coupon
+    account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    address:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    application:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    automatic_tax:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    billing_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    cancellation_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    charge:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    coupon_applies_to:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    coupon_currency_option:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    currency_option:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    custom_unit_amount:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    customer_balance_customer_balance_settings:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    customer_tax:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_application:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_discount:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_product:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_tax_id:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    discounts_resource_discount_amount:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    external_account_requirements:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_line_item_period:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_setting_custom_field:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_setting_customer_setting:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_tax_amount:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_threshold_reason:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_from_invoice:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_invoice_rendering:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_payment_settings:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_resource_invoice_tax_id:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_resource_line_items_proration_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_shipping_cost:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoices_status_transitions:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_amount_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_automatic_payment_methods_payment_intent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_private_payment_methods_alipay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_next_action:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_payment_method_options:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_processing:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_acss_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_affirm:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_afterpay_clearpay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_au_becs_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_bacs_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_bancontact:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_blik:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_boleto:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_card_present:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_cashapp:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_config_biz_payment_method_configuration_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_customer_balance:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_eps:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_fpx:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_giropay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_grabpay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_ideal:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_interac_present:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_klarna:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_konbini:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_link:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_oxxo:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_p24:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_paynow:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_paypal:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_pix:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_promptpay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_revolut_pay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_sepa_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_sofort:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_us_bank_account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_wechat_pay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_zip:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    price_tier:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    product:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    promotion_code:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    quote:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    radar_radar_options:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    recurring:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    review:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    setup_intent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    shipping:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_automatic_tax:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_billing_thresholds:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_details_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_item:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_pending_invoice_item_interval:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_schedule:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscription_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscriptions_resource_pause_collection:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscriptions_resource_payment_settings:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscriptions_resource_pending_update:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    subscriptions_trials_resource_trial_settings:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    tax_id_verification:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    tax_rate:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    test_helpers.test_clock:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    transform_quantity:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true

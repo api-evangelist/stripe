@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-gelato-verification-session-list-schema.json",
+  "title": "GelatoVerificationSessionList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-identity-api-openapi.yml#/components/schemas/GelatoVerificationSessionList",
+  "type": "object",
+  "required": [
+    "data",
+    "has_more",
+    "object",
+    "url"
+  ],
+  "properties": {
+    "data": {
+      "items": {
+        "$ref": "#/$defs/identity.verification_session"
+      },
+      "type": "array"
+    },
+    "has_more": {
+      "description": "True if this list has another page of items after this one that can be fetched.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+      "enum": [
+        "list"
+      ],
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL where this list can be accessed.",
+      "maxLength": 5000,
+      "pattern": "^/v1/identity/verification_sessions",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "gelato_document_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_id_number_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_selfie_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_session_last_error": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_verification_report_options": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_verification_session_options": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_verified_outputs": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "identity.verification_report": {
+      "description": "A VerificationReport is the result of an attempt to collect and verify data from a user.\nThe collection of verification checks performed is determined from the `type` and `options`\nparameters used. You can find the result of each verification check performed in the\nappropriate sub-resource: `document`, `id_number`, `selfie`.\n\nEach VerificationReport contains a copy of any data collected by the user as well as\nreference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)\nAPI. To configure and create VerificationReports, use the\n[VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.\n\nRelated guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).",
+      "properties": {
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "document": {
+          "$ref": "#/$defs/gelato_document_report"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "id_number": {
+          "$ref": "#/$defs/gelato_id_number_report"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "identity.verification_report"
+          ],
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/$defs/gelato_verification_report_options"
+        },
+        "selfie": {
+          "$ref": "#/$defs/gelato_selfie_report"
+        },
+        "type": {
+          "description": "Type of report.",
+          "enum": [
+            "document",
+            "id_number"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        },
+        "verification_session": {
+          "description": "ID of the VerificationSession that created this report.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "created",
+        "id",
+        "livemode",
+        "object"
+      ],
+      "title": "GelatoVerificationReport",
+      "type": "object",
+      "x-expandableFields": [
+        "document",
+        "id_number",
+        "options",
+        "selfie"
+      ],
+      "x-resourceId": "identity.verification_report"
+    },
+    "identity.verification_session": {
+      "description": "A VerificationSession guides you through the process of collecting and verifying the identities\nof your users. It contains details about the type of verification, such as what [verification\ncheck](/docs/identity/verification-checks) to perform. Only create one VerificationSession for\neach verification in your system.\n\nA VerificationSession transitions through [multiple\nstatuses](/docs/identity/how-sessions-work) throughout its lifetime as it progresses through\nthe verification flow. The VerificationSession contains the user's verified data after\nverification checks are complete.\n\nRelated guide: [The Verification Sessions API](https://stripe.com/docs/identity/verification-sessions)",
+      "properties": {
+        "client_secret": {
+          "description": "The short-lived client secret used by Stripe.js to [show a verification modal](https://stripe.com/docs/js/identity/modal) inside your app. This client secret expires after 24 hours and can only be used once. Don’t store it, log it, embed it in a URL, or expose it to anyone other than the user. Make sure that you have TLS enabled on any page that includes the client secret. Refer to our docs on [passing the client secret to the frontend](https://stripe.com/docs/identity/verification-sessions#client-secret) to learn more.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "last_error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gelato_session_last_error"
+            }
+          ],
+          "description": "If present, this property tells you the last error encountered when processing the verification."
+        },
+        "last_verification_report": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/identity.verification_report"
+            }
+          ],
+          "description": "ID of the most recent VerificationReport. [Learn more about accessing detailed verification results.](https://stripe.com/docs/identity/verification-sessions#results)",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/identity.verification_report"
+              }
+            ]
+          }
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "identity.verification_session"
+          ],
+          "type": "string"
+        },
+        "options": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gelato_verification_session_options"
+            }
+          ],
+          "description": "A set of options for the session’s verification checks."
+        },
+        "redaction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/verification_session_redaction"
+            }
+          ],
+          "description": "Redaction status of this VerificationSession. If the VerificationSession is not redacted, this field will be null."
+        },
+        "status": {
+          "description": "Status of this VerificationSession. [Learn more about the lifecycle of sessions](https://stripe.com/docs/identity/how-sessions-work).",
+          "enum": [
+            "canceled",
+            "processing",
+            "requires_input",
+            "verified"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of [verification check](https://stripe.com/docs/identity/verification-checks) to be performed.",
+          "enum": [
+            "document",
+            "id_number"
+          ],
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stripeBypassValidation": true
+        },
+        "url": {
+          "description": "The short-lived URL that you use to redirect a user to Stripe to submit their identity information. This URL expires after 48 hours and can only be used once. Don’t store it, log it, send it in emails or expose it to anyone other than the user. Refer to our docs on [verifying identity documents](https://stripe.com/docs/identity/verify-identity-documents?platform=web&type=redirect) to learn how to redirect users to Stripe.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verified_outputs": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gelato_verified_outputs"
+            }
+          ],
+          "description": "The user’s verified data."
+        }
+      },
+      "required": [
+        "created",
+        "id",
+        "livemode",
+        "metadata",
+        "object",
+        "status"
+      ],
+      "title": "GelatoVerificationSession",
+      "type": "object",
+      "x-expandableFields": [
+        "last_error",
+        "last_verification_report",
+        "options",
+        "redaction",
+        "verified_outputs"
+      ],
+      "x-resourceId": "identity.verification_session"
+    },
+    "verification_session_redaction": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

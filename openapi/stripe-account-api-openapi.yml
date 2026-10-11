@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Stripe Accounts Account API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements
+    or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -61,7 +62,8 @@ paths:
         ChooseTags: true
   /v1/account_links:
     post:
-      description: Creates an AccountLink object that includes a single-use Stripe URL that the platform can redirect their user to in order to take them through the Connect Onboarding flow.
+      description: Creates an AccountLink object that includes a single-use Stripe URL that the platform can redirect their user to in order to
+        take them through the Connect Onboarding flow.
       operationId: PostAccountLinks
       requestBody:
         content:
@@ -94,7 +96,8 @@ paths:
         ChooseTags: true
   /v1/account_sessions:
     post:
-      description: Creates a AccountSession object that includes a single-use token that the platform can use on their front-end to grant client-side API access.
+      description: Creates a AccountSession object that includes a single-use token that the platform can use on their front-end to grant client-side
+        API access.
       operationId: PostAccountSessions
       requestBody:
         content:
@@ -202,7 +205,8 @@ paths:
       description: 'With Connect, you can delete accounts you manage.
 
 
-        Accounts created using test-mode keys can be deleted at any time. Standard accounts created using live-mode keys cannot be deleted. Custom or Express accounts created using live-mode keys can only be deleted once all balances are zero.
+        Accounts created using test-mode keys can be deleted at any time. Standard accounts created using live-mode keys cannot be deleted. Custom
+        or Express accounts created using live-mode keys can only be deleted once all balances are zero.
 
 
         If you want to delete your own account, use the account information tab in your account settings instead.'
@@ -515,7 +519,8 @@ paths:
       x-api-evangelist-processing:
         ChooseTags: true
     post:
-      description: 'Updates the metadata, account holder name, account holder type of a bank account belonging to a Custom account, and optionally sets it as the default for its currency. Other bank account details are not editable by design.
+      description: 'Updates the metadata, account holder name, account holder type of a bank account belonging to a Custom account, and optionally
+        sets it as the default for its currency. Other bank account details are not editable by design.
 
 
         You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.'
@@ -715,7 +720,8 @@ paths:
       x-api-evangelist-processing:
         ChooseTags: true
     post:
-      description: 'Updates the metadata, account holder name, account holder type of a bank account belonging to a Custom account, and optionally sets it as the default for its currency. Other bank account details are not editable by design.
+      description: 'Updates the metadata, account holder name, account holder type of a bank account belonging to a Custom account, and optionally
+        sets it as the default for its currency. Other bank account details are not editable by design.
 
 
         You can re-enable a disabled bank account by performing an update call without providing any arguments or changes.'
@@ -774,7 +780,8 @@ paths:
       description: 'With Connect, you may flag accounts as suspicious.
 
 
-        Test-mode Custom and Express accounts can be rejected at any time. Accounts created using live-mode keys may only be rejected once all balances are zero.'
+        Test-mode Custom and Express accounts can be rejected at any time. Accounts created using live-mode keys may only be rejected once all
+        balances are zero.'
       operationId: PostAccountsAccountReject
       parameters:
       - in: path
@@ -913,14 +920,16 @@ components:
           format: unix-time
           type: integer
         default_currency:
-          description: Three-letter ISO currency code representing the default currency for the account. This must be a currency that [Stripe supports in the account's country](https://stripe.com/docs/payouts).
+          description: Three-letter ISO currency code representing the default currency for the account. This must be a currency that [Stripe
+            supports in the account's country](https://stripe.com/docs/payouts).
           maxLength: 5000
           type: string
         details_submitted:
           description: Whether account details have been submitted. Standard accounts cannot receive payouts before this is true.
           type: boolean
         email:
-          description: An email address associated with the account. It's not used for authentication and Stripe doesn't market to this field without explicit approval from the platform.
+          description: An email address associated with the account. It's not used for authentication and Stripe doesn't market to this field
+            without explicit approval from the platform.
           maxLength: 5000
           type:
           - string
@@ -929,7 +938,8 @@ components:
           description: External accounts (bank accounts and debit cards) currently attached to this account
           properties:
             data:
-              description: The list contains all external accounts that have been attached to the Stripe account. These may be bank accounts or cards.
+              description: The list contains all external accounts that have been attached to the Stripe account. These may be bank accounts or
+                cards.
               items:
                 anyOf:
                 - $ref: '#/components/schemas/bank_account'
@@ -970,7 +980,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type: object
         object:
           description: String representing the object's type. Objects of the same type share the same value.
@@ -1016,9 +1027,11 @@ components:
       description: 'This is an object representing a person associated with a Stripe account.
 
 
-        A platform cannot access a Standard or Express account''s persons after the account starts onboarding, such as after generating an account link for the account.
+        A platform cannot access a Standard or Express account''s persons after the account starts onboarding, such as after generating an account
+        link for the account.
 
-        See the [Standard onboarding](https://stripe.com/docs/connect/standard-accounts) or [Express onboarding documentation](https://stripe.com/docs/connect/express-accounts) for information about platform prefilling and account onboarding steps.
+        See the [Standard onboarding](https://stripe.com/docs/connect/standard-accounts) or [Express onboarding documentation](https://stripe.com/docs/connect/express-accounts)
+        for information about platform prefilling and account onboarding steps.
 
 
         Related guide: [Handling identity verification with the API](https://stripe.com/docs/connect/handling-api-verification#person-information)'
@@ -1086,7 +1099,8 @@ components:
           maxLength: 5000
           type: string
         id_number_provided:
-          description: Whether the person's `id_number` was provided. True if either the full ID number was provided or if only the required part of the ID number was provided (ex. last four of an individual's SSN for the US indicated by `ssn_last_4_provided`).
+          description: Whether the person's `id_number` was provided. True if either the full ID number was provided or if only the required part
+            of the ID number was provided (ex. last four of an individual's SSN for the US indicated by `ssn_last_4_provided`).
           type: boolean
         id_number_secondary_provided:
           description: Whether the person's `id_number_secondary` was provided.
@@ -1119,7 +1133,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type: object
         nationality:
           description: The country where the person is a national.
@@ -1139,7 +1154,8 @@ components:
           - string
           - 'null'
         political_exposure:
-          description: Indicates if the person or any of their representatives, family members, or other closely related persons, declares that they hold or have held an important public job or function, in any jurisdiction.
+          description: Indicates if the person or any of their representatives, family members, or other closely related persons, declares that
+            they hold or have held an important public job or function, in any jurisdiction.
           enum:
           - existing
           - none
@@ -1228,10 +1244,12 @@ components:
           description: 'The client secret of this AccountSession. Used on the client to set up secure access to the given `account`.
 
 
-            The client secret can be used to provide access to `account` from your frontend. It should not be stored, logged, or exposed to anyone other than the connected account. Make sure that you have TLS enabled on any page that includes the client secret.
+            The client secret can be used to provide access to `account` from your frontend. It should not be stored, logged, or exposed to anyone
+            other than the connected account. Make sure that you have TLS enabled on any page that includes the client secret.
 
 
-            Refer to our docs to [setup Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components) and learn about how `client_secret` should be handled.'
+            Refer to our docs to [setup Connect embedded components](https://stripe.com/docs/connect/get-started-connect-embedded-components)
+            and learn about how `client_secret` should be handled.'
           maxLength: 5000
           type: string
         components:
@@ -1260,3 +1278,193 @@ components:
       x-expandableFields:
       - components
       x-resourceId: account_session
+    DeleteAccountsAccountBankAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    DeleteAccountsAccountExternalAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    DeleteAccountsAccountRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    GetAccountRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    GetAccountsAccountBankAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    GetAccountsAccountExternalAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    GetAccountsAccountRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountLinksRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountSessionsRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountBankAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountBankAccountsRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountExternalAccountsIdRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountExternalAccountsRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountRejectRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsAccountRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    PostAccountsRequest:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_business_profile:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_capabilities:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_future_requirements:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_requirements:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_settings:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_tos_acceptance:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    account_unification_account_controller:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    address:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    connect_embedded_account_session_create_components:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_bank_account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    legal_entity_company:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    legal_entity_dob:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    legal_entity_japan_address:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    legal_entity_person_verification:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    person_additional_tos_acceptances:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    person_future_requirements:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    person_relationship:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    person_requirements:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true

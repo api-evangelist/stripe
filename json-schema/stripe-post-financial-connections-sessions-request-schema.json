@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-post-financial-connections-sessions-request-schema.json",
+  "title": "PostFinancialConnectionsSessionsRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-financial-connections-api-openapi.yml#/components/schemas/PostFinancialConnectionsSessionsRequest",
+  "type": "object",
+  "required": [
+    "account_holder",
+    "permissions"
+  ],
+  "properties": {
+    "account_holder": {
+      "description": "The account holder to link accounts for.",
+      "properties": {
+        "account": {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "customer": {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "account",
+            "customer"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "accountholder_params",
+      "type": "object"
+    },
+    "expand": {
+      "description": "Specifies which fields in the response should be expanded.",
+      "items": {
+        "maxLength": 5000,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "filters": {
+      "description": "Filters to restrict the kinds of accounts to collect.",
+      "properties": {
+        "countries": {
+          "items": {
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "countries"
+      ],
+      "title": "filters_params",
+      "type": "object"
+    },
+    "permissions": {
+      "description": "List of data features that you would like to request access to.\n\nPossible values are `balances`, `transactions`, `ownership`, and `payment_method`.",
+      "items": {
+        "enum": [
+          "balances",
+          "ownership",
+          "payment_method",
+          "transactions"
+        ],
+        "maxLength": 5000,
+        "type": "string",
+        "x-stripeBypassValidation": true
+      },
+      "type": "array"
+    },
+    "prefetch": {
+      "description": "List of data features that you would like to retrieve upon account creation.",
+      "items": {
+        "enum": [
+          "balances",
+          "ownership",
+          "transactions"
+        ],
+        "type": "string",
+        "x-stripeBypassValidation": true
+      },
+      "type": "array"
+    },
+    "return_url": {
+      "description": "For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.",
+      "maxLength": 5000,
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-post-files-request-schema.json",
+  "title": "PostFilesRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-files-api-openapi.yml#/components/schemas/PostFilesRequest",
+  "type": "object",
+  "required": [
+    "file",
+    "purpose"
+  ],
+  "properties": {
+    "expand": {
+      "description": "Specifies which fields in the response should be expanded.",
+      "items": {
+        "maxLength": 5000,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "file": {
+      "description": "A file to upload. Make sure that the specifications follow RFC 2388, which defines file transfers for the `multipart/form-data` protocol.",
+      "format": "binary",
+      "type": "string"
+    },
+    "file_link_data": {
+      "description": "Optional parameters that automatically create a [file link](https://stripe.com/docs/api#file_links) for the newly created file.",
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "expires_at": {
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "enum": [
+                ""
+              ],
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "create"
+      ],
+      "title": "file_link_creation_params",
+      "type": "object"
+    },
+    "purpose": {
+      "description": "The [purpose](https://stripe.com/docs/file-upload#uploading-a-file) of the uploaded file.",
+      "enum": [
+        "account_requirement",
+        "additional_verification",
+        "business_icon",
+        "business_logo",
+        "customer_signature",
+        "dispute_evidence",
+        "identity_document",
+        "pci_document",
+        "tax_document_user_upload",
+        "terminal_reader_splashscreen"
+      ],
+      "type": "string",
+      "x-stripeBypassValidation": true
+    }
+  }
+}

@@ -1,0 +1,423 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-source-mandate-notification-schema.json",
+  "title": "SourceMandateNotification",
+  "description": "Source mandate notifications should be created when a notification related to\na source mandate must be sent to the payer. They will trigger a webhook or\ndeliver an email to the customer.",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-sources-api-openapi.yml#/components/schemas/source_mandate_notification",
+  "properties": {
+    "acss_debit": {
+      "$ref": "#/$defs/source_mandate_notification_acss_debit_data"
+    },
+    "amount": {
+      "description": "A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bacs_debit": {
+      "$ref": "#/$defs/source_mandate_notification_bacs_debit_data"
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "source_mandate_notification"
+      ],
+      "type": "string"
+    },
+    "reason": {
+      "description": "The reason of the mandate notification. Valid reasons are `mandate_confirmed` or `debit_initiated`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "sepa_debit": {
+      "$ref": "#/$defs/source_mandate_notification_sepa_debit_data"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "status": {
+      "description": "The status of the mandate notification. Valid statuses are `pending` or `submitted`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "type": {
+      "description": "The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.",
+      "maxLength": 5000,
+      "type": "string"
+    }
+  },
+  "required": [
+    "created",
+    "id",
+    "livemode",
+    "object",
+    "reason",
+    "source",
+    "status",
+    "type"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "acss_debit",
+    "bacs_debit",
+    "sepa_debit",
+    "source"
+  ],
+  "x-resourceId": "source_mandate_notification",
+  "$defs": {
+    "source": {
+      "description": "`Source` objects allow you to accept a variety of payment methods. They\nrepresent a customer's payment instrument, and can be used with the Stripe API\njust like a `Card` object: once chargeable, they can be charged, or can be\nattached to customers.\n\nStripe doesn't recommend using the deprecated [Sources API](https://stripe.com/docs/api/sources).\nWe recommend that you adopt the [PaymentMethods API](https://stripe.com/docs/api/payment_methods).\nThis newer API provides access to our latest features and payment method types.\n\nRelated guides: [Sources API](https://stripe.com/docs/sources) and [Sources & Customers](https://stripe.com/docs/sources/customers).",
+      "properties": {
+        "ach_credit_transfer": {
+          "$ref": "#/$defs/source_type_ach_credit_transfer"
+        },
+        "ach_debit": {
+          "$ref": "#/$defs/source_type_ach_debit"
+        },
+        "acss_debit": {
+          "$ref": "#/$defs/source_type_acss_debit"
+        },
+        "alipay": {
+          "$ref": "#/$defs/source_type_alipay"
+        },
+        "amount": {
+          "description": "A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total amount associated with the source. This is the amount for which the source will be chargeable once ready. Required for `single_use` sources.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "au_becs_debit": {
+          "$ref": "#/$defs/source_type_au_becs_debit"
+        },
+        "bancontact": {
+          "$ref": "#/$defs/source_type_bancontact"
+        },
+        "card": {
+          "$ref": "#/$defs/source_type_card"
+        },
+        "card_present": {
+          "$ref": "#/$defs/source_type_card_present"
+        },
+        "client_secret": {
+          "description": "The client secret of the source. Used for client-side retrieval using a publishable key.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "code_verification": {
+          "$ref": "#/$defs/source_code_verification_flow"
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) associated with the source. This is the currency for which the source will be chargeable once ready. Required for `single_use` sources.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customer": {
+          "description": "The ID of the customer to which this source is attached. This will not be present when the source has not been attached to a customer.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "eps": {
+          "$ref": "#/$defs/source_type_eps"
+        },
+        "flow": {
+          "description": "The authentication `flow` of the source. `flow` is one of `redirect`, `receiver`, `code_verification`, `none`.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "giropay": {
+          "$ref": "#/$defs/source_type_giropay"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "ideal": {
+          "$ref": "#/$defs/source_type_ideal"
+        },
+        "klarna": {
+          "$ref": "#/$defs/source_type_klarna"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "multibanco": {
+          "$ref": "#/$defs/source_type_multibanco"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "source"
+          ],
+          "type": "string"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/source_owner"
+            }
+          ],
+          "description": "Information about the owner of the payment instrument that may be used or required by particular source types."
+        },
+        "p24": {
+          "$ref": "#/$defs/source_type_p24"
+        },
+        "receiver": {
+          "$ref": "#/$defs/source_receiver_flow"
+        },
+        "redirect": {
+          "$ref": "#/$defs/source_redirect_flow"
+        },
+        "sepa_debit": {
+          "$ref": "#/$defs/source_type_sepa_debit"
+        },
+        "sofort": {
+          "$ref": "#/$defs/source_type_sofort"
+        },
+        "source_order": {
+          "$ref": "#/$defs/source_order"
+        },
+        "statement_descriptor": {
+          "description": "Extra information about a source. This will appear on your customer's statement every time you charge the source.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "description": "The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`, or `pending`. Only `chargeable` sources can be used to create a charge.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "three_d_secure": {
+          "$ref": "#/$defs/source_type_three_d_secure"
+        },
+        "type": {
+          "description": "The `type` of the source. The `type` is a payment method, one of `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`, `card`, `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`, `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`. An additional hash is included on the source with a name matching this value. It contains additional information specific to the [payment method](https://stripe.com/docs/sources) used.",
+          "enum": [
+            "ach_credit_transfer",
+            "ach_debit",
+            "acss_debit",
+            "alipay",
+            "au_becs_debit",
+            "bancontact",
+            "card",
+            "card_present",
+            "eps",
+            "giropay",
+            "ideal",
+            "klarna",
+            "multibanco",
+            "p24",
+            "sepa_debit",
+            "sofort",
+            "three_d_secure",
+            "wechat"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        },
+        "usage": {
+          "description": "Either `reusable` or `single_use`. Whether this source should be reusable or not. Some source types may or may not be reusable by construction, while others may leave the option at creation. If an incompatible value is passed, an error will be returned.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "wechat": {
+          "$ref": "#/$defs/source_type_wechat"
+        }
+      },
+      "required": [
+        "client_secret",
+        "created",
+        "flow",
+        "id",
+        "livemode",
+        "object",
+        "status",
+        "type"
+      ],
+      "title": "Source",
+      "type": "object",
+      "x-expandableFields": [
+        "code_verification",
+        "owner",
+        "receiver",
+        "redirect",
+        "source_order"
+      ],
+      "x-resourceId": "source"
+    },
+    "source_code_verification_flow": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_mandate_notification_acss_debit_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_mandate_notification_bacs_debit_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_mandate_notification_sepa_debit_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_order": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_owner": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_receiver_flow": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_redirect_flow": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_ach_credit_transfer": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_ach_debit": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_acss_debit": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_alipay": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_au_becs_debit": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_bancontact": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_card": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_card_present": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_eps": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_giropay": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_ideal": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_klarna": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_multibanco": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_p24": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_sepa_debit": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_sofort": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_three_d_secure": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_type_wechat": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

@@ -1,0 +1,1780 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-invoiceitem-schema.json",
+  "title": "InvoiceItem",
+  "description": "Invoice Items represent the component lines of an [invoice](https://stripe.com/docs/api/invoices). An invoice item is added to an\ninvoice by creating or updating it with an `invoice` field, at which point it will be included as\n[an invoice line item](https://stripe.com/docs/api/invoices/line_item) within\n[invoice.lines](https://stripe.com/docs/api/invoices/object#invoice_object-lines).\n\nInvoice Items can be created before you are ready to actually send the invoice. This can be particularly useful when combined\nwith a [subscription](https://stripe.com/docs/api/subscriptions). Sometimes you want to add a charge or credit to a customer, but actually charge\nor credit the customer’s card only at the end of a regular billing cycle. This is useful for combining several charges\n(to minimize per-transaction fees), or for having Stripe tabulate your usage-based billing totals.\n\nRelated guides: [Integrate with the Invoicing API](https://stripe.com/docs/invoicing/integration), [Subscription Invoices](https://stripe.com/docs/billing/invoices/subscription#adding-upcoming-invoice-items).",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-invoice-api-openapi.yml#/components/schemas/invoiceitem",
+  "properties": {
+    "amount": {
+      "description": "Amount (in the `currency` specified) of the invoice item. This should always be equal to `unit_amount * quantity`.",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "customer": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/customer"
+        },
+        {
+          "$ref": "#/$defs/deleted_customer"
+        }
+      ],
+      "description": "The ID of the customer who will be billed when this invoice item is billed.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/customer"
+          },
+          {
+            "$ref": "#/$defs/deleted_customer"
+          }
+        ]
+      }
+    },
+    "date": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "description": {
+      "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "discountable": {
+      "description": "If true, discounts will apply to this invoice item. Always false for prorations.",
+      "type": "boolean"
+    },
+    "discounts": {
+      "description": "The discounts which apply to the invoice item. Item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.",
+      "items": {
+        "anyOf": [
+          {
+            "maxLength": 5000,
+            "type": "string"
+          },
+          {
+            "$ref": "#/$defs/discount"
+          }
+        ],
+        "x-expansionResources": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/discount"
+            }
+          ]
+        }
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "invoice": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/invoice"
+        }
+      ],
+      "description": "The ID of the invoice this invoice item belongs to.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/invoice"
+          }
+        ]
+      }
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "invoiceitem"
+      ],
+      "type": "string"
+    },
+    "period": {
+      "$ref": "#/$defs/invoice_line_item_period"
+    },
+    "price": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/price"
+        }
+      ],
+      "description": "The price of the invoice item."
+    },
+    "proration": {
+      "description": "Whether the invoice item was created automatically as a proration adjustment when the customer switched plans.",
+      "type": "boolean"
+    },
+    "quantity": {
+      "description": "Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the subscription that the proration was computed for.",
+      "type": "integer"
+    },
+    "subscription": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/subscription"
+        }
+      ],
+      "description": "The subscription that this invoice item has been created for, if any.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/subscription"
+          }
+        ]
+      }
+    },
+    "subscription_item": {
+      "description": "The subscription item that this invoice item has been created for, if any.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "tax_rates": {
+      "description": "The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do not apply to this invoice item.",
+      "items": {
+        "$ref": "#/$defs/tax_rate"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "test_clock": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/test_helpers.test_clock"
+        }
+      ],
+      "description": "ID of the test clock this invoice item belongs to.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/test_helpers.test_clock"
+          }
+        ]
+      }
+    },
+    "unit_amount": {
+      "description": "Unit amount (in the `currency` specified) of the invoice item.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unit_amount_decimal": {
+      "description": "Same as `unit_amount`, but contains a decimal value with at most 12 decimal places.",
+      "format": "decimal",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "amount",
+    "currency",
+    "customer",
+    "date",
+    "discountable",
+    "id",
+    "livemode",
+    "object",
+    "period",
+    "proration",
+    "quantity"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "customer",
+    "discounts",
+    "invoice",
+    "period",
+    "price",
+    "subscription",
+    "tax_rates",
+    "test_clock"
+  ],
+  "x-resourceId": "invoiceitem",
+  "$defs": {
+    "account": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "address": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "api_errors": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "application": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "automatic_tax": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_account": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "card": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "charge": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "customer": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_application": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_customer": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_discount": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "deleted_tax_id": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "discount": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "discounts_resource_discount_amount": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoice": {
+      "description": "Invoices are statements of amounts owed by a customer, and are either\ngenerated one-off, or generated periodically from a subscription.\n\nThey contain [invoice items](https://stripe.com/docs/api#Invoice Items), and proration adjustments\nthat may be caused by subscription upgrades/downgrades (if necessary).\n\nIf your invoice is configured to be billed through automatic charges,\nStripe automatically finalizes your invoice and attempts payment. Note\nthat finalizing the invoice,\n[when automatic](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection), does\nnot happen immediately as the invoice is created. Stripe waits\nuntil one hour after the last webhook was successfully sent (or the last\nwebhook timed out after failing). If you (and the platforms you may have\nconnected to) have no webhooks configured, Stripe waits one hour after\ncreation to finalize the invoice.\n\nIf your invoice is configured to be billed by sending an email, then based on your\n[email settings](https://dashboard.stripe.com/account/billing/automatic),\nStripe will email the invoice to your customer and await payment. These\nemails can contain a link to a hosted page to pay the invoice.\n\nStripe applies any customer credit on the account before determining the\namount due for the invoice (i.e., the amount that will be actually\ncharged). If the amount due for the invoice is less than Stripe's [minimum allowed charge\nper currency](/docs/currencies#minimum-and-maximum-charge-amounts), the\ninvoice is automatically marked paid, and we add the amount due to the\ncustomer's credit balance which is applied to the next invoice.\n\nMore details on the customer's credit balance are\n[here](https://stripe.com/docs/billing/customer/balance).\n\nRelated guide: [Send invoices to customers](https://stripe.com/docs/billing/invoices/sending)",
+      "properties": {
+        "account_country": {
+          "description": "The country of the business associated with this invoice, most often the business creating the invoice.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_name": {
+          "description": "The public name of the business associated with this invoice, most often the business creating the invoice.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_tax_ids": {
+          "description": "The account tax IDs associated with the invoice. Only editable when the invoice is a draft.",
+          "items": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/tax_id"
+              },
+              {
+                "$ref": "#/$defs/deleted_tax_id"
+              }
+            ],
+            "x-expansionResources": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/tax_id"
+                },
+                {
+                  "$ref": "#/$defs/deleted_tax_id"
+                }
+              ]
+            }
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "amount_due": {
+          "description": "Final amount due at this time for this invoice. If the invoice's total is smaller than the minimum charge amount, for example, or if there is account credit that can be applied to the invoice, the `amount_due` may be 0. If there is a positive `starting_balance` for the invoice (the customer owes money), the `amount_due` will also take that into account. The charge that gets generated for the invoice will be for the amount specified in `amount_due`.",
+          "type": "integer"
+        },
+        "amount_paid": {
+          "description": "The amount, in cents (or local equivalent), that was paid.",
+          "type": "integer"
+        },
+        "amount_remaining": {
+          "description": "The difference between amount_due and amount_paid, in cents (or local equivalent).",
+          "type": "integer"
+        },
+        "amount_shipping": {
+          "description": "This is the sum of all the shipping amounts.",
+          "type": "integer"
+        },
+        "application": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/application"
+            },
+            {
+              "$ref": "#/$defs/deleted_application"
+            }
+          ],
+          "description": "ID of the Connect Application that created the invoice.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/application"
+              },
+              {
+                "$ref": "#/$defs/deleted_application"
+              }
+            ]
+          }
+        },
+        "application_fee_amount": {
+          "description": "The fee in cents (or local equivalent) that will be applied to the invoice and transferred to the application owner's Stripe account when the invoice is paid.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "attempt_count": {
+          "description": "Number of payment attempts made for this invoice, from the perspective of the payment retry schedule. Any payment attempt counts as the first attempt, and subsequently only automatic retries increment the attempt count. In other words, manual payment attempts after the first attempt do not affect the retry schedule.",
+          "type": "integer"
+        },
+        "attempted": {
+          "description": "Whether an attempt has been made to pay the invoice. An invoice is not attempted until 1 hour after the `invoice.created` webhook, for example, so you might not want to display that invoice as unpaid to your users.",
+          "type": "boolean"
+        },
+        "auto_advance": {
+          "description": "Controls whether Stripe performs [automatic collection](https://stripe.com/docs/invoicing/integration/automatic-advancement-collection) of the invoice. If `false`, the invoice's state doesn't automatically advance without an explicit action.",
+          "type": "boolean"
+        },
+        "automatic_tax": {
+          "$ref": "#/$defs/automatic_tax"
+        },
+        "billing_reason": {
+          "description": "Indicates the reason why the invoice was created.\n\n* `manual`: Unrelated to a subscription, for example, created via the invoice editor.\n* `subscription`: No longer in use. Applies to subscriptions from before May 2018 where no distinction was made between updates, cycles, and thresholds.\n* `subscription_create`: A new subscription was created.\n* `subscription_cycle`: A subscription advanced into a new period.\n* `subscription_threshold`: A subscription reached a billing threshold.\n* `subscription_update`: A subscription was updated.\n* `upcoming`: Reserved for simulated invoices, per the upcoming invoice endpoint.",
+          "enum": [
+            "automatic_pending_invoice_item_invoice",
+            "manual",
+            "quote_accept",
+            "subscription",
+            "subscription_create",
+            "subscription_cycle",
+            "subscription_threshold",
+            "subscription_update",
+            "upcoming"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "charge": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/charge"
+            }
+          ],
+          "description": "ID of the latest charge generated for this invoice, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/charge"
+              }
+            ]
+          }
+        },
+        "collection_method": {
+          "description": "Either `charge_automatically`, or `send_invoice`. When charging automatically, Stripe will attempt to pay this invoice using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment instructions.",
+          "enum": [
+            "charge_automatically",
+            "send_invoice"
+          ],
+          "type": "string"
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "custom_fields": {
+          "description": "Custom fields displayed on the invoice.",
+          "items": {
+            "$ref": "#/$defs/invoice_setting_custom_field"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "customer": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/customer"
+            },
+            {
+              "$ref": "#/$defs/deleted_customer"
+            }
+          ],
+          "description": "The ID of the customer who will be billed.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/customer"
+              },
+              {
+                "$ref": "#/$defs/deleted_customer"
+              }
+            ]
+          }
+        },
+        "customer_address": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/address"
+            }
+          ],
+          "description": "The customer's address. Until the invoice is finalized, this field will equal `customer.address`. Once the invoice is finalized, this field will no longer be updated."
+        },
+        "customer_email": {
+          "description": "The customer's email. Until the invoice is finalized, this field will equal `customer.email`. Once the invoice is finalized, this field will no longer be updated.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customer_name": {
+          "description": "The customer's name. Until the invoice is finalized, this field will equal `customer.name`. Once the invoice is finalized, this field will no longer be updated.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customer_phone": {
+          "description": "The customer's phone number. Until the invoice is finalized, this field will equal `customer.phone`. Once the invoice is finalized, this field will no longer be updated.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customer_shipping": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/shipping"
+            }
+          ],
+          "description": "The customer's shipping information. Until the invoice is finalized, this field will equal `customer.shipping`. Once the invoice is finalized, this field will no longer be updated."
+        },
+        "customer_tax_exempt": {
+          "description": "The customer's tax exempt status. Until the invoice is finalized, this field will equal `customer.tax_exempt`. Once the invoice is finalized, this field will no longer be updated.",
+          "enum": [
+            "exempt",
+            "none",
+            "reverse"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customer_tax_ids": {
+          "description": "The customer's tax IDs. Until the invoice is finalized, this field will contain the same tax IDs as `customer.tax_ids`. Once the invoice is finalized, this field will no longer be updated.",
+          "items": {
+            "$ref": "#/$defs/invoices_resource_invoice_tax_id"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "default_payment_method": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/payment_method"
+            }
+          ],
+          "description": "ID of the default payment method for the invoice. It must belong to the customer associated with the invoice. If not set, defaults to the subscription's default payment method, if any, or to the default payment method in the customer's invoice settings.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/payment_method"
+              }
+            ]
+          }
+        },
+        "default_source": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/bank_account"
+            },
+            {
+              "$ref": "#/$defs/card"
+            },
+            {
+              "$ref": "#/$defs/source"
+            }
+          ],
+          "description": "ID of the default payment source for the invoice. It must belong to the customer associated with the invoice and be in a chargeable state. If not set, defaults to the subscription's default source, if any, or to the customer's default source.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/bank_account"
+              },
+              {
+                "$ref": "#/$defs/card"
+              },
+              {
+                "$ref": "#/$defs/source"
+              }
+            ]
+          },
+          "x-stripeBypassValidation": true
+        },
+        "default_tax_rates": {
+          "description": "The tax rates applied to this invoice, if any.",
+          "items": {
+            "$ref": "#/$defs/tax_rate"
+          },
+          "type": "array"
+        },
+        "description": {
+          "description": "An arbitrary string attached to the object. Often useful for displaying to users. Referenced as 'memo' in the Dashboard.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discount": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/discount"
+            }
+          ],
+          "description": "Describes the current discount applied to this invoice, if there is one. Not populated if there are multiple discounts."
+        },
+        "discounts": {
+          "description": "The discounts applied to the invoice. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.",
+          "items": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/discount"
+              },
+              {
+                "$ref": "#/$defs/deleted_discount"
+              }
+            ],
+            "x-expansionResources": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/discount"
+                },
+                {
+                  "$ref": "#/$defs/deleted_discount"
+                }
+              ]
+            }
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "due_date": {
+          "description": "The date on which payment for this invoice is due. This value will be `null` for invoices where `collection_method=charge_automatically`.",
+          "format": "unix-time",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "effective_at": {
+          "description": "The date when this invoice is in effect. Same as `finalized_at` unless overwritten. When defined, this value replaces the system-generated 'Date of issue' printed on the invoice PDF and receipt.",
+          "format": "unix-time",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ending_balance": {
+          "description": "Ending customer balance after the invoice is finalized. Invoices are finalized approximately an hour after successful webhook delivery or when payment collection is attempted for the invoice. If the invoice has not been finalized yet, this will be null.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "footer": {
+          "description": "Footer displayed on the invoice.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "from_invoice": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/invoices_from_invoice"
+            }
+          ],
+          "description": "Details of the invoice that was cloned. See the [revision documentation](https://stripe.com/docs/invoicing/invoice-revisions) for more details."
+        },
+        "hosted_invoice_url": {
+          "description": "The URL for the hosted invoice page, which allows customers to view and pay an invoice. If the invoice has not been finalized yet, this will be null.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object. This property is always present unless the invoice is an upcoming invoice. See [Retrieve an upcoming invoice](https://stripe.com/docs/api/invoices/upcoming) for more details.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "invoice_pdf": {
+          "description": "The link to download the PDF for the invoice. If the invoice has not been finalized yet, this will be null.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_finalization_error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/api_errors"
+            }
+          ],
+          "description": "The error encountered during the previous attempt to finalize the invoice. This field is cleared when the invoice is successfully finalized."
+        },
+        "latest_revision": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/invoice"
+            }
+          ],
+          "description": "The ID of the most recent non-draft revision of this invoice",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/invoice"
+              }
+            ]
+          }
+        },
+        "lines": {
+          "description": "The individual line items that make up the invoice. `lines` is sorted as follows: (1) pending invoice items (including prorations) in reverse chronological order, (2) subscription items in reverse chronological order, and (3) invoice items added after invoice creation in chronological order.",
+          "properties": {
+            "data": {
+              "description": "Details about each object.",
+              "items": {
+                "$ref": "#/$defs/line_item"
+              },
+              "type": "array"
+            },
+            "has_more": {
+              "description": "True if this list has another page of items after this one that can be fetched.",
+              "type": "boolean"
+            },
+            "object": {
+              "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+              "enum": [
+                "list"
+              ],
+              "type": "string"
+            },
+            "url": {
+              "description": "The URL where this list can be accessed.",
+              "maxLength": 5000,
+              "type": "string"
+            }
+          },
+          "required": [
+            "data",
+            "has_more",
+            "object",
+            "url"
+          ],
+          "title": "InvoiceLinesList",
+          "type": "object",
+          "x-expandableFields": [
+            "data"
+          ]
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "next_payment_attempt": {
+          "description": "The time at which payment will next be attempted. This value will be `null` for invoices where `collection_method=send_invoice`.",
+          "format": "unix-time",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "number": {
+          "description": "A unique, identifying string that appears on emails sent to the customer for this invoice. This starts with the customer's unique invoice_prefix if it is specified.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "invoice"
+          ],
+          "type": "string"
+        },
+        "on_behalf_of": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/account"
+            }
+          ],
+          "description": "The account (if any) for which the funds of the invoice payment are intended. If set, the invoice will be presented with the branding and support information of the specified account. See the [Invoices with Connect](https://stripe.com/docs/billing/invoices/connect) documentation for details.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/account"
+              }
+            ]
+          }
+        },
+        "paid": {
+          "description": "Whether payment was successfully collected for this invoice. An invoice can be paid (most commonly) with a charge or with credit from the customer's account balance.",
+          "type": "boolean"
+        },
+        "paid_out_of_band": {
+          "description": "Returns true if the invoice was manually marked paid, returns false if the invoice hasn't been paid yet or was paid on Stripe.",
+          "type": "boolean"
+        },
+        "payment_intent": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/payment_intent"
+            }
+          ],
+          "description": "The PaymentIntent associated with this invoice. The PaymentIntent is generated when the invoice is finalized, and can then be used to pay the invoice. Note that voiding an invoice will cancel the PaymentIntent.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/payment_intent"
+              }
+            ]
+          }
+        },
+        "payment_settings": {
+          "$ref": "#/$defs/invoices_payment_settings"
+        },
+        "period_end": {
+          "description": "End of the usage period during which invoice items were added to this invoice.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "period_start": {
+          "description": "Start of the usage period during which invoice items were added to this invoice.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "post_payment_credit_notes_amount": {
+          "description": "Total amount of all post-payment credit notes issued for this invoice.",
+          "type": "integer"
+        },
+        "pre_payment_credit_notes_amount": {
+          "description": "Total amount of all pre-payment credit notes issued for this invoice.",
+          "type": "integer"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/quote"
+            }
+          ],
+          "description": "The quote this invoice was generated from.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/quote"
+              }
+            ]
+          }
+        },
+        "receipt_number": {
+          "description": "This is the transaction number that appears on email receipts sent for this invoice.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rendering": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/invoices_invoice_rendering"
+            }
+          ],
+          "description": "The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted Invoice Page."
+        },
+        "shipping_cost": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/invoices_shipping_cost"
+            }
+          ],
+          "description": "The details of the cost of shipping, including the ShippingRate applied on the invoice."
+        },
+        "shipping_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/shipping"
+            }
+          ],
+          "description": "Shipping details for the invoice. The Invoice PDF will use the `shipping_details` value if it is set, otherwise the PDF will render the shipping address from the customer."
+        },
+        "starting_balance": {
+          "description": "Starting customer balance before the invoice is finalized. If the invoice has not been finalized yet, this will be the current customer balance. For revision invoices, this also includes any customer balance that was applied to the original invoice.",
+          "type": "integer"
+        },
+        "statement_descriptor": {
+          "description": "Extra information about an invoice for the customer's credit card statement.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "description": "The status of the invoice, one of `draft`, `open`, `paid`, `uncollectible`, or `void`. [Learn more](https://stripe.com/docs/billing/invoices/workflow#workflow-overview)",
+          "enum": [
+            "draft",
+            "open",
+            "paid",
+            "uncollectible",
+            "void"
+          ],
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stripeBypassValidation": true
+        },
+        "status_transitions": {
+          "$ref": "#/$defs/invoices_status_transitions"
+        },
+        "subscription": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/subscription"
+            }
+          ],
+          "description": "The subscription that this invoice was prepared for, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/subscription"
+              }
+            ]
+          }
+        },
+        "subscription_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/subscription_details_data"
+            }
+          ],
+          "description": "Details about the subscription that created this invoice."
+        },
+        "subscription_proration_date": {
+          "description": "Only set for upcoming invoices that preview prorations. The time used to calculate prorations.",
+          "type": "integer"
+        },
+        "subtotal": {
+          "description": "Total of all subscriptions, invoice items, and prorations on the invoice before any invoice level discount or exclusive tax is applied. Item discounts are already incorporated",
+          "type": "integer"
+        },
+        "subtotal_excluding_tax": {
+          "description": "The integer amount in cents (or local equivalent) representing the subtotal of the invoice before any invoice level discount or tax is applied. Item discounts are already incorporated",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "tax": {
+          "description": "The amount of tax on this invoice. This is the sum of all the tax amounts on this invoice.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "test_clock": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/test_helpers.test_clock"
+            }
+          ],
+          "description": "ID of the test clock this invoice belongs to.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/test_helpers.test_clock"
+              }
+            ]
+          }
+        },
+        "threshold_reason": {
+          "$ref": "#/$defs/invoice_threshold_reason"
+        },
+        "total": {
+          "description": "Total after discounts and taxes.",
+          "type": "integer"
+        },
+        "total_discount_amounts": {
+          "description": "The aggregate amounts calculated per discount across all line items.",
+          "items": {
+            "$ref": "#/$defs/discounts_resource_discount_amount"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "total_excluding_tax": {
+          "description": "The integer amount in cents (or local equivalent) representing the total amount of the invoice including all discounts but excluding all tax.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "total_tax_amounts": {
+          "description": "The aggregate amounts calculated per tax rate for all line items.",
+          "items": {
+            "$ref": "#/$defs/invoice_tax_amount"
+          },
+          "type": "array"
+        },
+        "transfer_data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/invoice_transfer_data"
+            }
+          ],
+          "description": "The account (if any) the payment will be attributed to for tax reporting, and where funds from the payment will be transferred to for the invoice."
+        },
+        "webhooks_delivered_at": {
+          "description": "Invoices are automatically paid or sent 1 hour after webhooks are delivered, or until all webhook delivery attempts have [been exhausted](https://stripe.com/docs/billing/webhooks#understand). This field tracks the time when webhooks for this invoice were successfully delivered. If the invoice had no webhooks to deliver, this will be set while the invoice is being created.",
+          "format": "unix-time",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "amount_due",
+        "amount_paid",
+        "amount_remaining",
+        "amount_shipping",
+        "attempt_count",
+        "attempted",
+        "automatic_tax",
+        "collection_method",
+        "created",
+        "currency",
+        "default_tax_rates",
+        "lines",
+        "livemode",
+        "object",
+        "paid",
+        "paid_out_of_band",
+        "payment_settings",
+        "period_end",
+        "period_start",
+        "post_payment_credit_notes_amount",
+        "pre_payment_credit_notes_amount",
+        "starting_balance",
+        "status_transitions",
+        "subtotal",
+        "total",
+        "total_tax_amounts"
+      ],
+      "title": "Invoice",
+      "type": "object",
+      "x-expandableFields": [
+        "account_tax_ids",
+        "application",
+        "automatic_tax",
+        "charge",
+        "custom_fields",
+        "customer",
+        "customer_address",
+        "customer_shipping",
+        "customer_tax_ids",
+        "default_payment_method",
+        "default_source",
+        "default_tax_rates",
+        "discount",
+        "discounts",
+        "from_invoice",
+        "last_finalization_error",
+        "latest_revision",
+        "lines",
+        "on_behalf_of",
+        "payment_intent",
+        "payment_settings",
+        "quote",
+        "rendering",
+        "shipping_cost",
+        "shipping_details",
+        "status_transitions",
+        "subscription",
+        "subscription_details",
+        "test_clock",
+        "threshold_reason",
+        "total_discount_amounts",
+        "total_tax_amounts",
+        "transfer_data"
+      ],
+      "x-resourceId": "invoice"
+    },
+    "invoice_line_item_period": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoice_setting_custom_field": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoice_tax_amount": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoice_threshold_reason": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoice_transfer_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoiceitem": {
+      "description": "Invoice Items represent the component lines of an [invoice](https://stripe.com/docs/api/invoices). An invoice item is added to an\ninvoice by creating or updating it with an `invoice` field, at which point it will be included as\n[an invoice line item](https://stripe.com/docs/api/invoices/line_item) within\n[invoice.lines](https://stripe.com/docs/api/invoices/object#invoice_object-lines).\n\nInvoice Items can be created before you are ready to actually send the invoice. This can be particularly useful when combined\nwith a [subscription](https://stripe.com/docs/api/subscriptions). Sometimes you want to add a charge or credit to a customer, but actually charge\nor credit the customer’s card only at the end of a regular billing cycle. This is useful for combining several charges\n(to minimize per-transaction fees), or for having Stripe tabulate your usage-based billing totals.\n\nRelated guides: [Integrate with the Invoicing API](https://stripe.com/docs/invoicing/integration), [Subscription Invoices](https://stripe.com/docs/billing/invoices/subscription#adding-upcoming-invoice-items).",
+      "properties": {
+        "amount": {
+          "description": "Amount (in the `currency` specified) of the invoice item. This should always be equal to `unit_amount * quantity`.",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "customer": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/customer"
+            },
+            {
+              "$ref": "#/$defs/deleted_customer"
+            }
+          ],
+          "description": "The ID of the customer who will be billed when this invoice item is billed.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/customer"
+              },
+              {
+                "$ref": "#/$defs/deleted_customer"
+              }
+            ]
+          }
+        },
+        "date": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "description": {
+          "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discountable": {
+          "description": "If true, discounts will apply to this invoice item. Always false for prorations.",
+          "type": "boolean"
+        },
+        "discounts": {
+          "description": "The discounts which apply to the invoice item. Item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.",
+          "items": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/discount"
+              }
+            ],
+            "x-expansionResources": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/discount"
+                }
+              ]
+            }
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "invoice": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/invoice"
+            }
+          ],
+          "description": "The ID of the invoice this invoice item belongs to.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/invoice"
+              }
+            ]
+          }
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "invoiceitem"
+          ],
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/$defs/invoice_line_item_period"
+        },
+        "price": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/price"
+            }
+          ],
+          "description": "The price of the invoice item."
+        },
+        "proration": {
+          "description": "Whether the invoice item was created automatically as a proration adjustment when the customer switched plans.",
+          "type": "boolean"
+        },
+        "quantity": {
+          "description": "Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the subscription that the proration was computed for.",
+          "type": "integer"
+        },
+        "subscription": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/subscription"
+            }
+          ],
+          "description": "The subscription that this invoice item has been created for, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/subscription"
+              }
+            ]
+          }
+        },
+        "subscription_item": {
+          "description": "The subscription item that this invoice item has been created for, if any.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "tax_rates": {
+          "description": "The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do not apply to this invoice item.",
+          "items": {
+            "$ref": "#/$defs/tax_rate"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "test_clock": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/test_helpers.test_clock"
+            }
+          ],
+          "description": "ID of the test clock this invoice item belongs to.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/test_helpers.test_clock"
+              }
+            ]
+          }
+        },
+        "unit_amount": {
+          "description": "Unit amount (in the `currency` specified) of the invoice item.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "unit_amount_decimal": {
+          "description": "Same as `unit_amount`, but contains a decimal value with at most 12 decimal places.",
+          "format": "decimal",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "amount",
+        "currency",
+        "customer",
+        "date",
+        "discountable",
+        "id",
+        "livemode",
+        "object",
+        "period",
+        "proration",
+        "quantity"
+      ],
+      "title": "InvoiceItem",
+      "type": "object",
+      "x-expandableFields": [
+        "customer",
+        "discounts",
+        "invoice",
+        "period",
+        "price",
+        "subscription",
+        "tax_rates",
+        "test_clock"
+      ],
+      "x-resourceId": "invoiceitem"
+    },
+    "invoices_from_invoice": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_invoice_rendering": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_payment_settings": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_resource_invoice_tax_id": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_resource_line_items_proration_details": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_shipping_cost": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "invoices_status_transitions": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "line_item": {
+      "description": "",
+      "properties": {
+        "amount": {
+          "description": "The amount, in cents (or local equivalent).",
+          "type": "integer"
+        },
+        "amount_excluding_tax": {
+          "description": "The integer amount in cents (or local equivalent) representing the amount for this line item, excluding all tax and discounts.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "description": {
+          "description": "An arbitrary string attached to the object. Often useful for displaying to users.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discount_amounts": {
+          "description": "The amount of discount calculated per discount for this line item.",
+          "items": {
+            "$ref": "#/$defs/discounts_resource_discount_amount"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "discountable": {
+          "description": "If true, discounts will apply to this line item. Always false for prorations.",
+          "type": "boolean"
+        },
+        "discounts": {
+          "description": "The discounts applied to the invoice line item. Line item discounts are applied before invoice discounts. Use `expand[]=discounts` to expand each discount.",
+          "items": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/discount"
+              }
+            ],
+            "x-expansionResources": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/discount"
+                }
+              ]
+            }
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "invoice_item": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/invoiceitem"
+            }
+          ],
+          "description": "The ID of the [invoice item](https://stripe.com/docs/api/Invoice Items) associated with this line item if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/invoiceitem"
+              }
+            ]
+          }
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Note that for line items with `type=subscription` this will reflect the metadata of the subscription that caused the line item to be created.",
+          "type": "object"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "line_item"
+          ],
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/$defs/invoice_line_item_period"
+        },
+        "price": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/price"
+            }
+          ],
+          "description": "The price of the line item."
+        },
+        "proration": {
+          "description": "Whether this is a proration.",
+          "type": "boolean"
+        },
+        "proration_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/invoices_resource_line_items_proration_details"
+            }
+          ],
+          "description": "Additional details for proration line items"
+        },
+        "quantity": {
+          "description": "The quantity of the subscription, if the line item is a subscription or a proration.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "subscription": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/subscription"
+            }
+          ],
+          "description": "The subscription that the invoice item pertains to, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/subscription"
+              }
+            ]
+          }
+        },
+        "subscription_item": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/subscription_item"
+            }
+          ],
+          "description": "The subscription item that generated this line item. Left empty if the line item is not an explicit result of a subscription.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/subscription_item"
+              }
+            ]
+          }
+        },
+        "tax_amounts": {
+          "description": "The amount of tax calculated per tax rate for this line item",
+          "items": {
+            "$ref": "#/$defs/invoice_tax_amount"
+          },
+          "type": "array"
+        },
+        "tax_rates": {
+          "description": "The tax rates which apply to the line item.",
+          "items": {
+            "$ref": "#/$defs/tax_rate"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "A string identifying the type of the source of this line item, either an `invoiceitem` or a `subscription`.",
+          "enum": [
+            "invoiceitem",
+            "subscription"
+          ],
+          "type": "string"
+        },
+        "unit_amount_excluding_tax": {
+          "description": "The amount in cents (or local equivalent) representing the unit amount for this line item, excluding all tax and discounts.",
+          "format": "decimal",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "amount",
+        "currency",
+        "discountable",
+        "id",
+        "livemode",
+        "metadata",
+        "object",
+        "period",
+        "proration",
+        "type"
+      ],
+      "title": "InvoiceLineItem",
+      "type": "object",
+      "x-expandableFields": [
+        "discount_amounts",
+        "discounts",
+        "invoice_item",
+        "period",
+        "price",
+        "proration_details",
+        "subscription",
+        "subscription_item",
+        "tax_amounts",
+        "tax_rates"
+      ],
+      "x-resourceId": "line_item"
+    },
+    "payment_intent": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "payment_method": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "price": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "quote": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "shipping": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "subscription": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "subscription_details_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "subscription_item": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "tax_id": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "tax_rate": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "test_helpers.test_clock": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

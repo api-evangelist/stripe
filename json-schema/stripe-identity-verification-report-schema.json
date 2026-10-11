@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-identity-verification-report-schema.json",
+  "title": "GelatoVerificationReport",
+  "description": "A VerificationReport is the result of an attempt to collect and verify data from a user.\nThe collection of verification checks performed is determined from the `type` and `options`\nparameters used. You can find the result of each verification check performed in the\nappropriate sub-resource: `document`, `id_number`, `selfie`.\n\nEach VerificationReport contains a copy of any data collected by the user as well as\nreference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)\nAPI. To configure and create VerificationReports, use the\n[VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.\n\nRelated guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-identity-api-openapi.yml#/components/schemas/identity.verification_report",
+  "properties": {
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "document": {
+      "$ref": "#/$defs/gelato_document_report"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "id_number": {
+      "$ref": "#/$defs/gelato_id_number_report"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "identity.verification_report"
+      ],
+      "type": "string"
+    },
+    "options": {
+      "$ref": "#/$defs/gelato_verification_report_options"
+    },
+    "selfie": {
+      "$ref": "#/$defs/gelato_selfie_report"
+    },
+    "type": {
+      "description": "Type of report.",
+      "enum": [
+        "document",
+        "id_number"
+      ],
+      "type": "string",
+      "x-stripeBypassValidation": true
+    },
+    "verification_session": {
+      "description": "ID of the VerificationSession that created this report.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "created",
+    "id",
+    "livemode",
+    "object"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "document",
+    "id_number",
+    "options",
+    "selfie"
+  ],
+  "x-resourceId": "identity.verification_report",
+  "$defs": {
+    "gelato_document_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_id_number_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_selfie_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_verification_report_options": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

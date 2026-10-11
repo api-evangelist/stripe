@@ -19,7 +19,8 @@ tags:
 paths:
   /v1/reviews:
     get:
-      description: Returns a list of Review objects that have open set to true. The objects are sorted in descending order by creation date, with the most recently created object appearing first.
+      description: Returns a list of Review objects that have open set to true. The objects are sorted in descending order by creation date, with
+        the most recently created object appearing first.
       operationId: GetReviews
       parameters:
       - explode: true
@@ -41,7 +42,9 @@ paths:
             type: object
           - type: integer
         style: deepObject
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -67,7 +70,9 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -258,7 +263,8 @@ components:
             oneOf:
             - $ref: '#/components/schemas/charge'
         closed_reason:
-          description: The reason the review was closed, or null if it has not yet been closed. One of `approved`, `refunded`, `refunded_as_fraud`, `disputed`, or `redacted`.
+          description: The reason the review was closed, or null if it has not yet been closed. One of `approved`, `refunded`, `refunded_as_fraud`,
+            `disputed`, or `redacted`.
           enum:
           - approved
           - disputed
@@ -285,7 +291,8 @@ components:
         ip_address_location:
           anyOf:
           - $ref: '#/components/schemas/radar_review_resource_location'
-          description: Information related to the location of the payment. Note that this information is an approximation and attempts to locate the nearest population center - it should not be used to determine a specific address.
+          description: Information related to the location of the payment. Note that this information is an approximation and attempts to locate
+            the nearest population center - it should not be used to determine a specific address.
         livemode:
           description: Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
           type: boolean
@@ -313,7 +320,8 @@ components:
             oneOf:
             - $ref: '#/components/schemas/payment_intent'
         reason:
-          description: The reason the review is currently open or closed. One of `rule`, `manual`, `approved`, `refunded`, `refunded_as_fraud`, `disputed`, or `redacted`.
+          description: The reason the review is currently open or closed. One of `rule`, `manual`, `approved`, `refunded`, `refunded_as_fraud`,
+            `disputed`, or `redacted`.
           maxLength: 5000
           type: string
         session:
@@ -342,6 +350,31 @@ components:
     GetReviewsReviewRequest:
       type: object
       properties: {}
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    charge:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    radar_review_resource_location:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    radar_review_resource_session:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

@@ -1,0 +1,329 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-climate-order-schema.json",
+  "title": "ClimateRemovalsOrders",
+  "description": "Orders represent your intent to purchase a particular Climate product. When you create an order, the\npayment is deducted from your merchant balance.",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-climate-api-openapi.yml#/components/schemas/climate.order",
+  "properties": {
+    "amount_fees": {
+      "description": "Total amount of [Frontier](https://frontierclimate.com/)'s service fees in the currency's smallest unit.",
+      "type": "integer"
+    },
+    "amount_subtotal": {
+      "description": "Total amount of the carbon removal in the currency's smallest unit.",
+      "type": "integer"
+    },
+    "amount_total": {
+      "description": "Total amount of the order including fees in the currency's smallest unit.",
+      "type": "integer"
+    },
+    "beneficiary": {
+      "$ref": "#/$defs/climate_removals_beneficiary"
+    },
+    "canceled_at": {
+      "description": "Time at which the order was canceled. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "cancellation_reason": {
+      "description": "Reason for the cancellation of this order.",
+      "enum": [
+        "expired",
+        "product_unavailable",
+        "requested"
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "x-stripeBypassValidation": true
+    },
+    "certificate": {
+      "description": "For delivered orders, a URL to a delivery certificate for the order.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confirmed_at": {
+      "description": "Time at which the order was confirmed. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase, representing the currency for this order.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "delayed_at": {
+      "description": "Time at which the order's expected_delivery_year was delayed. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "delivered_at": {
+      "description": "Time at which the order was delivered. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "delivery_details": {
+      "description": "Details about the delivery of carbon removal for this order.",
+      "items": {
+        "$ref": "#/$defs/climate_removals_order_deliveries"
+      },
+      "type": "array"
+    },
+    "expected_delivery_year": {
+      "description": "The year this order is expected to be delivered.",
+      "type": "integer"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": "object"
+    },
+    "metric_tons": {
+      "description": "Quantity of carbon removal that is included in this order.",
+      "format": "decimal",
+      "type": "string"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "climate.order"
+      ],
+      "type": "string"
+    },
+    "product": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/climate.product"
+        }
+      ],
+      "description": "Unique ID for the Climate `Product` this order is purchasing.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/climate.product"
+          }
+        ]
+      }
+    },
+    "product_substituted_at": {
+      "description": "Time at which the order's product was substituted for a different product. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "status": {
+      "description": "The current status of this order.",
+      "enum": [
+        "awaiting_funds",
+        "canceled",
+        "confirmed",
+        "delivered",
+        "open"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "amount_fees",
+    "amount_subtotal",
+    "amount_total",
+    "created",
+    "currency",
+    "delivery_details",
+    "expected_delivery_year",
+    "id",
+    "livemode",
+    "metadata",
+    "metric_tons",
+    "object",
+    "product",
+    "status"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "beneficiary",
+    "delivery_details",
+    "product"
+  ],
+  "x-resourceId": "climate.order",
+  "$defs": {
+    "climate.product": {
+      "description": "A Climate product represents a type of carbon removal unit available for reservation.\nYou can retrieve it to see the current price and availability.",
+      "properties": {
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "current_prices_per_metric_ton": {
+          "additionalProperties": {
+            "$ref": "#/$defs/climate_removals_products_price"
+          },
+          "description": "Current prices for a metric ton of carbon removal in a currency's smallest unit.",
+          "type": "object"
+        },
+        "delivery_year": {
+          "description": "The year in which the carbon removal is expected to be delivered.",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object. For convenience, Climate product IDs are human-readable strings\nthat start with `climsku_`. See [carbon removal inventory](https://stripe.com/docs/climate/orders/carbon-removal-inventory)\nfor a list of available carbon removal products.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metric_tons_available": {
+          "description": "The quantity of metric tons available for reservation.",
+          "format": "decimal",
+          "type": "string"
+        },
+        "name": {
+          "description": "The Climate product's name.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "climate.product"
+          ],
+          "type": "string"
+        },
+        "suppliers": {
+          "description": "The carbon removal suppliers that fulfill orders for this Climate product.",
+          "items": {
+            "$ref": "#/$defs/climate.supplier"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "created",
+        "current_prices_per_metric_ton",
+        "id",
+        "livemode",
+        "metric_tons_available",
+        "name",
+        "object",
+        "suppliers"
+      ],
+      "title": "ClimateRemovalsProducts",
+      "type": "object",
+      "x-expandableFields": [
+        "current_prices_per_metric_ton",
+        "suppliers"
+      ],
+      "x-resourceId": "climate.product"
+    },
+    "climate.supplier": {
+      "description": "A supplier of carbon removal.",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "info_url": {
+          "description": "Link to a webpage to learn more about the supplier.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "locations": {
+          "description": "The locations in which this supplier operates.",
+          "items": {
+            "$ref": "#/$defs/climate_removals_location"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Name of this carbon removal supplier.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "object": {
+          "description": "String representing the object’s type. Objects of the same type share the same value.",
+          "enum": [
+            "climate.supplier"
+          ],
+          "type": "string"
+        },
+        "removal_pathway": {
+          "description": "The scientific pathway used for carbon removal.",
+          "enum": [
+            "biomass_carbon_removal_and_storage",
+            "direct_air_capture",
+            "enhanced_weathering"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "info_url",
+        "livemode",
+        "locations",
+        "name",
+        "object",
+        "removal_pathway"
+      ],
+      "title": "ClimateRemovalsSuppliers",
+      "type": "object",
+      "x-expandableFields": [
+        "locations"
+      ],
+      "x-resourceId": "climate.supplier"
+    }
+  }
+}

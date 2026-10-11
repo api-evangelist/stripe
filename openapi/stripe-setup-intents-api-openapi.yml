@@ -25,14 +25,16 @@ paths:
       - description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
 
 
-          It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
+          It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set
+          to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
         in: query
         name: attach_to_self
         required: false
         schema:
           type: boolean
         style: form
-      - description: A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it can be a dictionary with a number of different query options.
+      - description: A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp, or it
+          can be a dictionary with a number of different query options.
         explode: true
         in: query
         name: created
@@ -60,7 +62,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -94,7 +98,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -198,7 +204,8 @@ paths:
         Client-side retrieval using a publishable key is allowed when the client_secret is provided in the query string.
 
 
-        When retrieved with a publishable key, only a subset of properties will be returned. Please refer to the SetupIntent object reference for more details.'
+        When retrieved with a publishable key, only a subset of properties will be returned. Please refer to the SetupIntent object reference
+        for more details.'
       operationId: GetSetupIntentsIntent
       parameters:
       - description: The client secret of the SetupIntent. We require this string if you use a publishable key to retrieve the SetupIntent.
@@ -308,7 +315,8 @@ paths:
       x-summary-source: derived
   /v1/setup_intents/{intent}/cancel:
     post:
-      description: 'You can cancel a SetupIntent object when it’s in one of these statuses: requires_payment_method, requires_confirmation, or requires_action.
+      description: 'You can cancel a SetupIntent object when it’s in one of these statuses: requires_payment_method, requires_confirmation, or
+        requires_action.
 
 
         After you cancel it, setup is abandoned and any operations on the SetupIntent fail with an error.'
@@ -549,10 +557,12 @@ components:
           description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
 
 
-            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
+            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set
+            to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
           type: boolean
         automatic_payment_methods:
-          description: When you enable this parameter, this SetupIntent accepts payment methods that you enable in the Dashboard and that are compatible with its other parameters.
+          description: When you enable this parameter, this SetupIntent accepts payment methods that you enable in the Dashboard and that are
+            compatible with its other parameters.
           properties:
             allow_redirects:
               enum:
@@ -566,13 +576,15 @@ components:
           title: automatic_payment_methods_param
           type: object
         confirm:
-          description: Set to `true` to attempt to confirm this SetupIntent immediately. This parameter defaults to `false`. If a card is the attached payment method, you can provide a `return_url` in case further authentication is necessary.
+          description: Set to `true` to attempt to confirm this SetupIntent immediately. This parameter defaults to `false`. If a card is the
+            attached payment method, you can provide a `return_url` in case further authentication is necessary.
           type: boolean
         customer:
           description: 'ID of the Customer this SetupIntent belongs to, if one exists.
 
 
-            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
+            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other
+            Customers cannot be used with this SetupIntent.'
           maxLength: 5000
           type: string
         description:
@@ -589,7 +601,8 @@ components:
           description: 'Indicates the directions of money movement for which this payment method is intended to be used.
 
 
-            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
+            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use
+            the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
           items:
             enum:
             - inbound
@@ -641,7 +654,9 @@ components:
         metadata:
           additionalProperties:
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
           type: object
         on_behalf_of:
           description: The Stripe account ID created for this SetupIntent.
@@ -1346,13 +1361,16 @@ components:
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: The list of payment method types (for example, card) that this SetupIntent can use. If you don't provide this, it defaults to ["card"].
+          description: The list of payment method types (for example, card) that this SetupIntent can use. If you don't provide this, it defaults
+            to ["card"].
           items:
             maxLength: 5000
             type: string
           type: array
         return_url:
-          description: The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or site. To redirect to a mobile application, you can alternatively supply an application URI scheme. This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/setup_intents/create#create_setup_intent-confirm).
+          description: The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or
+            site. To redirect to a mobile application, you can alternatively supply an application URI scheme. This parameter can only be used
+            with [`confirm=true`](https://stripe.com/docs/api/setup_intents/create#create_setup_intent-confirm).
           type: string
         single_use:
           description: If you populate this hash, this SetupIntent generates a `single_use` mandate after successful completion.
@@ -2168,13 +2186,15 @@ components:
           description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
 
 
-            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
+            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set
+            to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
           type: boolean
         customer:
           description: 'ID of the Customer this SetupIntent belongs to, if one exists.
 
 
-            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
+            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other
+            Customers cannot be used with this SetupIntent.'
           maxLength: 5000
           type: string
         description:
@@ -2191,7 +2211,8 @@ components:
           description: 'Indicates the directions of money movement for which this payment method is intended to be used.
 
 
-            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
+            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use
+            the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
           items:
             enum:
             - inbound
@@ -2206,7 +2227,9 @@ components:
           - enum:
             - ''
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
         payment_method:
           description: ID of the payment method (a PaymentMethod, Card, or saved Source object) to attach to this SetupIntent.
           maxLength: 5000
@@ -2907,7 +2930,8 @@ components:
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: The list of payment method types (for example, card) that this SetupIntent can set up. If you don't provide this array, it defaults to ["card"].
+          description: The list of payment method types (for example, card) that this SetupIntent can set up. If you don't provide this array,
+            it defaults to ["card"].
           items:
             maxLength: 5000
             type: string
@@ -2964,7 +2988,8 @@ components:
           description: 'If present, the SetupIntent''s payment method will be attached to the in-context Stripe Account.
 
 
-            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
+            It can only be used for this Stripe Account’s own money movement flows like InboundTransfer and OutboundTransfers. It cannot be set
+            to true when setting up a PaymentMethod for a Customer, and defaults to false when attaching a PaymentMethod to a Customer.'
           type: boolean
         automatic_payment_methods:
           anyOf:
@@ -2983,7 +3008,8 @@ components:
           description: 'The client secret of this SetupIntent. Used for client-side retrieval using a publishable key.
 
 
-            The client secret can be used to complete payment setup from your frontend. It should not be stored, logged, or exposed to anyone other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.'
+            The client secret can be used to complete payment setup from your frontend. It should not be stored, logged, or exposed to anyone
+            other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.'
           maxLength: 5000
           type:
           - string
@@ -3001,7 +3027,8 @@ components:
           description: 'ID of the Customer this SetupIntent belongs to, if one exists.
 
 
-            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other Customers cannot be used with this SetupIntent.'
+            If present, the SetupIntent''s payment method will be attached to the Customer on successful setup. Payment methods attached to other
+            Customers cannot be used with this SetupIntent.'
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
@@ -3016,7 +3043,8 @@ components:
           description: 'Indicates the directions of money movement for which this payment method is intended to be used.
 
 
-            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
+            Include `inbound` if you intend to use the payment method as the origin to pull funds from. Include `outbound` if you intend to use
+            the payment method as the destination to send funds to. You can include both if you intend to use the payment method for both purposes.'
           items:
             enum:
             - inbound
@@ -3058,7 +3086,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -3113,7 +3142,8 @@ components:
             oneOf:
             - $ref: '#/components/schemas/mandate'
         status:
-          description: '[Status](https://stripe.com/docs/payments/intents#intent-statuses) of this SetupIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `canceled`, or `succeeded`.'
+          description: '[Status](https://stripe.com/docs/payments/intents#intent-statuses) of this SetupIntent, one of `requires_payment_method`,
+            `requires_confirmation`, `requires_action`, `processing`, `canceled`, or `succeeded`.'
           enum:
           - canceled
           - processing
@@ -3126,7 +3156,8 @@ components:
           description: 'Indicates how the payment method is intended to be used in the future.
 
 
-            Use `on_session` if you intend to only reuse the payment method when the customer is in your checkout flow. Use `off_session` if your customer may or may not be in your checkout flow. If not provided, this value defaults to `off_session`.'
+            Use `on_session` if you intend to only reuse the payment method when the customer is in your checkout flow. Use `off_session` if your
+            customer may or may not be in your checkout flow. If not provided, this value defaults to `off_session`.'
           maxLength: 5000
           type: string
       required:
@@ -3156,6 +3187,66 @@ components:
     GetSetupIntentsIntentRequest:
       type: object
       properties: {}
+    account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    application:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    customer:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_customer:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    mandate:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_automatic_payment_methods_setup_intent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_config_biz_payment_method_configuration_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    setup_attempt:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    setup_intent_next_action:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    setup_intent_payment_method_options:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

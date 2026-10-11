@@ -19,10 +19,13 @@ tags:
 paths:
   /v1/exchange_rates:
     get:
-      description: Returns a list of objects that contain the rates at which foreign currencies are converted to one another. Only shows the currencies for which Stripe supports.
+      description: Returns a list of objects that contain the rates at which foreign currencies are converted to one another. Only shows the currencies
+        for which Stripe supports.
       operationId: GetExchangeRates
       parameters:
-      - description: A cursor for use in pagination. `ending_before` is the currency that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with the exchange rate for currency X your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is the currency that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with the exchange rate for currency X your subsequent call can include `ending_before=obj_bar`
+          in order to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -41,14 +44,17 @@ paths:
             type: string
           type: array
         style: deepObject
-      - description: A limit on the number of objects to be returned. Limit can range between 1 and total number of supported payout currencies, and the default is the max.
+      - description: A limit on the number of objects to be returned. Limit can range between 1 and total number of supported payout currencies,
+          and the default is the max.
         in: query
         name: limit
         required: false
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is the currency that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with the exchange rate for currency X, your subsequent call can include `starting_after=X` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is the currency that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with the exchange rate for currency X, your subsequent call can include `starting_after=X`
+          in order to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -202,7 +208,8 @@ components:
          
 
 
-        *This Exchange Rates API is a Beta Service and is subject to Stripe''s terms of service. You may use the API solely for the purpose of transacting on Stripe. For example, the API may be queried in order to:*
+        *This Exchange Rates API is a Beta Service and is subject to Stripe''s terms of service. You may use the API solely for the purpose of
+        transacting on Stripe. For example, the API may be queried in order to:*
 
 
         - *localize prices for processing payments on Stripe*
@@ -214,10 +221,12 @@ components:
         - *determine app fees to charge a connected account*
 
 
-        *Using this Exchange Rates API beta for any purpose other than to transact on Stripe is strictly prohibited and constitutes a violation of Stripe''s terms of service.*'
+        *Using this Exchange Rates API beta for any purpose other than to transact on Stripe is strictly prohibited and constitutes a violation
+        of Stripe''s terms of service.*'
       properties:
         id:
-          description: Unique identifier for the object. Represented as the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html) in lowercase.
+          description: Unique identifier for the object. Represented as the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html)
+            in lowercase.
           maxLength: 5000
           type: string
         object:
@@ -228,7 +237,8 @@ components:
         rates:
           additionalProperties:
             type: number
-          description: Hash where the keys are supported currencies and the values are the exchange rate at which the base id currency converts to the key currency.
+          description: Hash where the keys are supported currencies and the values are the exchange rate at which the base id currency converts
+            to the key currency.
           type: object
       required:
       - id
@@ -241,6 +251,11 @@ components:
     GetExchangeRatesRateIdRequest:
       type: object
       properties: {}
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

@@ -19,7 +19,8 @@ tags:
 paths:
   /v1/files:
     get:
-      description: Returns a list of the files that your account has access to. Stripe sorts and returns the files by their creation dates, placing the most recently created files at the top.
+      description: Returns a list of the files that your account has access to. Stripe sorts and returns the files by their creation dates, placing
+        the most recently created files at the top.
       operationId: GetFiles
       parameters:
       - explode: true
@@ -41,7 +42,9 @@ paths:
             type: object
           - type: integer
         style: deepObject
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -92,7 +95,9 @@ paths:
           type: string
           x-stripeBypassValidation: true
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -129,7 +134,8 @@ paths:
       summary: Get files
       x-summary-source: derived
     post:
-      description: 'To upload a file to Stripe, you need to send a request of type multipart/form-data. Include the file you want to upload in the request, and the parameters for creating a file.
+      description: 'To upload a file to Stripe, you need to send a request of type multipart/form-data. Include the file you want to upload in
+        the request, and the parameters for creating a file.
 
 
         All of Stripe’s officially supported Client libraries support sending multipart/form-data.'
@@ -169,7 +175,8 @@ paths:
       x-summary-source: derived
   /v1/files/{file}:
     get:
-      description: Retrieves the details of an existing file object. After you supply a unique file ID, Stripe returns the corresponding file object. Learn how to access file contents.
+      description: Retrieves the details of an existing file object. After you supply a unique file ID, Stripe returns the corresponding file
+        object. Learn how to access file contents.
       operationId: GetFilesFile
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -356,11 +363,13 @@ components:
             type: string
           type: array
         file:
-          description: A file to upload. Make sure that the specifications follow RFC 2388, which defines file transfers for the `multipart/form-data` protocol.
+          description: A file to upload. Make sure that the specifications follow RFC 2388, which defines file transfers for the `multipart/form-data`
+            protocol.
           format: binary
           type: string
         file_link_data:
-          description: Optional parameters that automatically create a [file link](https://stripe.com/docs/api#file_links) for the newly created file.
+          description: Optional parameters that automatically create a [file link](https://stripe.com/docs/api#file_links) for the newly created
+            file.
           properties:
             create:
               type: boolean
@@ -430,6 +439,16 @@ components:
     GetFilesRequest:
       type: object
       properties: {}
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    file_link:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

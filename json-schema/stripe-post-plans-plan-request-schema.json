@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-post-plans-plan-request-schema.json",
+  "title": "PostPlansPlanRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-plans-api-openapi.yml#/components/schemas/PostPlansPlanRequest",
+  "type": "object",
+  "properties": {
+    "active": {
+      "description": "Whether the plan is currently available for new subscriptions.",
+      "type": "boolean"
+    },
+    "expand": {
+      "description": "Specifies which fields in the response should be expanded.",
+      "items": {
+        "maxLength": 5000,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "enum": [
+            ""
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`."
+    },
+    "nickname": {
+      "description": "A brief description of the plan, hidden from customers.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "product": {
+      "description": "The product the plan belongs to. This cannot be changed once it has been used in a subscription or subscription schedule.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "trial_period_days": {
+      "description": "Default number of trial days when subscribing a customer to this plan using [`trial_from_plan=true`](https://stripe.com/docs/api#create_subscription-trial_from_plan).",
+      "type": "integer"
+    }
+  }
+}

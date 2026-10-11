@@ -1,13 +1,16 @@
 ---
 generated: '2026-07-17'
 method: generated
-name: Onboard a Connect account
-description: Create a Stripe Connect connected account and mint a hosted onboarding link.
+name: stripe-connect-onboard-account
+description: Create a Stripe Connect connected account and mint a hosted onboarding
+  link.
 api: openapi/stripe-connect-api-openapi.yml
-operations: [PostAccounts, PostAccountLinks]
-source: >-
-  Grounded in arazzo/stripe-connect-onboard-account-workflow.yml; operationIds
+operations:
+- PostAccounts
+- PostAccountLinks
+source: Grounded in arazzo/stripe-connect-onboard-account-workflow.yml; operationIds
   verified in openapi/stripe-connect-api-openapi.yml.
+title: Onboard a Connect account
 ---
 
 # Onboard a Connect account

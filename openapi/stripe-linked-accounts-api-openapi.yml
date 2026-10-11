@@ -22,7 +22,8 @@ paths:
       description: Returns a list of Financial Connections Account objects.
       operationId: GetLinkedAccounts
       parameters:
-      - description: If present, only return accounts that belong to the specified account holder. `account_holder[customer]` and `account_holder[account]` are mutually exclusive.
+      - description: If present, only return accounts that belong to the specified account holder. `account_holder[customer]` and `account_holder[account]`
+          are mutually exclusive.
         explode: true
         in: query
         name: account_holder
@@ -38,7 +39,9 @@ paths:
           title: accountholder_params
           type: object
         style: deepObject
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -72,7 +75,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -158,7 +163,8 @@ paths:
       x-summary-source: derived
   /v1/linked_accounts/{account}/disconnect:
     post:
-      description: Disables your access to a Financial Connections Account. You will no longer be able to access data associated with the account (e.g. balances, transactions).
+      description: Disables your access to a Financial Connections Account. You will no longer be able to access data associated with the account
+        (e.g. balances, transactions).
       operationId: PostLinkedAccountsAccountDisconnect
       parameters:
       - in: path
@@ -208,7 +214,9 @@ paths:
           maxLength: 5000
           type: string
         style: simple
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -242,7 +250,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -351,7 +361,8 @@ components:
       type: object
       properties: {}
     financial_connections.account:
-      description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree of access.
+      description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree
+        of access.
       properties:
         account_holder:
           anyOf:
@@ -438,7 +449,8 @@ components:
           - inactive
           type: string
         subcategory:
-          description: "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`."
+          description: "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n\
+            \ - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`."
           enum:
           - checking
           - credit_card
@@ -458,7 +470,8 @@ components:
           - array
           - 'null'
         supported_payment_method_types:
-          description: The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be created from this account.
+          description: The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be
+            created from this account.
           items:
             enum:
             - link
@@ -560,6 +573,46 @@ components:
     GetLinkedAccountsRequest:
       type: object
       properties: {}
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_accountholder:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_balance:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_balance_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_ownership_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_transaction_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    financial_connections.account_owner:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    financial_connections.account_ownership:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

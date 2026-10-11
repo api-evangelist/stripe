@@ -22,7 +22,8 @@ paths:
       description: Returns a list of PaymentIntents.
       operationId: GetPaymentIntents
       parameters:
-      - description: A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp or a dictionary with a number of different query options.
+      - description: A filter on the list, based on the object `created` field. The value can be a string with an integer Unix timestamp or a
+          dictionary with a number of different query options.
         explode: true
         in: query
         name: created
@@ -50,7 +51,9 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -76,7 +79,9 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -218,7 +223,8 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first call. Use the next_page value returned in a previous response to request subsequent results.
+      - description: A cursor for pagination across multiple pages of results. Don't include this parameter on the first call. Use the next_page
+          value returned in a previous response to request subsequent results.
         in: query
         name: page
         required: false
@@ -226,7 +232,8 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language) and the list of supported [query fields for payment intents](https://stripe.com/docs/search#query-fields-for-payment-intents).
+      - description: The search query string. See [search query language](https://stripe.com/docs/search#search-query-language) and the list of
+          supported [query fields for payment intents](https://stripe.com/docs/search#query-fields-for-payment-intents).
         in: query
         name: query
         required: true
@@ -270,7 +277,8 @@ paths:
         You can retrieve a PaymentIntent client-side using a publishable key when the client_secret is in the query string.
 
 
-        If you retrieve a PaymentIntent with a publishable key, it only returns a subset of properties. Refer to the payment intent object reference for more details.'
+        If you retrieve a PaymentIntent with a publishable key, it only returns a subset of properties. Refer to the payment intent object reference
+        for more details.'
       operationId: GetPaymentIntentsIntent
       parameters:
       - description: The client secret of the PaymentIntent. We require it if you use a publishable key to retrieve the source.
@@ -440,10 +448,12 @@ paths:
       x-summary-source: derived
   /v1/payment_intents/{intent}/cancel:
     post:
-      description: 'You can cancel a PaymentIntent object when it’s in one of these statuses: requires_payment_method, requires_capture, requires_confirmation, requires_action or, in rare cases, processing.
+      description: 'You can cancel a PaymentIntent object when it’s in one of these statuses: requires_payment_method, requires_capture, requires_confirmation,
+        requires_action or, in rare cases, processing.
 
 
-        After it’s canceled, no additional charges are made by the PaymentIntent and any operations on the PaymentIntent fail with an error. For PaymentIntents with a status of requires_capture, the remaining amount_capturable is automatically refunded.
+        After it’s canceled, no additional charges are made by the PaymentIntent and any operations on the PaymentIntent fail with an error. For
+        PaymentIntents with a status of requires_capture, the remaining amount_capturable is automatically refunded.
 
 
         You can’t cancel the PaymentIntent for a Checkout Session. Expire the Checkout Session instead.'
@@ -784,13 +794,19 @@ components:
       - currency
       properties:
         amount:
-          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest
+            currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal
+            currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts).
+            The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
           type: integer
         application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type: integer
         automatic_payment_methods:
-          description: When you enable this parameter, this PaymentIntent accepts payment methods that you enable in the Dashboard and that are compatible with this PaymentIntent's other parameters.
+          description: When you enable this parameter, this PaymentIntent accepts payment methods that you enable in the Dashboard and that are
+            compatible with this PaymentIntent's other parameters.
           properties:
             allow_redirects:
               enum:
@@ -811,7 +827,9 @@ components:
           - manual
           type: string
         confirm:
-          description: Set to `true` to attempt to [confirm this PaymentIntent](https://stripe.com/docs/api/payment_intents/confirm) this PaymentIntent immediately. This parameter defaults to `false`. When creating and confirming a PaymentIntent at the same time, you can also provide the parameters available in the [Confirm API](https://stripe.com/docs/api/payment_intents/confirm).
+          description: Set to `true` to attempt to [confirm this PaymentIntent](https://stripe.com/docs/api/payment_intents/confirm) this PaymentIntent
+            immediately. This parameter defaults to `false`. When creating and confirming a PaymentIntent at the same time, you can also provide
+            the parameters available in the [Confirm API](https://stripe.com/docs/api/payment_intents/confirm).
           type: boolean
         confirmation_method:
           description: Describes whether we can confirm this PaymentIntent automatically, or if it requires customer action to confirm the payment.
@@ -820,7 +838,8 @@ components:
           - manual
           type: string
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         customer:
           description: 'ID of the Customer this PaymentIntent belongs to, if one exists.
@@ -829,7 +848,9 @@ components:
             Payment methods attached to other Customers cannot be used with this PaymentIntent.
 
 
-            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete.'
+            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s
+            payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user
+            are complete.'
           maxLength: 5000
           type: string
         description:
@@ -837,7 +858,9 @@ components:
           maxLength: 1000
           type: string
         error_on_requires_action:
-          description: Set to `true` to fail the payment attempt if the PaymentIntent transitions into `requires_action`. Use this parameter for simpler integrations that don't handle customer actions, such as [saving cards without authentication](https://stripe.com/docs/payments/save-card-without-authentication). This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
+          description: Set to `true` to fail the payment attempt if the PaymentIntent transitions into `requires_action`. Use this parameter for
+            simpler integrations that don't handle customer actions, such as [saving cards without authentication](https://stripe.com/docs/payments/save-card-without-authentication).
+            This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
           type: boolean
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -894,7 +917,9 @@ components:
         metadata:
           additionalProperties:
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
           type: object
         off_session:
           anyOf:
@@ -904,15 +929,19 @@ components:
             - recurring
             maxLength: 5000
             type: string
-          description: Set to `true` to indicate that the customer isn't in your checkout flow during this payment attempt and can't authenticate. Use this parameter in scenarios where you collect card details and [charge them later](https://stripe.com/docs/payments/cards/charging-saved-cards). This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
+          description: Set to `true` to indicate that the customer isn't in your checkout flow during this payment attempt and can't authenticate.
+            Use this parameter in scenarios where you collect card details and [charge them later](https://stripe.com/docs/payments/cards/charging-saved-cards).
+            This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
         on_behalf_of:
           description: The Stripe account ID that these funds are intended for. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type: string
         payment_method:
-          description: 'ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility) object) to attach to this PaymentIntent.
+          description: 'ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility)
+            object) to attach to this PaymentIntent.
 
 
-            If you omit this parameter with `confirm=true`, `customer.default_source` attaches as this PaymentIntent''s payment instrument to improve migration for users of the Charges API. We recommend that you explicitly provide the `payment_method` moving forward.'
+            If you omit this parameter with `confirm=true`, `customer.default_source` attaches as this PaymentIntent''s payment instrument to
+            improve migration for users of the Charges API. We recommend that you explicitly provide the `payment_method` moving forward.'
           maxLength: 5000
           type: string
         payment_method_configuration:
@@ -2323,7 +2352,8 @@ components:
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: The list of payment method types (for example, a card) that this PaymentIntent can use. If you don't provide this, it defaults to ["card"]. Use `automatic_payment_methods` to manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
+          description: The list of payment method types (for example, a card) that this PaymentIntent can use. If you don't provide this, it defaults
+            to ["card"]. Use `automatic_payment_methods` to manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
           items:
             maxLength: 5000
             type: string
@@ -2337,19 +2367,26 @@ components:
           title: radar_options_with_hidden_options
           type: object
         receipt_email:
-          description: Email address to send the receipt to. If you specify `receipt_email` for a payment in live mode, you send a receipt regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          description: Email address to send the receipt to. If you specify `receipt_email` for a payment in live mode, you send a receipt regardless
+            of your [email settings](https://dashboard.stripe.com/account/emails).
           type: string
         return_url:
-          description: The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or site. If you'd prefer to redirect to a mobile application, you can alternatively supply an application URI scheme. This parameter can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
+          description: The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or
+            site. If you'd prefer to redirect to a mobile application, you can alternatively supply an application URI scheme. This parameter
+            can only be used with [`confirm=true`](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-confirm).
           type: string
         setup_future_usage:
           description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
 
 
-            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s
+            Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was
+            provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction
+            completes.
 
 
-            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional
+            legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
           enum:
           - off_session
           - on_session
@@ -2397,11 +2434,15 @@ components:
           title: optional_fields_shipping
           type: object
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 22
           type: string
         statement_descriptor_suffix:
-          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. The concatenated descriptor must contain 1-22 characters.
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened
+            descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. The concatenated descriptor
+            must contain 1-22 characters.
           maxLength: 22
           type: string
         transfer_data:
@@ -2445,7 +2486,10 @@ components:
         Related guide: [Payment Intents API](https://stripe.com/docs/payments/payment-intents)'
       properties:
         amount:
-          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest
+            currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal
+            currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts).
+            The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
           type: integer
         amount_capturable:
           description: Amount that can be captured from this PaymentIntent.
@@ -2465,7 +2509,9 @@ components:
             oneOf:
             - $ref: '#/components/schemas/application'
         application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type:
           - integer
           - 'null'
@@ -2474,13 +2520,15 @@ components:
           - $ref: '#/components/schemas/payment_flows_automatic_payment_methods_payment_intent'
           description: Settings to configure compatible payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods)
         canceled_at:
-          description: Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since the Unix epoch.
+          description: Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since
+            the Unix epoch.
           format: unix-time
           type:
           - integer
           - 'null'
         cancellation_reason:
-          description: Reason for cancellation of this PaymentIntent, either user-provided (`duplicate`, `fraudulent`, `requested_by_customer`, or `abandoned`) or generated by Stripe internally (`failed_invoice`, `void_invoice`, or `automatic`).
+          description: Reason for cancellation of this PaymentIntent, either user-provided (`duplicate`, `fraudulent`, `requested_by_customer`,
+            or `abandoned`) or generated by Stripe internally (`failed_invoice`, `void_invoice`, or `automatic`).
           enum:
           - abandoned
           - automatic
@@ -2500,7 +2548,10 @@ components:
           - manual
           type: string
         client_secret:
-          description: "The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. \n\nThe client secret can be used to complete a payment from your frontend. It should not be stored, logged, or exposed to anyone other than the customer. Make sure that you have TLS enabled on any page that includes the client secret.\n\nRefer to our docs to [accept a payment](https://stripe.com/docs/payments/accept-a-payment?ui=elements) and learn about how `client_secret` should be handled."
+          description: "The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. \n\nThe client secret\
+            \ can be used to complete a payment from your frontend. It should not be stored, logged, or exposed to anyone other than the customer.\
+            \ Make sure that you have TLS enabled on any page that includes the client secret.\n\nRefer to our docs to [accept a payment](https://stripe.com/docs/payments/accept-a-payment?ui=elements)\
+            \ and learn about how `client_secret` should be handled."
           maxLength: 5000
           type:
           - string
@@ -2516,7 +2567,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         customer:
           anyOf:
@@ -2530,7 +2582,9 @@ components:
             Payment methods attached to other Customers cannot be used with this PaymentIntent.
 
 
-            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete.'
+            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s
+            payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user
+            are complete.'
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/customer'
@@ -2557,7 +2611,8 @@ components:
         last_payment_error:
           anyOf:
           - $ref: '#/components/schemas/api_errors'
-          description: The payment error encountered in the previous PaymentIntent confirmation. It will be cleared if the PaymentIntent is later updated for any reason.
+          description: The payment error encountered in the previous PaymentIntent confirmation. It will be cleared if the PaymentIntent is later
+            updated for any reason.
         latest_charge:
           anyOf:
           - maxLength: 5000
@@ -2574,12 +2629,14 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Learn more about [storing information in metadata](https://stripe.com/docs/payments/payment-intents/creating-payment-intents#storing-information-in-metadata).
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Learn more about [storing information in metadata](https://stripe.com/docs/payments/payment-intents/creating-payment-intents#storing-information-in-metadata).
           type: object
         next_action:
           anyOf:
           - $ref: '#/components/schemas/payment_intent_next_action'
-          description: If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using the provided source.
+          description: If present, this property tells you what actions you need to take in order for your customer to fulfill a payment using
+            the provided source.
         object:
           description: String representing the object's type. Objects of the same type share the same value.
           enum:
@@ -2590,7 +2647,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/account'
-          description: The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts) for details.
+          description: The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected
+            accounts](https://stripe.com/docs/payments/connected-accounts) for details.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/account'
@@ -2622,7 +2680,8 @@ components:
           - $ref: '#/components/schemas/payment_intent_processing'
           description: If present, this property tells you about the processing state of the payment.
         receipt_email:
-          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment
+            in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
           maxLength: 5000
           type:
           - string
@@ -2640,10 +2699,14 @@ components:
           description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
 
 
-            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s
+            Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was
+            provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction
+            completes.
 
 
-            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional
+            legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).'
           enum:
           - off_session
           - on_session
@@ -2655,19 +2718,24 @@ components:
           - $ref: '#/components/schemas/shipping'
           description: Shipping information for this PaymentIntent.
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 5000
           type:
           - string
           - 'null'
         statement_descriptor_suffix:
-          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened
+            descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for
+            the concatenated descriptor.
           maxLength: 5000
           type:
           - string
           - 'null'
         status:
-          description: Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `canceled`, or `succeeded`. Read more about each PaymentIntent [status](https://stripe.com/docs/payments/intents#intent-statuses).
+          description: Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`,
+            `requires_capture`, `canceled`, or `succeeded`. Read more about each PaymentIntent [status](https://stripe.com/docs/payments/intents#intent-statuses).
           enum:
           - canceled
           - processing
@@ -2680,7 +2748,8 @@ components:
         transfer_data:
           anyOf:
           - $ref: '#/components/schemas/transfer_data'
-          description: The data that automatically creates a Transfer after the payment finalizes. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The data that automatically creates a Transfer after the payment finalizes. Learn more about the [use case for connected
+            accounts](https://stripe.com/docs/payments/connected-accounts).
         transfer_group:
           description: A string that identifies the resulting payment as part of a group. Learn more about the [use case for connected accounts](https://stripe.com/docs/connect/separate-charges-and-transfers).
           maxLength: 5000
@@ -2754,10 +2823,13 @@ components:
       - amount
       properties:
         amount:
-          description: The updated total amount that you intend to collect from the cardholder. This amount must be greater than the currently authorized amount.
+          description: The updated total amount that you intend to collect from the cardholder. This amount must be greater than the currently
+            authorized amount.
           type: integer
         application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type: integer
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
@@ -2772,10 +2844,14 @@ components:
         metadata:
           additionalProperties:
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
           type: object
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 22
           type: string
         transfer_data:
@@ -2794,7 +2870,8 @@ components:
           description: 'Amount that you intend to apply to this PaymentIntent from the customer’s cash balance.
 
 
-            A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (for example, 100 cents to charge 1 USD or 100 to charge 100 JPY, a zero-decimal currency).
+            A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal)
+            (for example, 100 cents to charge 1 USD or 100 to charge 100 JPY, a zero-decimal currency).
 
 
             The maximum amount is the amount of the PaymentIntent.
@@ -2803,7 +2880,8 @@ components:
             When you omit the amount, it defaults to the remaining amount requested on the PaymentIntent.'
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -2870,10 +2948,13 @@ components:
       type: object
       properties:
         amount_to_capture:
-          description: The amount to capture from the PaymentIntent, which must be less than or equal to the original amount. Any additional amount is automatically refunded. Defaults to the full `amount_capturable` if it's not provided.
+          description: The amount to capture from the PaymentIntent, which must be less than or equal to the original amount. Any additional amount
+            is automatically refunded. Defaults to the full `amount_capturable` if it's not provided.
           type: integer
         application_fee_amount:
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type: integer
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -2882,7 +2963,9 @@ components:
             type: string
           type: array
         final_capture:
-          description: Defaults to `true`. When capturing a PaymentIntent, setting `final_capture` to `false` notifies Stripe to not release the remaining uncaptured funds to make sure that they're captured in future requests. You can only use this setting when [multicapture](https://stripe.com/docs/payments/multicapture) is available for PaymentIntents.
+          description: Defaults to `true`. When capturing a PaymentIntent, setting `final_capture` to `false` notifies Stripe to not release the
+            remaining uncaptured funds to make sure that they're captured in future requests. You can only use this setting when [multicapture](https://stripe.com/docs/payments/multicapture)
+            is available for PaymentIntents.
           type: boolean
         metadata:
           anyOf:
@@ -2892,13 +2975,19 @@ components:
           - enum:
             - ''
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 22
           type: string
         statement_descriptor_suffix:
-          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. The concatenated descriptor must be 1-22 characters long.
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened
+            descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. The concatenated descriptor
+            must be 1-22 characters long.
           maxLength: 22
           type: string
         transfer_data:
@@ -2920,7 +3009,10 @@ components:
       type: object
       properties:
         amount:
-          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts). The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          description: Amount intended to be collected by this PaymentIntent. A positive integer representing how much to charge in the [smallest
+            currency unit](https://stripe.com/docs/currencies#zero-decimal) (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal
+            currency). The minimum amount is $0.50 US or [equivalent in charge currency](https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts).
+            The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
           type: integer
         application_fee_amount:
           anyOf:
@@ -2928,7 +3020,9 @@ components:
           - enum:
             - ''
             type: string
-          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information, see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application
+            owner's Stripe account. The amount of the application fee collected will be capped at the total payment amount. For more information,
+            see the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
         capture_method:
           description: Controls when the funds will be captured from the customer's account.
           enum:
@@ -2937,7 +3031,8 @@ components:
           - manual
           type: string
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         customer:
           description: 'ID of the Customer this PaymentIntent belongs to, if one exists.
@@ -2946,7 +3041,9 @@ components:
             Payment methods attached to other Customers cannot be used with this PaymentIntent.
 
 
-            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user are complete.'
+            If present in combination with [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage), this PaymentIntent''s
+            payment method will be attached to the Customer after the PaymentIntent has been confirmed and any required actions from the user
+            are complete.'
           maxLength: 5000
           type: string
         description:
@@ -2967,9 +3064,12 @@ components:
           - enum:
             - ''
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
         payment_method:
-          description: ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility) object) to attach to this PaymentIntent.
+          description: ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility)
+            object) to attach to this PaymentIntent.
           maxLength: 5000
           type: string
         payment_method_configuration:
@@ -4380,7 +4480,8 @@ components:
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: The list of payment method types (for example, card) that this PaymentIntent can use. Use `automatic_payment_methods` to manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
+          description: The list of payment method types (for example, card) that this PaymentIntent can use. Use `automatic_payment_methods` to
+            manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
           items:
             maxLength: 5000
             type: string
@@ -4391,18 +4492,24 @@ components:
           - enum:
             - ''
             type: string
-          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment
+            in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
         setup_future_usage:
           description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
 
 
-            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s
+            Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was
+            provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction
+            completes.
 
 
-            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional
+            legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
 
 
-            If `setup_future_usage` is already set and you are performing a request using a publishable key, you may only update the value from `on_session` to `off_session`.'
+            If `setup_future_usage` is already set and you are performing a request using a publishable key, you may only update the value from
+            `on_session` to `off_session`.'
           enum:
           - ''
           - off_session
@@ -4455,22 +4562,28 @@ components:
             type: string
           description: Shipping information for this PaymentIntent.
         statement_descriptor:
-          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic). Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least one letter and be 1–22 characters long.
+          description: For card charges, use [statement_descriptor_suffix](https://stripe.com/docs/payments/account/statement-descriptors#dynamic).
+            Otherwise, you can use this value as the complete description of a charge on your customers' statements. It must contain at least
+            one letter and be 1–22 characters long.
           maxLength: 22
           type: string
         statement_descriptor_suffix:
-          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for the concatenated descriptor.
+          description: Provides information about a card payment that customers see on their statements. Concatenated with the prefix (shortened
+            descriptor) or statement descriptor that’s set on the account to form the complete statement descriptor. Maximum 22 characters for
+            the concatenated descriptor.
           maxLength: 22
           type: string
         transfer_data:
-          description: Use this parameter to automatically create a Transfer when the payment succeeds. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: Use this parameter to automatically create a Transfer when the payment succeeds. Learn more about the [use case for connected
+            accounts](https://stripe.com/docs/payments/connected-accounts).
           properties:
             amount:
               type: integer
           title: transfer_data_update_params
           type: object
         transfer_group:
-          description: A string that identifies the resulting payment as part of a group. You can only provide `transfer_group` if it hasn't been set. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
+          description: A string that identifies the resulting payment as part of a group. You can only provide `transfer_group` if it hasn't been
+            set. Learn more about the [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts).
           type: string
     PostPaymentIntentsIntentConfirmRequest:
       type: object
@@ -4487,7 +4600,8 @@ components:
           maxLength: 5000
           type: string
         error_on_requires_action:
-          description: Set to `true` to fail the payment attempt if the PaymentIntent transitions into `requires_action`. This parameter is intended for simpler integrations that do not handle customer actions, like [saving cards without authentication](https://stripe.com/docs/payments/save-card-without-authentication).
+          description: Set to `true` to fail the payment attempt if the PaymentIntent transitions into `requires_action`. This parameter is intended
+            for simpler integrations that do not handle customer actions, like [saving cards without authentication](https://stripe.com/docs/payments/save-card-without-authentication).
           type: boolean
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -4575,9 +4689,11 @@ components:
             - recurring
             maxLength: 5000
             type: string
-          description: Set to `true` to indicate that the customer isn't in your checkout flow during this payment attempt and can't authenticate. Use this parameter in scenarios where you collect card details and [charge them later](https://stripe.com/docs/payments/cards/charging-saved-cards).
+          description: Set to `true` to indicate that the customer isn't in your checkout flow during this payment attempt and can't authenticate.
+            Use this parameter in scenarios where you collect card details and [charge them later](https://stripe.com/docs/payments/cards/charging-saved-cards).
         payment_method:
-          description: ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility) object) to attach to this PaymentIntent.
+          description: ID of the payment method (a PaymentMethod, Card, or [compatible Source](https://stripe.com/docs/payments/payment-methods/transitioning#compatibility)
+            object) to attach to this PaymentIntent.
           maxLength: 5000
           type: string
         payment_method_data:
@@ -5984,7 +6100,8 @@ components:
           title: payment_method_options_param
           type: object
         payment_method_types:
-          description: The list of payment method types (for example, a card) that this PaymentIntent can use. Use `automatic_payment_methods` to manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
+          description: The list of payment method types (for example, a card) that this PaymentIntent can use. Use `automatic_payment_methods`
+            to manage payment methods from the [Stripe Dashboard](https://dashboard.stripe.com/settings/payment_methods).
           items:
             maxLength: 5000
             type: string
@@ -6003,9 +6120,11 @@ components:
           - enum:
             - ''
             type: string
-          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
+          description: Email address that the receipt for the resulting payment will be sent to. If `receipt_email` is specified for a payment
+            in live mode, a receipt will be sent regardless of your [email settings](https://dashboard.stripe.com/account/emails).
         return_url:
-          description: 'The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method''s app or site.
+          description: 'The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method''s app
+            or site.
 
             If you''d prefer to redirect to a mobile application, you can alternatively supply an application URI scheme.
 
@@ -6015,13 +6134,18 @@ components:
           description: 'Indicates that you intend to make future payments with this PaymentIntent''s payment method.
 
 
-            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+            Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent''s
+            Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was
+            provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction
+            completes.
 
 
-            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+            When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional
+            legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
 
 
-            If `setup_future_usage` is already set and you are performing a request using a publishable key, you may only update the value from `on_session` to `off_session`.'
+            If `setup_future_usage` is already set and you are performing a request using a publishable key, you may only update the value from
+            `on_session` to `off_session`.'
           enum:
           - ''
           - off_session
@@ -6098,6 +6222,91 @@ components:
     GetPaymentIntentsIntentRequest:
       type: object
       properties: {}
+    account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    application:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    charge:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    customer:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_customer:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    invoice:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_amount_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_flows_automatic_payment_methods_payment_intent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_next_action:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_payment_method_options:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_intent_processing:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    payment_method_config_biz_payment_method_configuration_details:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    review:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    shipping:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

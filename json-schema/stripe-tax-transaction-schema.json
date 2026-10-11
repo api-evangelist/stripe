@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-tax-transaction-schema.json",
+  "title": "TaxProductResourceTaxTransaction",
+  "description": "A Tax Transaction records the tax collected from or refunded to your customer.\n\nRelated guide: [Calculate tax in your custom payment flow](https://stripe.com/docs/tax/custom#tax-transaction)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-tax-api-openapi.yml#/components/schemas/tax.transaction",
+  "properties": {
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "customer": {
+      "description": "The ID of an existing [Customer](https://stripe.com/docs/api/customers/object) used for the resource.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_details": {
+      "$ref": "#/$defs/tax_product_resource_customer_details"
+    },
+    "id": {
+      "description": "Unique identifier for the transaction.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "line_items": {
+      "description": "The tax collected or refunded, by line item.",
+      "properties": {
+        "data": {
+          "description": "Details about each object.",
+          "items": {
+            "$ref": "#/$defs/tax.transaction_line_item"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "True if this list has another page of items after this one that can be fetched.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+          "enum": [
+            "list"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "description": "The URL where this list can be accessed.",
+          "maxLength": 5000,
+          "pattern": "^/v1/tax/transactions/[^/]+/line_items",
+          "type": "string"
+        }
+      },
+      "required": [
+        "data",
+        "has_more",
+        "object",
+        "url"
+      ],
+      "title": "TaxProductResourceTaxTransactionLineItemList",
+      "type": [
+        "object",
+        "null"
+      ],
+      "x-expandableFields": [
+        "data"
+      ]
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "tax.transaction"
+      ],
+      "type": "string"
+    },
+    "reference": {
+      "description": "A custom unique identifier, such as 'myOrder_123'.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "reversal": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/tax_product_resource_tax_transaction_resource_reversal"
+        }
+      ],
+      "description": "If `type=reversal`, contains information about what was reversed."
+    },
+    "shipping_cost": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/tax_product_resource_tax_transaction_shipping_cost"
+        }
+      ],
+      "description": "The shipping cost details for the transaction."
+    },
+    "tax_date": {
+      "description": "Timestamp of date at which the tax rules and rates in effect applies for the calculation.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "type": {
+      "description": "If `reversal`, this transaction reverses an earlier transaction.",
+      "enum": [
+        "reversal",
+        "transaction"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "created",
+    "currency",
+    "customer_details",
+    "id",
+    "livemode",
+    "object",
+    "reference",
+    "tax_date",
+    "type"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "customer_details",
+    "line_items",
+    "reversal",
+    "shipping_cost"
+  ],
+  "x-resourceId": "tax.transaction",
+  "$defs": {
+    "tax.transaction_line_item": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "tax_product_resource_customer_details": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "tax_product_resource_tax_transaction_resource_reversal": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "tax_product_resource_tax_transaction_shipping_cost": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

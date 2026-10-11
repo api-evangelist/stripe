@@ -19,7 +19,8 @@ tags:
 paths:
   /v1/payouts:
     get:
-      description: Returns a list of existing payouts sent to third-party bank accounts or payouts that Stripe sent to you. The payouts return in sorted order, with the most recently created payouts appearing first.
+      description: Returns a list of existing payouts sent to third-party bank accounts or payouts that Stripe sent to you. The payouts return
+        in sorted order, with the most recently created payouts appearing first.
       operationId: GetPayouts
       parameters:
       - explode: true
@@ -67,7 +68,9 @@ paths:
         schema:
           type: string
         style: form
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -93,7 +96,9 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -138,13 +143,15 @@ paths:
       summary: Get payouts
       x-summary-source: derived
     post:
-      description: 'To send funds to your own bank account, create a new payout object. Your Stripe balance must cover the payout amount. If it doesn’t, you receive an “Insufficient Funds” error.
+      description: 'To send funds to your own bank account, create a new payout object. Your Stripe balance must cover the payout amount. If it
+        doesn’t, you receive an “Insufficient Funds” error.
 
 
         If your API key is in test mode, money won’t actually be sent, though every other action occurs as if you’re in live mode.
 
 
-        If you create a manual payout on a Stripe account that uses multiple payment source types, you need to specify the source type balance that the payout draws from. The balance object details available and pending amounts by source type.'
+        If you create a manual payout on a Stripe account that uses multiple payment source types, you need to specify the source type balance
+        that the payout draws from. The balance object details available and pending amounts by source type.'
       operationId: PostPayouts
       requestBody:
         content:
@@ -179,7 +186,8 @@ paths:
       x-summary-source: derived
   /v1/payouts/{payout}:
     get:
-      description: Retrieves the details of an existing payout. Supply the unique payout ID from either a payout creation request or the payout list. Stripe returns the corresponding payout information.
+      description: Retrieves the details of an existing payout. Supply the unique payout ID from either a payout creation request or the payout
+        list. Stripe returns the corresponding payout information.
       operationId: GetPayoutsPayout
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -226,7 +234,8 @@ paths:
       summary: Get payouts payout
       x-summary-source: derived
     post:
-      description: Updates the specified payout by setting the values of the parameters you pass. We don’t change parameters that you don’t provide. This request only accepts the metadata as arguments.
+      description: Updates the specified payout by setting the values of the parameters you pass. We don’t change parameters that you don’t provide.
+        This request only accepts the metadata as arguments.
       operationId: PostPayoutsPayout
       parameters:
       - in: path
@@ -269,7 +278,8 @@ paths:
       x-summary-source: derived
   /v1/payouts/{payout}/cancel:
     post:
-      description: You can cancel a previously created payout if it hasn’t been paid out yet. Stripe refunds the funds to your available balance. You can’t cancel automatic Stripe payouts.
+      description: You can cancel a previously created payout if it hasn’t been paid out yet. Stripe refunds the funds to your available balance.
+        You can’t cancel automatic Stripe payouts.
       operationId: PostPayoutsPayoutCancel
       parameters:
       - in: path
@@ -309,10 +319,12 @@ paths:
       x-summary-source: derived
   /v1/payouts/{payout}/reverse:
     post:
-      description: 'Reverses a payout by debiting the destination bank account. At this time, you can only reverse payouts for connected accounts to US bank accounts. If the payout is in the pending status, use /v1/payouts/:id/cancel instead.
+      description: 'Reverses a payout by debiting the destination bank account. At this time, you can only reverse payouts for connected accounts
+        to US bank accounts. If the payout is in the pending status, use /v1/payouts/:id/cancel instead.
 
 
-        By requesting a reversal through /v1/payouts/:id/reverse, you confirm that the authorized signatory of the selected bank account authorizes the debit on the bank account and that no other authorization is required.'
+        By requesting a reversal through /v1/payouts/:id/reverse, you confirm that the authorized signatory of the selected bank account authorizes
+        the debit on the bank account and that no other authorization is required.'
       operationId: PostPayoutsPayoutReverse
       parameters:
       - in: path
@@ -375,7 +387,9 @@ components:
           - enum:
             - ''
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
     PostPayoutsRequest:
       type: object
       required:
@@ -386,14 +400,16 @@ components:
           description: A positive integer in cents representing how much to payout.
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
           maxLength: 5000
           type: string
         destination:
-          description: The ID of a bank account or a card to send the payout to. If you don't provide a destination, we use the default external account for the specified currency.
+          description: The ID of a bank account or a card to send the payout to. If you don't provide a destination, we use the default external
+            account for the specified currency.
           type: string
         expand:
           description: Specifies which fields in the response should be expanded.
@@ -404,10 +420,13 @@ components:
         metadata:
           additionalProperties:
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
           type: object
         method:
-          description: The method used to send this payout, which is `standard` or `instant`. We support `instant` for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
+          description: The method used to send this payout, which is `standard` or `instant`. We support `instant` for payouts to debit cards
+            and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
           enum:
           - instant
           - standard
@@ -415,7 +434,8 @@ components:
           type: string
           x-stripeBypassValidation: true
         source_type:
-          description: The balance type of your Stripe balance to draw this payout from. Balances for different payment sources are kept separately. You can find the amounts with the Balances API. One of `bank_account`, `card`, or `fpx`.
+          description: The balance type of your Stripe balance to draw this payout from. Balances for different payment sources are kept separately.
+            You can find the amounts with the Balances API. One of `bank_account`, `card`, or `fpx`.
           enum:
           - bank_account
           - card
@@ -424,7 +444,9 @@ components:
           type: string
           x-stripeBypassValidation: true
         statement_descriptor:
-          description: A string that displays on the recipient's bank or card statement (up to 22 characters). A `statement_descriptor` that's longer than 22 characters return an error. Most banks truncate this information and display it inconsistently. Some banks might not display it at all.
+          description: A string that displays on the recipient's bank or card statement (up to 22 characters). A `statement_descriptor` that's
+            longer than 22 characters return an error. Most banks truncate this information and display it inconsistently. Some banks might not
+            display it at all.
           maxLength: 22
           type: string
           x-stripeBypassValidation: true
@@ -488,7 +510,8 @@ components:
           format: unix-time
           type: integer
         automatic:
-          description: Returns `true` if the payout is created by an [automated payout schedule](https://stripe.com/docs/payouts#payout-schedule) and `false` if it's [requested manually](https://stripe.com/docs/payouts#manual-payouts).
+          description: Returns `true` if the payout is created by an [automated payout schedule](https://stripe.com/docs/payouts#payout-schedule)
+            and `false` if it's [requested manually](https://stripe.com/docs/payouts#manual-payouts).
           type: boolean
         balance_transaction:
           anyOf:
@@ -504,7 +527,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         description:
           description: An arbitrary string attached to the object. Often useful for displaying to users.
@@ -533,7 +557,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/balance_transaction'
-          description: If the payout fails or cancels, this is the ID of the balance transaction that reverses the initial balance transaction and returns the funds from the failed payout back in your balance.
+          description: If the payout fails or cancels, this is the ID of the balance transaction that reverses the initial balance transaction
+            and returns the funds from the failed payout back in your balance.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/balance_transaction'
@@ -560,12 +585,14 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
         method:
-          description: The method used to send this payout, which can be `standard` or `instant`. `instant` is supported for payouts to debit cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
+          description: The method used to send this payout, which can be `standard` or `instant`. `instant` is supported for payouts to debit
+            cards and bank accounts in certain countries. Learn more about [bank support for Instant Payouts](https://stripe.com/docs/payouts/instant-payouts-banks).
           maxLength: 5000
           type: string
         object:
@@ -583,7 +610,8 @@ components:
             oneOf:
             - $ref: '#/components/schemas/payout'
         reconciliation_status:
-          description: If `completed`, you can use the [Balance Transactions API](https://stripe.com/docs/api/balance_transactions/list#balance_transaction_list-payout) to list all balance transactions that are paid out in this payout.
+          description: If `completed`, you can use the [Balance Transactions API](https://stripe.com/docs/api/balance_transactions/list#balance_transaction_list-payout)
+            to list all balance transactions that are paid out in this payout.
           enum:
           - completed
           - in_progress
@@ -609,7 +637,9 @@ components:
           - string
           - 'null'
         status:
-          description: 'Current status of the payout: `paid`, `pending`, `in_transit`, `canceled` or `failed`. A payout is `pending` until it''s submitted to the bank, when it becomes `in_transit`. The status changes to `paid` if the transaction succeeds, or to `failed` or `canceled` (within 5 business days). Some payouts that fail might initially show as `paid`, then change to `failed`.'
+          description: 'Current status of the payout: `paid`, `pending`, `in_transit`, `canceled` or `failed`. A payout is `pending` until it''s
+            submitted to the bank, when it becomes `in_transit`. The status changes to `paid` if the transaction succeeds, or to `failed` or `canceled`
+            (within 5 business days). Some payouts that fail might initially show as `paid`, then change to `failed`.'
           maxLength: 5000
           type: string
         type:
@@ -663,8 +693,40 @@ components:
         metadata:
           additionalProperties:
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
           type: object
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    balance_transaction:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_bank_account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    deleted_card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

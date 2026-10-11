@@ -1,15 +1,19 @@
 ---
 generated: '2026-07-17'
 method: generated
-name: Launch a recurring subscription
-description: Create a product and recurring price, attach a customer, and start a subscription.
+name: stripe-launch-subscription
+description: Create a product and recurring price, attach a customer, and start a
+  subscription.
 api: openapi/stripe-subscription-api-openapi.yml
-operations: [PostProducts, postPrices, postCustomers, PostSubscriptions]
-source: >-
-  Grounded in arazzo/stripe-launch-subscription-workflow.yml; operationIds
-  verified in openapi/stripe-products-api-openapi.yml,
-  openapi/stripe-prices-api-openapi.yml, openapi/stripe-customers-api-openapi.yml
-  and openapi/stripe-subscription-api-openapi.yml.
+operations:
+- PostProducts
+- PostPrices
+- PostCustomers
+- PostSubscriptions
+source: Grounded in arazzo/stripe-launch-subscription-workflow.yml; operationIds verified
+  in openapi/stripe-products-api-openapi.yml, openapi/stripe-prices-api-openapi.yml,
+  openapi/stripe-customers-api-openapi.yml and openapi/stripe-subscription-api-openapi.yml.
+title: Launch a recurring subscription
 ---
 
 # Launch a recurring subscription
@@ -24,8 +28,8 @@ Stand up a product catalog entry and bill a customer on a recurring cycle.
 
 ## Steps
 1. **Create the product** — `PostProducts` (`POST /v1/products`) with `name`. Capture `prod_...`.
-2. **Create a recurring price** — `postPrices` (`POST /v1/prices`) with `product` = `prod_...`, `unit_amount`, `currency`, and `recurring[interval]` = `month`. Capture `price_...`.
-3. **Create the customer** — `postCustomers` (`POST /v1/customers`) with `email` and a `payment_method` (test: `pm_card_visa`), setting it as the default via `invoice_settings[default_payment_method]`. Capture `cus_...`.
+2. **Create a recurring price** — `PostPrices` (`POST /v1/prices`) with `product` = `prod_...`, `unit_amount`, `currency`, and `recurring[interval]` = `month`. Capture `price_...`.
+3. **Create the customer** — `PostCustomers` (`POST /v1/customers`) with `email` and a `payment_method` (test: `pm_card_visa`), setting it as the default via `invoice_settings[default_payment_method]`. Capture `cus_...`.
 4. **Create the subscription** — `PostSubscriptions` (`POST /v1/subscriptions`) with `customer` = `cus_...` and `items[0][price]` = `price_...`. On success `status` is `active` (or `trialing`).
 
 ## Errors

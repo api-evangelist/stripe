@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-file-schema.json",
+  "title": "File",
+  "description": "This object represents files hosted on Stripe's servers. You can upload\nfiles with the [create file](https://stripe.com/docs/api#create_file) request\n(for example, when uploading dispute evidence). Stripe also\ncreates files independently (for example, the results of a [Sigma scheduled\nquery](#scheduled_queries)).\n\nRelated guide: [File upload guide](https://stripe.com/docs/file-upload)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-files-api-openapi.yml#/components/schemas/file",
+  "properties": {
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "expires_at": {
+      "description": "The file expires and isn't available at this time in epoch seconds.",
+      "format": "unix-time",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "filename": {
+      "description": "The suitable name for saving the file to a filesystem.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "links": {
+      "description": "A list of [file links](https://stripe.com/docs/api#file_links) that point at this file.",
+      "properties": {
+        "data": {
+          "description": "Details about each object.",
+          "items": {
+            "$ref": "#/$defs/file_link"
+          },
+          "type": "array"
+        },
+        "has_more": {
+          "description": "True if this list has another page of items after this one that can be fetched.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+          "enum": [
+            "list"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "description": "The URL where this list can be accessed.",
+          "maxLength": 5000,
+          "pattern": "^/v1/file_links",
+          "type": "string"
+        }
+      },
+      "required": [
+        "data",
+        "has_more",
+        "object",
+        "url"
+      ],
+      "title": "FileResourceFileLinkList",
+      "type": [
+        "object",
+        "null"
+      ],
+      "x-expandableFields": [
+        "data"
+      ]
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "file"
+      ],
+      "type": "string"
+    },
+    "purpose": {
+      "description": "The [purpose](https://stripe.com/docs/file-upload#uploading-a-file) of the uploaded file.",
+      "enum": [
+        "account_requirement",
+        "additional_verification",
+        "business_icon",
+        "business_logo",
+        "customer_signature",
+        "dispute_evidence",
+        "document_provider_identity_document",
+        "finance_report_run",
+        "identity_document",
+        "identity_document_downloadable",
+        "pci_document",
+        "selfie",
+        "sigma_scheduled_query",
+        "tax_document_user_upload",
+        "terminal_reader_splashscreen"
+      ],
+      "type": "string",
+      "x-stripeBypassValidation": true
+    },
+    "size": {
+      "description": "The size of the file object in bytes.",
+      "type": "integer"
+    },
+    "title": {
+      "description": "A suitable title for the document.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "description": "The returned file type (for example, `csv`, `pdf`, `jpg`, or `png`).",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "description": "Use your live secret API key to download the file from this URL.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "created",
+    "id",
+    "object",
+    "purpose",
+    "size"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "links"
+  ],
+  "x-resourceId": "file"
+}

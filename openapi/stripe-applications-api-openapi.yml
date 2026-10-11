@@ -8,7 +8,8 @@ info:
     url: https://stripe.com
   termsOfService: https://stripe.com/us/terms/
   x-stripeSpecFilename: spec3
-  description: 'Operations tagged Applications across 2 of this provider''s published API definitions: stripe-application-fees-api-openapi.yml, stripe-application-secrets-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Applications across 2 of this provider''s published API definitions: stripe-application-fees-api-openapi.yml,
+    stripe-application-secrets-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.stripe.com/
 security:
@@ -19,7 +20,8 @@ tags:
 paths:
   /v1/application_fees:
     get:
-      description: Returns a list of application fees youve previously collected. The application fees are returned in sorted order, with the most recent fees appearing first.
+      description: Returns a list of application fees youve previously collected. The application fees are returned in sorted order, with the
+        most recent fees appearing first.
       operationId: GetApplicationFees
       parameters:
       - description: Only return application fees for the charge specified by this charge ID.
@@ -49,7 +51,9 @@ paths:
             type: object
           - type: integer
         style: deepObject
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -75,7 +79,9 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -141,7 +147,8 @@ paths:
     - url: https://api.stripe.com/
   /v1/application_fees/{fee}/refunds/{id}:
     get:
-      description: By default, you can see the 10 most recent refunds stored directly on the application fee object, but you can also retrieve details about a specific refund stored on the application fee.
+      description: By default, you can see the 10 most recent refunds stored directly on the application fee object, but you can also retrieve
+        details about a specific refund stored on the application fee.
       operationId: GetApplicationFeesFeeRefundsId
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -197,7 +204,8 @@ paths:
       x-api-evangelist-processing:
         ChooseTags: true
     post:
-      description: 'Updates the specified application fee refund by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
+      description: 'Updates the specified application fee refund by setting the values of the parameters passed. Any parameters not provided will
+        be left unchanged.
 
 
         This request only accepts metadata as an argument.'
@@ -244,7 +252,9 @@ paths:
                   - enum:
                     - ''
                     type: string
-                  description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+                  description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful
+                    for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty
+                    value to them. All keys can be unset by posting an empty value to `metadata`.
               type: object
         required: false
       responses:
@@ -269,7 +279,8 @@ paths:
     - url: https://api.stripe.com/
   /v1/application_fees/{id}:
     get:
-      description: Retrieves the details of an application fee that your account has collected. The same information is returned when refunding the application fee.
+      description: Retrieves the details of an application fee that your account has collected. The same information is returned when refunding
+        the application fee.
       operationId: GetApplicationFeesId
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -376,10 +387,14 @@ paths:
     - url: https://api.stripe.com/
   /v1/application_fees/{id}/refunds:
     get:
-      description: You can see a list of the refunds belonging to a specific application fee. Note that the 10 most recent refunds are always available by default on the application fee object. If you need more than those 10, you can use this API method and the limit and starting_after parameters to page through additional refunds.
+      description: You can see a list of the refunds belonging to a specific application fee. Note that the 10 most recent refunds are always
+        available by default on the application fee object. If you need more than those 10, you can use this API method and the limit and starting_after
+        parameters to page through additional refunds.
       operationId: GetApplicationFeesIdRefunds
       parameters:
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -412,7 +427,9 @@ paths:
         schema:
           type: integer
         style: form
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -513,7 +530,8 @@ paths:
               additionalProperties: false
               properties:
                 amount:
-                  description: A positive integer, in _cents (or local equivalent)_, representing how much of this fee to refund. Can refund only up to the remaining unrefunded amount of the fee.
+                  description: A positive integer, in _cents (or local equivalent)_, representing how much of this fee to refund. Can refund only
+                    up to the remaining unrefunded amount of the fee.
                   type: integer
                 expand:
                   description: Specifies which fields in the response should be expanded.
@@ -524,7 +542,9 @@ paths:
                 metadata:
                   additionalProperties:
                     type: string
-                  description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+                  description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful
+                    for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty
+                    value to them. All keys can be unset by posting an empty value to `metadata`.
                   type: object
               type: object
         required: false
@@ -553,7 +573,9 @@ paths:
       description: List all secrets stored on the given scope.
       operationId: getAppsSecrets
       parameters:
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -579,7 +601,8 @@ paths:
         schema:
           type: integer
         style: form
-      - description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets scoped to their own user.
+      - description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets
+          scoped to their own user.
         explode: true
         in: query
         name: scope
@@ -599,7 +622,9 @@ paths:
           title: scope_param
           type: object
         style: deepObject
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -699,7 +724,8 @@ paths:
                   maxLength: 5000
                   type: string
                 scope:
-                  description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets scoped to their own user.
+                  description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets
+                    or secrets scoped to their own user.
                   properties:
                     type:
                       enum:
@@ -770,7 +796,8 @@ paths:
                   maxLength: 5000
                   type: string
                 scope:
-                  description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets scoped to their own user.
+                  description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets
+                    or secrets scoped to their own user.
                   properties:
                     type:
                       enum:
@@ -836,7 +863,8 @@ paths:
           maxLength: 5000
           type: string
         style: form
-      - description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets scoped to their own user.
+      - description: Specifies the scoping of the secret. Requests originating from UI extensions can only access account-scoped secrets or secrets
+          scoped to their own user.
         explode: true
         in: query
         name: scope
@@ -917,7 +945,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         fee:
           anyOf:
@@ -936,7 +965,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -974,7 +1004,8 @@ components:
           description: Amount earned, in cents (or local equivalent).
           type: integer
         amount_refunded:
-          description: Amount in cents (or local equivalent) refunded (can be less than the amount attribute on the fee if a partial refund was issued)
+          description: Amount in cents (or local equivalent) refunded (can be less than the amount attribute on the fee if a partial refund was
+            issued)
           type: integer
         application:
           anyOf:
@@ -990,7 +1021,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/balance_transaction'
-          description: Balance transaction that describes the impact of this collected application fee on your account balance (not including refunds).
+          description: Balance transaction that describes the impact of this collected application fee on your account balance (not including
+            refunds).
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/balance_transaction'
@@ -1008,7 +1040,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         id:
           description: Unique identifier for the object.
@@ -1027,7 +1060,8 @@ components:
           - maxLength: 5000
             type: string
           - $ref: '#/components/schemas/charge'
-          description: ID of the corresponding charge on the platform account, if this fee was the result of a charge using the `destination` parameter.
+          description: ID of the corresponding charge on the platform account, if this fee was the result of a charge using the `destination`
+            parameter.
           x-expansionResources:
             oneOf:
             - $ref: '#/components/schemas/charge'
@@ -1098,13 +1132,16 @@ components:
       description: 'Secret Store is an API that allows Stripe Apps developers to securely persist secrets for use by UI Extensions and app backends.
 
 
-        The primary resource in Secret Store is a `secret`. Other apps can''t view secrets created by an app. Additionally, secrets are scoped to provide further permission control.
+        The primary resource in Secret Store is a `secret`. Other apps can''t view secrets created by an app. Additionally, secrets are scoped
+        to provide further permission control.
 
 
-        All Dashboard users and the app backend share `account` scoped secrets. Use the `account` scope for secrets that don''t change per-user, like a third-party API key.
+        All Dashboard users and the app backend share `account` scoped secrets. Use the `account` scope for secrets that don''t change per-user,
+        like a third-party API key.
 
 
-        A `user` scoped secret is accessible by the app backend and one specific Dashboard user. Use the `user` scope for per-user secrets like per-user OAuth tokens, where different users might have different permissions.
+        A `user` scoped secret is accessible by the app backend and one specific Dashboard user. Use the `user` scope for per-user secrets like
+        per-user OAuth tokens, where different users might have different permissions.
 
 
         Related guide: [Store data between page reloads](https://stripe.com/docs/stripe-apps/store-auth-data-custom-objects)'
@@ -1158,6 +1195,36 @@ components:
       x-expandableFields:
       - scope
       x-resourceId: apps.secret
+    account:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    application:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    balance_transaction:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    charge:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    secret_service_resource_scope:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

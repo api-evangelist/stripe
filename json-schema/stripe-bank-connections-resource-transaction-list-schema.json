@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-bank-connections-resource-transaction-list-schema.json",
+  "title": "BankConnectionsResourceTransactionList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-financial-connections-api-openapi.yml#/components/schemas/BankConnectionsResourceTransactionList",
+  "type": "object",
+  "required": [
+    "data",
+    "has_more",
+    "object",
+    "url"
+  ],
+  "properties": {
+    "data": {
+      "description": "Details about each object.",
+      "items": {
+        "$ref": "#/$defs/financial_connections.transaction"
+      },
+      "type": "array"
+    },
+    "has_more": {
+      "description": "True if this list has another page of items after this one that can be fetched.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+      "enum": [
+        "list"
+      ],
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL where this list can be accessed.",
+      "maxLength": 5000,
+      "pattern": "^/v1/financial_connections/transactions",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "bank_connections_resource_transaction_resource_status_transitions": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "financial_connections.transaction": {
+      "description": "A Transaction represents a real transaction that affects a Financial Connections Account balance.",
+      "properties": {
+        "account": {
+          "description": "The ID of the Financial Connections Account this transaction belongs to.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "amount": {
+          "description": "The amount of this transaction, in cents (or local equivalent).",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of this transaction.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "financial_connections.transaction"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "description": "The status of the transaction.",
+          "enum": [
+            "pending",
+            "posted",
+            "void"
+          ],
+          "type": "string"
+        },
+        "status_transitions": {
+          "$ref": "#/$defs/bank_connections_resource_transaction_resource_status_transitions"
+        },
+        "transacted_at": {
+          "description": "Time at which the transaction was transacted. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "transaction_refresh": {
+          "description": "The token of the transaction refresh that last updated or created this transaction.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "updated": {
+          "description": "Time at which the object was last updated. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "account",
+        "amount",
+        "currency",
+        "description",
+        "id",
+        "livemode",
+        "object",
+        "status",
+        "status_transitions",
+        "transacted_at",
+        "transaction_refresh",
+        "updated"
+      ],
+      "title": "BankConnectionsResourceTransaction",
+      "type": "object",
+      "x-expandableFields": [
+        "status_transitions"
+      ],
+      "x-resourceId": "financial_connections.transaction"
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-bank-connections-resource-linked-account-list-schema.json",
+  "title": "BankConnectionsResourceLinkedAccountList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-financial-connections-api-openapi.yml#/components/schemas/BankConnectionsResourceLinkedAccountList",
+  "type": "object",
+  "required": [
+    "data",
+    "has_more",
+    "object",
+    "url"
+  ],
+  "properties": {
+    "data": {
+      "description": "Details about each object.",
+      "items": {
+        "$ref": "#/$defs/financial_connections.account"
+      },
+      "type": "array"
+    },
+    "has_more": {
+      "description": "True if this list has another page of items after this one that can be fetched.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+      "enum": [
+        "list"
+      ],
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL where this list can be accessed.",
+      "maxLength": 5000,
+      "pattern": "^/v1/financial_connections/accounts",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "bank_connections_resource_accountholder": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_connections_resource_balance": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_connections_resource_balance_refresh": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_connections_resource_ownership_refresh": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "bank_connections_resource_transaction_refresh": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "financial_connections.account": {
+      "description": "A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree of access.",
+      "properties": {
+        "account_holder": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bank_connections_resource_accountholder"
+            }
+          ],
+          "description": "The account holder that this account belongs to."
+        },
+        "balance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bank_connections_resource_balance"
+            }
+          ],
+          "description": "The most recent information about the account's balance."
+        },
+        "balance_refresh": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bank_connections_resource_balance_refresh"
+            }
+          ],
+          "description": "The state of the most recent attempt to refresh the account balance."
+        },
+        "category": {
+          "description": "The type of the account. Account category is further divided in `subcategory`.",
+          "enum": [
+            "cash",
+            "credit",
+            "investment",
+            "other"
+          ],
+          "type": "string"
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "display_name": {
+          "description": "A human-readable name that has been assigned to this account, either by the account holder or by the institution.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "institution_name": {
+          "description": "The name of the institution that holds this account.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "last4": {
+          "description": "The last 4 digits of the account number. If present, this will be 4 numeric characters.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "financial_connections.account"
+          ],
+          "type": "string"
+        },
+        "ownership": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/financial_connections.account_ownership"
+            }
+          ],
+          "description": "The most recent information about the account's owners.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/financial_connections.account_ownership"
+              }
+            ]
+          }
+        },
+        "ownership_refresh": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bank_connections_resource_ownership_refresh"
+            }
+          ],
+          "description": "The state of the most recent attempt to refresh the account owners."
+        },
+        "permissions": {
+          "description": "The list of permissions granted by this account.",
+          "items": {
+            "enum": [
+              "balances",
+              "ownership",
+              "payment_method",
+              "transactions"
+            ],
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "status": {
+          "description": "The status of the link to the account.",
+          "enum": [
+            "active",
+            "disconnected",
+            "inactive"
+          ],
+          "type": "string"
+        },
+        "subcategory": {
+          "description": "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`.",
+          "enum": [
+            "checking",
+            "credit_card",
+            "line_of_credit",
+            "mortgage",
+            "other",
+            "savings"
+          ],
+          "type": "string"
+        },
+        "subscriptions": {
+          "description": "The list of data refresh subscriptions requested on this account.",
+          "items": {
+            "enum": [
+              "transactions"
+            ],
+            "type": "string",
+            "x-stripeBypassValidation": true
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "supported_payment_method_types": {
+          "description": "The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be created from this account.",
+          "items": {
+            "enum": [
+              "link",
+              "us_bank_account"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "transaction_refresh": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bank_connections_resource_transaction_refresh"
+            }
+          ],
+          "description": "The state of the most recent attempt to refresh the account transactions."
+        }
+      },
+      "required": [
+        "category",
+        "created",
+        "id",
+        "institution_name",
+        "livemode",
+        "object",
+        "status",
+        "subcategory",
+        "supported_payment_method_types"
+      ],
+      "title": "BankConnectionsResourceLinkedAccount",
+      "type": "object",
+      "x-expandableFields": [
+        "account_holder",
+        "balance",
+        "balance_refresh",
+        "ownership",
+        "ownership_refresh",
+        "transaction_refresh"
+      ],
+      "x-resourceId": "financial_connections.account"
+    },
+    "financial_connections.account_ownership": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

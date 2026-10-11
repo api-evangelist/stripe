@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Stripe Accounts Account Sources API
-  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements or if the account is enabled to make live charges or receive payouts.
+  description: This is an object representing a Stripe account. You can retrieve it to see properties on the account like its current requirements
+    or if the account is enabled to make live charges or receive payouts.
   contact:
     email: dev-platform@stripe.com
     name: Stripe Dev Platform Team
@@ -69,7 +70,8 @@ paths:
       x-summary-source: derived
   /v1/sources/{source}:
     get:
-      description: Retrieves an existing source object. Supply the unique source ID from a source creation request and Stripe will return the corresponding up-to-date source object information.
+      description: Retrieves an existing source object. Supply the unique source ID from a source creation request and Stripe will return the
+        corresponding up-to-date source object information.
       operationId: GetSourcesSource
       parameters:
       - description: The client secret of the source. Required if a publishable key is used to retrieve the source.
@@ -127,7 +129,8 @@ paths:
       description: 'Updates the specified source by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
 
 
-        This request accepts the metadata and owner as arguments. It is also possible to update type specific information for selected payment methods. Please refer to our payment method guides for more detail.'
+        This request accepts the metadata and owner as arguments. It is also possible to update type specific information for selected payment
+        methods. Please refer to our payment method guides for more detail.'
       operationId: PostSourcesSource
       parameters:
       - in: path
@@ -237,7 +240,9 @@ paths:
       description: List source transactions for a given source.
       operationId: GetSourcesSourceSourceTransactions
       parameters:
-      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order to fetch the previous page of the list.
+      - description: A cursor for use in pagination. `ending_before` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, starting with `obj_bar`, your subsequent call can include `ending_before=obj_bar` in order
+          to fetch the previous page of the list.
         in: query
         name: ending_before
         required: false
@@ -270,7 +275,9 @@ paths:
           maxLength: 5000
           type: string
         style: simple
-      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order to fetch the next page of the list.
+      - description: A cursor for use in pagination. `starting_after` is an object ID that defines your place in the list. For instance, if you
+          make a list request and receive 100 objects, ending with `obj_foo`, your subsequent call can include `starting_after=obj_foo` in order
+          to fetch the next page of the list.
         in: query
         name: starting_after
         required: false
@@ -308,7 +315,8 @@ paths:
       x-summary-source: derived
   /v1/sources/{source}/source_transactions/{source_transaction}:
     get:
-      description: Retrieve an existing source transaction object. Supply the unique source ID from a source creation request and the source transaction ID and Stripe will return the corresponding up-to-date source object information.
+      description: Retrieve an existing source transaction object. Supply the unique source ID from a source creation request and the source transaction
+        ID and Stripe will return the corresponding up-to-date source object information.
       operationId: GetSourcesSourceSourceTransactionsSourceTransaction
       parameters:
       - description: Specifies which fields in the response should be expanded.
@@ -448,7 +456,8 @@ components:
             type: string
           type: array
         mandate:
-          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance status.
+          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance
+            status.
           properties:
             acceptance:
               properties:
@@ -532,7 +541,9 @@ components:
           - enum:
             - ''
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an empty value to `metadata`.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format. Individual keys can be unset by posting an empty value to
+            them. All keys can be unset by posting an empty value to `metadata`.
         owner:
           description: Information about the owner of the payment instrument that may be used or required by particular source types.
           properties:
@@ -569,7 +580,8 @@ components:
           title: owner
           type: object
         source_order:
-          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna) sources before you can charge it.
+          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna)
+            sources before you can charge it.
           properties:
             items:
               items:
@@ -701,7 +713,9 @@ components:
         alipay:
           $ref: '#/components/schemas/source_type_alipay'
         amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total amount associated with the source. This is the amount for which the source will be chargeable once ready. Required for `single_use` sources.
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal
+            currency) representing the total amount associated with the source. This is the amount for which the source will be chargeable once
+            ready. Required for `single_use` sources.
           type:
           - integer
           - 'null'
@@ -724,12 +738,14 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) associated with the source. This is the currency for which the source will be chargeable once ready. Required for `single_use` sources.
+          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) associated with the source. This is the currency
+            for which the source will be chargeable once ready. Required for `single_use` sources.
           type:
           - string
           - 'null'
         customer:
-          description: The ID of the customer to which this source is attached. This will not be present when the source has not been attached to a customer.
+          description: The ID of the customer to which this source is attached. This will not be present when the source has not been attached
+            to a customer.
           maxLength: 5000
           type: string
         eps:
@@ -755,7 +771,8 @@ components:
           additionalProperties:
             maxLength: 500
             type: string
-          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+          description: Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for
+            storing additional information about the object in a structured format.
           type:
           - object
           - 'null'
@@ -789,13 +806,17 @@ components:
           - string
           - 'null'
         status:
-          description: The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`, or `pending`. Only `chargeable` sources can be used to create a charge.
+          description: The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`, or `pending`. Only `chargeable` sources
+            can be used to create a charge.
           maxLength: 5000
           type: string
         three_d_secure:
           $ref: '#/components/schemas/source_type_three_d_secure'
         type:
-          description: The `type` of the source. The `type` is a payment method, one of `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`, `card`, `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`, `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`. An additional hash is included on the source with a name matching this value. It contains additional information specific to the [payment method](https://stripe.com/docs/sources) used.
+          description: The `type` of the source. The `type` is a payment method, one of `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`,
+            `card`, `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`, `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`.
+            An additional hash is included on the source with a name matching this value. It contains additional information specific to the [payment
+            method](https://stripe.com/docs/sources) used.
           enum:
           - ach_credit_transfer
           - ach_debit
@@ -818,7 +839,8 @@ components:
           type: string
           x-stripeBypassValidation: true
         usage:
-          description: Either `reusable` or `single_use`. Whether this source should be reusable or not. Some source types may or may not be reusable by construction, while others may leave the option at creation. If an incompatible value is passed, an error will be returned.
+          description: Either `reusable` or `single_use`. Whether this source should be reusable or not. Some source types may or may not be reusable
+            by construction, while others may leave the option at creation. If an incompatible value is passed, an error will be returned.
           maxLength: 5000
           type:
           - string
@@ -847,13 +869,16 @@ components:
       type: object
       properties:
         amount:
-          description: Amount associated with the source. This is the amount for which the source will be chargeable once ready. Required for `single_use` sources. Not supported for `receiver` type sources, where charge amount may not be specified until funds land.
+          description: Amount associated with the source. This is the amount for which the source will be chargeable once ready. Required for
+            `single_use` sources. Not supported for `receiver` type sources, where charge amount may not be specified until funds land.
           type: integer
         currency:
-          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) associated with the source. This is the currency for which the source will be chargeable once ready.
+          description: Three-letter [ISO code for the currency](https://stripe.com/docs/currencies) associated with the source. This is the currency
+            for which the source will be chargeable once ready.
           type: string
         customer:
-          description: The `Customer` to whom the original source is attached to. Must be set when the original source is not a `Source` (e.g., `Card`).
+          description: The `Customer` to whom the original source is attached to. Must be set when the original source is not a `Source` (e.g.,
+            `Card`).
           maxLength: 500
           type: string
         expand:
@@ -863,7 +888,8 @@ components:
             type: string
           type: array
         flow:
-          description: The authentication `flow` of the source to create. `flow` is one of `redirect`, `receiver`, `code_verification`, `none`. It is generally inferred unless a type supports multiple flows.
+          description: The authentication `flow` of the source to create. `flow` is one of `redirect`, `receiver`, `code_verification`, `none`.
+            It is generally inferred unless a type supports multiple flows.
           enum:
           - code_verification
           - none
@@ -872,7 +898,8 @@ components:
           maxLength: 5000
           type: string
         mandate:
-          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance status.
+          description: Information about a mandate possibility attached to a source object (generally for bank debits) as well as its acceptance
+            status.
           properties:
             acceptance:
               properties:
@@ -1013,7 +1040,8 @@ components:
           title: redirect_params
           type: object
         source_order:
-          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna) sources before you can charge it.
+          description: Information about the items and shipping associated with the source. Required for transactional credit (for example Klarna)
+            sources before you can charge it.
           properties:
             items:
               items:
@@ -1086,7 +1114,9 @@ components:
           title: shallow_order_specs
           type: object
         statement_descriptor:
-          description: An arbitrary string to be displayed on your customer's statement. As an example, if your website is `RunClub` and the item you're charging for is a race ticket, you may want to specify a `statement_descriptor` of `RunClub 5K race ticket.` While many payment types will display this information, some may not display it at all.
+          description: An arbitrary string to be displayed on your customer's statement. As an example, if your website is `RunClub` and the item
+            you're charging for is a race ticket, you may want to specify a `statement_descriptor` of `RunClub 5K race ticket.` While many payment
+            types will display this information, some may not display it at all.
           maxLength: 5000
           type: string
         token:
@@ -1094,7 +1124,8 @@ components:
           maxLength: 5000
           type: string
         type:
-          description: The `type` of the source to create. Required unless `customer` and `original_source` are specified (see the [Cloning card Sources](https://stripe.com/docs/sources/connect#cloning-card-sources) guide)
+          description: The `type` of the source to create. Required unless `customer` and `original_source` are specified (see the [Cloning card
+            Sources](https://stripe.com/docs/sources/connect#cloning-card-sources) guide)
           maxLength: 5000
           type: string
         usage:
@@ -1113,7 +1144,9 @@ components:
         acss_debit:
           $ref: '#/components/schemas/source_mandate_notification_acss_debit_data'
         amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying source. Required if the notification type is `debit_initiated`.
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal
+            currency) representing the amount associated with the mandate notification. The amount is expressed in the currency of the underlying
+            source. Required if the notification type is `debit_initiated`.
           type:
           - integer
           - 'null'
@@ -1148,7 +1181,8 @@ components:
           maxLength: 5000
           type: string
         type:
-          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as `three_d_secure`.
+          description: The type of source this mandate notification is attached to. Should be the source type identifier code for the payment
+            method, such as `three_d_secure`.
           maxLength: 5000
           type: string
       required:
@@ -1180,7 +1214,8 @@ components:
         ach_credit_transfer:
           $ref: '#/components/schemas/source_transaction_ach_credit_transfer_data'
         amount:
-          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount your customer has pushed to the receiver.
+          description: A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal
+            currency) representing the amount your customer has pushed to the receiver.
           type: integer
         chf_credit_transfer:
           $ref: '#/components/schemas/source_transaction_chf_credit_transfer_data'
@@ -1189,7 +1224,8 @@ components:
           format: unix-time
           type: integer
         currency:
-          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+          description: Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported
+            currency](https://stripe.com/docs/currencies).
           type: string
         gbp_credit_transfer:
           $ref: '#/components/schemas/source_transaction_gbp_credit_transfer_data'
@@ -1256,3 +1292,163 @@ components:
       - paper_check
       - sepa_credit_transfer
       x-resourceId: source_transaction
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_code_verification_flow:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_mandate_notification_acss_debit_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_mandate_notification_bacs_debit_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_mandate_notification_sepa_debit_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_order:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_owner:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_receiver_flow:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_redirect_flow:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_transaction_ach_credit_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_transaction_chf_credit_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_transaction_gbp_credit_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_transaction_paper_check_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_transaction_sepa_credit_transfer_data:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_ach_credit_transfer:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_ach_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_acss_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_alipay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_au_becs_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_bancontact:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_card:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_card_present:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_eps:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_giropay:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_ideal:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_klarna:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_multibanco:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_p24:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_sepa_debit:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_sofort:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_three_d_secure:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    source_type_wechat:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true

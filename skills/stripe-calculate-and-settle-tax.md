@@ -1,13 +1,16 @@
 ---
 generated: '2026-07-17'
 method: generated
-name: Calculate and settle tax
-description: Calculate sales tax/VAT for a set of line items, then record a Tax transaction from that calculation.
+name: stripe-calculate-and-settle-tax
+description: Calculate sales tax/VAT for a set of line items, then record a Tax transaction
+  from that calculation.
 api: openapi/stripe-tax-api-openapi.yml
-operations: [PostTaxCalculations, PostTaxTransactionsCreateFromCalculation]
-source: >-
-  Grounded in arazzo/stripe-calculate-and-settle-tax-workflow.yml; operationIds
+operations:
+- PostTaxCalculations
+- PostTaxTransactionsCreateFromCalculation
+source: Grounded in arazzo/stripe-calculate-and-settle-tax-workflow.yml; operationIds
   verified in openapi/stripe-tax-api-openapi.yml.
+title: Calculate and settle tax
 ---
 
 # Calculate and settle tax

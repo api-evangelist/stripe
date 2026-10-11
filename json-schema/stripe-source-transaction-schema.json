@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-source-transaction-schema.json",
+  "title": "SourceTransaction",
+  "description": "Some payment methods have no required amount that a customer must send.\nCustomers can be instructed to send any amount, and it can be made up of\nmultiple transactions. As such, sources can have multiple associated\ntransactions.",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-sources-api-openapi.yml#/components/schemas/source_transaction",
+  "properties": {
+    "ach_credit_transfer": {
+      "$ref": "#/$defs/source_transaction_ach_credit_transfer_data"
+    },
+    "amount": {
+      "description": "A positive integer in the smallest currency unit (that is, 100 cents for $1.00, or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the amount your customer has pushed to the receiver.",
+      "type": "integer"
+    },
+    "chf_credit_transfer": {
+      "$ref": "#/$defs/source_transaction_chf_credit_transfer_data"
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "gbp_credit_transfer": {
+      "$ref": "#/$defs/source_transaction_gbp_credit_transfer_data"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "source_transaction"
+      ],
+      "type": "string"
+    },
+    "paper_check": {
+      "$ref": "#/$defs/source_transaction_paper_check_data"
+    },
+    "sepa_credit_transfer": {
+      "$ref": "#/$defs/source_transaction_sepa_credit_transfer_data"
+    },
+    "source": {
+      "description": "The ID of the source this transaction is attached to.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "status": {
+      "description": "The status of the transaction, one of `succeeded`, `pending`, or `failed`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "type": {
+      "description": "The type of source this transaction is attached to.",
+      "enum": [
+        "ach_credit_transfer",
+        "ach_debit",
+        "alipay",
+        "bancontact",
+        "card",
+        "card_present",
+        "eps",
+        "giropay",
+        "ideal",
+        "klarna",
+        "multibanco",
+        "p24",
+        "sepa_debit",
+        "sofort",
+        "three_d_secure",
+        "wechat"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "amount",
+    "created",
+    "currency",
+    "id",
+    "livemode",
+    "object",
+    "source",
+    "status",
+    "type"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "ach_credit_transfer",
+    "chf_credit_transfer",
+    "gbp_credit_transfer",
+    "paper_check",
+    "sepa_credit_transfer"
+  ],
+  "x-resourceId": "source_transaction",
+  "$defs": {
+    "source_transaction_ach_credit_transfer_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_transaction_chf_credit_transfer_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_transaction_gbp_credit_transfer_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_transaction_paper_check_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "source_transaction_sepa_credit_transfer_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

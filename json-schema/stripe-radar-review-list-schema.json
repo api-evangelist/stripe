@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-radar-review-list-schema.json",
+  "title": "RadarReviewList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-reviews-api-openapi.yml#/components/schemas/RadarReviewList",
+  "type": "object",
+  "required": [
+    "data",
+    "has_more",
+    "object",
+    "url"
+  ],
+  "properties": {
+    "data": {
+      "items": {
+        "$ref": "#/$defs/review"
+      },
+      "type": "array"
+    },
+    "has_more": {
+      "description": "True if this list has another page of items after this one that can be fetched.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+      "enum": [
+        "list"
+      ],
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL where this list can be accessed.",
+      "maxLength": 5000,
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "charge": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "payment_intent": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "radar_review_resource_location": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "radar_review_resource_session": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "review": {
+      "description": "Reviews can be used to supplement automated fraud detection with human expertise.\n\nLearn more about [Radar](/radar) and reviewing payments\n[here](https://stripe.com/docs/radar/reviews).",
+      "properties": {
+        "billing_zip": {
+          "description": "The ZIP or postal code of the card used, if applicable.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "charge": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/charge"
+            }
+          ],
+          "description": "The charge associated with this review.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/charge"
+              }
+            ]
+          }
+        },
+        "closed_reason": {
+          "description": "The reason the review was closed, or null if it has not yet been closed. One of `approved`, `refunded`, `refunded_as_fraud`, `disputed`, or `redacted`.",
+          "enum": [
+            "approved",
+            "disputed",
+            "redacted",
+            "refunded",
+            "refunded_as_fraud"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "ip_address": {
+          "description": "The IP address where the payment originated.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ip_address_location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/radar_review_resource_location"
+            }
+          ],
+          "description": "Information related to the location of the payment. Note that this information is an approximation and attempts to locate the nearest population center - it should not be used to determine a specific address."
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "review"
+          ],
+          "type": "string"
+        },
+        "open": {
+          "description": "If `true`, the review needs action.",
+          "type": "boolean"
+        },
+        "opened_reason": {
+          "description": "The reason the review was opened. One of `rule` or `manual`.",
+          "enum": [
+            "manual",
+            "rule"
+          ],
+          "type": "string"
+        },
+        "payment_intent": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/payment_intent"
+            }
+          ],
+          "description": "The PaymentIntent ID associated with this review, if one exists.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/payment_intent"
+              }
+            ]
+          }
+        },
+        "reason": {
+          "description": "The reason the review is currently open or closed. One of `rule`, `manual`, `approved`, `refunded`, `refunded_as_fraud`, `disputed`, or `redacted`.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "session": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/radar_review_resource_session"
+            }
+          ],
+          "description": "Information related to the browsing session of the user who initiated the payment."
+        }
+      },
+      "required": [
+        "created",
+        "id",
+        "livemode",
+        "object",
+        "open",
+        "opened_reason",
+        "reason"
+      ],
+      "title": "RadarReview",
+      "type": "object",
+      "x-expandableFields": [
+        "charge",
+        "ip_address_location",
+        "payment_intent",
+        "session"
+      ],
+      "x-resourceId": "review"
+    }
+  }
+}

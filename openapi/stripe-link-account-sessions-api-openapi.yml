@@ -19,7 +19,8 @@ tags:
 paths:
   /v1/link_account_sessions:
     post:
-      description: To launch the Financial Connections authorization flow, create a Session. The session’s client_secret can be used to launch the flow using Stripe.js.
+      description: To launch the Financial Connections authorization flow, create a Session. The session’s client_secret can be used to launch
+        the flow using Stripe.js.
       operationId: PostLinkAccountSessions
       requestBody:
         content:
@@ -112,7 +113,8 @@ paths:
 components:
   schemas:
     financial_connections.account:
-      description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree of access.
+      description: A Financial Connections Account represents an account that exists outside of Stripe, to which you have been granted some degree
+        of access.
       properties:
         account_holder:
           anyOf:
@@ -199,7 +201,8 @@ components:
           - inactive
           type: string
         subcategory:
-          description: "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`."
+          description: "If `category` is `cash`, one of:\n\n - `checking`\n - `savings`\n - `other`\n\nIf `category` is `credit`, one of:\n\n\
+            \ - `mortgage`\n - `line_of_credit`\n - `credit_card`\n - `other`\n\nIf `category` is `investment` or `other`, this will be `other`."
           enum:
           - checking
           - credit_card
@@ -219,7 +222,8 @@ components:
           - array
           - 'null'
         supported_payment_method_types:
-          description: The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be created from this account.
+          description: The [PaymentMethod type](https://stripe.com/docs/api/payment_methods/object#payment_method_object-type)(s) that can be
+            created from this account.
           items:
             enum:
             - link
@@ -329,11 +333,13 @@ components:
             x-stripeBypassValidation: true
           type: array
         return_url:
-          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
+          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL
+            to return to your app.
           maxLength: 5000
           type: string
     financial_connections.session:
-      description: A Financial Connections Session is the secure way to programmatically launch the client-side Stripe.js modal that lets your users link their accounts.
+      description: A Financial Connections Session is the secure way to programmatically launch the client-side Stripe.js modal that lets your
+        users link their accounts.
       properties:
         account_holder:
           anyOf:
@@ -411,7 +417,8 @@ components:
           - array
           - 'null'
         return_url:
-          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL to return to your app.
+          description: For webview integrations only. Upon completing OAuth login in the native browser, the user will be redirected to this URL
+            to return to your app.
           maxLength: 5000
           type: string
       required:
@@ -428,6 +435,46 @@ components:
       - accounts
       - filters
       x-resourceId: financial_connections.session
+    api_errors:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_accountholder:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_balance:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_balance_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_link_account_session_filters:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_ownership_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    bank_connections_resource_transaction_refresh:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    financial_connections.account_ownership:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   securitySchemes:
     basicAuth:
       description: 'Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>'

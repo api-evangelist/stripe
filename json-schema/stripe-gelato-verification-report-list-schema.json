@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-gelato-verification-report-list-schema.json",
+  "title": "GelatoVerificationReportList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-identity-api-openapi.yml#/components/schemas/GelatoVerificationReportList",
+  "type": "object",
+  "required": [
+    "data",
+    "has_more",
+    "object",
+    "url"
+  ],
+  "properties": {
+    "data": {
+      "items": {
+        "$ref": "#/$defs/identity.verification_report"
+      },
+      "type": "array"
+    },
+    "has_more": {
+      "description": "True if this list has another page of items after this one that can be fetched.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value. Always has the value `list`.",
+      "enum": [
+        "list"
+      ],
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL where this list can be accessed.",
+      "maxLength": 5000,
+      "pattern": "^/v1/identity/verification_reports",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "gelato_document_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_id_number_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_selfie_report": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "gelato_verification_report_options": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "identity.verification_report": {
+      "description": "A VerificationReport is the result of an attempt to collect and verify data from a user.\nThe collection of verification checks performed is determined from the `type` and `options`\nparameters used. You can find the result of each verification check performed in the\nappropriate sub-resource: `document`, `id_number`, `selfie`.\n\nEach VerificationReport contains a copy of any data collected by the user as well as\nreference IDs which can be used to access collected images through the [FileUpload](https://stripe.com/docs/api/files)\nAPI. To configure and create VerificationReports, use the\n[VerificationSession](https://stripe.com/docs/api/identity/verification_sessions) API.\n\nRelated guides: [Accessing verification results](https://stripe.com/docs/identity/verification-sessions#results).",
+      "properties": {
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "document": {
+          "$ref": "#/$defs/gelato_document_report"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "id_number": {
+          "$ref": "#/$defs/gelato_id_number_report"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "identity.verification_report"
+          ],
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/$defs/gelato_verification_report_options"
+        },
+        "selfie": {
+          "$ref": "#/$defs/gelato_selfie_report"
+        },
+        "type": {
+          "description": "Type of report.",
+          "enum": [
+            "document",
+            "id_number"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        },
+        "verification_session": {
+          "description": "ID of the VerificationSession that created this report.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "created",
+        "id",
+        "livemode",
+        "object"
+      ],
+      "title": "GelatoVerificationReport",
+      "type": "object",
+      "x-expandableFields": [
+        "document",
+        "id_number",
+        "options",
+        "selfie"
+      ],
+      "x-resourceId": "identity.verification_report"
+    }
+  }
+}

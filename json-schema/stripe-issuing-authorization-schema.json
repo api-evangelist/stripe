@@ -1,0 +1,1383 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-issuing-authorization-schema.json",
+  "title": "IssuingAuthorization",
+  "description": "When an [issued card](https://stripe.com/docs/issuing) is used to make a purchase, an Issuing `Authorization`\nobject is created. [Authorizations](https://stripe.com/docs/issuing/purchases/authorizations) must be approved for the\npurchase to be completed successfully.\n\nRelated guide: [Issued card authorizations](https://stripe.com/docs/issuing/purchases/authorizations)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-issuing-api-openapi.yml#/components/schemas/issuing.authorization",
+  "properties": {
+    "amount": {
+      "description": "The total amount that was authorized or rejected. This amount is in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `amount` should be the same as `merchant_amount`, unless `currency` and `merchant_currency` are different.",
+      "type": "integer"
+    },
+    "amount_details": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/issuing_authorization_amount_details"
+        }
+      ],
+      "description": "Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal)."
+    },
+    "approved": {
+      "description": "Whether the authorization has been approved.",
+      "type": "boolean"
+    },
+    "authorization_method": {
+      "description": "How the card details were provided.",
+      "enum": [
+        "chip",
+        "contactless",
+        "keyed_in",
+        "online",
+        "swipe"
+      ],
+      "type": "string"
+    },
+    "balance_transactions": {
+      "description": "List of balance transactions associated with this authorization.",
+      "items": {
+        "$ref": "#/$defs/balance_transaction"
+      },
+      "type": "array"
+    },
+    "card": {
+      "$ref": "#/$defs/issuing.card"
+    },
+    "cardholder": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/issuing.cardholder"
+        }
+      ],
+      "description": "The cardholder to whom this authorization belongs.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/issuing.cardholder"
+          }
+        ]
+      }
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "currency": {
+      "description": "The currency of the cardholder. This currency can be different from the currency presented at authorization and the `merchant_currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "merchant_amount": {
+      "description": "The total amount that was authorized or rejected. This amount is in the `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `merchant_amount` should be the same as `amount`, unless `merchant_currency` and `currency` are different.",
+      "type": "integer"
+    },
+    "merchant_currency": {
+      "description": "The local currency that was presented to the cardholder for the authorization. This currency can be different from the cardholder currency and the `currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+      "type": "string"
+    },
+    "merchant_data": {
+      "$ref": "#/$defs/issuing_authorization_merchant_data"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "maxLength": 500,
+        "type": "string"
+      },
+      "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+      "type": "object"
+    },
+    "network_data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/issuing_authorization_network_data"
+        }
+      ],
+      "description": "Details about the authorization, such as identifiers, set by the card network."
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "issuing.authorization"
+      ],
+      "type": "string"
+    },
+    "pending_request": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/issuing_authorization_pending_request"
+        }
+      ],
+      "description": "The pending authorization request. This field will only be non-null during an `issuing_authorization.request` webhook."
+    },
+    "request_history": {
+      "description": "History of every time a `pending_request` authorization was approved/declined, either by you directly or by Stripe (e.g. based on your spending_controls). If the merchant changes the authorization by performing an incremental authorization, you can look at this field to see the previous requests for the authorization. This field can be helpful in determining why a given authorization was approved/declined.",
+      "items": {
+        "$ref": "#/$defs/issuing_authorization_request"
+      },
+      "type": "array"
+    },
+    "status": {
+      "description": "The current status of the authorization in its lifecycle.",
+      "enum": [
+        "closed",
+        "pending",
+        "reversed"
+      ],
+      "type": "string"
+    },
+    "token": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/issuing.token"
+        }
+      ],
+      "description": "[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this authorization. If a network token was not used for this authorization, this field will be null.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/issuing.token"
+          }
+        ]
+      }
+    },
+    "transactions": {
+      "description": "List of [transactions](https://stripe.com/docs/api/issuing/transactions) associated with this authorization.",
+      "items": {
+        "$ref": "#/$defs/issuing.transaction"
+      },
+      "type": "array"
+    },
+    "treasury": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/issuing_authorization_treasury"
+        }
+      ],
+      "description": "[Treasury](https://stripe.com/docs/api/treasury) details related to this authorization if it was created on a [FinancialAccount](https://stripe.com/docs/api/treasury/financial_accounts)."
+    },
+    "verification_data": {
+      "$ref": "#/$defs/issuing_authorization_verification_data"
+    },
+    "wallet": {
+      "description": "The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`. Will populate as `null` when no digital wallet was utilized.",
+      "maxLength": 5000,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "amount",
+    "approved",
+    "authorization_method",
+    "balance_transactions",
+    "card",
+    "created",
+    "currency",
+    "id",
+    "livemode",
+    "merchant_amount",
+    "merchant_currency",
+    "merchant_data",
+    "metadata",
+    "object",
+    "request_history",
+    "status",
+    "transactions",
+    "verification_data"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "amount_details",
+    "balance_transactions",
+    "card",
+    "cardholder",
+    "merchant_data",
+    "network_data",
+    "pending_request",
+    "request_history",
+    "token",
+    "transactions",
+    "treasury",
+    "verification_data"
+  ],
+  "x-resourceId": "issuing.authorization",
+  "$defs": {
+    "balance_transaction": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing.authorization": {
+      "description": "When an [issued card](https://stripe.com/docs/issuing) is used to make a purchase, an Issuing `Authorization`\nobject is created. [Authorizations](https://stripe.com/docs/issuing/purchases/authorizations) must be approved for the\npurchase to be completed successfully.\n\nRelated guide: [Issued card authorizations](https://stripe.com/docs/issuing/purchases/authorizations)",
+      "properties": {
+        "amount": {
+          "description": "The total amount that was authorized or rejected. This amount is in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `amount` should be the same as `merchant_amount`, unless `currency` and `merchant_currency` are different.",
+          "type": "integer"
+        },
+        "amount_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_authorization_amount_details"
+            }
+          ],
+          "description": "Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal)."
+        },
+        "approved": {
+          "description": "Whether the authorization has been approved.",
+          "type": "boolean"
+        },
+        "authorization_method": {
+          "description": "How the card details were provided.",
+          "enum": [
+            "chip",
+            "contactless",
+            "keyed_in",
+            "online",
+            "swipe"
+          ],
+          "type": "string"
+        },
+        "balance_transactions": {
+          "description": "List of balance transactions associated with this authorization.",
+          "items": {
+            "$ref": "#/$defs/balance_transaction"
+          },
+          "type": "array"
+        },
+        "card": {
+          "$ref": "#/$defs/issuing.card"
+        },
+        "cardholder": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.cardholder"
+            }
+          ],
+          "description": "The cardholder to whom this authorization belongs.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.cardholder"
+              }
+            ]
+          }
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "The currency of the cardholder. This currency can be different from the currency presented at authorization and the `merchant_currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "merchant_amount": {
+          "description": "The total amount that was authorized or rejected. This amount is in the `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). `merchant_amount` should be the same as `amount`, unless `merchant_currency` and `currency` are different.",
+          "type": "integer"
+        },
+        "merchant_currency": {
+          "description": "The local currency that was presented to the cardholder for the authorization. This currency can be different from the cardholder currency and the `currency` field on this authorization. Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "merchant_data": {
+          "$ref": "#/$defs/issuing_authorization_merchant_data"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "network_data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_authorization_network_data"
+            }
+          ],
+          "description": "Details about the authorization, such as identifiers, set by the card network."
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.authorization"
+          ],
+          "type": "string"
+        },
+        "pending_request": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_authorization_pending_request"
+            }
+          ],
+          "description": "The pending authorization request. This field will only be non-null during an `issuing_authorization.request` webhook."
+        },
+        "request_history": {
+          "description": "History of every time a `pending_request` authorization was approved/declined, either by you directly or by Stripe (e.g. based on your spending_controls). If the merchant changes the authorization by performing an incremental authorization, you can look at this field to see the previous requests for the authorization. This field can be helpful in determining why a given authorization was approved/declined.",
+          "items": {
+            "$ref": "#/$defs/issuing_authorization_request"
+          },
+          "type": "array"
+        },
+        "status": {
+          "description": "The current status of the authorization in its lifecycle.",
+          "enum": [
+            "closed",
+            "pending",
+            "reversed"
+          ],
+          "type": "string"
+        },
+        "token": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.token"
+            }
+          ],
+          "description": "[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this authorization. If a network token was not used for this authorization, this field will be null.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.token"
+              }
+            ]
+          }
+        },
+        "transactions": {
+          "description": "List of [transactions](https://stripe.com/docs/api/issuing/transactions) associated with this authorization.",
+          "items": {
+            "$ref": "#/$defs/issuing.transaction"
+          },
+          "type": "array"
+        },
+        "treasury": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_authorization_treasury"
+            }
+          ],
+          "description": "[Treasury](https://stripe.com/docs/api/treasury) details related to this authorization if it was created on a [FinancialAccount](https://stripe.com/docs/api/treasury/financial_accounts)."
+        },
+        "verification_data": {
+          "$ref": "#/$defs/issuing_authorization_verification_data"
+        },
+        "wallet": {
+          "description": "The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`. Will populate as `null` when no digital wallet was utilized.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "amount",
+        "approved",
+        "authorization_method",
+        "balance_transactions",
+        "card",
+        "created",
+        "currency",
+        "id",
+        "livemode",
+        "merchant_amount",
+        "merchant_currency",
+        "merchant_data",
+        "metadata",
+        "object",
+        "request_history",
+        "status",
+        "transactions",
+        "verification_data"
+      ],
+      "title": "IssuingAuthorization",
+      "type": "object",
+      "x-expandableFields": [
+        "amount_details",
+        "balance_transactions",
+        "card",
+        "cardholder",
+        "merchant_data",
+        "network_data",
+        "pending_request",
+        "request_history",
+        "token",
+        "transactions",
+        "treasury",
+        "verification_data"
+      ],
+      "x-resourceId": "issuing.authorization"
+    },
+    "issuing.card": {
+      "description": "You can [create physical or virtual cards](https://stripe.com/docs/issuing/cards) that are issued to cardholders.",
+      "properties": {
+        "brand": {
+          "description": "The brand of the card.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "cancellation_reason": {
+          "description": "The reason why the card was canceled.",
+          "enum": [
+            "design_rejected",
+            "lost",
+            "stolen"
+          ],
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stripeBypassValidation": true
+        },
+        "cardholder": {
+          "$ref": "#/$defs/issuing.cardholder"
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Supported currencies are `usd` in the US, `eur` in the EU, and `gbp` in the UK.",
+          "type": "string"
+        },
+        "cvc": {
+          "description": "The card's CVC. For security reasons, this is only available for virtual cards, and will be omitted unless you explicitly request it with [the `expand` parameter](https://stripe.com/docs/api/expanding_objects). Additionally, it's only available via the [\"Retrieve a card\" endpoint](https://stripe.com/docs/api/issuing/cards/retrieve), not via \"List all cards\" or any other endpoint.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "exp_month": {
+          "description": "The expiration month of the card.",
+          "type": "integer"
+        },
+        "exp_year": {
+          "description": "The expiration year of the card.",
+          "type": "integer"
+        },
+        "financial_account": {
+          "description": "The financial account this card is attached to.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "last4": {
+          "description": "The last 4 digits of the card number.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "number": {
+          "description": "The full unredacted card number. For security reasons, this is only available for virtual cards, and will be omitted unless you explicitly request it with [the `expand` parameter](https://stripe.com/docs/api/expanding_objects). Additionally, it's only available via the [\"Retrieve a card\" endpoint](https://stripe.com/docs/api/issuing/cards/retrieve), not via \"List all cards\" or any other endpoint.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.card"
+          ],
+          "type": "string"
+        },
+        "replaced_by": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.card"
+            }
+          ],
+          "description": "The latest card that replaces this card, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.card"
+              }
+            ]
+          }
+        },
+        "replacement_for": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.card"
+            }
+          ],
+          "description": "The card this card replaces, if any.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.card"
+              }
+            ]
+          }
+        },
+        "replacement_reason": {
+          "description": "The reason why the previous card needed to be replaced.",
+          "enum": [
+            "damaged",
+            "expired",
+            "lost",
+            "stolen"
+          ],
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-stripeBypassValidation": true
+        },
+        "shipping": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_card_shipping"
+            }
+          ],
+          "description": "Where and how the card will be shipped."
+        },
+        "spending_controls": {
+          "$ref": "#/$defs/issuing_card_authorization_controls"
+        },
+        "status": {
+          "description": "Whether authorizations can be approved on this card. May be blocked from activating cards depending on past-due Cardholder requirements. Defaults to `inactive`.",
+          "enum": [
+            "active",
+            "canceled",
+            "inactive"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        },
+        "type": {
+          "description": "The type of the card.",
+          "enum": [
+            "physical",
+            "virtual"
+          ],
+          "type": "string"
+        },
+        "wallets": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_card_wallets"
+            }
+          ],
+          "description": "Information relating to digital wallets (like Apple Pay and Google Pay)."
+        }
+      },
+      "required": [
+        "brand",
+        "cardholder",
+        "created",
+        "currency",
+        "exp_month",
+        "exp_year",
+        "id",
+        "last4",
+        "livemode",
+        "metadata",
+        "object",
+        "spending_controls",
+        "status",
+        "type"
+      ],
+      "title": "IssuingCard",
+      "type": "object",
+      "x-expandableFields": [
+        "cardholder",
+        "replaced_by",
+        "replacement_for",
+        "shipping",
+        "spending_controls",
+        "wallets"
+      ],
+      "x-resourceId": "issuing.card"
+    },
+    "issuing.cardholder": {
+      "description": "An Issuing `Cardholder` object represents an individual or business entity who is [issued](https://stripe.com/docs/issuing) cards.\n\nRelated guide: [How to create a cardholder](https://stripe.com/docs/issuing/cards#create-cardholder)",
+      "properties": {
+        "billing": {
+          "$ref": "#/$defs/issuing_cardholder_address"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_cardholder_company"
+            }
+          ],
+          "description": "Additional information about a `company` cardholder."
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "email": {
+          "description": "The cardholder's email address.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "individual": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_cardholder_individual"
+            }
+          ],
+          "description": "Additional information about an `individual` cardholder."
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "name": {
+          "description": "The cardholder's name. This will be printed on cards issued to them.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.cardholder"
+          ],
+          "type": "string"
+        },
+        "phone_number": {
+          "description": "The cardholder's phone number. This is required for all cardholders who will be creating EU cards. See the [3D Secure documentation](https://stripe.com/docs/issuing/3d-secure#when-is-3d-secure-applied) for more details.",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "preferred_locales": {
+          "description": "The cardholder’s preferred locales (languages), ordered by preference. Locales can be `de`, `en`, `es`, `fr`, or `it`.\n This changes the language of the [3D Secure flow](https://stripe.com/docs/issuing/3d-secure) and one-time password messages sent to the cardholder.",
+          "items": {
+            "enum": [
+              "de",
+              "en",
+              "es",
+              "fr",
+              "it"
+            ],
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "requirements": {
+          "$ref": "#/$defs/issuing_cardholder_requirements"
+        },
+        "spending_controls": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_cardholder_authorization_controls"
+            }
+          ],
+          "description": "Rules that control spending across this cardholder's cards. Refer to our [documentation](https://stripe.com/docs/issuing/controls/spending-controls) for more details."
+        },
+        "status": {
+          "description": "Specifies whether to permit authorizations on this cardholder's cards.",
+          "enum": [
+            "active",
+            "blocked",
+            "inactive"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "description": "One of `individual` or `company`. See [Choose a cardholder type](https://stripe.com/docs/issuing/other/choose-cardholder) for more details.",
+          "enum": [
+            "company",
+            "individual"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        }
+      },
+      "required": [
+        "billing",
+        "created",
+        "id",
+        "livemode",
+        "metadata",
+        "name",
+        "object",
+        "requirements",
+        "status",
+        "type"
+      ],
+      "title": "IssuingCardholder",
+      "type": "object",
+      "x-expandableFields": [
+        "billing",
+        "company",
+        "individual",
+        "requirements",
+        "spending_controls"
+      ],
+      "x-resourceId": "issuing.cardholder"
+    },
+    "issuing.dispute": {
+      "description": "As a [card issuer](https://stripe.com/docs/issuing), you can dispute transactions that the cardholder does not recognize, suspects to be fraudulent, or has other issues with.\n\nRelated guide: [Issuing disputes](https://stripe.com/docs/issuing/purchases/disputes)",
+      "properties": {
+        "amount": {
+          "description": "Disputed amount in the card's currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). Usually the amount of the `transaction`, but can differ (usually because of currency fluctuation).",
+          "type": "integer"
+        },
+        "balance_transactions": {
+          "description": "List of balance transactions associated with the dispute.",
+          "items": {
+            "$ref": "#/$defs/balance_transaction"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "The currency the `transaction` was made in.",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/issuing_dispute_evidence"
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.dispute"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "description": "Current status of the dispute.",
+          "enum": [
+            "expired",
+            "lost",
+            "submitted",
+            "unsubmitted",
+            "won"
+          ],
+          "type": "string"
+        },
+        "transaction": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.transaction"
+            }
+          ],
+          "description": "The transaction being disputed.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.transaction"
+              }
+            ]
+          }
+        },
+        "treasury": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_dispute_treasury"
+            }
+          ],
+          "description": "[Treasury](https://stripe.com/docs/api/treasury) details related to this dispute if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts"
+        }
+      },
+      "required": [
+        "amount",
+        "created",
+        "currency",
+        "evidence",
+        "id",
+        "livemode",
+        "metadata",
+        "object",
+        "status",
+        "transaction"
+      ],
+      "title": "IssuingDispute",
+      "type": "object",
+      "x-expandableFields": [
+        "balance_transactions",
+        "evidence",
+        "transaction",
+        "treasury"
+      ],
+      "x-resourceId": "issuing.dispute"
+    },
+    "issuing.token": {
+      "description": "An issuing token object is created when an issued card is added to a digital wallet. As a [card issuer](https://stripe.com/docs/issuing), you can [view and manage these tokens](https://stripe.com/docs/issuing/controls/token-management) through Stripe.",
+      "properties": {
+        "card": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.card"
+            }
+          ],
+          "description": "Card associated with this token.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.card"
+              }
+            ]
+          }
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "device_fingerprint": {
+          "description": "The hashed ID derived from the device ID from the card network associated with the token",
+          "maxLength": 5000,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "last4": {
+          "description": "The last four digits of the token.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "network": {
+          "description": "The token service provider / card network associated with the token.",
+          "enum": [
+            "mastercard",
+            "visa"
+          ],
+          "type": "string"
+        },
+        "network_data": {
+          "$ref": "#/$defs/issuing_network_token_network_data"
+        },
+        "network_updated_at": {
+          "description": "Time at which the token was last updated by the card network. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.token"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "description": "The usage state of the token.",
+          "enum": [
+            "active",
+            "deleted",
+            "requested",
+            "suspended"
+          ],
+          "type": "string"
+        },
+        "wallet_provider": {
+          "description": "The digital wallet for this token, if one was used.",
+          "enum": [
+            "apple_pay",
+            "google_pay",
+            "samsung_pay"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "card",
+        "created",
+        "id",
+        "livemode",
+        "network",
+        "network_updated_at",
+        "object",
+        "status"
+      ],
+      "title": "IssuingNetworkToken",
+      "type": "object",
+      "x-expandableFields": [
+        "card",
+        "network_data"
+      ],
+      "x-resourceId": "issuing.token"
+    },
+    "issuing.transaction": {
+      "description": "Any use of an [issued card](https://stripe.com/docs/issuing) that results in funds entering or leaving\nyour Stripe account, such as a completed purchase or refund, is represented by an Issuing\n`Transaction` object.\n\nRelated guide: [Issued card transactions](https://stripe.com/docs/issuing/purchases/transactions)",
+      "properties": {
+        "amount": {
+          "description": "The transaction amount, which will be reflected in your balance. This amount is in your currency and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal).",
+          "type": "integer"
+        },
+        "amount_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_transaction_amount_details"
+            }
+          ],
+          "description": "Detailed breakdown of amount components. These amounts are denominated in `currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal)."
+        },
+        "authorization": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.authorization"
+            }
+          ],
+          "description": "The `Authorization` object that led to this transaction.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.authorization"
+              }
+            ]
+          }
+        },
+        "balance_transaction": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/balance_transaction"
+            }
+          ],
+          "description": "ID of the [balance transaction](https://stripe.com/docs/api/balance_transactions) associated with this transaction.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/balance_transaction"
+              }
+            ]
+          }
+        },
+        "card": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.card"
+            }
+          ],
+          "description": "The card used to make this transaction.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.card"
+              }
+            ]
+          }
+        },
+        "cardholder": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.cardholder"
+            }
+          ],
+          "description": "The cardholder to whom this transaction belongs.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.cardholder"
+              }
+            ]
+          }
+        },
+        "created": {
+          "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+          "format": "unix-time",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).",
+          "type": "string"
+        },
+        "dispute": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.dispute"
+            }
+          ],
+          "description": "If you've disputed the transaction, the ID of the dispute.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.dispute"
+              }
+            ]
+          }
+        },
+        "id": {
+          "description": "Unique identifier for the object.",
+          "maxLength": 5000,
+          "type": "string"
+        },
+        "livemode": {
+          "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+          "type": "boolean"
+        },
+        "merchant_amount": {
+          "description": "The amount that the merchant will receive, denominated in `merchant_currency` and in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). It will be different from `amount` if the merchant is taking payment in a different currency.",
+          "type": "integer"
+        },
+        "merchant_currency": {
+          "description": "The currency with which the merchant is taking payment.",
+          "type": "string"
+        },
+        "merchant_data": {
+          "$ref": "#/$defs/issuing_authorization_merchant_data"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "description": "Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.",
+          "type": "object"
+        },
+        "network_data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_transaction_network_data"
+            }
+          ],
+          "description": "Details about the transaction, such as processing dates, set by the card network."
+        },
+        "object": {
+          "description": "String representing the object's type. Objects of the same type share the same value.",
+          "enum": [
+            "issuing.transaction"
+          ],
+          "type": "string"
+        },
+        "purchase_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_transaction_purchase_details"
+            }
+          ],
+          "description": "Additional purchase information that is optionally provided by the merchant."
+        },
+        "token": {
+          "anyOf": [
+            {
+              "maxLength": 5000,
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/issuing.token"
+            }
+          ],
+          "description": "[Token](https://stripe.com/docs/api/issuing/tokens/object) object used for this transaction. If a network token was not used for this transaction, this field will be null.",
+          "x-expansionResources": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/issuing.token"
+              }
+            ]
+          }
+        },
+        "treasury": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/issuing_transaction_treasury"
+            }
+          ],
+          "description": "[Treasury](https://stripe.com/docs/api/treasury) details related to this transaction if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts"
+        },
+        "type": {
+          "description": "The nature of the transaction.",
+          "enum": [
+            "capture",
+            "refund"
+          ],
+          "type": "string",
+          "x-stripeBypassValidation": true
+        },
+        "wallet": {
+          "description": "The digital wallet used for this transaction. One of `apple_pay`, `google_pay`, or `samsung_pay`.",
+          "enum": [
+            "apple_pay",
+            "google_pay",
+            "samsung_pay"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "amount",
+        "card",
+        "created",
+        "currency",
+        "id",
+        "livemode",
+        "merchant_amount",
+        "merchant_currency",
+        "merchant_data",
+        "metadata",
+        "object",
+        "type"
+      ],
+      "title": "IssuingTransaction",
+      "type": "object",
+      "x-expandableFields": [
+        "amount_details",
+        "authorization",
+        "balance_transaction",
+        "card",
+        "cardholder",
+        "dispute",
+        "merchant_data",
+        "network_data",
+        "purchase_details",
+        "token",
+        "treasury"
+      ],
+      "x-resourceId": "issuing.transaction"
+    },
+    "issuing_authorization_amount_details": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_merchant_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_network_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_pending_request": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_request": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_treasury": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_authorization_verification_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_card_authorization_controls": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_card_shipping": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_card_wallets": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_cardholder_address": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_cardholder_authorization_controls": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_cardholder_company": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_cardholder_individual": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_cardholder_requirements": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_dispute_evidence": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_dispute_treasury": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_network_token_network_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_transaction_amount_details": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_transaction_network_data": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_transaction_purchase_details": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "issuing_transaction_treasury": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/stripe/main/json-schema/stripe-radar-early-fraud-warning-schema.json",
+  "title": "RadarEarlyFraudWarning",
+  "description": "An early fraud warning indicates that the card issuer has notified us that a\ncharge may be fraudulent.\n\nRelated guide: [Early fraud warnings](https://stripe.com/docs/disputes/measuring#early-fraud-warnings)",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/stripe-radar-api-openapi.yml#/components/schemas/radar.early_fraud_warning",
+  "properties": {
+    "actionable": {
+      "description": "An EFW is actionable if it has not received a dispute and has not been fully refunded. You may wish to proactively refund a charge that receives an EFW, in order to avoid receiving a dispute later.",
+      "type": "boolean"
+    },
+    "charge": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/charge"
+        }
+      ],
+      "description": "ID of the charge this early fraud warning is for, optionally expanded.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/charge"
+          }
+        ]
+      }
+    },
+    "created": {
+      "description": "Time at which the object was created. Measured in seconds since the Unix epoch.",
+      "format": "unix-time",
+      "type": "integer"
+    },
+    "fraud_type": {
+      "description": "The type of fraud labelled by the issuer. One of `card_never_received`, `fraudulent_card_application`, `made_with_counterfeit_card`, `made_with_lost_card`, `made_with_stolen_card`, `misc`, `unauthorized_use_of_card`.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique identifier for the object.",
+      "maxLength": 5000,
+      "type": "string"
+    },
+    "livemode": {
+      "description": "Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.",
+      "type": "boolean"
+    },
+    "object": {
+      "description": "String representing the object's type. Objects of the same type share the same value.",
+      "enum": [
+        "radar.early_fraud_warning"
+      ],
+      "type": "string"
+    },
+    "payment_intent": {
+      "anyOf": [
+        {
+          "maxLength": 5000,
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/payment_intent"
+        }
+      ],
+      "description": "ID of the Payment Intent this early fraud warning is for, optionally expanded.",
+      "x-expansionResources": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/payment_intent"
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "actionable",
+    "charge",
+    "created",
+    "fraud_type",
+    "id",
+    "livemode",
+    "object"
+  ],
+  "type": "object",
+  "x-expandableFields": [
+    "charge",
+    "payment_intent"
+  ],
+  "x-resourceId": "radar.early_fraud_warning",
+  "$defs": {
+    "charge": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    },
+    "payment_intent": {
+      "type": "object",
+      "description": "Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves; the shape is unknown and is NOT a claim about the API.",
+      "x-ae-placeholder": true
+    }
+  }
+}
