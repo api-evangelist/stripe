@@ -1,0 +1,79 @@
+arazzo: 1.0.1
+info:
+  title: Add New Stripe Customers to a Mailchimp List
+  summary: Subscribe each new Stripe customer to a Mailchimp audience.
+  description: Retrieves a newly created Stripe customer and adds it as a member of a Mailchimp audience list. Recreates
+    the Zapier template "Add new Stripe customers to Mailchimp lists".
+  version: 1.0.0
+sourceDescriptions:
+- name: stripeCustomersApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-customers-api-openapi.yml
+  type: openapi
+- name: mailchimpListsApi
+  url: https://raw.githubusercontent.com/api-evangelist/mailchimp/refs/heads/main/openapi/mailchimp-lists-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-mailchimp-new-customers-to-list
+  summary: Subscribe each new Stripe customer to a Mailchimp audience.
+  description: Retrieves a newly created Stripe customer and adds it as a member of a Mailchimp audience list. Recreates
+    the Zapier template "Add new Stripe customers to Mailchimp lists".
+  inputs:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: Stripe customer id (cus_...) from the customer.created event.
+      listId:
+        type: string
+        description: Mailchimp audience (list) id.
+      status:
+        type: string
+        default: subscribed
+        description: Member status.
+    required:
+    - customerId
+    - listId
+  steps:
+  - stepId: get-stripe-customer
+    description: Retrieve the new Stripe customer.
+    operationId: $sourceDescriptions.stripeCustomersApi.GetCustomersCustomer
+    parameters:
+    - name: customer
+      in: path
+      value: $inputs.customerId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      email: $response.body#/email
+      name: $response.body#/name
+      phone: $response.body#/phone
+      customerId: $response.body#/id
+  - stepId: add-mailchimp-member
+    description: Add the customer to the Mailchimp list.
+    operationId: $sourceDescriptions.mailchimpListsApi.postListsIdMembers
+    parameters:
+    - name: list_id
+      in: path
+      value: $inputs.listId
+    requestBody:
+      contentType: application/json
+      payload:
+        email_address: $steps.get-stripe-customer.outputs.email
+        status: $inputs.status
+        merge_fields:
+          FNAME: $steps.get-stripe-customer.outputs.name
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      memberId: $response.body#/id
+  outputs:
+    email: $steps.get-stripe-customer.outputs.email
+    mailchimpMemberId: $steps.add-mailchimp-member.outputs.memberId
+x-integration:
+  partner: mailchimp
+  template: https://zapier.com/apps/mailchimp/integrations/stripe/433/add-new-stripe-customers-to-mailchimp-lists
+  edge_evidence: https://zapier.com/apps/mailchimp/integrations/stripe/433/add-new-stripe-customers-to-mailchimp-lists
+  edge_type: zapier-template
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)

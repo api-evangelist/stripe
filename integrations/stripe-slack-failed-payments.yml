@@ -1,0 +1,74 @@
+arazzo: 1.0.1
+info:
+  title: Post Failed Stripe Payments to Slack
+  summary: Alert a Slack channel when a Stripe payment fails.
+  description: Retrieves a Stripe PaymentIntent whose payment failed (payment_intent.payment_failed) and posts the
+    failure message and amount to Slack so the team can follow up. Recreates the Zapier template "Post failed Stripe
+    payments to Slack".
+  version: 1.0.0
+sourceDescriptions:
+- name: stripePaymentIntentsApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
+  type: openapi
+- name: slackChatApi
+  url: https://raw.githubusercontent.com/api-evangelist/slack/refs/heads/main/openapi/slack-chat-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-slack-failed-payments
+  summary: Alert a Slack channel when a Stripe payment fails.
+  description: Retrieves a Stripe PaymentIntent whose payment failed (payment_intent.payment_failed) and posts the
+    failure message and amount to Slack so the team can follow up. Recreates the Zapier template "Post failed Stripe
+    payments to Slack".
+  inputs:
+    type: object
+    properties:
+      paymentIntentId:
+        type: string
+        description: Stripe PaymentIntent id (pi_...).
+      channel:
+        type: string
+        description: Slack channel id to post into.
+    required:
+    - paymentIntentId
+    - channel
+  steps:
+  - stepId: get-payment-intent
+    description: Retrieve the failed PaymentIntent.
+    operationId: $sourceDescriptions.stripePaymentIntentsApi.GetPaymentIntentsIntent
+    parameters:
+    - name: intent
+      in: path
+      value: $inputs.paymentIntentId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      amount: $response.body#/amount
+      currency: $response.body#/currency
+      failure: $response.body#/last_payment_error/message
+      customer: $response.body#/customer
+  - stepId: post-slack-message
+    description: Post the notification to a Slack channel.
+    operationId: $sourceDescriptions.slackChatApi.postChatPostmessage
+    requestBody:
+      contentType: application/json
+      payload:
+        channel: $inputs.channel
+        text: 'Stripe payment failed: {$steps.get-payment-intent.outputs.amount} {$steps.get-payment-intent.outputs.currency}
+          (customer {$steps.get-payment-intent.outputs.customer}) - {$steps.get-payment-intent.outputs.failure}'
+    successCriteria:
+    - condition: $statusCode == 200
+    - condition: $response.body#/ok == true
+    outputs:
+      ts: $response.body#/ts
+      channel: $response.body#/channel
+  outputs:
+    failure: $steps.get-payment-intent.outputs.failure
+    slackTs: $steps.post-slack-message.outputs.ts
+x-integration:
+  partner: slack
+  template: https://zapier.com/apps/slack/integrations/stripe/1543/post-failed-stripe-payments-to-slack
+  edge_evidence: https://zapier.com/apps/slack/integrations/stripe/1543/post-failed-stripe-payments-to-slack
+  edge_type: zapier-template
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)

@@ -1,0 +1,68 @@
+arazzo: 1.0.1
+info:
+  title: Sync ActiveCampaign Contacts from Stripe Payments
+  summary: Add or update an ActiveCampaign contact for each new Stripe payment.
+  description: Retrieves a succeeded Stripe charge and syncs the payer into ActiveCampaign, creating the contact
+    or updating it if the email already exists. Recreates the Zapier template "Add or update ActiveCampaign contacts
+    with new Stripe payments".
+  version: 1.0.0
+sourceDescriptions:
+- name: stripeChargesApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+  type: openapi
+- name: activecampaignContactsApi
+  url: https://raw.githubusercontent.com/api-evangelist/activecampaign/refs/heads/main/openapi/activecampaign-contacts-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-activecampaign-sync-payment-contacts
+  summary: Add or update an ActiveCampaign contact for each new Stripe payment.
+  description: Retrieves a succeeded Stripe charge and syncs the payer into ActiveCampaign, creating the contact
+    or updating it if the email already exists. Recreates the Zapier template "Add or update ActiveCampaign contacts
+    with new Stripe payments".
+  inputs:
+    type: object
+    properties:
+      chargeId:
+        type: string
+        description: Stripe charge id (ch_...).
+    required:
+    - chargeId
+  steps:
+  - stepId: get-stripe-charge
+    description: Retrieve the succeeded Stripe charge.
+    operationId: $sourceDescriptions.stripeChargesApi.GetChargesCharge
+    parameters:
+    - name: charge
+      in: path
+      value: $inputs.chargeId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      email: $response.body#/billing_details/email
+      name: $response.body#/billing_details/name
+      phone: $response.body#/billing_details/phone
+  - stepId: sync-activecampaign-contact
+    description: Create or update the ActiveCampaign contact.
+    operationId: $sourceDescriptions.activecampaignContactsApi.sync-a-contacts-data
+    requestBody:
+      contentType: application/json
+      payload:
+        contact:
+          email: $steps.get-stripe-charge.outputs.email
+          firstName: $steps.get-stripe-charge.outputs.name
+          phone: $steps.get-stripe-charge.outputs.phone
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      contactId: $response.body#/contact/id
+  outputs:
+    email: $steps.get-stripe-charge.outputs.email
+    activecampaignContactId: $steps.sync-activecampaign-contact.outputs.contactId
+x-integration:
+  partner: activecampaign
+  template: https://zapier.com/apps/activecampaign/integrations/stripe/11561/add-or-update-activecampaign-contacts-with-new-stripe-payments
+  edge_evidence: https://zapier.com/apps/activecampaign/integrations/stripe/11561/add-or-update-activecampaign-contacts-with-new-stripe-payments
+  edge_type: zapier-template
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)

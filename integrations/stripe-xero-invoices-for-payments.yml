@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Create Xero Invoices for New Stripe Payments
+  summary: Create a Xero sales invoice for each succeeded Stripe charge.
+  description: Retrieves a succeeded Stripe charge and creates a matching ACCREC invoice in Xero for the charge
+    amount, so the payment is booked in accounting. Recreates the Zapier template "Create Xero invoices for new
+    Stripe payments".
+  version: 1.0.0
+sourceDescriptions:
+- name: stripeChargesApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+  type: openapi
+- name: xeroAccountingApi
+  url: https://raw.githubusercontent.com/api-evangelist/xero/refs/heads/main/openapi/xero-accounting-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-xero-invoices-for-payments
+  summary: Create a Xero sales invoice for each succeeded Stripe charge.
+  description: Retrieves a succeeded Stripe charge and creates a matching ACCREC invoice in Xero for the charge
+    amount, so the payment is booked in accounting. Recreates the Zapier template "Create Xero invoices for new
+    Stripe payments".
+  inputs:
+    type: object
+    properties:
+      chargeId:
+        type: string
+        description: Stripe charge id (ch_...).
+      xeroTenantId:
+        type: string
+        description: Xero tenant id.
+      contactID:
+        type: string
+        description: Xero contact id to invoice.
+      accountCode:
+        type: string
+        description: Xero revenue account code.
+      unitAmount:
+        type: number
+        description: Invoice amount in major units (Stripe amount / 100).
+    required:
+    - chargeId
+    - xeroTenantId
+    - contactID
+    - accountCode
+    - unitAmount
+  steps:
+  - stepId: get-stripe-charge
+    description: Retrieve the succeeded Stripe charge.
+    operationId: $sourceDescriptions.stripeChargesApi.GetChargesCharge
+    parameters:
+    - name: charge
+      in: path
+      value: $inputs.chargeId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chargeId: $response.body#/id
+      currency: $response.body#/currency
+      description: $response.body#/description
+  - stepId: create-xero-invoice
+    description: Create the Xero sales invoice.
+    operationId: $sourceDescriptions.xeroAccountingApi.createInvoices
+    parameters:
+    - name: xero-tenant-id
+      in: header
+      value: $inputs.xeroTenantId
+    requestBody:
+      contentType: application/json
+      payload:
+        Invoices:
+        - Type: ACCREC
+          Contact:
+            ContactID: $inputs.contactID
+          Reference: $steps.get-stripe-charge.outputs.chargeId
+          LineItems:
+          - Description: $steps.get-stripe-charge.outputs.description
+            Quantity: 1
+            UnitAmount: $inputs.unitAmount
+            AccountCode: $inputs.accountCode
+          Status: AUTHORISED
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      invoiceId: $response.body#/Invoices/0/InvoiceID
+      invoiceNumber: $response.body#/Invoices/0/InvoiceNumber
+  outputs:
+    stripeChargeId: $steps.get-stripe-charge.outputs.chargeId
+    xeroInvoiceId: $steps.create-xero-invoice.outputs.invoiceId
+x-integration:
+  partner: xero
+  template: https://zapier.com/apps/stripe/integrations/xero/3384/create-xero-invoices-for-new-stripe-payments
+  edge_evidence: https://zapier.com/apps/stripe/integrations/xero/3384/create-xero-invoices-for-new-stripe-payments
+  edge_type: zapier-template
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)

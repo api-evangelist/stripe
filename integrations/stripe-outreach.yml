@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Mark Outreach Prospects Converted from Stripe
+  summary: Tag the Outreach prospect as Converted and pause its sequence when a Stripe customer pays.
+  description: Retrieves the Stripe customer who just converted to paid, tags the matching Outreach prospect as
+    Converted, and pauses the active sequence state so sales outreach stops.
+  version: 1.0.0
+sourceDescriptions:
+- name: stripeCustomersApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-customers-api-openapi.yml
+  type: openapi
+- name: outreachProspectApi
+  url: https://raw.githubusercontent.com/api-evangelist/outreach/refs/heads/main/openapi/outreach-prospect-api-openapi.yml
+  type: openapi
+- name: outreachSequenceStateApi
+  url: https://raw.githubusercontent.com/api-evangelist/outreach/refs/heads/main/openapi/outreach-sequence-state-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-outreach-converted-prospect
+  summary: Tag the Outreach prospect as Converted and pause its sequence when a Stripe customer pays.
+  description: Retrieves the Stripe customer who just converted to paid, tags the matching Outreach prospect as
+    Converted, and pauses the active sequence state so sales outreach stops.
+  inputs:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: Stripe customer id (cus_...) from the customer.created event.
+      prospectId:
+        type: integer
+        description: Outreach prospect id matching the customer.
+      sequenceStateId:
+        type: integer
+        description: Active Outreach sequence state id to pause.
+    required:
+    - customerId
+    - prospectId
+    - sequenceStateId
+  steps:
+  - stepId: get-stripe-customer
+    description: Retrieve the new Stripe customer.
+    operationId: $sourceDescriptions.stripeCustomersApi.GetCustomersCustomer
+    parameters:
+    - name: customer
+      in: path
+      value: $inputs.customerId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      email: $response.body#/email
+      name: $response.body#/name
+      phone: $response.body#/phone
+      customerId: $response.body#/id
+  - stepId: tag-outreach-prospect
+    description: Tag the prospect as Converted.
+    operationId: $sourceDescriptions.outreachProspectApi.patchProspectsById
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.prospectId
+    requestBody:
+      contentType: application/vnd.api+json
+      payload:
+        data:
+          type: prospect
+          id: $inputs.prospectId
+          attributes:
+            tags:
+            - Converted
+            custom1: $steps.get-stripe-customer.outputs.customerId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      prospectId: $response.body#/data/id
+  - stepId: pause-sequence-state
+    description: Pause the active sequence state.
+    operationId: $sourceDescriptions.outreachSequenceStateApi.postSequenceStatesByIdActionsPause
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.sequenceStateId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      state: $response.body#/data/attributes/state
+  outputs:
+    prospectId: $steps.tag-outreach-prospect.outputs.prospectId
+    sequenceState: $steps.pause-sequence-state.outputs.state
+x-integration:
+  partner: outreach
+  template: null
+  edge_evidence: null
+  edge_type: curated
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)

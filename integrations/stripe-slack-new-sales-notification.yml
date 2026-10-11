@@ -1,0 +1,73 @@
+arazzo: 1.0.1
+info:
+  title: Notify Slack of New Stripe Sales
+  summary: Post a Slack message for each new successful Stripe charge.
+  description: Retrieves a succeeded Stripe charge (from the charge.succeeded event) and posts its amount, currency
+    and receipt email to a Slack channel. Recreates the Zapier template "Get Slack notifications for new Stripe
+    sales" as forkable Arazzo.
+  version: 1.0.0
+sourceDescriptions:
+- name: stripeChargesApi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+  type: openapi
+- name: slackChatApi
+  url: https://raw.githubusercontent.com/api-evangelist/slack/refs/heads/main/openapi/slack-chat-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-slack-new-sales
+  summary: Post a Slack message for each new successful Stripe charge.
+  description: Retrieves a succeeded Stripe charge (from the charge.succeeded event) and posts its amount, currency
+    and receipt email to a Slack channel. Recreates the Zapier template "Get Slack notifications for new Stripe
+    sales" as forkable Arazzo.
+  inputs:
+    type: object
+    properties:
+      chargeId:
+        type: string
+        description: Stripe charge id (ch_...).
+      channel:
+        type: string
+        description: Slack channel id to post into.
+    required:
+    - chargeId
+    - channel
+  steps:
+  - stepId: get-stripe-charge
+    description: Retrieve the succeeded Stripe charge.
+    operationId: $sourceDescriptions.stripeChargesApi.GetChargesCharge
+    parameters:
+    - name: charge
+      in: path
+      value: $inputs.chargeId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      amount: $response.body#/amount
+      currency: $response.body#/currency
+      email: $response.body#/billing_details/email
+  - stepId: post-slack-message
+    description: Post the notification to a Slack channel.
+    operationId: $sourceDescriptions.slackChatApi.postChatPostmessage
+    requestBody:
+      contentType: application/json
+      payload:
+        channel: $inputs.channel
+        text: 'New Stripe sale: {$steps.get-stripe-charge.outputs.amount} {$steps.get-stripe-charge.outputs.currency}
+          from {$steps.get-stripe-charge.outputs.email}'
+    successCriteria:
+    - condition: $statusCode == 200
+    - condition: $response.body#/ok == true
+    outputs:
+      ts: $response.body#/ts
+      channel: $response.body#/channel
+  outputs:
+    amount: $steps.get-stripe-charge.outputs.amount
+    slackTs: $steps.post-slack-message.outputs.ts
+x-integration:
+  partner: slack
+  template: https://zapier.com/apps/slack/integrations/stripe/1585/get-slack-notifications-for-new-stripe-sales
+  edge_evidence: https://zapier.com/apps/slack/integrations/stripe/1585/get-slack-notifications-for-new-stripe-sales
+  edge_type: zapier-template
+  method: generated
+  generated: '2026-10-12'
+  generator: pipeline step 25b (payments-integration-arazzo)
