@@ -1,0 +1,87 @@
+arazzo: 1.0.1
+info:
+  title: Add new Stripe sales as rows on Google Sheets
+  summary: Read the most recent Stripe charge and append it as a row to a Google Sheets range.
+  description: Recreates the Zapier template "Add new Stripe sales as rows on Google Sheets" as a forkable Arazzo
+    workflow over the two providers' own OpenAPI contracts. Stripe's GetCharges lists the latest charges; Google
+    Sheets' appendValues writes the newest one to the next row of a table. Every operationId below was read from
+    the referenced specs. A production version would page through charges since the last run; this one takes the
+    most recent charge, which is what the template's "new sale" trigger delivers one at a time.
+  version: 1.0.0
+x-integration:
+  partner: google-sheets
+  template: https://zapier.com/apps/google-sheets/integrations/stripe/938/add-new-stripe-sales-as-rows-on-google-sheets
+  edge_evidence: https://zapier.com/apps/stripe/integrations/google-sheets
+  edge_type: marketplace
+  method: generated
+  generated: '2026-10-12'
+  generator: provider-integrations-arazzo (hand pilot for roadmap#949)
+sourceDescriptions:
+- name: googleSheetsValuesApiOpenapi
+  url: https://raw.githubusercontent.com/api-evangelist/google-sheets/refs/heads/main/openapi/google-sheets-values-api-openapi.yml
+  type: openapi
+- name: stripeChargesApiOpenapi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stripe-sale-to-google-sheets-row
+  summary: Append the newest Stripe charge to a Google Sheets table.
+  description: Lists the most recent Stripe charge and appends its id, amount, currency, customer and status as
+    a row in the given spreadsheet range.
+  inputs:
+    type: object
+    required:
+    - spreadsheetId
+    - range
+    properties:
+      spreadsheetId:
+        type: string
+        description: The target Google Sheets spreadsheet.
+      range:
+        type: string
+        description: The A1 range of the table to append to, e.g. Sales!A:E.
+  steps:
+  - stepId: get-latest-charge
+    description: List the most recent Stripe charge.
+    operationId: $sourceDescriptions.stripeChargesApiOpenapi.GetCharges
+    parameters:
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      chargeId: $response.body#/data/0/id
+      amount: $response.body#/data/0/amount
+      currency: $response.body#/data/0/currency
+      customer: $response.body#/data/0/customer
+      status: $response.body#/data/0/status
+  - stepId: append-sale-row
+    description: Append the charge as the next row of the sheet's table.
+    operationId: $sourceDescriptions.googleSheetsValuesApiOpenapi.appendValues
+    parameters:
+    - name: spreadsheetId
+      in: path
+      value: $inputs.spreadsheetId
+    - name: range
+      in: path
+      value: $inputs.range
+    - name: valueInputOption
+      in: query
+      value: USER_ENTERED
+    requestBody:
+      contentType: application/json
+      payload:
+        values:
+        - - $steps.get-latest-charge.outputs.chargeId
+          - $steps.get-latest-charge.outputs.amount
+          - $steps.get-latest-charge.outputs.currency
+          - $steps.get-latest-charge.outputs.customer
+          - $steps.get-latest-charge.outputs.status
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      updatedRange: $response.body#/updates/updatedRange
+  outputs:
+    chargeId: $steps.get-latest-charge.outputs.chargeId
+    updatedRange: $steps.append-sale-row.outputs.updatedRange

@@ -2,26 +2,23 @@ arazzo: 1.0.1
 info:
   title: Calculate Avalara tax at Stripe Checkout
   summary: Compute sales tax with Avalara AvaTax, then create a Stripe Checkout Session.
-  description: >-
-    This workflow replicates the legacy integration that calls Avalara AvaTax to
-    compute the correct tax line for a cart, then attaches the result to a Stripe
-    Checkout Session. It first creates an AvaTax transaction from the cart's
-    line items and address, reads the calculated total tax, and then opens a
-    Stripe Checkout Session so the customer can pay the tax-inclusive amount.
+  description: This workflow replicates the legacy integration that calls Avalara AvaTax to compute the correct
+    tax line for a cart, then attaches the result to a Stripe Checkout Session. It first creates an AvaTax transaction
+    from the cart's line items and address, reads the calculated total tax, and then opens a Stripe Checkout Session
+    so the customer can pay the tax-inclusive amount.
   version: 1.0.0
 sourceDescriptions:
-- name: stripe
-  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/checkout-openapi-original.yml
+- name: avalaraTransactionsApiOpenapi
+  url: https://raw.githubusercontent.com/api-evangelist/avalara/refs/heads/main/openapi/avalara-transactions-api-openapi.yml
   type: openapi
-- name: avalara
-  url: https://raw.githubusercontent.com/api-evangelist/avalara/refs/heads/main/openapi/avalara-avatax-rest-openapi.yml
+- name: stripeCheckoutApiOpenapi
+  url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-checkout-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: stripe-avalara-checkout-tax
   summary: Calculate Avalara tax for a cart and create a Stripe Checkout Session.
-  description: >-
-    Creates an AvaTax transaction to calculate tax for the cart, then creates a
-    Stripe Checkout Session that reflects the taxed amount.
+  description: Creates an AvaTax transaction to calculate tax for the cart, then creates a Stripe Checkout Session
+    that reflects the taxed amount.
   inputs:
     type: object
     properties:
@@ -65,7 +62,7 @@ workflows:
   steps:
   - stepId: calculate-avalara-tax
     description: Create an AvaTax transaction to calculate tax for the cart.
-    operationId: $sourceDescriptions.avalara.createTransaction
+    operationId: $sourceDescriptions.avalaraTransactionsApiOpenapi.createTransaction
     requestBody:
       contentType: application/json
       payload:
@@ -83,7 +80,7 @@ workflows:
       totalAmount: $response.body#/totalAmount
   - stepId: create-checkout-session
     description: Create a Stripe Checkout Session reflecting the calculated tax.
-    operationId: $sourceDescriptions.stripe.PostCheckoutSessions
+    operationId: $sourceDescriptions.stripeCheckoutApiOpenapi.PostCheckoutSessions
     requestBody:
       contentType: application/x-www-form-urlencoded
       payload:
