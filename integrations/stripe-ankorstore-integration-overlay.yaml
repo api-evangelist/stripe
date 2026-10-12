@@ -1,0 +1,63 @@
+# DERIVED by build-integration-preconfigs.py (roadmap#949). Overlay on the PARTNER's contract:
+# where ankorstore's enum names stripe, and what that value is.
+overlay: 1.0.0
+info:
+  title: stripe as a processor-connection in ankorstore's contract
+  version: 1.0.0
+extends: https://raw.githubusercontent.com/api-evangelist/ankorstore/refs/heads/main/openapi/ankorstore-orderpay-api-openapi.yml
+actions:
+- target: $.paths['/api/v1/order-pay/order-pay-orders'].post.responses['201'].content['application/vnd.api+json'].schema.properties.included.items.anyOf[0].properties.attributes.properties.psp
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/api/v1/order-pay/order-pay-orders/{id}'].get.responses['200'].content['application/vnd.api+json'].schema.properties.included.items.anyOf[0].properties.attributes.properties.psp
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/api/v1/order-pay/order-pay-orders/{id}'].patch.responses['200'].content['application/vnd.api+json'].schema.properties.included.items.anyOf[0].properties.attributes.properties.psp
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/api/v1/order-pay/order-pay-orders/{id}/-actions/cancel'].post.responses['200'].content['application/vnd.api+json'].schema.properties.included.items.anyOf[0].properties.attributes.properties.psp
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/api/v1/order-pay/order-pay-orders/{id}/-actions/confirm'].post.responses['200'].content['application/vnd.api+json'].schema.properties.included.items.anyOf[0].properties.attributes.properties.psp
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py

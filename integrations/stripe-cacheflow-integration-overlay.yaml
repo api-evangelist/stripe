@@ -1,0 +1,41 @@
+# DERIVED by build-integration-preconfigs.py (roadmap#949). Overlay on the PARTNER's contract:
+# where cacheflow's enum names stripe, and what that value is.
+overlay: 1.0.0
+info:
+  title: stripe as a processor-connection in cacheflow's contract
+  version: 1.0.0
+extends: https://raw.githubusercontent.com/api-evangelist/cacheflow/refs/heads/main/openapi/cacheflow-payouts-api-openapi.yml
+actions:
+- target: $.components.schemas.PaymentMethod.properties.processor
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/cacheflow/blob/main/openapi/cacheflow-payouts-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.components.schemas.Transfer.properties.processor
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/cacheflow/blob/main/openapi/cacheflow-payouts-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.components.schemas.TransferEvent.properties.processor
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/cacheflow/blob/main/openapi/cacheflow-payouts-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py

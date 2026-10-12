@@ -4,16 +4,16 @@ overlay: 1.0.0
 info:
   title: stripe as a processor-connection in justt's contract
   version: 1.0.0
-extends: https://raw.githubusercontent.com/api-evangelist/justt/refs/heads/main/openapi/justt-transactions-api-openapi.yml
+extends: https://raw.githubusercontent.com/api-evangelist/justt/refs/heads/main/openapi/justt-integrations-api-openapi.yml
 actions:
-- target: $.components.schemas.PostTransactionDto.properties.psp
+- target: $.components.schemas.SupportedPSP
   update:
     x-apievangelist-integration:
       values:
         stripe:
           provider: stripe
           relationship: processor-connection
-          evidence: https://github.com/api-evangelist/justt/blob/main/openapi/justt-transactions-api-openapi.yml
+          evidence: https://github.com/api-evangelist/justt/blob/main/openapi/justt-integrations-api-openapi.yml
       method: derived
       generated: '2026-10-12'
       generator: build-integration-preconfigs.py

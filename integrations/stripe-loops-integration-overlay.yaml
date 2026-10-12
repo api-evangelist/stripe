@@ -1,0 +1,30 @@
+# DERIVED by build-integration-preconfigs.py (roadmap#949). Overlay on the PARTNER's contract:
+# where loops's enum names stripe, and what that value is.
+overlay: 1.0.0
+info:
+  title: stripe as a processor-connection in loops's contract
+  version: 1.0.0
+extends: https://raw.githubusercontent.com/api-evangelist/loops/refs/heads/main/openapi/loops-event-patterns-api-openapi.yml
+actions:
+- target: $.components.schemas.EventPatternSummary.properties.incomingWebhookPlatform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/loops/blob/main/openapi/loops-event-patterns-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.components.schemas.EventPattern.properties.incomingWebhookPlatform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/loops/blob/main/openapi/loops-event-patterns-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py

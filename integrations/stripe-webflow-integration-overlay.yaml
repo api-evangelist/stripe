@@ -1,0 +1,107 @@
+# DERIVED by build-integration-preconfigs.py (roadmap#949). Overlay on the PARTNER's contract:
+# where webflow's enum names stripe, and what that value is.
+overlay: 1.0.0
+info:
+  title: stripe as a processor-connection in webflow's contract
+  version: 1.0.0
+extends: https://raw.githubusercontent.com/api-evangelist/webflow/refs/heads/main/openapi/webflow-products-skus-api-openapi.yml
+actions:
+- target: $.paths['/sites/{site_id}/products'].get.responses['200'].content['application/json'].schema.properties.items.items.properties.skus.items.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products'].post.requestBody.content['application/json'].schema.properties.sku.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products'].post.responses['200'].content['application/json'].schema.properties.skus.items.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}'].get.responses['200'].content['application/json'].schema.properties.skus.items.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}'].patch.requestBody.content['application/json'].schema.properties.sku.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}/skus'].post.requestBody.content['application/json'].schema.properties.skus.items.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}/skus'].post.responses['200'].content['application/json'].schema.properties.skus.items.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}/skus/{sku_id}'].patch.requestBody.content['application/json'].schema.properties.sku.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py
+- target: $.paths['/sites/{site_id}/products/{product_id}/skus/{sku_id}'].patch.responses['200'].content['application/json'].schema.properties.fieldData.properties['ec-sku-subscription-plan'].properties.plans.items.properties.platform
+  update:
+    x-apievangelist-integration:
+      values:
+        stripe:
+          provider: stripe
+          relationship: processor-connection
+          evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+      method: derived
+      generated: '2026-10-12'
+      generator: build-integration-preconfigs.py

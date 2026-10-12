@@ -50,6 +50,8 @@
   source: curated
   status: arazzo
   broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/bigcommerce/refs/heads/main/openapi/storefront-orders-openapi-original.yml'
+  evidence: https://github.com/api-evangelist/bigcommerce/blob/main/openapi/bigcommerce-transactions-api-openapi.yml
+  type: contract
 - slug: stripe-braze
   label: Forward Stripe events to Braze custom events
   partner: braze
@@ -153,6 +155,8 @@
   source: curated
   status: arazzo
   broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscription-api-openapi.yml'
+  evidence: https://marketplace.stripe.com/apps/intercom
+  type: marketplace
 - slug: stripe-iterable
   label: Sync Stripe trial-end events to Iterable
   partner: iterable
@@ -882,39 +886,479 @@
   source: edge
   status: pending-generation
   arazzo: null
+- slug: stripe-aftership
+  label: aftership
+  partner: aftership
+  partner_name: aftership
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/aftership/blob/main/openapi/aftership-returns-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: aftership
+    spec_file: aftership-returns-api-openapi.yml
+    value: stripe
+    property: Instant_exchange.payment.gateway
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-ankorstore
+  label: ankorstore
+  partner: ankorstore
+  partner_name: ankorstore
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/ankorstore/blob/main/openapi/ankorstore-orderpay-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: ankorstore
+    spec_file: ankorstore-orderpay-api-openapi.yml
+    value: stripe
+    property: included.attributes.psp
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-bonjoro
+  label: bonjoro
+  partner: bonjoro
+  partner_name: bonjoro
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/bonjoro/blob/main/openapi/bonjoro-integrations-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: bonjoro
+    spec_file: bonjoro-integrations-api-openapi.yml
+    value: stripe
+    property: schemas.integration.provider
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-cacheflow
+  label: cacheflow
+  partner: cacheflow
+  partner_name: cacheflow
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/cacheflow/blob/main/openapi/cacheflow-payouts-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: cacheflow
+    spec_file: cacheflow-payouts-api-openapi.yml
+    value: stripe
+    property: schemas.PaymentMethod.processor
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-elastic-path
+  label: elastic-path
+  partner: elastic-path
+  partner_name: elastic-path
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/elastic-path/blob/main/openapi/elastic-path-payments-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: elastic-path
+    spec_file: elastic-path-payments-api-openapi.yml
+    value: stripe
+    property: schemas.TransactionResponse.gateway
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-highlevel
+  label: highlevel
+  partner: highlevel
+  partner_name: highlevel
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/highlevel/blob/main/openapi/highlevel-prices-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: highlevel
+    spec_file: highlevel-prices-api-openapi.yml
+    value: stripe
+    property: PriceMetaDto.source
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
 - slug: stripe-justt
   label: justt
   partner: justt
   partner_name: justt
   type: contract
   channel: partner-built
-  evidence: https://github.com/api-evangelist/justt/blob/main/openapi/justt-transactions-api-openapi.yml
+  evidence: https://github.com/api-evangelist/justt/blob/main/openapi/justt-integrations-api-openapi.yml
   source: edge
   relationship: processor-connection
   contract_reference:
     repo: justt
-    spec_file: justt-transactions-api-openapi.yml
+    spec_file: justt-integrations-api-openapi.yml
     value: stripe
-    property: schemas.PostTransactionDto.psp
+    property: components.schemas.SupportedPSP
     detected_by: detect-payment-method-edges.py
     detected: '2026-10-12'
   arazzo: stripe-justt-preconfig.yml
   status: arazzo
-- slug: stripe-meow
-  label: meow
-  partner: meow
-  partner_name: meow
+- slug: stripe-lokki
+  label: lokki
+  partner: lokki
+  partner_name: lokki
   type: contract
   channel: partner-built
-  evidence: https://github.com/api-evangelist/meow/blob/main/openapi/meow-cards-api-openapi.yml
+  evidence: https://github.com/api-evangelist/lokki/blob/main/openapi/lokki-admin-api-openapi.yml
   source: edge
   relationship: processor-connection
   contract_reference:
-    repo: meow
-    spec_file: meow-cards-api-openapi.yml
+    repo: lokki
+    spec_file: lokki-admin-api-openapi.yml
     value: stripe
-    property: components.schemas.IssuingPlatform
+    property: CompanyStripeCredentials.provider.default
     detected_by: detect-payment-method-edges.py
     detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-loops
+  label: loops
+  partner: loops
+  partner_name: loops
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/loops/blob/main/openapi/loops-event-patterns-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: loops
+    spec_file: loops-event-patterns-api-openapi.yml
+    value: stripe
+    property: EventPatternSummary.incomingWebhookPlatform
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-opply
+  label: opply
+  partner: opply
+  partner_name: opply
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/opply/blob/main/openapi/opply-agreements-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: opply
+    spec_file: opply-agreements-api-openapi.yml
+    value: stripe
+    property: components.schemas.PaymentProviderEnum
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-ordoro
+  label: ordoro
+  partner: ordoro
+  partner_name: ordoro
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/ordoro/blob/main/openapi/ordoro-integration-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: ordoro
+    spec_file: ordoro-integration-api-openapi.yml
+    value: stripe
+    property: integration_base.vendor
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-salesflare
+  label: salesflare
+  partner: salesflare
+  partner_name: salesflare
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/salesflare/blob/main/openapi/salesflare-users-api-openapi.yml
+  source: edge
+  relationship: rail
+  contract_reference:
+    repo: salesflare
+    spec_file: salesflare-users-api-openapi.yml
+    value: stripe
+    property: content.team.payment_type
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-webflow
+  label: webflow
+  partner: webflow
+  partner_name: webflow
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/webflow/blob/main/openapi/webflow-products-skus-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: webflow
+    spec_file: webflow-products-skus-api-openapi.yml
+    value: stripe
+    property: ec-sku-subscription-plan.plans.platform
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-webflow-api-and-documentation-webflow
+  label: webflow-api-and-documentation-webflow
+  partner: webflow-api-and-documentation-webflow
+  partner_name: webflow-api-and-documentation-webflow
+  type: contract
+  channel: partner-built
+  evidence: https://github.com/api-evangelist/webflow-api-and-documentation-webflow/blob/main/openapi/webflow-api-and-documentation-webflow-products-skus-api-openapi.yml
+  source: edge
+  relationship: processor-connection
+  contract_reference:
+    repo: webflow-api-and-documentation-webflow
+    spec_file: webflow-api-and-documentation-webflow-products-skus-api-openapi.yml
+    value: stripe
+    property: ec-sku-subscription-plan.plans.platform
+    detected_by: detect-payment-method-edges.py
+    detected: '2026-10-12'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-data-exporter-for-google-drive
+  label: Data Exporter for Google Drive
+  partner_name: Data Exporter for Google Drive
+  category: Productivity
+  use_case: Export Stripe data directly to Google Drive
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/data-exporter-for-google-drive
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-firstpromoter
+  label: FirstPromoter
+  partner: firstpromoter
+  partner_name: FirstPromoter
+  category: Affiliate and referrals
+  use_case: Affiliate and referral tracking for SaaS on Stripe revenue
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/firstpromoter
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-hubspot-quote-billing-sync
+  label: HubSpot - Quote - Billing Sync
+  partner_name: HubSpot - Quote - Billing Sync
+  category: Billing
+  use_case: Sync HubSpot quotes to Stripe Billing
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/finrite-hubspot-subscription-sync
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-docusign-esignature
+  label: DocuSign eSignature
+  partner: docusign
+  partner_name: DocuSign eSignature
+  category: Compliance
+  use_case: Bring payments and agreements together
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/docusign-esignature
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-sendowl
+  label: SendOwl
+  partner: sendowl
+  partner_name: SendOwl
+  category: Commerce
+  use_case: Deliver digital goods sold with Stripe
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/sendowl
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-stripe-tax-for-bigcommerce
+  label: Stripe Tax for BigCommerce
+  partner_name: Stripe Tax for BigCommerce
+  category: Tax
+  use_case: Apply Stripe Tax rates in a BigCommerce store
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/stripe-tax-for-bigcommerce
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-salesforce-platform
+  label: Salesforce Platform
+  partner_name: Salesforce Platform
+  category: Billing
+  use_case: Automate billing workflows and data sync between Stripe and Salesforce
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/salesforce-platform
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-stockify-manage-inventory
+  label: Stockify - Manage Inventory
+  partner_name: Stockify - Manage Inventory
+  category: Commerce
+  use_case: Inventory management and limit-selling within Stripe
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/stockify-manage-inventory
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-billit-e-invoicing
+  label: Billit e-invoicing
+  partner_name: Billit e-invoicing
+  category: Billing
+  use_case: Global e-invoicing activated from a Stripe account
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/billit-e-invoicing
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-opensrs-storefront
+  label: OpenSRS Storefront
+  partner_name: OpenSRS Storefront
+  category: Commerce
+  use_case: Sell domains from a Storefront through Stripe
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/opensrs-storefront
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-stunning
+  label: Stunning
+  partner_name: Stunning
+  category: Revenue optimization
+  use_case: Failed payment recovery from the Stripe Dashboard
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/stunning
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-tolt
+  label: Tolt
+  partner_name: Tolt
+  category: Affiliate and referrals
+  use_case: Affiliate programs paid out on Stripe revenue
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/tolt
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-cap-genius-ai
+  label: Cap Genius AI
+  partner_name: Cap Genius AI
+  category: Billing
+  use_case: Review agency subscriptions inside the Stripe Dashboard
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/cap-genius-ai
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-gofunnel
+  label: GoFunnel
+  partner_name: GoFunnel
+  category: Data and analytics
+  use_case: Cohort and funnel insights from Stripe revenue data
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/gofunnel
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-rekomi
+  label: Rekomi
+  partner_name: Rekomi
+  category: Affiliate and referrals
+  use_case: Manage affiliate commissions in Stripe
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/rekomi
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-revinho
+  label: Revinho
+  partner_name: Revinho
+  category: Revenue optimization
+  use_case: Connect revenue and growth data
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/revinho
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-collectionscopilot
+  label: CollectionsCopilot
+  partner_name: CollectionsCopilot
+  category: Revenue optimization
+  use_case: Automated invoice collection
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.stripe.com/apps/collectionscopilot
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null
