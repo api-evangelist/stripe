@@ -1,0 +1,2290 @@
+# DERIVED by derive-integration-map.py (roadmap#949): each integration workflow, step by step,
+# resolved to spec file -> tag -> business capability (Turbo EA, CC BY 4.0) and the operation's
+# phrasing intent. Read from our own files; an unmapped link says why.
+slug: stripe
+workflows:
+- file: stripe-activecampaign-sync-payment-contacts.yml
+  title: Sync ActiveCampaign Contacts from Stripe Payments
+  partner: activecampaign
+  template: https://zapier.com/apps/activecampaign/integrations/stripe/11561/add-or-update-activecampaign-contacts-with-new-stripe-payments
+  repos:
+  - stripe
+  - activecampaign
+  steps:
+  - step: get-stripe-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: sync-activecampaign-contact
+    repo: activecampaign
+    spec_file: activecampaign-contacts-api-openapi.yml
+    operationId: sync-a-contacts-data
+    tag: Contacts
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Create or update a contact by email
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    activecampaign:
+      capabilities: []
+      tags:
+      - Contacts
+  intents:
+  - Get a charge
+  - Create or update a contact by email
+- file: stripe-amplitude.yml
+  title: Send Stripe Revenue Events to Amplitude
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - amplitude
+  steps:
+  - step: retrieve-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: upload-revenue-event
+    repo: amplitude
+    spec_file: amplitude-events-api-openapi.yml
+    operationId: uploadEvents
+    tag: Events
+    capability_id: BC-4280.10
+    capability: Product Telemetry Instrumentation
+    capability_l1: BC-4280
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    amplitude:
+      capabilities:
+      - BC-4280.10
+      tags:
+      - Events
+  intents:
+  - Get a charge
+- file: stripe-anrok.yml
+  title: Post Stripe SaaS subscriptions to Anrok for sales-tax compliance
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - anrok
+  steps:
+  - step: get-stripe-invoice
+    repo: stripe
+    spec_file: stripe-invoices-api-openapi.yml
+    operationId: GetInvoicesInvoice
+    tag: Invoices
+    capability_id: BC-4250.30
+    capability: Invoicing & Statement Management
+    capability_l1: BC-4250
+    intent: Retrieve an invoice
+    effect: read
+    unmapped: null
+  - step: post-anrok-transaction
+    repo: anrok
+    spec_file: anrok-transactions-api-openapi.yml
+    operationId: transactionsCreateOrUpdate
+    tag: Transactions
+    capability_id: BC-4250.60
+    capability: Subscription Tax Management
+    capability_l1: BC-4250
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-4250.30
+      tags:
+      - Invoices
+    anrok:
+      capabilities:
+      - BC-4250.60
+      tags:
+      - Transactions
+  intents:
+  - Retrieve an invoice
+- file: stripe-auth0.yml
+  title: Provision Auth0 Users from Stripe Customers
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - auth0
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: create-auth0-user
+    repo: auth0
+    spec_file: auth0-users-api-openapi.yml
+    operationId: post_users
+    tag: users
+    capability_id: BC-620.20
+    capability: Identity & Access Management
+    capability_l1: BC-620
+    intent: Create a user in a connection
+    effect: write
+    unmapped: null
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    auth0:
+      capabilities:
+      - BC-620.20
+      tags:
+      - users
+  intents:
+  - Retrieve a customer
+  - Create a user in a connection
+- file: stripe-avalara.yml
+  title: Calculate Avalara tax at Stripe Checkout
+  partner: null
+  template: null
+  repos:
+  - avalara
+  - stripe
+  steps:
+  - step: calculate-avalara-tax
+    repo: avalara
+    spec_file: avalara-transactions-api-openapi.yml
+    operationId: createTransaction
+    tag: Transactions
+    capability_id: BC-220.20
+    capability: Indirect Tax Management
+    capability_l1: BC-220
+    intent: Calculate tax by creating a sales transaction
+    effect: write
+    unmapped: null
+  - step: create-checkout-session
+    repo: stripe
+    spec_file: stripe-checkout-api-openapi.yml
+    operationId: PostCheckoutSessions
+    tag: Checkout
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Create a Checkout Session
+    effect: write
+    unmapped: null
+  connects:
+    avalara:
+      capabilities:
+      - BC-220.20
+      tags:
+      - Transactions
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Checkout
+  intents:
+  - Calculate tax by creating a sales transaction
+  - Create a Checkout Session
+- file: stripe-bigcommerce.yml
+  title: Sync BigCommerce orders to Stripe payments
+  partner: null
+  template: null
+  repos:
+  - bigcommerce
+  - stripe
+  steps:
+  - step: fetch-order
+    repo: bigcommerce
+    spec_file: bigcommerce-order-api-openapi.yml
+    operationId: getOrder
+    tag: Order
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  - step: create-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: PostPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Start a payment for an amount
+    effect: write
+    unmapped: null
+  connects:
+    bigcommerce:
+      capabilities: []
+      tags:
+      - Order
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+  intents:
+  - Start a payment for an amount
+- file: stripe-braze.yml
+  title: Forward Stripe events to Braze custom events
+  partner: null
+  template: null
+  repos:
+  - stripe
+  steps:
+  - step: get-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: get-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+      - Customers
+  intents:
+  - Get a charge
+  - Retrieve a customer
+- file: stripe-brevo-new-customer-contacts.yml
+  title: Turn New Stripe Customers into Brevo Contacts
+  partner: brevo
+  template: https://zapier.com/apps/brevo/integrations/stripe/3405/turn-new-stripe-customers-into-sendinblue-contacts
+  repos:
+  - stripe
+  - brevo
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: create-brevo-contact
+    repo: brevo
+    spec_file: brevo-contacts-api-openapi.yml
+    operationId: createContact
+    tag: contacts
+    capability_id: BC-420.10
+    capability: Customer Data Management
+    capability_l1: BC-420
+    intent: Create a contact
+    effect: write
+    unmapped: null
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    brevo:
+      capabilities:
+      - BC-420.10
+      tags:
+      - contacts
+  intents:
+  - Retrieve a customer
+  - Create a contact
+- file: stripe-chargebee.yml
+  title: Bridge Chargebee Subscriptions to Stripe Payment Methods
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - chargebee
+  steps:
+  - step: retrieve-stripe-payment-method
+    repo: stripe
+    spec_file: stripe-payment-methods-api-openapi.yml
+    operationId: GetPaymentMethodsPaymentMethod
+    tag: Payment Methods
+    capability_id: BC-1340
+    capability: Payments & Card Management
+    capability_l1: BC-1340
+    intent: Look up a payment method
+    effect: read
+    unmapped: null
+  - step: create-chargebee-subscription
+    repo: chargebee
+    spec_file: chargebee-subscriptions-api-openapi.yml
+    operationId: createSubscription
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340
+      tags:
+      - Payment Methods
+    chargebee:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+  intents:
+  - Look up a payment method
+- file: stripe-clerk.yml
+  title: Bind Clerk Users to Stripe Customers
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - clerk
+  steps:
+  - step: create-stripe-customer
+    repo: stripe
+    spec_file: customers-openapi-original.yml
+    operationId: PostCustomers
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: bind-clerk-user
+    repo: clerk
+    spec_file: clerk-openapi.yml
+    operationId: updateUser
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities: []
+      tags: []
+    clerk:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-close.yml
+  title: Sync Stripe Payments to Close Opportunities
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - close
+  steps:
+  - step: list-payment-intents
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: getPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: null
+    effect: null
+    unmapped: null
+  - step: create-opportunity
+    repo: close
+    spec_file: close-openapi.yml
+    operationId: create
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+    close:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-customer-io.yml
+  title: Forward Stripe subscription lifecycle to Customer.io events
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - customer-io
+  steps:
+  - step: retrieve-subscription
+    repo: stripe
+    spec_file: stripe-subscription-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: track-customer-event
+    repo: customer-io
+    spec_file: customer-io-track-api-openapi.yml
+    operationId: trackCustomerEvent
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities: []
+      tags: []
+    customer-io:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-freshbooks.yml
+  title: Generate FreshBooks invoices from Stripe Checkout sessions
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - freshbooks
+  steps:
+  - step: get-checkout-session
+    repo: stripe
+    spec_file: stripe-checkout-api-openapi.yml
+    operationId: GetCheckoutSessionsSession
+    tag: Checkout
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Retrieve a Checkout Session
+    effect: read
+    unmapped: null
+  - step: update-freshbooks-invoice
+    repo: freshbooks
+    spec_file: freshbooks-invoices-api-openapi.yml
+    operationId: updateInvoice
+    tag: Invoices
+    capability_id: BC-200.30
+    capability: Accounts Receivable Management
+    capability_l1: BC-200
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Checkout
+    freshbooks:
+      capabilities:
+      - BC-200.30
+      tags:
+      - Invoices
+  intents:
+  - Retrieve a Checkout Session
+- file: stripe-front.yml
+  title: Tag Front conversations with Stripe spending tier
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - front
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: list-stripe-charges
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetCharges
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: List charges
+    effect: read
+    unmapped: null
+  - step: tag-front-conversation
+    repo: front
+    spec_file: front-conversations-api-openapi.yml
+    operationId: add-conversation-tag
+    tag: Conversations
+    capability_id: BC-430.10
+    capability: Customer Inquiry Management
+    capability_l1: BC-430
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+      - Customers
+    front:
+      capabilities:
+      - BC-430.10
+      tags:
+      - Conversations
+  intents:
+  - Retrieve a customer
+  - List charges
+- file: stripe-google-sheets-new-sales.yml
+  title: Add new Stripe sales as rows on Google Sheets
+  partner: google-sheets
+  template: https://zapier.com/apps/google-sheets/integrations/stripe/938/add-new-stripe-sales-as-rows-on-google-sheets
+  repos:
+  - stripe
+  - google-sheets
+  steps:
+  - step: get-latest-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetCharges
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: List charges
+    effect: read
+    unmapped: null
+  - step: append-sale-row
+    repo: google-sheets
+    spec_file: google-sheets-values-api-openapi.yml
+    operationId: appendValues
+    tag: Values
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    google-sheets:
+      capabilities: []
+      tags:
+      - Values
+  intents:
+  - List charges
+- file: stripe-gorgias.yml
+  title: Show Stripe order context in Gorgias for e-commerce support
+  partner: null
+  template: null
+  repos:
+  - gorgias
+  - stripe
+  steps:
+  - step: find-gorgias-customer
+    repo: gorgias
+    spec_file: gorgias-customers-api-openapi.yml
+    operationId: listCustomers
+    tag: Customers
+    capability_id: BC-420.10
+    capability: Customer Data Management
+    capability_l1: BC-420
+    intent: null
+    effect: null
+    unmapped: null
+  - step: fetch-stripe-checkout-sessions
+    repo: stripe
+    spec_file: stripe-checkout-api-openapi.yml
+    operationId: GetCheckoutSessions
+    tag: Checkout
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: List Checkout Sessions
+    effect: read
+    unmapped: null
+  connects:
+    gorgias:
+      capabilities:
+      - BC-420.10
+      tags:
+      - Customers
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Checkout
+  intents:
+  - List Checkout Sessions
+- file: stripe-hubspot.yml
+  title: Push Stripe successful charges as HubSpot deals
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - hubspot
+  steps:
+  - step: retrieve-stripe-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: getChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: null
+    effect: null
+    unmapped: null
+  - step: get-hubspot-contact
+    repo: hubspot
+    spec_file: hubspot-crm-contacts-api-openapi.yml
+    operationId: getContact
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: create-hubspot-deal
+    repo: hubspot
+    spec_file: hubspot-crm-deals-api-openapi.yml
+    operationId: createDeal
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    hubspot:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-intercom.yml
+  title: Surface Stripe MRR + Plan for Intercom Inbox
+  partner: null
+  template: null
+  repos:
+  - stripe
+  steps:
+  - step: get-subscription
+    repo: stripe
+    spec_file: stripe-subscriptions-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+  intents:
+  - Get a subscription
+- file: stripe-iterable.yml
+  title: Sync Stripe trial-end events to Iterable
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - iterable
+  steps:
+  - step: get-stripe-subscription
+    repo: stripe
+    spec_file: stripe-subscriptions-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
+  - step: track-iterable-event
+    repo: iterable
+    spec_file: iterable-events-api-openapi.yml
+    operationId: trackEvent
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Track a custom event via the simple endpoint
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+    iterable:
+      capabilities: []
+      tags:
+      - Events
+  intents:
+  - Get a subscription
+  - Track a custom event via the simple endpoint
+- file: stripe-klaviyo.yml
+  title: Forward Stripe payment events to Klaviyo as profile events
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - klaviyo
+  steps:
+  - step: listPaymentIntents
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: GetPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: List payments in progress and completed
+    effect: read
+    unmapped: null
+  - step: getCustomer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: trackKlaviyoEvent
+    repo: klaviyo
+    spec_file: klaviyo-events-api-openapi.yml
+    operationId: create_event
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Track an event for a profile
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Customers
+      - Payment Intents
+    klaviyo:
+      capabilities: []
+      tags:
+      - Events
+  intents:
+  - List payments in progress and completed
+  - Retrieve a customer
+  - Track an event for a profile
+- file: stripe-looker.yml
+  title: Power Looker dashboards from Stripe revenue data
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - looker
+  steps:
+  - step: list-stripe-charges
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetCharges
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: List charges
+    effect: read
+    unmapped: null
+  - step: run-looker-query
+    repo: looker
+    spec_file: looker-query-api-openapi.yml
+    operationId: runInlineQuery
+    tag: Query
+    capability_id: BC-610.50
+    capability: Analytics & BI Management
+    capability_l1: BC-610
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    looker:
+      capabilities:
+      - BC-610.50
+      tags:
+      - Query
+  intents:
+  - List charges
+- file: stripe-mailchimp-new-customers-to-list.yml
+  title: Add New Stripe Customers to a Mailchimp List
+  partner: mailchimp
+  template: https://zapier.com/apps/mailchimp/integrations/stripe/433/add-new-stripe-customers-to-mailchimp-lists
+  repos:
+  - stripe
+  - mailchimp
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: add-mailchimp-member
+    repo: mailchimp
+    spec_file: mailchimp-lists-api-openapi.yml
+    operationId: postListsIdMembers
+    tag: Lists
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Add a new subscriber to an audience
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    mailchimp:
+      capabilities: []
+      tags:
+      - Lists
+  intents:
+  - Retrieve a customer
+  - Add a new subscriber to an audience
+- file: stripe-mailchimp.yml
+  title: Add Stripe Checkout completers to a Mailchimp audience
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - mailchimp
+  steps:
+  - step: get-checkout-session
+    repo: stripe
+    spec_file: stripe-checkout-api-openapi.yml
+    operationId: GetCheckoutSessionsSession
+    tag: Checkout
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Retrieve a Checkout Session
+    effect: read
+    unmapped: null
+  - step: add-audience-member
+    repo: mailchimp
+    spec_file: mailchimp-lists-api-openapi.yml
+    operationId: postListsIdMembers
+    tag: Lists
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Add a new subscriber to an audience
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Checkout
+    mailchimp:
+      capabilities: []
+      tags:
+      - Lists
+  intents:
+  - Retrieve a Checkout Session
+  - Add a new subscriber to an audience
+- file: stripe-make.yml
+  title: Stripe to Make scenario invocation
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - make
+  steps:
+  - step: list-stripe-events
+    repo: stripe
+    spec_file: stripe-events-api-openapi.yml
+    operationId: GetEvents
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List account events
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: run-make-scenario
+    repo: make
+    spec_file: make-scenario-execution-api-openapi.yml
+    operationId: runScenario
+    tag: Scenario Execution
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Events
+    make:
+      capabilities: []
+      tags:
+      - Scenario Execution
+  intents:
+  - List account events
+- file: stripe-messagebird.yml
+  title: Multi-channel notify on Stripe events via MessageBird
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - messagebird
+  steps:
+  - step: get-charge
+    repo: stripe
+    spec_file: charges-openapi-original.yml
+    operationId: GetChargesCharge
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: start-conversation
+    repo: messagebird
+    spec_file: messagebird-conversations-openapi.yml
+    operationId: startConversation
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities: []
+      tags: []
+    messagebird:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-mixpanel.yml
+  title: Track Stripe payment events in Mixpanel
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - mixpanel
+  steps:
+  - step: get-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: track-event
+    repo: mixpanel
+    spec_file: mixpanel-events-api-openapi.yml
+    operationId: trackEvent
+    tag: Events
+    capability_id: BC-4280.10
+    capability: Product Telemetry Instrumentation
+    capability_l1: BC-4280
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    mixpanel:
+      capabilities:
+      - BC-4280.10
+      tags:
+      - Events
+  intents:
+  - Get a charge
+- file: stripe-n8n.yml
+  title: Run an n8n workflow on Stripe events
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - n8n
+  steps:
+  - step: list-stripe-events
+    repo: stripe
+    spec_file: stripe-events-api-openapi.yml
+    operationId: GetEvents
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List account events
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: create-n8n-workflow
+    repo: n8n
+    spec_file: n8n-workflow-api-openapi.yml
+    operationId: createWorkflow
+    tag: Workflow
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Events
+    n8n:
+      capabilities: []
+      tags:
+      - Workflow
+  intents:
+  - List account events
+- file: stripe-okta.yml
+  title: Sync Stripe subscription tier to Okta group membership
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - okta
+  steps:
+  - step: get-subscription
+    repo: stripe
+    spec_file: stripe-subscription-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: add-user-to-group
+    repo: okta
+    spec_file: okta-openapi-original.yml
+    operationId: addUserToGroup
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities: []
+      tags: []
+    okta:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-outreach.yml
+  title: Mark Outreach Prospects Converted from Stripe
+  partner: outreach
+  template: null
+  repos:
+  - stripe
+  - outreach
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: tag-outreach-prospect
+    repo: outreach
+    spec_file: outreach-prospect-api-openapi.yml
+    operationId: patchProspectsById
+    tag: Prospect
+    capability_id: BC-410.30
+    capability: Opportunity & Pipeline Management
+    capability_l1: BC-410
+    intent: null
+    effect: null
+    unmapped: null
+  - step: pause-sequence-state
+    repo: outreach
+    spec_file: outreach-sequence-state-api-openapi.yml
+    operationId: postSequenceStatesByIdActionsPause
+    tag: Sequence State
+    capability_id: BC-410
+    capability: Sales Management
+    capability_l1: BC-410
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    outreach:
+      capabilities:
+      - BC-410
+      - BC-410.30
+      tags:
+      - Prospect
+      - Sequence State
+  intents:
+  - Retrieve a customer
+- file: stripe-pipedrive.yml
+  title: Mirror Stripe subscription lifecycle into Pipedrive deals
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - pipedrive
+  steps:
+  - step: retrieve-subscription
+    repo: stripe
+    spec_file: stripe-subscriptions-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
+  - step: create-deal
+    repo: pipedrive
+    spec_file: pipedrive-deals-api-openapi.yml
+    operationId: addDeal
+    tag: Deals
+    capability_id: BC-410.30
+    capability: Opportunity & Pipeline Management
+    capability_l1: BC-410
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+    pipedrive:
+      capabilities:
+      - BC-410.30
+      tags:
+      - Deals
+  intents:
+  - Get a subscription
+- file: stripe-salesforce.yml
+  title: Sync Stripe customers into Salesforce contacts
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - salesforce
+  steps:
+  - step: find-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomers
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List customers
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: create-salesforce-contact
+    repo: salesforce
+    spec_file: salesforce-records-api-openapi.yml
+    operationId: createRecord
+    tag: Records
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Create a new record
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    salesforce:
+      capabilities: []
+      tags:
+      - Records
+  intents:
+  - List customers
+  - Create a new record
+- file: stripe-segment.yml
+  title: Stripe to Segment Charge Analytics
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - segment
+  steps:
+  - step: list-charges
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetCharges
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: List charges
+    effect: read
+    unmapped: null
+  - step: track-charge
+    repo: segment
+    spec_file: segment-track-api-openapi.yml
+    operationId: track
+    tag: Track
+    capability_id: BC-4280.10
+    capability: Product Telemetry Instrumentation
+    capability_l1: BC-4280
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    segment:
+      capabilities:
+      - BC-4280.10
+      tags:
+      - Track
+  intents:
+  - List charges
+- file: stripe-sendgrid.yml
+  title: Stripe to SendGrid Transactional Receipt
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - sendgrid
+  steps:
+  - step: get-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: GetPaymentIntentsIntent
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Get a PaymentIntent
+    effect: read
+    unmapped: null
+  - step: send-receipt-email
+    repo: sendgrid
+    spec_file: sendgrid-mail-send-api-openapi.yml
+    operationId: SendMail
+    tag: Mail Send
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Send an email
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+    sendgrid:
+      capabilities: []
+      tags:
+      - Mail Send
+  intents:
+  - Get a PaymentIntent
+  - Send an email
+- file: stripe-shopify.yml
+  title: Use Stripe for Shopify Checkout Outside Shopify Payments
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - shopify
+  steps:
+  - step: create-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: PostPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Start a payment for an amount
+    effect: write
+    unmapped: null
+  - step: create-shopify-order
+    repo: shopify
+    spec_file: shopify-orders-api-openapi.yml
+    operationId: createOrder
+    tag: Orders
+    capability_id: BC-520.40
+    capability: Order Fulfilment Management
+    capability_l1: BC-520
+    intent: Record an order from an external channel
+    effect: write
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+    shopify:
+      capabilities:
+      - BC-520.40
+      tags:
+      - Orders
+  intents:
+  - Start a payment for an amount
+  - Record an order from an external channel
+- file: stripe-sift.yml
+  title: Score Stripe payment intents with Sift fraud
+  partner: null
+  template: null
+  repos:
+  - sift
+  - stripe
+  steps:
+  - step: score-order-with-sift
+    repo: sift
+    spec_file: sift-events-api-openapi.yml
+    operationId: postEvent
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  - step: create-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: PostPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Start a payment for an amount
+    effect: write
+    unmapped: null
+  connects:
+    sift:
+      capabilities: []
+      tags:
+      - Events
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+  intents:
+  - Start a payment for an amount
+- file: stripe-slack-failed-payments.yml
+  title: Post Failed Stripe Payments to Slack
+  partner: slack
+  template: https://zapier.com/apps/slack/integrations/stripe/1543/post-failed-stripe-payments-to-slack
+  repos:
+  - stripe
+  - slack
+  steps:
+  - step: get-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: GetPaymentIntentsIntent
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Get a PaymentIntent
+    effect: read
+    unmapped: null
+  - step: post-slack-message
+    repo: slack
+    spec_file: slack-chat-api-openapi.yml
+    operationId: postChatPostmessage
+    tag: Chat
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Send a message to a channel
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+    slack:
+      capabilities: []
+      tags:
+      - Chat
+  intents:
+  - Get a PaymentIntent
+  - Send a message to a channel
+- file: stripe-slack-new-sales-notification.yml
+  title: Notify Slack of New Stripe Sales
+  partner: slack
+  template: https://zapier.com/apps/slack/integrations/stripe/1585/get-slack-notifications-for-new-stripe-sales
+  repos:
+  - stripe
+  - slack
+  steps:
+  - step: get-stripe-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: post-slack-message
+    repo: slack
+    spec_file: slack-chat-api-openapi.yml
+    operationId: postChatPostmessage
+    tag: Chat
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Send a message to a channel
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    slack:
+      capabilities: []
+      tags:
+      - Chat
+  intents:
+  - Get a charge
+  - Send a message to a channel
+- file: stripe-slack.yml
+  title: Post Stripe Payment Alerts to Slack Channels
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - slack
+  steps:
+  - step: get-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: post-slack-alert
+    repo: slack
+    spec_file: slack-chat-api-openapi.yml
+    operationId: postChatPostmessage
+    tag: Chat
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Send a message to a channel
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    slack:
+      capabilities: []
+      tags:
+      - Chat
+  intents:
+  - Get a charge
+  - Send a message to a channel
+- file: stripe-snowflake.yml
+  title: Stream Stripe events into Snowflake
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - snowflake
+  steps:
+  - step: list-stripe-events
+    repo: stripe
+    spec_file: stripe-events-api-openapi.yml
+    operationId: GetEvents
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List account events
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: refresh-snowflake-pipe
+    repo: snowflake
+    spec_file: snowflake-pipe-api-openapi.yml
+    operationId: refreshPipe
+    tag: pipe
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Refresh a pipe to load staged files
+    effect: write
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Events
+    snowflake:
+      capabilities: []
+      tags:
+      - pipe
+  intents:
+  - List account events
+  - Refresh a pipe to load staged files
+- file: stripe-squarespace.yml
+  title: Process Squarespace Commerce orders through Stripe
+  partner: null
+  template: null
+  repos:
+  - squarespace
+  - stripe
+  steps:
+  - step: list-orders
+    repo: squarespace
+    spec_file: squarespace-orders-api-openapi.yml
+    operationId: listOrders
+    tag: Orders
+    capability_id: BC-520.40
+    capability: Order Fulfilment Management
+    capability_l1: BC-520
+    intent: List orders (unversioned)
+    effect: read
+    unmapped: null
+  - step: create-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: PostPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Start a payment for an amount
+    effect: write
+    unmapped: null
+  connects:
+    squarespace:
+      capabilities:
+      - BC-520.40
+      tags:
+      - Orders
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+  intents:
+  - List orders (unversioned)
+  - Start a payment for an amount
+- file: stripe-stigg.yml
+  title: Enforce Stigg entitlements at Stripe checkout
+  partner: null
+  template: null
+  repos:
+  - stigg
+  - stripe
+  steps:
+  - step: check-entitlement
+    repo: stigg
+    spec_file: stigg-subscriptions-api-openapi.yml
+    operationId: SubscriptionController_getSubscriptions
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: null
+    effect: null
+    unmapped: null
+  - step: create-checkout-session
+    repo: stripe
+    spec_file: stripe-checkout-api-openapi.yml
+    operationId: PostCheckoutSessions
+    tag: Checkout
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Create a Checkout Session
+    effect: write
+    unmapped: null
+  connects:
+    stigg:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Checkout
+  intents:
+  - Create a Checkout Session
+- file: stripe-taxjar.yml
+  title: File Stripe sales through TaxJar
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - taxjar
+  steps:
+  - step: list-stripe-invoices
+    repo: stripe
+    spec_file: stripe-invoices-api-openapi.yml
+    operationId: GetInvoices
+    tag: Invoices
+    capability_id: BC-4250.30
+    capability: Invoicing & Statement Management
+    capability_l1: BC-4250
+    intent: List invoices
+    effect: read
+    unmapped: null
+  - step: create-taxjar-order
+    repo: taxjar
+    spec_file: taxjar-transactions-orders-api-openapi.yml
+    operationId: createOrder
+    tag: Transactions - Orders
+    capability_id: BC-220.20
+    capability: Indirect Tax Management
+    capability_l1: BC-220
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-4250.30
+      tags:
+      - Invoices
+    taxjar:
+      capabilities:
+      - BC-220.20
+      tags:
+      - Transactions - Orders
+  intents:
+  - List invoices
+- file: stripe-trainerize-new-customer-clients.yml
+  title: Add New Stripe Customers as Trainerize Clients
+  partner: trainerize
+  template: https://zapier.com/apps/abc-trainerize/integrations/stripe/11479/add-new-stripe-customers-as-trainerize-clients
+  repos:
+  - stripe
+  - trainerize
+  steps:
+  - step: get-stripe-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: add-trainerize-client
+    repo: trainerize
+    spec_file: trainerize-clients-api-openapi.yml
+    operationId: addOrUpdateClient
+    tag: Clients
+    capability_id: BC-420.10
+    capability: Customer Data Management
+    capability_l1: BC-420
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Customers
+    trainerize:
+      capabilities:
+      - BC-420.10
+      tags:
+      - Clients
+  intents:
+  - Retrieve a customer
+- file: stripe-twilio.yml
+  title: SMS Stripe payment receipts via Twilio
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - twilio
+  steps:
+  - step: get-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: getChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: null
+    effect: null
+    unmapped: null
+  - step: send-sms
+    repo: twilio
+    spec_file: twilio-messaging-openapi.yml
+    operationId: createMessage
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    twilio:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-woocommerce.yml
+  title: Stripe and WooCommerce Order-to-Payment Integration
+  partner: null
+  template: null
+  repos:
+  - woocommerce
+  - stripe
+  steps:
+  - step: list-woocommerce-orders
+    repo: woocommerce
+    spec_file: woocommerce-orders-api-openapi.yml
+    operationId: listOrders
+    tag: Orders
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  - step: create-stripe-payment-intent
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: PostPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: Start a payment for an amount
+    effect: write
+    unmapped: null
+  connects:
+    woocommerce:
+      capabilities: []
+      tags:
+      - Orders
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+  intents:
+  - Start a payment for an amount
+- file: stripe-workato.yml
+  title: Forward Stripe Event to Workato
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - workato
+  steps:
+  - step: list-stripe-events
+    repo: stripe
+    spec_file: stripe-events-api-openapi.yml
+    operationId: GetEvents
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List account events
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: publish-to-workato
+    repo: workato
+    spec_file: workato-messages-api-openapi.yml
+    operationId: publishMessage
+    tag: Messages
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Events
+    workato:
+      capabilities: []
+      tags:
+      - Messages
+  intents:
+  - List account events
+- file: stripe-workos.yml
+  title: Provision WorkOS organizations from Stripe Enterprise subscriptions
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - workos
+  steps:
+  - step: get-subscription
+    repo: stripe
+    spec_file: stripe-subscriptions-api-openapi.yml
+    operationId: GetSubscriptionsSubscriptionExposedId
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
+  - step: create-organization
+    repo: workos
+    spec_file: workos-organizations-api-openapi.yml
+    operationId: OrganizationsController_create
+    tag: organizations
+    capability_id: BC-4230.10
+    capability: Tenant Provisioning & Lifecycle
+    capability_l1: BC-4230
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
+    workos:
+      capabilities:
+      - BC-4230.10
+      tags:
+      - organizations
+  intents:
+  - Get a subscription
+- file: stripe-xero-invoices-for-payments.yml
+  title: Create Xero Invoices for New Stripe Payments
+  partner: xero
+  template: https://zapier.com/apps/stripe/integrations/xero/3384/create-xero-invoices-for-new-stripe-payments
+  repos:
+  - stripe
+  - xero
+  steps:
+  - step: get-stripe-charge
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetChargesCharge
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
+  - step: create-xero-invoice
+    repo: xero
+    spec_file: xero-accounting-api-openapi.yml
+    operationId: createInvoices
+    tag: Accounting
+    capability_id: BC-200
+    capability: Financial Management
+    capability_l1: BC-200
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+    xero:
+      capabilities:
+      - BC-200
+      tags:
+      - Accounting
+  intents:
+  - Get a charge
+- file: stripe-xero.yml
+  title: Reconcile Stripe Payouts in Xero Bank Transactions
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - xero
+  steps:
+  - step: list-stripe-payouts
+    repo: stripe
+    spec_file: stripe-payouts-api-openapi.yml
+    operationId: GetPayouts
+    tag: Payouts
+    capability_id: BC-1340
+    capability: Payments & Card Management
+    capability_l1: BC-1340
+    intent: List payouts
+    effect: read
+    unmapped: null
+  - step: create-xero-bank-transaction
+    repo: xero
+    spec_file: xero-accounting-api-openapi.yml
+    operationId: createBankTransactions
+    tag: Accounting
+    capability_id: BC-200
+    capability: Financial Management
+    capability_l1: BC-200
+    intent: null
+    effect: null
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340
+      tags:
+      - Payouts
+    xero:
+      capabilities:
+      - BC-200
+      tags:
+      - Accounting
+  intents:
+  - List payouts
+- file: stripe-zapier.yml
+  title: Stripe to Zapier Event Automation
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - zapier
+  steps:
+  - step: list-stripe-events
+    repo: stripe
+    spec_file: stripe-events-api-openapi.yml
+    operationId: GetEvents
+    tag: Events
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: List account events
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: run-zapier-action
+    repo: zapier
+    spec_file: zapier-experimental-api-openapi.yml
+    operationId: create-action-run
+    tag: Experimental
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    stripe:
+      capabilities: []
+      tags:
+      - Events
+    zapier:
+      capabilities: []
+      tags:
+      - Experimental
+  intents:
+  - List account events
+- file: stripe-zendesk.yml
+  title: Attach Stripe customer history to Zendesk tickets
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - zendesk
+  steps:
+  - step: get-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: GetCustomersCustomer
+    tag: Customers
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
+  - step: list-charges
+    repo: stripe
+    spec_file: stripe-charges-api-openapi.yml
+    operationId: GetCharges
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: List charges
+    effect: read
+    unmapped: null
+  - step: create-ticket
+    repo: zendesk
+    spec_file: zendesk-tickets-api-openapi.yml
+    operationId: CreateTicket
+    tag: Tickets
+    capability_id: BC-430.10
+    capability: Customer Inquiry Management
+    capability_l1: BC-430
+    intent: Create a ticket via the v2 endpoint
+    effect: write
+    unmapped: null
+  connects:
+    stripe:
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
+      - Customers
+    zendesk:
+      capabilities:
+      - BC-430.10
+      tags:
+      - Tickets
+  intents:
+  - Retrieve a customer
+  - List charges
+  - Create a ticket via the v2 endpoint
+- file: stripe-zoho-crm.yml
+  title: Sync Stripe customer billing into Zoho CRM accounts
+  partner: null
+  template: null
+  repos:
+  - stripe
+  - zoho-crm
+  steps:
+  - step: get-customer
+    repo: stripe
+    spec_file: stripe-customers-api-openapi.yml
+    operationId: getCustomersCustomer
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: list-invoices
+    repo: stripe
+    spec_file: stripe-invoice-api-openapi.yml
+    operationId: getInvoices
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  - step: upsert-account
+    repo: zoho-crm
+    spec_file: zoho-crm-openapi.yml
+    operationId: insertRecords
+    tag: null
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: operation not found in spec
+  connects:
+    stripe:
+      capabilities: []
+      tags: []
+    zoho-crm:
+      capabilities: []
+      tags: []
+  intents: []
+- file: stripe-zuora.yml
+  title: Reconcile Zuora Invoices Against Stripe Payments
+  partner: null
+  template: null
+  repos:
+  - zuora
+  - stripe
+  steps:
+  - step: retrieve-zuora-invoice
+    repo: zuora
+    spec_file: zuora-invoices-api-openapi.yml
+    operationId: Get_GetInvoice
+    tag: Invoices
+    capability_id: BC-4250.30
+    capability: Invoicing & Statement Management
+    capability_l1: BC-4250
+    intent: null
+    effect: null
+    unmapped: null
+  - step: find-stripe-payment-intents
+    repo: stripe
+    spec_file: stripe-payment-intents-api-openapi.yml
+    operationId: GetPaymentIntents
+    tag: Payment Intents
+    capability_id: BC-1340.10
+    capability: Payment Initiation Management
+    capability_l1: BC-1340
+    intent: List payments in progress and completed
+    effect: read
+    unmapped: null
+  connects:
+    zuora:
+      capabilities:
+      - BC-4250.30
+      tags:
+      - Invoices
+    stripe:
+      capabilities:
+      - BC-1340.10
+      tags:
+      - Payment Intents
+  intents:
+  - List payments in progress and completed
