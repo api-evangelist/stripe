@@ -806,6 +806,30 @@ workflows:
   intents:
   - Get a subscription
   - Track a custom event via the simple endpoint
+- file: stripe-justt-preconfig.yml
+  title: 'stripe through justt: TransactionController_createTransaction preconfigured with stripe'
+  partner: justt
+  template: null
+  repos:
+  - justt
+  steps:
+  - step: call-with-preset
+    repo: justt
+    spec_file: justt-transactions-api-openapi.yml
+    operationId: TransactionController_createTransaction
+    tag: Transactions
+    capability_id: null
+    capability: null
+    capability_l1: null
+    intent: null
+    effect: null
+    unmapped: no capability edge for this spec file
+  connects:
+    justt:
+      capabilities: []
+      tags:
+      - Transactions
+  intents: []
 - file: stripe-klaviyo.yml
   title: Forward Stripe payment events to Klaviyo as profile events
   partner: null
