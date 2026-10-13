@@ -396,15 +396,15 @@ workflows:
   steps:
   - step: create-stripe-customer
     repo: stripe
-    spec_file: customers-openapi-original.yml
+    spec_file: stripe-customers-api-openapi.yml
     operationId: PostCustomers
-    tag: null
+    tag: Customers
     capability_id: null
     capability: null
     capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    intent: Create a customer
+    effect: write
+    unmapped: no capability edge for this spec file
   - step: bind-clerk-user
     repo: clerk
     spec_file: clerk-openapi.yml
@@ -419,11 +419,13 @@ workflows:
   connects:
     stripe:
       capabilities: []
-      tags: []
+      tags:
+      - Customers
     clerk:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Create a customer
 - file: stripe-close.yml
   title: Sync Stripe Payments to Close Opportunities
   partner: null
@@ -435,13 +437,13 @@ workflows:
   - step: list-payment-intents
     repo: stripe
     spec_file: stripe-payment-intents-api-openapi.yml
-    operationId: getPaymentIntents
+    operationId: GetPaymentIntents
     tag: Payment Intents
     capability_id: BC-1340.10
     capability: Payment Initiation Management
     capability_l1: BC-1340
-    intent: null
-    effect: null
+    intent: List payments in progress and completed
+    effect: read
     unmapped: null
   - step: create-opportunity
     repo: close
@@ -463,7 +465,8 @@ workflows:
     close:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - List payments in progress and completed
 - file: stripe-customer-io.yml
   title: Forward Stripe subscription lifecycle to Customer.io events
   partner: null
@@ -474,15 +477,15 @@ workflows:
   steps:
   - step: retrieve-subscription
     repo: stripe
-    spec_file: stripe-subscription-api-openapi.yml
+    spec_file: stripe-subscriptions-api-openapi.yml
     operationId: GetSubscriptionsSubscriptionExposedId
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
   - step: track-customer-event
     repo: customer-io
     spec_file: customer-io-track-api-openapi.yml
@@ -496,12 +499,15 @@ workflows:
     unmapped: operation not found in spec
   connects:
     stripe:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
     customer-io:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Get a subscription
 - file: stripe-freshbooks.yml
   title: Generate FreshBooks invoices from Stripe Checkout sessions
   partner: null
@@ -697,13 +703,13 @@ workflows:
   - step: retrieve-stripe-charge
     repo: stripe
     spec_file: stripe-charges-api-openapi.yml
-    operationId: getChargesCharge
+    operationId: GetChargesCharge
     tag: Charges
     capability_id: BC-1340.70
     capability: Card Transaction Processing Management
     capability_l1: BC-1340
-    intent: null
-    effect: null
+    intent: Get a charge
+    effect: read
     unmapped: null
   - step: get-hubspot-contact
     repo: hubspot
@@ -736,7 +742,8 @@ workflows:
     hubspot:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Get a charge
 - file: stripe-intercom.yml
   title: Surface Stripe MRR + Plan for Intercom Inbox
   partner: null
@@ -1065,15 +1072,15 @@ workflows:
   steps:
   - step: get-charge
     repo: stripe
-    spec_file: charges-openapi-original.yml
+    spec_file: stripe-charges-api-openapi.yml
     operationId: GetChargesCharge
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    tag: Charges
+    capability_id: BC-1340.70
+    capability: Card Transaction Processing Management
+    capability_l1: BC-1340
+    intent: Get a charge
+    effect: read
+    unmapped: null
   - step: start-conversation
     repo: messagebird
     spec_file: messagebird-conversations-openapi.yml
@@ -1087,12 +1094,15 @@ workflows:
     unmapped: operation not found in spec
   connects:
     stripe:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-1340.70
+      tags:
+      - Charges
     messagebird:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Get a charge
 - file: stripe-mixpanel.yml
   title: Track Stripe payment events in Mixpanel
   partner: null
@@ -1187,15 +1197,15 @@ workflows:
   steps:
   - step: get-subscription
     repo: stripe
-    spec_file: stripe-subscription-api-openapi.yml
+    spec_file: stripe-subscriptions-api-openapi.yml
     operationId: GetSubscriptionsSubscriptionExposedId
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    tag: Subscriptions
+    capability_id: BC-4240
+    capability: Subscription Lifecycle Management
+    capability_l1: BC-4240
+    intent: Get a subscription
+    effect: read
+    unmapped: null
   - step: add-user-to-group
     repo: okta
     spec_file: okta-openapi-original.yml
@@ -1209,12 +1219,15 @@ workflows:
     unmapped: operation not found in spec
   connects:
     stripe:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-4240
+      tags:
+      - Subscriptions
     okta:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Get a subscription
 - file: stripe-outreach.yml
   title: Mark Outreach Prospects Converted from Stripe
   partner: outreach
@@ -1881,25 +1894,25 @@ workflows:
   - step: get-charge
     repo: stripe
     spec_file: stripe-charges-api-openapi.yml
-    operationId: getChargesCharge
+    operationId: GetChargesCharge
     tag: Charges
     capability_id: BC-1340.70
     capability: Card Transaction Processing Management
     capability_l1: BC-1340
-    intent: null
-    effect: null
+    intent: Get a charge
+    effect: read
     unmapped: null
   - step: send-sms
     repo: twilio
-    spec_file: twilio-messaging-openapi.yml
+    spec_file: twilio-messages-api-openapi.yml
     operationId: createMessage
-    tag: null
+    tag: Messages
     capability_id: null
     capability: null
     capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    intent: Send an SMS or MMS message
+    effect: write
+    unmapped: no capability edge for this spec file
   connects:
     stripe:
       capabilities:
@@ -1908,8 +1921,11 @@ workflows:
       - Charges
     twilio:
       capabilities: []
-      tags: []
-  intents: []
+      tags:
+      - Messages
+  intents:
+  - Get a charge
+  - Send an SMS or MMS message
 - file: stripe-woocommerce.yml
   title: Stripe and WooCommerce Order-to-Payment Integration
   partner: null
@@ -2231,25 +2247,25 @@ workflows:
   - step: get-customer
     repo: stripe
     spec_file: stripe-customers-api-openapi.yml
-    operationId: getCustomersCustomer
-    tag: null
+    operationId: GetCustomersCustomer
+    tag: Customers
     capability_id: null
     capability: null
     capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    intent: Retrieve a customer
+    effect: read
+    unmapped: no capability edge for this spec file
   - step: list-invoices
     repo: stripe
-    spec_file: stripe-invoice-api-openapi.yml
-    operationId: getInvoices
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    spec_file: stripe-invoices-api-openapi.yml
+    operationId: GetInvoices
+    tag: Invoices
+    capability_id: BC-4250.30
+    capability: Invoicing & Statement Management
+    capability_l1: BC-4250
+    intent: List invoices
+    effect: read
+    unmapped: null
   - step: upsert-account
     repo: zoho-crm
     spec_file: zoho-crm-openapi.yml
@@ -2263,12 +2279,17 @@ workflows:
     unmapped: operation not found in spec
   connects:
     stripe:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-4250.30
+      tags:
+      - Customers
+      - Invoices
     zoho-crm:
       capabilities: []
       tags: []
-  intents: []
+  intents:
+  - Retrieve a customer
+  - List invoices
 - file: stripe-zuora.yml
   title: Reconcile Zuora Invoices Against Stripe Payments
   partner: null
