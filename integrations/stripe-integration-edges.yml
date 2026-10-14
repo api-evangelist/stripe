@@ -5,7 +5,9 @@ source:
 - https://n8n.io/integrations/stripe/
 - https://composio.dev/toolkits/stripe
 checked:
+- guesty/integrations/guesty-integration-edges.yml
 - guidewire/integrations/guidewire-integration-edges.yml
+- hostaway/integrations/hostaway-integration-edges.yml
 - https://composio.dev/toolkits/stripe
 - https://fivetran.com/docs/activations/destinations/available-destinations/stripe
 - https://hightouch.com/docs/destinations/stripe
@@ -13,6 +15,7 @@ checked:
 - https://marketplace.visualstudio.com/vscode
 - https://monid.ai/tools/stripe
 - https://n8n.io/integrations/stripe/
+- https://registry.modelcontextprotocol.io/v0/servers
 - https://www.openbanking.org.uk/regulated-providers/stripe-payments-uk-ltd/
 - https://www.twilio.com/docs/segment/connections/sources/catalog/cloud-apps/stripe
 - https://zapier.com/apps/stripe/integrations
@@ -1542,6 +1545,53 @@ edges:
       - update or create
   detected_by: sweep-cdp.py
   first_seen: '2026-10-14'
+- partner_name: MCP Registry
+  partner: mcp
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=com.stripe
+  contract_reference:
+    register: registry.modelcontextprotocol.io
+    spec_file: null
+    role: mcp-server-listing
+    registered_name: com.stripe/mcp
+    register_id: com.stripe/mcp
+    detected_by: sweep-agent-tools.py
+    detected: '2026-10-14'
+  mcp_registry:
+    servers:
+    - com.stripe/mcp
+    hosted_remote: 1
+    local_package: 0
+    transports:
+      streamable-http: 1
+    auth_declared: 0
+    catalog_declared: true
+    namespace_domains:
+    - stripe.com
+  matched_by:
+  - namespace-domain
+  detected_by: sweep-agent-tools.py
+  first_seen: '2026-10-14'
+- partner_name: Guesty (own)
+  partner: guesty
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.guesty.com/marketplace-items/stripe/
+  mirror_of: guesty/integrations/guesty-integration-edges.yml
+  apps:
+  - Stripe Payment Processing Platform
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
 - partner_name: Guidewire (own)
   partner: guidewire
   partner_match: mirror
@@ -1563,6 +1613,22 @@ edges:
   badges:
   - Ready for Guidewire
   - 'Partner tier: Growth'
+- partner_name: Hostaway (own)
+  partner: hostaway
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.hostaway.com/marketplace/stripe
+  mirror_of: hostaway/integrations/hostaway-integration-edges.yml
+  apps:
+  - Stripe
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
 templates:
 - title: Add transactions in Wave for new Stripe sales
   url: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
