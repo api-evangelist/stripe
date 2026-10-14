@@ -5,6 +5,7 @@ source:
 - https://n8n.io/integrations/stripe/
 - https://composio.dev/toolkits/stripe
 checked:
+- guidewire/integrations/guidewire-integration-edges.yml
 - https://composio.dev/toolkits/stripe
 - https://fivetran.com/docs/activations/destinations/available-destinations/stripe
 - https://hightouch.com/docs/destinations/stripe
@@ -1453,6 +1454,26 @@ edges:
     api_families: null
     detected_by: sweep-standard-registers.py
     detected: '2026-10-12'
+- partner_name: Visual Studio Code Marketplace
+  partner: vs-code-marketplace
+  partner_match: aggregator
+  type: marketplace
+  marketplace: vscode
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://marketplace.visualstudio.com/publishers/Stripe
+  listing_count: 3
+  apps:
+  - Stripe
+  - Markdoc language support
+  - Endsmart
+  publisher_name: Stripe
+  badges:
+  - Verified publisher
+  - Verified domain
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
 - partner_name: Twilio Segment
   partner: segment
   partner_match: aggregator
@@ -1521,26 +1542,27 @@ edges:
       - update or create
   detected_by: sweep-cdp.py
   first_seen: '2026-10-14'
-- partner_name: Visual Studio Code Marketplace
-  partner: vs-code-marketplace
-  partner_match: aggregator
+- partner_name: Guidewire (own)
+  partner: guidewire
+  partner_match: mirror
+  mirror_match: domain
   type: marketplace
-  marketplace: vscode
-  channel: partner-built
   relationship: platform-app
   direction: third-party
-  evidence: https://marketplace.visualstudio.com/publishers/Stripe
-  listing_count: 3
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.guidewire.com/product/01tPW00000CpTc9YAF/01tPW00000CpTc9YAF
+  mirror_of: guidewire/integrations/guidewire-integration-edges.yml
   apps:
-  - Stripe
-  - Markdoc language support
-  - Endsmart
-  publisher_name: Stripe
-  badges:
-  - Verified publisher
-  - Verified domain
-  detected_by: sweep-devtools.py
+  - Stripe Accelerator for BillingCenter
+  - Stripe Accelerator for ClaimCenter
+  listing_count: 2
   detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Accelerator; Payments; BillingCenter
+  badges:
+  - Ready for Guidewire
+  - 'Partner tier: Growth'
 templates:
 - title: Add transactions in Wave for new Stripe sales
   url: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
