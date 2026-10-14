@@ -447,15 +447,15 @@ workflows:
     unmapped: null
   - step: create-opportunity
     repo: close
-    spec_file: close-openapi.yml
-    operationId: create
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    spec_file: close-opportunities-api-openapi.yml
+    operationId: opportunities_create
+    tag: opportunities
+    capability_id: BC-410.30
+    capability: Opportunity & Pipeline Management
+    capability_l1: BC-410
+    intent: Create an opportunity
+    effect: write
+    unmapped: null
   connects:
     stripe:
       capabilities:
@@ -463,10 +463,13 @@ workflows:
       tags:
       - Payment Intents
     close:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-410.30
+      tags:
+      - opportunities
   intents:
   - List payments in progress and completed
+  - Create an opportunity
 - file: stripe-customer-io.yml
   title: Forward Stripe subscription lifecycle to Customer.io events
   partner: null
@@ -713,26 +716,26 @@ workflows:
     unmapped: null
   - step: get-hubspot-contact
     repo: hubspot
-    spec_file: hubspot-crm-contacts-api-openapi.yml
-    operationId: getContact
-    tag: null
+    spec_file: hubspot-basic-api-openapi.yml
+    operationId: get-/crm/objects/2026-03/contacts/{contactId}_getById
+    tag: Basic
     capability_id: null
     capability: null
     capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    intent: Get a contact
+    effect: read
+    unmapped: no capability edge for this spec file
   - step: create-hubspot-deal
     repo: hubspot
-    spec_file: hubspot-crm-deals-api-openapi.yml
-    operationId: createDeal
-    tag: null
+    spec_file: hubspot-basic-api-openapi.yml
+    operationId: post-/crm/objects/2026-03/0-3_create
+    tag: Basic
     capability_id: null
     capability: null
     capability_l1: null
-    intent: null
-    effect: null
-    unmapped: operation not found in spec
+    intent: Create a deal
+    effect: write
+    unmapped: no capability edge for this spec file
   connects:
     stripe:
       capabilities:
@@ -741,9 +744,12 @@ workflows:
       - Charges
     hubspot:
       capabilities: []
-      tags: []
+      tags:
+      - Basic
   intents:
   - Get a charge
+  - Get a contact
+  - Create a deal
 - file: stripe-intercom.yml
   title: Surface Stripe MRR + Plan for Intercom Inbox
   partner: null
@@ -1208,15 +1214,15 @@ workflows:
     unmapped: null
   - step: add-user-to-group
     repo: okta
-    spec_file: okta-openapi-original.yml
+    spec_file: okta-group-api-openapi.yml
     operationId: addUserToGroup
-    tag: null
-    capability_id: null
-    capability: null
-    capability_l1: null
+    tag: Group
+    capability_id: BC-620.20
+    capability: Identity & Access Management
+    capability_l1: BC-620
     intent: null
     effect: null
-    unmapped: operation not found in spec
+    unmapped: null
   connects:
     stripe:
       capabilities:
@@ -1224,8 +1230,10 @@ workflows:
       tags:
       - Subscriptions
     okta:
-      capabilities: []
-      tags: []
+      capabilities:
+      - BC-620.20
+      tags:
+      - Group
   intents:
   - Get a subscription
 - file: stripe-outreach.yml

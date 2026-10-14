@@ -11,7 +11,7 @@ sourceDescriptions:
   url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-intents-api-openapi.yml
   type: openapi
 - name: closeApi
-  url: https://raw.githubusercontent.com/api-evangelist/close/refs/heads/main/openapi/close-openapi.yml
+  url: https://raw.githubusercontent.com/api-evangelist/close/refs/heads/main/openapi/close-opportunities-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: stripe-close-sync-payment-to-opportunity
@@ -59,7 +59,7 @@ workflows:
       firstCustomer: $response.body#/data/0/customer
   - stepId: create-opportunity
     description: Create a Close opportunity from the Stripe payment amount.
-    operationId: $sourceDescriptions.closeApi.create
+    operationId: $sourceDescriptions.closeApi.opportunities_create
     parameters:
     - name: Authorization
       in: header
@@ -76,12 +76,22 @@ workflows:
     outputs:
       opportunityId: $response.body#/id
       opportunityStatus: $response.body#/status_type
+    x-remapped-by-meaning:
+      from: $sourceDescriptions.closeApi.create
+      to: $sourceDescriptions.closeApi.opportunities_create
+      spec: close-opportunities-api-openapi.yml
+      evidence: POST /opportunity/ — summary "Create an opportunity" — the only opportunity-create in close openapi/
+        (others create statuses, custom fields, exports, status-change activities)
+      date: '2026-10-14'
   outputs:
     paymentIntents: $steps.list-payment-intents.outputs.paymentIntents
     opportunityId: $steps.create-opportunity.outputs.opportunityId
 x-integration:
   guessed_steps:
   - step: create-opportunity
-    cause: partner-contract
+    cause: remapped-by-meaning
     why: create is not an operationId in any current close openapi/ file (spec close-openapi.yml was renamed/split
       by refine and the operation was not carried under that id)
+    was_cause: partner-contract
+    remapped: $sourceDescriptions.closeApi.create -> opportunities_create (close-opportunities-api-openapi.yml)
+      by meaning, not an exact operationId match

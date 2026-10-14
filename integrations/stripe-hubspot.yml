@@ -11,10 +11,10 @@ sourceDescriptions:
   url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-charges-api-openapi.yml
   type: openapi
 - name: hubspot
-  url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-crm-deals-api-openapi.yml
+  url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-basic-api-openapi.yml
   type: openapi
 - name: hubspotContacts
-  url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-crm-contacts-api-openapi.yml
+  url: https://raw.githubusercontent.com/api-evangelist/hubspot/refs/heads/main/openapi/hubspot-basic-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: stripe-hubspot-sync-charge-to-deal
@@ -54,7 +54,7 @@ workflows:
       status: $response.body#/status
   - stepId: get-hubspot-contact
     description: Look up the matching HubSpot contact for this charge.
-    operationId: $sourceDescriptions.hubspotContacts.getContact
+    operationId: $sourceDescriptions.hubspotContacts.get-/crm/objects/2026-03/contacts/{contactId}_getById
     parameters:
     - name: contactId
       in: path
@@ -63,9 +63,17 @@ workflows:
     - condition: $statusCode == 200
     outputs:
       contactId: $response.body#/id
+    x-remapped-by-meaning:
+      from: $sourceDescriptions.hubspotContacts.getContact
+      to: $sourceDescriptions.hubspotContacts.get-/crm/objects/2026-03/contacts/{contactId}_getById
+      spec: hubspot-basic-api-openapi.yml
+      evidence: GET /crm/objects/2026-03/contacts/{contactId} — summary "Retrieve a contact"; description "Retrieve
+        a contact by its ID (`contactId`) or by a unique property (`idProperty`)." — the only single-contact read
+        in hubspot openapi/
+      date: '2026-10-14'
   - stepId: create-hubspot-deal
     description: Create a Closed Won HubSpot deal from the Stripe charge.
-    operationId: $sourceDescriptions.hubspot.createDeal
+    operationId: $sourceDescriptions.hubspot.post-/crm/objects/2026-03/0-3_create
     requestBody:
       contentType: application/json
       payload:
@@ -79,6 +87,14 @@ workflows:
     outputs:
       dealId: $response.body#/id
       createdAt: $response.body#/createdAt
+    x-remapped-by-meaning:
+      from: $sourceDescriptions.hubspot.createDeal
+      to: $sourceDescriptions.hubspot.post-/crm/objects/2026-03/0-3_create
+      spec: hubspot-basic-api-openapi.yml
+      evidence: POST /crm/objects/2026-03/0-3 — summary "Create"; description "Create a deal with the given properties
+        and return a copy of the object, including the ID." — the only single-deal create (batch/create is the batch
+        form)
+      date: '2026-10-14'
   outputs:
     chargeId: $steps.retrieve-stripe-charge.outputs.chargeId
     contactId: $steps.get-hubspot-contact.outputs.contactId
@@ -86,10 +102,16 @@ workflows:
 x-integration:
   guessed_steps:
   - step: get-hubspot-contact
-    cause: partner-contract
+    cause: remapped-by-meaning
     why: getContact is not an operationId in any current hubspot openapi/ file (spec hubspot-crm-contacts-api-openapi.yml
       was renamed/split by refine and the operation was not carried under that id)
+    was_cause: partner-contract
+    remapped: $sourceDescriptions.hubspotContacts.getContact -> get-/crm/objects/2026-03/contacts/{contactId}_getById
+      (hubspot-basic-api-openapi.yml) by meaning, not an exact operationId match
   - step: create-hubspot-deal
-    cause: partner-contract
+    cause: remapped-by-meaning
     why: createDeal is not an operationId in any current hubspot openapi/ file (spec hubspot-crm-deals-api-openapi.yml
       was renamed/split by refine and the operation was not carried under that id)
+    was_cause: partner-contract
+    remapped: $sourceDescriptions.hubspot.createDeal -> post-/crm/objects/2026-03/0-3_create (hubspot-basic-api-openapi.yml)
+      by meaning, not an exact operationId match

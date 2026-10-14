@@ -11,7 +11,7 @@ sourceDescriptions:
   url: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-subscriptions-api-openapi.yml
   type: openapi
 - name: okta
-  url: https://raw.githubusercontent.com/api-evangelist/okta/refs/heads/main/openapi/okta-openapi-original.yml
+  url: https://raw.githubusercontent.com/api-evangelist/okta/refs/heads/main/openapi/okta-group-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: stripe-okta-sync-subscription-tier
@@ -62,6 +62,14 @@ workflows:
     - condition: $statusCode == 204
     outputs:
       assigned_status_code: $statusCode
+    x-remapped-by-meaning:
+      from: $sourceDescriptions.okta.addUserToGroup
+      to: $sourceDescriptions.okta.addUserToGroup
+      spec: okta-group-api-openapi.yml
+      evidence: PUT /api/v1/groups/{groupId}/users/{userId} — summary "Okta Add User to Group"; description "Adds
+        a user to a group with 'OKTA_GROUP' type." — the only operation; the other two addUserToGroup hits are x-okta-operations
+        SDK alias metadata on the User/Group models, not operations
+      date: '2026-10-14'
   outputs:
     subscription_id: $steps.get-subscription.outputs.subscription_id
     subscription_status: $steps.get-subscription.outputs.status
@@ -69,6 +77,9 @@ workflows:
 x-integration:
   guessed_steps:
   - step: add-user-to-group
-    cause: partner-contract
+    cause: remapped-by-meaning
     why: addUserToGroup resolves to 3 operations across ['okta-group-api-openapi.yml', 'okta-user-api-openapi.yml'];
       not repointed without a unique match
+    was_cause: partner-contract
+    remapped: $sourceDescriptions.okta.addUserToGroup -> addUserToGroup (okta-group-api-openapi.yml) by meaning,
+      not an exact operationId match
