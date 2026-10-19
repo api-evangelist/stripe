@@ -11,6 +11,7 @@ checked:
 - https://composio.dev/toolkits/stripe
 - https://connectors.airbyte.com/files/registries/v0/cloud_registry.json
 - https://connectors.airbyte.com/files/registries/v0/oss_registry.json
+- https://eservices.mas.gov.sg/fid
 - https://fivetran.com/docs-sitemap.xml
 - https://fivetran.com/docs/activations/destinations/available-destinations/stripe
 - https://fivetran.com/docs/connectors/partner-built-program
@@ -23,6 +24,9 @@ checked:
 - https://monid.ai/tools/stripe
 - https://n8n.io/integrations/stripe/
 - https://registry.modelcontextprotocol.io/v0/servers
+- https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx
+- https://www.bnm.gov.my/list-of-regulatees
+- https://www.ojk.go.id/id/kanal/iknb/data-dan-statistik/direktori/fintech/Default.aspx
 - https://www.openbanking.org.uk/regulated-providers/stripe-payments-uk-ltd/
 - https://www.twilio.com/docs/segment/connections/sources/catalog/cloud-apps/stripe
 - https://zapier.com/api/v4/apps/
@@ -25271,6 +25275,33 @@ edges:
   detected: '2026-10-18'
   detected_by: mirror-platform-listings.py
   category: Slack app
+- partner_name: MAS Financial Institutions Directory
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://eservices.mas.gov.sg/fid
+  category: open finance (Singapore)
+  contract_reference:
+    register: MAS Financial Institutions Directory
+    spec_file: null
+    standard: MAS licensing (Banking Act / Payment Services Act, Singapore)
+    role: licensed-participant
+    registrations:
+    - registered_name: STRIPE PAYMENTS SINGAPORE PTE. LTD.
+      licences:
+      - Major Payment Institution
+      matched_domain: stripe.com
+      matched_by: domain
+      evidence: https://eservices.mas.gov.sg/fid/institution/detail/219107-STRIPE-PAYMENTS-SINGAPORE-PTE-LTD
+      register_id: 219107-STRIPE-PAYMENTS-SINGAPORE-PTE-LTD
+    signal_note: 'participation only: a regulator licence; no API conformance is published by this register'
+    detected_by: sweep-gulf-asean-open-finance.py
+    detected: '2026-10-18'
+  detected_by: sweep-gulf-asean-open-finance.py
+  first_seen: '2026-10-18'
 templates:
 - title: Add transactions in Wave for new Stripe sales
   url: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
