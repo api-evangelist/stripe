@@ -188,6 +188,8 @@
   source: curated
   status: arazzo
   broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/klaviyo/refs/heads/main/openapi/klaviyo-openapi.json'
+  evidence: https://zapier.com/apps/stripe/integrations/klaviyo
+  type: marketplace
 - slug: stripe-looker
   label: Power Looker dashboards from Stripe revenue data
   partner: looker
@@ -576,6 +578,7 @@
   evidence: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
   template: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
   source: template
+  relationship: ipaas-bridge
   status: pending-partner-spec
   arazzo: null
 - slug: stripe-add-new-stripe-sales-as-rows-on-google-sheets
@@ -590,6 +593,7 @@
   evidence: https://zapier.com/apps/google-sheets/integrations/stripe/938/add-new-stripe-sales-as-rows-on-google-sheets
   template: https://zapier.com/apps/google-sheets/integrations/stripe/938/add-new-stripe-sales-as-rows-on-google-sheets
   source: template
+  relationship: ipaas-bridge
   arazzo: stripe-google-sheets-new-sales.yml
   status: arazzo
 - slug: stripe-get-slack-notifications-for-new-stripe-sales
@@ -607,6 +611,7 @@
   related_arazzo:
   - stripe-slack-failed-payments.yml
   - stripe-slack.yml
+  relationship: ipaas-bridge
   arazzo: stripe-slack-new-sales-notification.yml
   status: arazzo
 - slug: stripe-turn-new-stripe-customers-into-sendinblue-contacts
@@ -621,6 +626,7 @@
   evidence: https://zapier.com/apps/brevo/integrations/stripe/3405/turn-new-stripe-customers-into-sendinblue-contacts
   template: https://zapier.com/apps/brevo/integrations/stripe/3405/turn-new-stripe-customers-into-sendinblue-contacts
   source: template
+  relationship: ipaas-bridge
   arazzo: stripe-brevo-new-customer-contacts.yml
   status: arazzo
 - slug: stripe-add-new-stripe-customers-to-mailchimp-lists
@@ -637,6 +643,7 @@
   source: template
   related_arazzo:
   - stripe-mailchimp.yml
+  relationship: ipaas-bridge
   arazzo: stripe-mailchimp-new-customers-to-list.yml
   status: arazzo
 - slug: stripe-post-failed-stripe-payments-to-slack
@@ -654,6 +661,7 @@
   related_arazzo:
   - stripe-slack-new-sales-notification.yml
   - stripe-slack.yml
+  relationship: ipaas-bridge
   arazzo: stripe-slack-failed-payments.yml
   status: arazzo
 - slug: stripe-create-xero-invoices-for-new-stripe-payments
@@ -670,6 +678,7 @@
   source: template
   related_arazzo:
   - stripe-xero.yml
+  relationship: ipaas-bridge
   arazzo: stripe-xero-invoices-for-payments.yml
   status: arazzo
 - slug: stripe-add-new-stripe-customers-as-trainerize-clients
@@ -684,6 +693,7 @@
   evidence: https://zapier.com/apps/abc-trainerize/integrations/stripe/11479/add-new-stripe-customers-as-trainerize-clients
   template: https://zapier.com/apps/abc-trainerize/integrations/stripe/11479/add-new-stripe-customers-as-trainerize-clients
   source: template
+  relationship: ipaas-bridge
   arazzo: stripe-trainerize-new-customer-clients.yml
   status: arazzo
 - slug: stripe-add-or-update-activecampaign-contacts-with-new-stripe-payments
@@ -698,221 +708,9 @@
   evidence: https://zapier.com/apps/activecampaign/integrations/stripe/11561/add-or-update-activecampaign-contacts-with-new-stripe-payments
   template: https://zapier.com/apps/activecampaign/integrations/stripe/11561/add-or-update-activecampaign-contacts-with-new-stripe-payments
   source: template
+  relationship: ipaas-bridge
   arazzo: stripe-activecampaign-sync-payment-contacts.yml
   status: arazzo
-- slug: stripe-gmail
-  label: Gmail
-  partner: gmail
-  partner_name: Gmail
-  category: Email
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/gmail
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: stripe-airtable
-  label: Airtable
-  partner: airtable
-  partner_name: Airtable
-  category: Databases
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/airtable
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-leadconnector
-  label: LeadConnector
-  partner_name: LeadConnector
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/leadconnector
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: stripe-mailerlite
-  label: MailerLite
-  partner: mailerlite
-  partner_name: MailerLite
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/mailerlite
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-kit
-  label: Kit
-  partner: convertkit
-  partner_name: Kit
-  category: Drip Emails
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/kit
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-flodesk
-  label: Flodesk
-  partner_name: Flodesk
-  category: Email Newsletters
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/flodesk
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: stripe-skool
-  label: Skool
-  partner: skool
-  partner_name: Skool
-  category: Education
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/skool
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: stripe-circle
-  label: Circle
-  partner: circle-community
-  partner_name: Circle
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/circle
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-google-drive
-  label: Google Drive
-  partner: google-drive
-  partner_name: Google Drive
-  category: File Management & Storage
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/google-drive
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-kajabi
-  label: Kajabi
-  partner: kajabi
-  partner_name: Kajabi
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/kajabi
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-discord
-  label: Discord
-  partner: discord
-  partner_name: Discord
-  category: Team Chat
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/discord
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-facebook-conversions
-  label: Facebook Conversions
-  partner_name: Facebook Conversions
-  category: Ads & Conversion
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/facebook-conversions
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: stripe-holded
-  label: Holded
-  partner: holded
-  partner_name: Holded
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/holded
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-clickup
-  label: ClickUp
-  partner: clickup
-  partner_name: ClickUp
-  category: Project Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/clickup
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-google-ads
-  label: Google Ads
-  partner: google-ads
-  partner_name: Google Ads
-  category: Ads & Conversion
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/google-ads
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-zoom
-  label: Zoom
-  partner: zoom
-  partner_name: Zoom
-  category: Video Conferencing
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/zoom
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-notion
-  label: Notion
-  partner: notion
-  partner_name: Notion
-  category: Task Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/notion
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: stripe-microsoft-outlook
-  label: Microsoft Outlook
-  partner: microsoft-outlook
-  partner_name: Microsoft Outlook
-  category: Calendar
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/stripe/integrations/microsoft-outlook
-  source: edge
-  status: pending-generation
-  arazzo: null
 - slug: stripe-aftership
   label: aftership
   partner: aftership
@@ -11396,4 +11194,249 @@
     sources: true
     builder: Pipedream repo (component)
   status: not-a-workflow
+  arazzo: null
+- slug: stripe-gmail
+  label: Gmail
+  partner: gmail
+  partner_name: Gmail
+  category: Email
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/gmail
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: stripe-airtable
+  label: Airtable
+  partner: airtable
+  partner_name: Airtable
+  category: Databases
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/airtable
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-leadconnector
+  label: LeadConnector
+  partner_name: LeadConnector
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/leadconnector
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: stripe-mailerlite
+  label: MailerLite
+  partner: mailerlite
+  partner_name: MailerLite
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/mailerlite
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-kit
+  label: Kit
+  partner: convertkit
+  partner_name: Kit
+  category: Drip Emails
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/kit
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-flodesk
+  label: Flodesk
+  partner_name: Flodesk
+  category: Email Newsletters
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/flodesk
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: stripe-notion
+  label: Notion
+  partner: notion
+  partner_name: Notion
+  category: Task Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/notion
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-skool
+  label: Skool
+  partner: skool
+  partner_name: Skool
+  category: Education
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/skool
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: stripe-discord
+  label: Discord
+  partner: discord
+  partner_name: Discord
+  category: Team Chat
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/discord
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-microsoft-outlook
+  label: Microsoft Outlook
+  partner: microsoft-outlook
+  partner_name: Microsoft Outlook
+  category: Calendar
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/microsoft-outlook
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-circle
+  label: Circle
+  partner: circle-community
+  partner_name: Circle
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/circle
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-google-drive
+  label: Google Drive
+  partner: google-drive
+  partner_name: Google Drive
+  category: File Management & Storage
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/google-drive
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-kajabi
+  label: Kajabi
+  partner: kajabi
+  partner_name: Kajabi
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/kajabi
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-facebook-conversions
+  label: Facebook Conversions
+  partner: facebook
+  partner_name: Facebook Conversions
+  category: Ads & Conversion
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/facebook-conversions
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-monday-com
+  label: monday.com
+  partner: monday-com
+  partner_name: monday.com
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/monday
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-holded
+  label: Holded
+  partner: holded
+  partner_name: Holded
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/holded
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-clickup
+  label: ClickUp
+  partner: clickup
+  partner_name: ClickUp
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/clickup
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-google-ads
+  label: Google Ads
+  partner: google-ads
+  partner_name: Google Ads
+  category: Ads & Conversion
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/google-ads
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: stripe-zoom
+  label: Zoom
+  partner: zoom
+  partner_name: Zoom
+  category: Video Conferencing
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/stripe/integrations/zoom
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
   arazzo: null
