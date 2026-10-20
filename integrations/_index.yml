@@ -348,6 +348,8 @@
   source: curated
   status: arazzo
   broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/snowflake/refs/heads/main/openapi/pipe.yaml'
+  evidence: https://app.snowflake.com/marketplace/providers/GZSTZ5KNLVA
+  type: marketplace
 - slug: stripe-squarespace
   label: Process Squarespace Commerce orders through Stripe
   partner: squarespace
@@ -11481,6 +11483,125 @@
       is past its expiry / reassessment date or marked expired; `listed` is context only. List Access Agreement
       accepted on Kin's instruction 2026-10-20
     detected_by: sweep-compliance-assurance.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-homebrew
+  label: Homebrew
+  partner: homebrew
+  partner_name: Homebrew
+  category: official CLI (Homebrew)
+  type: register
+  channel: package-registry
+  evidence: https://formulae.brew.sh/formula/stripe-cli
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Homebrew (public package index)
+    spec_file: null
+    packages:
+    - name: stripe-cli
+      kind: formula
+      version: 1.54.1
+      released: null
+      lapsed: false
+      page: https://formulae.brew.sh/formula/stripe-cli
+      cli: 'formula desc: Command-line tool for Stripe'
+      repo_leg: domain:stripe.com
+      publisher_leg: artifact-shared-github-org:stripe
+      matched_by: domain
+    current: true
+    signal_note: 'the provider''s own command-line tool on a package manager: distribution, not an integration;
+      lapsed = no release in 24 months or deprecated / disabled by the manager'
+    detected_by: sweep-official-clis.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-scoop
+  label: Scoop
+  partner_name: Scoop
+  category: official CLI (Scoop)
+  type: register
+  channel: package-registry
+  evidence: https://github.com/ScoopInstaller/Main/blob/master/bucket/stripe-cli.json
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Scoop (public package index)
+    spec_file: null
+    packages:
+    - name: stripe-cli
+      kind: main
+      version: 1.54.1
+      released: null
+      lapsed: false
+      page: https://github.com/ScoopInstaller/Main/blob/master/bucket/stripe-cli.json
+      cli: 'scoop description: Officially command-line tool for Stripe.'
+      repo_leg: domain:stripe.com
+      publisher_leg: artifact-shared-github-org:stripe
+      matched_by: domain
+    current: true
+    signal_note: 'the provider''s own command-line tool on a package manager: distribution, not an integration;
+      lapsed = no release in 24 months or deprecated / disabled by the manager'
+    detected_by: sweep-official-clis.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-databricks-marketplace
+  label: Databricks Marketplace
+  partner: databricks
+  partner_name: Databricks Marketplace
+  category: data product listing
+  type: marketplace
+  marketplace: databricks-marketplace
+  channel: distribution
+  evidence: https://marketplace.databricks.com/provider/6abedc7a-3bf2-4a54-97b5-a121ad4c63a5
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Databricks Marketplace (marketplace.databricks.com/api/2.0/public-marketplace-providers + public-marketplace-listings)
+    spec_file: null
+    role: data-marketplace-seller
+    registered_name: Stripe
+    matched_domain: stripe.com
+    matched_by: domain
+    listings: 1
+    sample_listings:
+    - Stripe Data Pipeline
+    signal_note: 'participation: the provider lists data products on this marketplace; counts are context'
+    detected_by: sweep-data-marketplaces.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-emvco-approved-products-acceptance-devices
+  label: 'EMVCo (Approved Products: acceptance devices)'
+  partner_name: 'EMVCo (Approved Products: acceptance devices)'
+  category: Card acceptance type approval
+  type: register
+  channel: standard-directory
+  evidence: https://www.emvco.com/approved-products/stripekernel-version-1/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: EMVCo Approved Products, Acceptance Device (emvco.com/approved-products-search)
+    standard: EMVCo
+    spec_file: null
+    role: emvco-approved-acceptance-device-vendor
+    registered_name: Stripe
+    register_id: https://www.emvco.com/approved-products/stripekernel-version-1/
+    matched_domain: null
+    matched_by: register-name
+    identity_source: register-name
+    identity_note: register-name 'stripe' = stripe; wikidata P856 stripe.com agrees or unheld
+    certified_products:
+    - product: EMVCo L2 Contact Kernels
+      approval_type: L2 Contact Kernels
+      lapsed: true
+      latest_valid_to: '2022-09-27'
+    signal_note: certified_products = one entry per EMVCo acceptance-device approval TYPE (L1 contact IFM, L1 contactless
+      PCD, L2 contact kernel, contactless product, C-8 kernel, terminal ESD); lapsed = every approval of that type
+      is past its valid-to date; approval / product / version counts are never recorded or counted
+    detected_by: sweep-emv-card-terminals.py
     detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
