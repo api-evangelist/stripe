@@ -10,7 +10,6 @@ checked:
 - guidewire/integrations/guidewire-integration-edges.yml
 - hostaway/integrations/hostaway-integration-edges.yml
 - https://api.nuget.org/v3
-- https://cdn.winget.microsoft.com/cache
 - https://composio.dev/toolkits/stripe
 - https://connectors.airbyte.com/files/registries/v0/cloud_registry.json
 - https://connectors.airbyte.com/files/registries/v0/oss_registry.json
@@ -19,17 +18,12 @@ checked:
 - https://fivetran.com/docs-sitemap.xml
 - https://fivetran.com/docs/activations/destinations/available-destinations/stripe
 - https://fivetran.com/docs/connectors/partner-built-program
-- https://formulae.brew.sh/api/cask.json
-- https://formulae.brew.sh/api/formula.json
 - https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
 - https://github.com/PipedreamHQ/pipedream/tree/d5872355ef27b4efa769f05352f2820c299a456e/components/
-- https://github.com/ScoopInstaller/Extras
-- https://github.com/ScoopInstaller/Main
 - https://github.com/meltano/hub
 - https://github.com/n8n-io/n8n/tree/860f1273ebd73fabbd668cbec2c49ed9b48a286d/packages/nodes-base/nodes/
 - https://github.com/n8n-io/n8n/tree/f73dc337f8dc61a4fd44aebe41c55faafe4f53a4/packages/nodes-base/nodes/
 - https://hightouch.com/docs/destinations/stripe
-- https://listings.pcisecuritystandards.org/assessors_and_solutions
 - https://marketplace.stripe.com/
 - https://marketplace.visualstudio.com/vscode
 - https://monid.ai/tools/stripe
@@ -48,6 +42,15 @@ checked:
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/stripe/integrations
 - slack/integrations/slack-integration-edges.yml
+- https://listings.pcisecuritystandards.org/assessors_and_solutions
+- https://cdn.winget.microsoft.com/cache
+- https://formulae.brew.sh/api/cask.json
+- https://formulae.brew.sh/api/formula.json
+- https://github.com/ScoopInstaller/Extras
+- https://github.com/ScoopInstaller/Main
+- https://app.snowflake.com/marketplace/providers
+- https://marketplace.databricks.com/
+- https://www.emvco.com/approved-products-search/?type=approved-products&sub_type=acceptance_device
 summary: null
 marketplace_apps:
 - marketplace: own
@@ -25508,6 +25511,38 @@ edges:
     detected_by: sweep-official-clis.py
     detected: '2026-10-20'
   detected_by: sweep-official-clis.py
+  first_seen: '2026-10-20'
+- partner_name: 'EMVCo (Approved Products: acceptance devices)'
+  partner: null
+  partner_match: register-name
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.emvco.com/approved-products/stripekernel-version-1/
+  category: Card acceptance type approval
+  contract_reference:
+    register: EMVCo Approved Products, Acceptance Device (emvco.com/approved-products-search)
+    standard: EMVCo
+    spec_file: null
+    role: emvco-approved-acceptance-device-vendor
+    registered_name: Stripe
+    register_id: https://www.emvco.com/approved-products/stripekernel-version-1/
+    matched_domain: null
+    matched_by: register-name
+    identity_source: register-name
+    identity_note: register-name 'stripe' = stripe; wikidata P856 stripe.com agrees or unheld
+    certified_products:
+    - product: EMVCo L2 Contact Kernels
+      approval_type: L2 Contact Kernels
+      lapsed: true
+      latest_valid_to: '2022-09-27'
+    signal_note: certified_products = one entry per EMVCo acceptance-device approval TYPE (L1 contact IFM, L1 contactless
+      PCD, L2 contact kernel, contactless product, C-8 kernel, terminal ESD); lapsed = every approval of that type
+      is past its valid-to date; approval / product / version counts are never recorded or counted
+    detected_by: sweep-emv-card-terminals.py
+    detected: '2026-10-20'
+  detected_by: sweep-emv-card-terminals.py
   first_seen: '2026-10-20'
 templates:
 - title: Add transactions in Wave for new Stripe sales
