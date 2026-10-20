@@ -10,8 +10,8 @@
   use_case: For each succeeded Stripe charge, send a corresponding revenue event to Amplitude.
   arazzo: stripe-amplitude.yml
   source: curated
-  status: arazzo
-  broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/charges-openapi-original.yml'
+  status: arazzo-broken
+  broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/amplitude/refs/heads/main/openapi/amplitude-events-api-openapi.yml'
   evidence: https://marketplace.stripe.com/apps/amplitude
   type: marketplace
 - slug: stripe-anrok
@@ -78,8 +78,8 @@
     lives in Chargebee against the Stripe-held payment instrument.
   arazzo: stripe-chargebee.yml
   source: curated
-  status: arazzo
-  broken_reason: 'source url->missing local spec: https://raw.githubusercontent.com/api-evangelist/stripe/refs/heads/main/openapi/stripe-payment-method-api-openapi.yml'
+  status: arazzo-broken
+  broken_reason: 'step create-chargebee-subscription: opId ''createSubscription'' NOT in chargebee-subscriptions-api-openapi.yml'
 - slug: stripe-clerk
   label: Bind Clerk Users to Stripe Customers
   partner: clerk
@@ -1177,6 +1177,191 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: stripe-uk-open-banking
+  label: UK Open Banking
+  partner_name: UK Open Banking
+  type: contract
+  channel: regulator-register
+  evidence: https://www.openbanking.org.uk/regulated-providers/stripe-payments-uk-ltd/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: UK Open Banking regulated providers (OBL directory)
+    spec_file: null
+    role: Third Party Providers
+    registered_name: Stripe Payments UK Ltd
+    register_id: https://register.fca.org.uk/s/firm?id=001b000000pibOHAAY
+    matched_domain: stripe.com
+    api_families: null
+    detected_by: sweep-standard-registers.py
+    detected: '2026-10-14'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-guidewire-own
+  label: Guidewire (own)
+  partner: guidewire
+  partner_name: Guidewire (own)
+  category: Accelerator; Payments; BillingCenter
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.guidewire.com/product/01tPW00000CpTc9YAF/01tPW00000CpTc9YAF
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-maven-central
+  label: Maven Central
+  partner: maven-central
+  partner_name: Maven Central
+  category: official SDK (Java/JVM)
+  type: register
+  channel: package-registry
+  evidence: https://central.sonatype.com/artifact/com.stripe/stripe-java
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Maven Central (public registry JSON)
+    spec_file: null
+    language: Java/JVM
+    packages:
+    - name: com.stripe:stripe-java
+      version: 34.1.0-beta.1
+      released: '2026-10-14'
+      released_field: lastUpdated
+      lapsed: false
+      page: https://central.sonatype.com/artifact/com.stripe/stripe-java
+      repo_leg: domain:stripe.com
+      publisher_leg: groupId:stripe.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/@stripe/stripe-js
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@stripe/stripe-js'
+      version: 10.1.0
+      released: '2026-10-13'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@stripe/stripe-js
+      repo_leg: domain:stripe.com
+      publisher_leg: email:stripe.com
+      matched_by: domain
+    - name: stripe
+      version: 23.0.0
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/stripe
+      repo_leg: shared-github-org:stripe
+      publisher_leg: email:stripe.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-pypi
+  label: PyPI
+  partner: pypi
+  partner_name: PyPI
+  category: official SDK (Python)
+  type: register
+  channel: package-registry
+  evidence: https://pypi.org/project/stripe/
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: PyPI (public registry JSON)
+    spec_file: null
+    language: Python
+    packages:
+    - name: stripe
+      version: 16.0.0
+      released: '2026-10-01'
+      released_field: upload_time
+      lapsed: false
+      page: https://pypi.org/project/stripe/
+      repo_leg: domain:stripe.com
+      publisher_leg: email:stripe.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-rubygems
+  label: RubyGems
+  partner: rubygems
+  partner_name: RubyGems
+  category: official SDK (Ruby)
+  type: register
+  channel: package-registry
+  evidence: https://rubygems.org/gems/stripe
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: RubyGems (public registry JSON)
+    spec_file: null
+    language: Ruby
+    packages:
+    - name: stripe
+      version: 20.0.0
+      released: '2026-10-01'
+      released_field: version_created_at
+      lapsed: false
+      page: https://rubygems.org/gems/stripe
+      repo_leg: domain:stripe.com
+      publisher_leg: org:stripe
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: stripe-mcp-registry
+  label: MCP Registry
+  partner: mcp
+  partner_name: MCP Registry
+  type: register
+  channel: standard-directory
+  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=com.stripe
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: registry.modelcontextprotocol.io
+    spec_file: null
+    role: mcp-server-listing
+    registered_name: com.stripe/mcp
+    register_id: com.stripe/mcp
+    detected_by: sweep-agent-tools.py
+    detected: '2026-10-19'
+  status: not-a-workflow
+  arazzo: null
 - slug: stripe-hightouch
   label: Hightouch
   partner: hightouch
@@ -1199,26 +1384,6 @@
   evidence: https://fivetran.com/docs/activations/destinations/available-destinations/stripe
   source: edge
   relationship: connector-coverage
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-uk-open-banking
-  label: UK Open Banking
-  partner_name: UK Open Banking
-  type: contract
-  channel: regulator-register
-  evidence: https://www.openbanking.org.uk/regulated-providers/stripe-payments-uk-ltd/
-  source: edge
-  relationship: standard-participant
-  contract_reference:
-    register: UK Open Banking regulated providers (OBL directory)
-    spec_file: null
-    role: Third Party Providers
-    registered_name: Stripe Payments UK Ltd
-    register_id: https://register.fca.org.uk/s/firm?id=001b000000pibOHAAY
-    matched_domain: stripe.com
-    api_families: null
-    detected_by: sweep-standard-registers.py
-    detected: '2026-10-14'
   status: not-a-workflow
   arazzo: null
 - slug: stripe-momentum-labs
@@ -11082,64 +11247,6 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
-- slug: stripe-guidewire-own
-  label: Guidewire (own)
-  partner: guidewire
-  partner_name: Guidewire (own)
-  category: Accelerator; Payments; BillingCenter
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.guidewire.com/product/01tPW00000CpTc9YAF/01tPW00000CpTc9YAF
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-mcp-registry
-  label: MCP Registry
-  partner: mcp
-  partner_name: MCP Registry
-  type: register
-  channel: standard-directory
-  evidence: https://registry.modelcontextprotocol.io/v0/servers?search=com.stripe
-  source: edge
-  relationship: standard-participant
-  contract_reference:
-    register: registry.modelcontextprotocol.io
-    spec_file: null
-    role: mcp-server-listing
-    registered_name: com.stripe/mcp
-    register_id: com.stripe/mcp
-    detected_by: sweep-agent-tools.py
-    detected: '2026-10-15'
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-pipedream
-  label: Pipedream
-  partner: pipedream
-  partner_name: Pipedream
-  type: marketplace
-  marketplace: pipedream-components
-  channel: open-source-node
-  evidence: https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/stripe
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Pipedream components (PipedreamHQ/pipedream components/)
-    spec_file: null
-    role: ipaas-connector:pipedream
-    registered_name: stripe
-    matched_domain: stripe.com
-    matched_by: domain
-    detected_by: sweep-workflow-automation.py
-    detected: '2026-10-15'
-    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
-    app_slug: stripe
-    actions: true
-    sources: true
-    builder: Pipedream repo (component)
-  status: not-a-workflow
-  arazzo: null
 - slug: stripe-airbyte
   label: Airbyte
   partner: airbyte
@@ -11264,136 +11371,29 @@
     detected: '2026-10-18'
   status: not-a-workflow
   arazzo: null
-- slug: stripe-maven-central
-  label: Maven Central
-  partner: maven-central
-  partner_name: Maven Central
-  category: official SDK (Java/JVM)
-  type: register
-  channel: package-registry
-  evidence: https://central.sonatype.com/artifact/com.stripe/stripe-java
+- slug: stripe-pipedream
+  label: Pipedream
+  partner: pipedream
+  partner_name: Pipedream
+  type: marketplace
+  marketplace: pipedream-components
+  channel: open-source-node
+  evidence: https://github.com/PipedreamHQ/pipedream/tree/d5872355ef27b4efa769f05352f2820c299a456e/components/stripe
   source: edge
-  relationship: distribution-channel
+  relationship: ipaas-bridge
   contract_reference:
-    register: Maven Central (public registry JSON)
+    register: Pipedream components (PipedreamHQ/pipedream components/)
     spec_file: null
-    language: Java/JVM
-    packages:
-    - name: com.stripe:stripe-java
-      version: 34.1.0-beta.1
-      released: '2026-10-14'
-      released_field: lastUpdated
-      lapsed: false
-      page: https://central.sonatype.com/artifact/com.stripe/stripe-java
-      repo_leg: domain:stripe.com
-      publisher_leg: groupId:stripe.com
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-official-sdks.py
-    detected: '2026-10-18'
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-npm-registry
-  label: npm registry
-  partner: npm
-  partner_name: npm registry
-  category: official SDK (JavaScript/TypeScript)
-  type: register
-  channel: package-registry
-  evidence: https://www.npmjs.com/package/@stripe/stripe-js
-  source: edge
-  relationship: distribution-channel
-  contract_reference:
-    register: npm registry (public registry JSON)
-    spec_file: null
-    language: JavaScript/TypeScript
-    packages:
-    - name: '@stripe/stripe-js'
-      version: 10.1.0
-      released: '2026-10-13'
-      released_field: modified
-      lapsed: false
-      page: https://www.npmjs.com/package/@stripe/stripe-js
-      repo_leg: domain:stripe.com
-      publisher_leg: email:stripe.com
-      matched_by: domain
-    - name: stripe
-      version: 23.0.0
-      released: '2026-10-14'
-      released_field: modified
-      lapsed: false
-      page: https://www.npmjs.com/package/stripe
-      repo_leg: shared-github-org:stripe
-      publisher_leg: email:stripe.com
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-official-sdks.py
-    detected: '2026-10-18'
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-pypi
-  label: PyPI
-  partner: pypi
-  partner_name: PyPI
-  category: official SDK (Python)
-  type: register
-  channel: package-registry
-  evidence: https://pypi.org/project/stripe/
-  source: edge
-  relationship: distribution-channel
-  contract_reference:
-    register: PyPI (public registry JSON)
-    spec_file: null
-    language: Python
-    packages:
-    - name: stripe
-      version: 16.0.0
-      released: '2026-10-01'
-      released_field: upload_time
-      lapsed: false
-      page: https://pypi.org/project/stripe/
-      repo_leg: domain:stripe.com
-      publisher_leg: email:stripe.com
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-official-sdks.py
-    detected: '2026-10-18'
-  status: not-a-workflow
-  arazzo: null
-- slug: stripe-rubygems
-  label: RubyGems
-  partner: rubygems
-  partner_name: RubyGems
-  category: official SDK (Ruby)
-  type: register
-  channel: package-registry
-  evidence: https://rubygems.org/gems/stripe
-  source: edge
-  relationship: distribution-channel
-  contract_reference:
-    register: RubyGems (public registry JSON)
-    spec_file: null
-    language: Ruby
-    packages:
-    - name: stripe
-      version: 20.0.0
-      released: '2026-10-01'
-      released_field: version_created_at
-      lapsed: false
-      page: https://rubygems.org/gems/stripe
-      repo_leg: domain:stripe.com
-      publisher_leg: org:stripe
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-official-sdks.py
-    detected: '2026-10-18'
+    role: ipaas-connector:pipedream
+    registered_name: stripe
+    matched_domain: stripe.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: stripe
+    actions: true
+    sources: true
+    builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
