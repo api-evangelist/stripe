@@ -96,6 +96,7 @@ checked:
 - https://euclid.eba.europa.eu/register/api/filemetadata
 - https://euclid.eba.europa.eu/register/cir/search
 - https://euclid.eba.europa.eu/register/pir/search
+- adobe-commerce/integrations/adobe-commerce-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: own
@@ -26226,6 +26227,86 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-mobile-sdk-index.py
   first_seen: '2026-10-21'
+- partner_name: EBA Payment Institutions Register (PSD2 / EMD2)
+  partner: null
+  partner_match: register-name
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://euclid.eba.europa.eu/register/pir/search
+  category: EU/EEA PSD2 payment / e-money authorisation
+  contract_reference:
+    register: EBA Payment Institutions Register (PSD2 / EMD2)
+    spec_file: null
+    standard: null
+    role: authorised-payment-or-e-money-institution
+    registrations:
+    - registered_name: Stripe Technology Europe, Limited
+      licences:
+      - electronic money institution
+      register_country: IE
+      register_id: IE_CBI!C187865
+      matched_domain: null
+      matched_by: register-name
+      authorised: '2019-03-22'
+      competent_authority: IE_CBI
+      commercial_name: Stripe
+      national_ref: C187865
+      home_services:
+      - ES_010
+      - PS_03A
+      - PS_03B
+      - PS_03C
+      - PS_04A
+      - PS_04B
+      - PS_04C
+      - PS_05A
+      - PS_05B
+      - PS_060
+      - PS_070
+      - PS_080
+      passports:
+      - AT
+      - BE
+      - BG
+      - CY
+      - CZ
+      - DE
+      - DK
+      - EE
+      - ES
+      - FI
+      - FR
+      - GR
+      - HR
+      - HU
+      - IS
+      - IT
+      - LI
+      - LT
+      - LU
+      - LV
+      - MT
+      - NL
+      - 'NO'
+      - PL
+      - PT
+      - RO
+      - SE
+      - SI
+      - SK
+      register_name_note: register-name 'stripe' = stripe; wikidata P856 stripe.com agrees or unheld
+    matched_by: register-name
+    signal_note: 'participation only: a regulator authorisation / registration and its PSD2 passports (host countries);
+      no API conformance is published by this register'
+    detected_by: sweep-eu-psd2-payment-institutions.py
+    detected: '2026-10-21'
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  detected_by: sweep-eu-psd2-payment-institutions.py
+  first_seen: '2026-10-21'
 - partner_name: Guidewire (own)
   partner: guidewire
   partner_match: mirror
@@ -26337,86 +26418,23 @@ edges:
   category: mobile SDK (payments)
   publisher_verified:
   - Registered in Google Play SDK Console
-- partner_name: EBA Payment Institutions Register (PSD2 / EMD2)
-  partner: null
-  partner_match: register-name
-  type: register
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://euclid.eba.europa.eu/register/pir/search
-  category: EU/EEA PSD2 payment / e-money authorisation
-  contract_reference:
-    register: EBA Payment Institutions Register (PSD2 / EMD2)
-    spec_file: null
-    standard: null
-    role: authorised-payment-or-e-money-institution
-    registrations:
-    - registered_name: Stripe Technology Europe, Limited
-      licences:
-      - electronic money institution
-      register_country: IE
-      register_id: IE_CBI!C187865
-      matched_domain: null
-      matched_by: register-name
-      authorised: '2019-03-22'
-      competent_authority: IE_CBI
-      commercial_name: Stripe
-      national_ref: C187865
-      home_services:
-      - ES_010
-      - PS_03A
-      - PS_03B
-      - PS_03C
-      - PS_04A
-      - PS_04B
-      - PS_04C
-      - PS_05A
-      - PS_05B
-      - PS_060
-      - PS_070
-      - PS_080
-      passports:
-      - AT
-      - BE
-      - BG
-      - CY
-      - CZ
-      - DE
-      - DK
-      - EE
-      - ES
-      - FI
-      - FR
-      - GR
-      - HR
-      - HU
-      - IS
-      - IT
-      - LI
-      - LT
-      - LU
-      - LV
-      - MT
-      - NL
-      - 'NO'
-      - PL
-      - PT
-      - RO
-      - SE
-      - SI
-      - SK
-      register_name_note: register-name 'stripe' = stripe; wikidata P856 stripe.com agrees or unheld
-    matched_by: register-name
-    signal_note: 'participation only: a regulator authorisation / registration and its PSD2 passports (host countries);
-      no API conformance is published by this register'
-    detected_by: sweep-eu-psd2-payment-institutions.py
-    detected: '2026-10-21'
-    identity_source: register-name
-    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
-      P856 not contradicting (Kin 2026-10-20 decision 2)
-  detected_by: sweep-eu-psd2-payment-institutions.py
-  first_seen: '2026-10-21'
+- partner_name: Adobe Commerce (own)
+  partner: adobe-commerce
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://commercemarketplace.adobe.com/stripe-stripe-payments.html
+  mirror_of: adobe-commerce/integrations/adobe-commerce-integration-edges.yml
+  apps:
+  - Stripe Payments
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Commerce Marketplace extension
 templates:
 - title: Add transactions in Wave for new Stripe sales
   url: https://zapier.com/apps/stripe/integrations/wave/28941/add-transactions-in-wave-for-new-stripe-sales
